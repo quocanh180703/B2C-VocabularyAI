@@ -1,0 +1,187 @@
+spring:
+  application:
+    name: vocabulary-ai-backend
+
+  # MySQL Configuration
+  datasource:
+    url: jdbc:mysql://localhost:3306/datn_2?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+    username: root
+    password: ${DB_PASSWORD:180703}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # JPA/Hibernate Configuration
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+          fetch_size: 50
+    open-in-view: false
+
+  # Flyway Configuration
+  flyway:
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    enabled: true
+
+  # Redis Configuration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 60000ms
+      jedis:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+
+  # Jackson Configuration
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+      indent-output: true
+    deserialization:
+      fail-on-unknown-properties: false
+
+# Server Configuration
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /api
+  compression:
+    enabled: true
+    min-response-size: 1024
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.vocabularyai: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# JWT Configuration
+jwt:
+  access-token:
+    expiration: 900000 # 15 minutes in milliseconds
+    secret: ${JWT_SECRET:vocabulary-ai-secret-key-change-in-production-environment-please}
+  refresh-token:
+    expiration: 2592000000 # 30 days in milliseconds
+    secret: ${JWT_REFRESH_SECRET:vocabulary-ai-refresh-secret-key-change-in-production-environment-please}
+
+# Gemini AI Configuration
+gemini:
+  api-key: ${GEMINI_API_KEY:}
+  model: gemini-1.5-pro-latest
+  temperature: 0.7
+  top-p: 0.9
+  max-tokens: 2048
+  request-timeout: 30000
+
+# AI Integration Configuration
+ai:
+  cache:
+    ttl-hours: 24
+    conversation-ttl-minutes: 30
+    grammar-ttl-hours: 1
+    hint-ttl-hours: 1
+  rate-limit:
+    daily-tokens: 1000000
+    daily-requests: 1000
+  streaming:
+    enabled: true
+  retry:
+    max-attempts: 5
+    initial-delay-ms: 1000
+    max-delay-ms: 16000
+  circuit-breaker:
+    failure-threshold: 5
+    reset-timeout-seconds: 30
+
+# Swagger / OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+  show-actuator: false
+  use-management-port: false
+
+# Speaking Module Configuration (Phase 8)
+speaking:
+  audio:
+    # Maximum file size in bytes (50 MB)
+    max-file-size: 52428800
+    # Maximum duration in seconds (10 minutes)
+    max-duration-seconds: 600
+    # Supported audio formats
+    supported-formats: WAV,MP3,M4A,WEBM,OGG,FLAC
+    # MIME types
+    supported-mime-types: audio/wav,audio/mpeg,audio/mp4,audio/webm,audio/ogg,audio/flac
+  storage:
+    # Storage type: local, cloudinary, s3
+    type: ${AUDIO_STORAGE_TYPE:local}
+    # Local storage path (if type=local)
+    local-path: ${AUDIO_STORAGE_LOCAL_PATH:/tmp/vocabulary-ai/audio}
+    # Cloudinary credentials (if type=cloudinary)
+    cloudinary-url: ${CLOUDINARY_URL:}
+    # AWS S3 credentials (if type=s3)
+    s3-bucket: ${AWS_S3_BUCKET:vocabulary-ai-audio}
+    s3-region: ${AWS_S3_REGION:us-east-1}
+  speech-to-text:
+    # Provider: google_rest or custom
+    # For MVP, using Google Cloud Speech-to-Text REST API via Gemini
+    provider: ${STT_PROVIDER:google_rest}
+    # Language code (e.g., en-US)
+    language-code: ${STT_LANGUAGE_CODE:en-US}
+    # API key (optional - can use GEMINI_API_KEY if provider supports it)
+    api-key: ${STT_API_KEY:}
+  text-to-speech:
+    # Provider: google_rest or custom
+    provider: ${TTS_PROVIDER:google_rest}
+    # Language code
+    language-code: ${TTS_LANGUAGE_CODE:en-US}
+    # Voice name (e.g., en-US-Neural2-C for female)
+    voice-name: ${TTS_VOICE_NAME:en-US-Neural2-C}
+    # API key (optional)
+    api-key: ${TTS_API_KEY:}
+  pronunciation:
+    # Pronunciation analysis provider: gemini, google-cloud, azure, disabled
+    # MVP uses Gemini (text-based pronunciation analysis from transcript)
+    provider: ${PRONUNCIATION_PROVIDER:gemini}
+  ai-analysis:
+    # Overall score weight calculation
+    grammar-weight: 0.25
+    vocabulary-weight: 0.25
+    fluency-weight: 0.25
+    content-weight: 0.25
+    pronunciation-weight: 0.0
+    # Minimum confidence score to accept result (0-100)
+    min-confidence-score: 70
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
