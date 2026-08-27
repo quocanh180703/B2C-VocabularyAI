@@ -45,4 +45,12 @@ public interface DailyPracticeService {
      * @param notes Ghi chú
      */
     void saveDailyNotes(Long userId, String notes);
+    
+    /**
+     * TASK 11: Invalidate all cached daily practice data for a user
+     * Called when user status changes (BANNED, INACTIVE)
+     * 
+     * @param userId ID người dùng
+     */
+    void invalidateCache(Long userId);
 }

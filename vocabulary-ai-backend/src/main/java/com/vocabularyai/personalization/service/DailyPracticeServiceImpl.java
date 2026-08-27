@@ -165,6 +165,25 @@ public class DailyPracticeServiceImpl implements DailyPracticeService {
         // Implementation sẽ lưu vào database
     }
     
+    /**
+     * TASK 11: Invalidate all cached daily practice data for a user
+     * Deletes all daily-practice cache entries: "ai:daily-practice:{userId}:*"
+     * Called when user status changes (BANNED/INACTIVE)
+     */
+    @Override
+    public void invalidateCache(Long userId) {
+        try {
+            log.debug("[TASK 11] Invalidating daily practice cache for userId: {}", userId);
+            String pattern = CACHE_KEY_PREFIX + userId + ":*";
+            cacheService.deletePattern(pattern);
+            log.debug("[TASK 11] Daily practice cache invalidated for userId: {}", userId);
+        } catch (Exception e) {
+            log.error("[TASK 11] Error invalidating daily practice cache for userId: {}: {}", 
+                      userId, e.getMessage(), e);
+            // Don't throw - cache is not security-critical, continue with operation
+        }
+    }
+    
     // ==================== Private Helpers ====================
     
     private int getCurrentWeek(LearningPlanDto plan, LocalDateTime date) {
