@@ -1,6 +1,8 @@
 package com.vocabularyai.auth.security;
 
 import com.vocabularyai.auth.config.JwtProperties;
+import com.vocabularyai.user.entity.User;
+import com.vocabularyai.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +23,15 @@ import java.io.IOException;
  * 
  * Intercepts HTTP requests and validates JWT token
  * If valid, sets authentication in SecurityContext
+ * 
+ * SECURITY FLOW:
+ * 1. Extract JWT from Authorization header
+ * 2. Validate JWT signature and expiration
+ * 3. Extract username and role from JWT
+ * 4. ✅ TASK 5: Load user from database and validate status
+ * 5. Only ACTIVE users are authenticated
+ * 6. INACTIVE/BANNED users are rejected (401)
+ * 7. Set authentication in SecurityContext
  */
 @Slf4j
 @Component
@@ -29,6 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     
     private final JwtProvider jwtProvider;
     private final JwtProperties jwtProperties;
+    private final UserRepository userRepository;
     
     @Override
     protected void doFilterInternal(
@@ -43,6 +55,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String username = jwtProvider.getUsername(jwt, jwtProperties.getAccessToken().getSecret());
                 String role = jwtProvider.getRole(jwt, jwtProperties.getAccessToken().getSecret());
                 
+                // ✅ TASK 5: Load user from database and validate status
+                User user = userRepository.findByUsername(username)
+                    .orElse(null);
+                
+                if (user == null) {
+                    log.warn("User not found in database: {}", username);
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+                
+                // ✅ TASK 5: Validate user status
+                if (!isUserActive(user)) {
+                    log.warn("User status is not ACTIVE (status: {}, username: {})", 
+                             user.getStatus(), username);
+                    // Don't set authentication for inactive/banned users
+                    // Return 401 Unauthorized when they try to access protected resources
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+                
                 UsernamePasswordAuthenticationToken authentication = 
                     new UsernamePasswordAuthenticationToken(
                         username, null, 
@@ -51,13 +83,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.debug("JWT token validated for username: {}", username);
+                log.debug("JWT token validated for username: {} (status: {})", username, user.getStatus());
             }
         } catch (Exception ex) {
             log.error("Could not set user authentication in security context", ex);
         }
         
         filterChain.doFilter(request, response);
+    }
+    
+    /**
+     * Check if user is ACTIVE
+     * 
+     * Only ACTIVE users can be authenticated
+     * INACTIVE/BANNED users are denied
+     * 
+     * @param user User to check
+     * @return true if user is ACTIVE, false otherwise
+     */
+    private boolean isUserActive(User user) {
+        return user.getStatus() == User.UserStatus.ACTIVE;
     }
     
     /**

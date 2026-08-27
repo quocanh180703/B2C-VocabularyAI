@@ -325,14 +325,18 @@ public class ChatServiceImpl implements ChatService {
     // ==================== Helper Methods ====================
     
     /**
-     * Lấy conversation và kiểm tra user sở hữu nó
+     * Lấy conversation và kiểm tra user sở hữu nó (IDOR prevention)
+     * 
+     * ✅ TASK 9: Fixed to throw ForbiddenException for proper 403 status
      */
     private AiConversation getConversationAndVerifyOwnership(Long conversationId, Long userId) {
         return conversationRepository.findByIdAndUserId(conversationId, userId)
             .orElseThrow(() -> {
-                log.error("Conversation not found or user doesn't have access: conversationId={}, userId={}", 
+                log.warn("IDOR prevention: Unauthorized access attempt: conversationId={}, userId={}", 
                     conversationId, userId);
-                return new IllegalArgumentException("Conversation not found or you don't have access");
+                return new com.vocabularyai.common.exception.ForbiddenException(
+                    "You don't have permission to access this conversation"
+                );
             });
     }
     

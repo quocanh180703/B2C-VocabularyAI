@@ -237,15 +237,19 @@ public class SpeakingSessionServiceImpl implements SpeakingSessionService {
     }
     
     /**
-     * Lấy session và xác minh user sở hữu
+     * Lấy session và xác minh user sở hữu (IDOR prevention)
      * 
-     * @throws IllegalArgumentException nếu session không tồn tại hoặc user không sở hữu
+     * ✅ TASK 9: Fixed to throw ForbiddenException for proper 403 status
+     * 
+     * @throws ForbiddenException nếu user không sở hữu session
      */
     private SpeakingSession getSessionAndVerifyOwnership(Long sessionId, Long userId) {
         return sessionRepository.findByIdAndUserId(sessionId, userId)
                 .orElseThrow(() -> {
-                    log.warn("Truy cập không được phép: sessionId={}, userId={}", sessionId, userId);
-                    return new IllegalArgumentException("Phiên không tồn tại hoặc bạn không có quyền truy cập");
+                    log.warn("IDOR prevention: Unauthorized access attempt: sessionId={}, userId={}", sessionId, userId);
+                    return new com.vocabularyai.common.exception.ForbiddenException(
+                        "You don't have permission to access this speaking session"
+                    );
                 });
     }
     

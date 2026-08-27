@@ -102,6 +102,12 @@ public class AuthService {
     
     /**
      * Refresh access token using refresh token
+     * 
+     * SECURITY:
+     * - Validate refresh token exists and not revoked
+     * - ✅ TASK 5: Validate user status (ACTIVE only)
+     * - Prevent INACTIVE/BANNED users from refreshing tokens
+     * - Generate new access token
      */
     @Transactional
     public AuthResponse refreshToken(RefreshTokenRequest request) {
@@ -122,6 +128,9 @@ public class AuthService {
         
         User user = refreshToken.getUser();
         
+        // ✅ TASK 5: Validate user status before refreshing
+        validateUserStatusForTokenRefresh(user);
+        
         // Generate new access token
         String newAccessToken = jwtProvider.generateAccessToken(
             user.getUsername(),
@@ -129,7 +138,8 @@ public class AuthService {
             user.getRole().name()
         );
         
-        log.info("Access token refreshed successfully for user: {}", user.getUsername());
+        log.info("Access token refreshed successfully for user: {} (status: {})", 
+                 user.getUsername(), user.getStatus());
         
         return AuthResponse.builder()
             .accessToken(newAccessToken)
@@ -138,6 +148,38 @@ public class AuthService {
             .expiresIn(jwtProperties.getAccessToken().getExpiration() / 1000)
             .user(UserResponse.fromEntity(user))
             .build();
+    }
+    
+    /**
+     * Validate user status for token refresh
+     * 
+     * Only ACTIVE users can refresh tokens
+     * INACTIVE/BANNED users are denied
+     * 
+     * @param user User to validate
+     * @throws UnauthorizedException If user is not ACTIVE
+     */
+    private void validateUserStatusForTokenRefresh(User user) {
+        if (user.getStatus() == User.UserStatus.INACTIVE) {
+            log.warn("Cannot refresh token for inactive user: {}", user.getUsername());
+            throw new UnauthorizedException(
+                "Your account is inactive (suspended). You cannot refresh your token."
+            );
+        }
+        
+        if (user.getStatus() == User.UserStatus.BANNED) {
+            log.warn("Cannot refresh token for banned user: {}", user.getUsername());
+            throw new UnauthorizedException(
+                "Your account is banned. You cannot refresh your token."
+            );
+        }
+        
+        if (user.getStatus() != User.UserStatus.ACTIVE) {
+            log.warn("Cannot refresh token for user with invalid status: {}", user.getStatus());
+            throw new UnauthorizedException(
+                "Your account has invalid status. Cannot refresh token."
+            );
+        }
     }
     
     /**

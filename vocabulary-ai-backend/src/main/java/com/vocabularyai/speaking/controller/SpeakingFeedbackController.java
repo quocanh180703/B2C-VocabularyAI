@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,8 +46,15 @@ import java.util.Optional;
  * - GET /api/ai/speaking/feedback/sessions/{sessionId}/statistics - Get average scores
  * 
  * Security:
- * - Require JWT authentication
- * - Verify user ownership (can only see their own feedback)
+ * - Require JWT authentication (@PreAuthorize class-level)
+ * - Verify user ownership (can only see their own feedback) - Service layer responsibility
+ * - All 8 endpoints restricted to authenticated users only
+ * 
+ * Authorization Flow:
+ * 1. JWT Filter: Extract authentication
+ * 2. @PreAuthorize("isAuthenticated()"): Class-level authorization
+ * 3. Controller: Receives authenticated user
+ * 4. Service: Verify resource ownership (userId == feedback.session.userId)
  */
 @Slf4j
 @RestController
@@ -54,6 +62,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Tag(name = "Speaking Feedback", description = "API để lấy feedback chi tiết của speaking attempts")
 @SecurityRequirement(name = "bearer-jwt")
+@PreAuthorize("isAuthenticated()")
 public class SpeakingFeedbackController {
     
     private final SpeakingFeedbackService feedbackService;

@@ -47,4 +47,9 @@ public interface QuizAttemptRepository extends JpaRepository<QuizAttempt, Long> 
      */
     @Query("SELECT COUNT(qa) FROM QuizAttempt qa WHERE qa.user.id = :userId AND qa.submittedAt IS NOT NULL")
     long countCompletedByUser(@Param("userId") Long userId);
+    
+    /**
+     * Find quiz attempt by ID and verify user ownership
+     */
+    Optional<QuizAttempt> findByIdAndUserId(Long id, Long userId);
 }

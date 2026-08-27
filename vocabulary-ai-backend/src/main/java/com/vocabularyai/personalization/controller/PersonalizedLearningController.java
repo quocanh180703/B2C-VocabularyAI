@@ -30,6 +30,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,9 +59,16 @@ import java.time.LocalDateTime;
  * - GET /api/ai/personalized/dashboard - Get full dashboard (Task 8)
  * 
  * Security:
- * - JWT authentication required
- * - User can only see their own data
+ * - JWT authentication required (@PreAuthorize class-level)
+ * - User can only see their own data - Service layer responsibility
  * - Rate limiting on AI endpoints
+ * - All 31+ endpoints restricted to authenticated users only
+ * 
+ * Authorization Flow:
+ * 1. JWT Filter: Extract authentication
+ * 2. @PreAuthorize("isAuthenticated()"): Class-level authorization
+ * 3. Controller: Receives authenticated user
+ * 4. Service: Verify resource ownership (userId == profile.userId)
  */
 @Slf4j
 @RestController
@@ -68,6 +76,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Tag(name = "Personalized Learning", description = "AI-powered personalized learning recommendations and analytics")
 @SecurityRequirement(name = "bearer-jwt")
+@PreAuthorize("isAuthenticated()")
 public class PersonalizedLearningController {
     
     private final LearningProfileService learningProfileService;

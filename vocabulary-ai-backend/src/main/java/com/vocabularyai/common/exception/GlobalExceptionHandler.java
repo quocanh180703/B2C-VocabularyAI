@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,13 +54,25 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     
     /**
      * Handle UnauthorizedException -> 401
+     * 
+     * ✅ TASK 5: User Status validation
+     * - "Your account is inactive (suspended). Please contact support."
+     * - "Your account is banned. You cannot refresh your token."
+     * 
+     * ✅ TASK 6: Standardized error response
      */
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ApiResponse<?>> handleUnauthorizedException(
             UnauthorizedException ex, WebRequest request) {
         log.warn("Unauthorized: {}", ex.getMessage());
         
-        ApiResponse<?> response = ApiResponse.error(ex.getMessage());
+        // TASK 6: Standardized error response with error details
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("code", "UNAUTHORIZED");
+        errorDetails.put("details", ex.getMessage());
+        errorDetails.put("timestamp", LocalDateTime.now());
+        
+        ApiResponse<?> response = ApiResponse.error(ex.getMessage(), errorDetails);
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
     
@@ -71,19 +84,33 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             ForbiddenException ex, WebRequest request) {
         log.warn("Forbidden: {}", ex.getMessage());
         
-        ApiResponse<?> response = ApiResponse.error(ex.getMessage());
+        // TASK 6: Standardized error response
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("code", "FORBIDDEN");
+        errorDetails.put("details", ex.getMessage());
+        errorDetails.put("timestamp", LocalDateTime.now());
+        
+        ApiResponse<?> response = ApiResponse.error(ex.getMessage(), errorDetails);
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
     
     /**
      * Handle AccessDeniedException (Spring Security) -> 403
+     * 
+     * ✅ TASK 6: Standardized 403 Forbidden response
      */
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiResponse<?>> handleAccessDeniedException(
             AccessDeniedException ex, WebRequest request) {
         log.warn("Access denied: {}", ex.getMessage());
         
-        ApiResponse<?> response = ApiResponse.error("Access denied");
+        // TASK 6: Standardized error response
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("code", "FORBIDDEN");
+        errorDetails.put("details", "You don't have permission to access this resource");
+        errorDetails.put("timestamp", LocalDateTime.now());
+        
+        ApiResponse<?> response = ApiResponse.error("Access denied", errorDetails);
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
     

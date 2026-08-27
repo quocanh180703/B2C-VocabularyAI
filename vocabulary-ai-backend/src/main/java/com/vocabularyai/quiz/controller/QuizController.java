@@ -101,10 +101,11 @@ public class QuizController {
     )
     public ResponseEntity<ApiResponse<QuizAttemptResponse>> submitQuiz(
             @PathVariable Long attemptId,
-            @Valid @RequestBody SubmitQuizRequest request) {
-        log.info("Submitting quiz attempt: {}", attemptId);
+            @Valid @RequestBody SubmitQuizRequest request,
+            @org.springframework.security.core.annotation.AuthenticationPrincipal com.vocabularyai.user.entity.User user) {
+        log.info("Submitting quiz attempt: {} for user: {}", attemptId, user.getId());
         
-        QuizAttemptResponse response = quizService.submitQuiz(attemptId, request);
+        QuizAttemptResponse response = quizService.submitQuiz(attemptId, user.getId(), request);
         
         return ResponseEntity.ok(
             ApiResponse.success("Quiz submitted successfully", response)
@@ -122,10 +123,11 @@ public class QuizController {
         description = "Get quiz attempt with all answers and explanations"
     )
     public ResponseEntity<ApiResponse<QuizAttemptWithAnswersResponse>> getQuizAttemptDetails(
-            @PathVariable Long attemptId) {
-        log.info("Getting quiz attempt details: {}", attemptId);
+            @PathVariable Long attemptId,
+            @org.springframework.security.core.annotation.AuthenticationPrincipal com.vocabularyai.user.entity.User user) {
+        log.info("Getting quiz attempt details: {} for user: {}", attemptId, user.getId());
         
-        QuizAttemptWithAnswersResponse response = quizService.getQuizAttemptWithAnswers(attemptId);
+        QuizAttemptWithAnswersResponse response = quizService.getQuizAttemptWithAnswers(attemptId, user.getId());
         
         return ResponseEntity.ok(
             ApiResponse.success("Quiz attempt retrieved successfully", response)
