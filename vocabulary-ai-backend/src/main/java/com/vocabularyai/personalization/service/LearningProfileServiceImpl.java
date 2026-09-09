@@ -415,17 +415,29 @@ public class LearningProfileServiceImpl implements LearningProfileService {
     private List<String> getAchievements(Long userId) {
         List<String> achievements = new ArrayList<>();
         
-        LearningProfileDto profile = getLearningProfile(userId);
+        // Get stats directly without calling getLearningProfile (to avoid infinite recursion)
+        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
+        var progressPage = learningProgressRepository.findByUserId(userId, pageable);
+        List<LearningProgress> progressList = progressPage.getContent();
         
-        if (profile.getTotalLearningDays() != null && profile.getTotalLearningDays() > 0) {
+        long totalLearningDays = getTotalLearningDays(userId);
+        int currentStreak = calculateCurrentStreak(userId);
+        
+        double overallScore = progressList.isEmpty() ? 0 : 
+            progressList.stream()
+                .mapToDouble(lp -> lp.getAccuracy())
+                .average()
+                .orElse(0);
+        
+        if (totalLearningDays > 0) {
             achievements.add("First learning session");
         }
         
-        if (profile.getCurrentStreak() != null && profile.getCurrentStreak() >= 7) {
+        if (currentStreak >= 7) {
             achievements.add("7-day learning streak");
         }
         
-        if (profile.getOverallScore() != null && profile.getOverallScore() > 80) {
+        if (overallScore > 80) {
             achievements.add("High proficiency (>80%)");
         }
         

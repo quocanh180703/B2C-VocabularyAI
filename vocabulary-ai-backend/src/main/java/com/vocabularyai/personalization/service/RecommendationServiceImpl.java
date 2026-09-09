@@ -3,6 +3,7 @@ package com.vocabularyai.personalization.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocabularyai.ai.service.gemini.GeminiAIClientService;
 import com.vocabularyai.ai.service.cache.CacheService;
+import com.vocabularyai.ai.util.JsonResponseExtractor;
 import com.vocabularyai.common.exception.ForbiddenException;
 import com.vocabularyai.common.exception.RateLimitExceededException;
 import com.vocabularyai.common.exception.ResourceNotFoundException;
@@ -45,7 +46,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class RecommendationServiceImpl implements RecommendationService {
     
     private final WeaknessStrengthService weaknessStrengthService;
@@ -163,6 +163,7 @@ public class RecommendationServiceImpl implements RecommendationService {
      * Lấy gợi ý nhanh chóng
      */
     @Override
+    @Transactional(readOnly = false)
     public List<RecommendationDto.RecommendationItem> getQuickWins(Long userId) {
         RecommendationDto recommendations = generateRecommendations(userId);
         if (recommendations == null || recommendations.getQuickWins() == null) {
@@ -175,6 +176,7 @@ public class RecommendationServiceImpl implements RecommendationService {
      * Lấy gợi ý dài hạn
      */
     @Override
+    @Transactional(readOnly = false)
     public List<RecommendationDto.RecommendationItem> getLongTermGoals(Long userId) {
         RecommendationDto recommendations = generateRecommendations(userId);
         if (recommendations == null || recommendations.getLongTermGoals() == null) {
@@ -187,6 +189,7 @@ public class RecommendationServiceImpl implements RecommendationService {
      * Lấy gợi ý khẩn cấp
      */
     @Override
+    @Transactional(readOnly = false)
     public List<RecommendationDto.RecommendationItem> getCriticalRecommendations(Long userId) {
         RecommendationDto recommendations = generateRecommendations(userId);
         if (recommendations == null || recommendations.getCriticalRecommendations() == null) {
@@ -199,6 +202,7 @@ public class RecommendationServiceImpl implements RecommendationService {
      * Lấy lịch trình hàng tuần
      */
     @Override
+    @Transactional(readOnly = false)
     public List<RecommendationDto.WeeklyScheduleItem> getWeeklySchedule(Long userId) {
         RecommendationDto recommendations = generateRecommendations(userId);
         if (recommendations == null || recommendations.getWeeklySchedule() == null) {
@@ -328,13 +332,21 @@ public class RecommendationServiceImpl implements RecommendationService {
     
     /**
      * Phân tích phản hồi JSON từ Gemini thành RecommendationDto
+     * 
+     * Handles markdown code fences and other text wrapping
      */
     private RecommendationDto parseAIResponse(String aiResponse, Long userId, String userName) {
         try {
             log.debug("[TASK 3] Phân tích phản hồi JSON cho userId: {}", userId);
             
+            // Extract JSON from response (handles markdown, embedded JSON, etc.)
+            String jsonString = JsonResponseExtractor.extractJsonString(aiResponse);
+            
             // Phân tích JSON
-            RecommendationDto dto = objectMapper.readValue(aiResponse, RecommendationDto.class);
+            RecommendationDto dto = objectMapper.readValue(jsonString, RecommendationDto.class);
+            
+            // Convert string lists to RecommendationItem objects if needed
+            dto = convertStringListsToItems(dto);
             
             // Đặt userId, userName, timestamp
             dto.setUserId(userId);
@@ -358,6 +370,91 @@ public class RecommendationServiceImpl implements RecommendationService {
             log.error("[TASK 3] Lỗi phân tích phản hồi JSON: {}", e.getMessage(), e);
             throw new RecommendationException("Lỗi phân tích phản hồi AI: " + e.getMessage(), e);
         }
+    }
+    
+    /**
+     * Convert string lists to RecommendationItem objects
+     * Handles case where Gemini returns string arrays instead of object arrays
+     */
+    private RecommendationDto convertStringListsToItems(RecommendationDto dto) {
+        if (dto == null) return dto;
+        
+        // Convert recommendations
+        if (dto.getRecommendations() != null) {
+            dto.setRecommendations(convertToRecommendationItems(dto.getRecommendations()));
+        }
+        
+        // Convert quickWins
+        if (dto.getQuickWins() != null) {
+            dto.setQuickWins(convertToRecommendationItems(dto.getQuickWins()));
+        }
+        
+        // Convert longTermGoals
+        if (dto.getLongTermGoals() != null) {
+            dto.setLongTermGoals(convertToRecommendationItems(dto.getLongTermGoals()));
+        }
+        
+        // Convert criticalRecommendations
+        if (dto.getCriticalRecommendations() != null) {
+            dto.setCriticalRecommendations(convertToRecommendationItems(dto.getCriticalRecommendations()));
+        }
+        
+        return dto;
+    }
+    
+    /**
+     * Convert list of items to proper RecommendationItem objects
+     */
+    private List<RecommendationDto.RecommendationItem> convertToRecommendationItems(List<?> items) {
+        if (items == null || items.isEmpty()) {
+            return new java.util.ArrayList<>();
+        }
+        
+        List<RecommendationDto.RecommendationItem> result = new java.util.ArrayList<>();
+        int priority = 1;
+        
+        for (Object item : items) {
+            RecommendationDto.RecommendationItem recItem;
+            
+            if (item instanceof String) {
+                // Convert string to RecommendationItem
+                String text = (String) item;
+                recItem = RecommendationDto.RecommendationItem.builder()
+                    .priority(priority++)
+                    .title(text.length() > 100 ? text.substring(0, 100) : text)
+                    .description(text)
+                    .type("PRACTICE")
+                    .expectedImpact("MEDIUM")
+                    .effortLevel("MODERATE")
+                    .estimatedTimeMinutes(30)
+                    .frequency("mỗi tuần")
+                    .build();
+            } else if (item instanceof RecommendationDto.RecommendationItem) {
+                // Already proper object
+                recItem = (RecommendationDto.RecommendationItem) item;
+                if (recItem.getPriority() == null) {
+                    recItem.setPriority(priority++);
+                }
+            } else if (item instanceof java.util.Map) {
+                // Convert from Map (from JSON object)
+                try {
+                    recItem = objectMapper.convertValue(item, RecommendationDto.RecommendationItem.class);
+                    if (recItem.getPriority() == null) {
+                        recItem.setPriority(priority++);
+                    }
+                } catch (Exception e) {
+                    log.warn("Failed to convert map to RecommendationItem: {}", e.getMessage());
+                    continue;
+                }
+            } else {
+                log.warn("Unknown item type: {}", item.getClass().getSimpleName());
+                continue;
+            }
+            
+            result.add(recItem);
+        }
+        
+        return result;
     }
     
     /**

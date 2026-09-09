@@ -52,8 +52,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jwt = extractJwtFromRequest(request);
             
             if (StringUtils.hasText(jwt)) {
+                log.debug("JWT token extracted from request, length: {}", jwt.length());
+                log.debug("JWT token (first 50 chars): {}", jwt.substring(0, Math.min(50, jwt.length())));
+                
                 String username = jwtProvider.getUsername(jwt, jwtProperties.getAccessToken().getSecret());
                 String role = jwtProvider.getRole(jwt, jwtProperties.getAccessToken().getSecret());
+                
+                log.debug("JWT token validated - username: {}, role: {}", username, role);
                 
                 // ✅ TASK 5: Load user from database and validate status
                 User user = userRepository.findByUsername(username)
@@ -77,13 +82,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 
                 UsernamePasswordAuthenticationToken authentication = 
                     new UsernamePasswordAuthenticationToken(
-                        username, null, 
+                        user, null,
                         java.util.List.of(new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_" + role))
                     );
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 log.debug("JWT token validated for username: {} (status: {})", username, user.getStatus());
+            } else {
+                log.debug("No JWT token found in Authorization header");
             }
         } catch (Exception ex) {
             log.error("Could not set user authentication in security context", ex);

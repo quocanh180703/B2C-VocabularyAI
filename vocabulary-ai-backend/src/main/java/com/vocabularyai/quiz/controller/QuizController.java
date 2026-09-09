@@ -37,6 +37,8 @@ public class QuizController {
      * Get all published quizzes
      */
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Get published quizzes", description = "Retrieve all published quizzes")
     public ResponseEntity<ApiResponse<Page<QuizResponse>>> getPublishedQuizzes(
             @RequestParam(required = false, defaultValue = "0") Integer page,
@@ -55,6 +57,8 @@ public class QuizController {
      * Get quiz by ID (with questions for taking)
      */
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Get quiz with questions", description = "Get quiz details and questions for taking")
     public ResponseEntity<ApiResponse<QuizWithQuestionsResponse>> getQuizForTaking(
             @PathVariable Long id) {

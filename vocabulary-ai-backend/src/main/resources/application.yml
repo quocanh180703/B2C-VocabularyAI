@@ -37,12 +37,13 @@ spring:
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:}
       timeout: 60000ms
+      connect-timeout: 2000ms
       jedis:
         pool:
-          max-active: 8
-          max-idle: 8
+          max-active: 2
+          max-idle: 2
           min-idle: 0
-          max-wait: -1ms
+          max-wait: 1000ms
 
   # Jackson Configuration
   jackson:
@@ -85,8 +86,8 @@ jwt:
 
 # Gemini AI Configuration
 gemini:
-  api-key: ${GEMINI_API_KEY:}
-  model: gemini-1.5-pro-latest
+  api-key: AQ.Ab8RN6Lre3GIuPMos5M-FGvdxT2K65SgtjbjkgQEBuFzNpeXUA
+  model: gemini-3.1-flash-lite
   temperature: 0.7
   top-p: 0.9
   max-tokens: 2048

@@ -72,7 +72,7 @@ import java.time.LocalDateTime;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/ai/personalized")
+@RequestMapping("/ai/personalized")
 @RequiredArgsConstructor
 @Tag(name = "Personalized Learning", description = "AI-powered personalized learning recommendations and analytics")
 @SecurityRequirement(name = "bearer-jwt")
@@ -128,8 +128,7 @@ public class PersonalizedLearningController {
     @GetMapping("/profile")
     @Operation(
         summary = "Get user's learning profile",
-        description = "Get comprehensive aggregated learning profile from all modules",
-        tags = {"Personalized Learning"}
+        description = "Get comprehensive aggregated learning profile from all modules"
     )
     @ApiResponse(
         responseCode = "200",
@@ -185,9 +184,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/level")
     @Operation(
-        summary = "Get estimated English level",
-        description = "Get user's estimated current English proficiency level (A1-C2)",
-        tags = {"Personalized Learning"}
+        summary = "Xem ước tính trình độ tiếng Anh",
+        description = "Get user's estimated current English proficiency level (A1-C2)"
     )
     @ApiResponse(
         responseCode = "200",
@@ -224,9 +222,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/weak-topics")
     @Operation(
-        summary = "Get weak learning topics",
-        description = "Get list of topics where user has <60% accuracy",
-        tags = {"Personalized Learning"}
+        summary = "Lấy các chủ đề học tập còn yếu",
+        description = "Get list of topics where user has <60% accuracy"
     )
     @ApiResponse(
         responseCode = "200",
@@ -263,9 +260,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/strong-topics")
     @Operation(
-        summary = "Get strong learning topics",
-        description = "Get list of topics where user has >80% accuracy",
-        tags = {"Personalized Learning"}
+        summary = "Lấy các chủ đề học tập chất lượng",
+        description = "Get list of topics where user has >80% accuracy"
     )
     @ApiResponse(
         responseCode = "200",
@@ -300,9 +296,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/frequency")
     @Operation(
-        summary = "Get learning frequency",
-        description = "Get user's learning frequency (activities per week)",
-        tags = {"Personalized Learning"}
+        summary = "Lấy tần suất học",
+        description = "Get user's learning frequency (activities per week)"
     )
     @ApiResponse(
         responseCode = "200",
@@ -336,9 +331,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/session-duration")
     @Operation(
-        summary = "Get average session duration",
-        description = "Get user's average learning session duration in minutes",
-        tags = {"Personalized Learning"}
+        summary = "Lấy thời lượng phiên trung bình",
+        description = "Get user's average learning session duration in minutes"
     )
     @ApiResponse(
         responseCode = "200",
@@ -406,9 +400,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/analysis")
     @Operation(
-        summary = "AI weakness and strength analysis",
-        description = "Get AI-powered analysis of user's weaknesses, strengths, and priority actions (TASK 2)",
-        tags = {"Personalized Learning - Task 2"}
+        summary = "Phân tích điểm mạnh và điểm yếu của AI",
+        description = "Get AI-powered analysis of user's weaknesses, strengths, and priority actions"
     )
     @ApiResponse(
         responseCode = "200",
@@ -430,7 +423,7 @@ public class PersonalizedLearningController {
     public ResponseEntity<WeaknessStrengthResponse> analyzeWeaknessesAndStrengths(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 2] GET /api/ai/personalized/analysis - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/analysis - userId: {}", user.getId());
         
         try {
             var analysis = weaknessStrengthService.analyzeWeaknessesAndStrengths(user.getId());
@@ -443,7 +436,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 2] Error analyzing weaknesses/strengths for user {}: {}",
+            log.error("Error analyzing weaknesses/strengths for user {}: {}",
                       user.getId(), e.getMessage(), e);
             throw e;
         }
@@ -463,9 +456,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/analysis/critical-weaknesses")
     @Operation(
-        summary = "Get critical weaknesses only",
-        description = "Get critical weaknesses (severity=CRITICAL) from weakness/strength analysis",
-        tags = {"Personalized Learning - Task 2"}
+        summary = "Chỉ lấy các lỗ hổng nghiêm trọng",
+        description = "Get critical weaknesses (severity=CRITICAL) from weakness/strength analysis"
     )
     @ApiResponse(
         responseCode = "200",
@@ -474,7 +466,7 @@ public class PersonalizedLearningController {
     public ResponseEntity<?> getCriticalWeaknesses(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 2] GET /api/ai/personalized/analysis/critical-weaknesses - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/analysis/critical-weaknesses - userId: {}", user.getId());
         
         try {
             var critical = weaknessStrengthService.getCriticalWeaknesses(user.getId());
@@ -488,7 +480,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 2] Error getting critical weaknesses for user {}: {}", user.getId(), e.getMessage(), e);
+            log.error("Error getting critical weaknesses for user {}: {}", user.getId(), e.getMessage(), e);
             throw e;
         }
     }
@@ -507,9 +499,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/analysis/outstanding-strengths")
     @Operation(
-        summary = "Get outstanding strengths only",
-        description = "Get outstanding strengths (excellenceLevel=OUTSTANDING) from analysis",
-        tags = {"Personalized Learning - Task 2"}
+        summary = "Chỉ tập trung vào những thế mạnh vượt trội",
+        description = "Get outstanding strengths (excellenceLevel=OUTSTANDING) from analysis"
     )
     @ApiResponse(
         responseCode = "200",
@@ -518,7 +509,7 @@ public class PersonalizedLearningController {
     public ResponseEntity<?> getOutstandingStrengths(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 2] GET /api/ai/personalized/analysis/outstanding-strengths - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/analysis/outstanding-strengths - userId: {}", user.getId());
         
         try {
             var outstanding = weaknessStrengthService.getOutstandingStrengths(user.getId());
@@ -532,7 +523,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 2] Error getting outstanding strengths for user {}: {}", user.getId(), e.getMessage(), e);
+            log.error("Error getting outstanding strengths for user {}: {}", user.getId(), e.getMessage(), e);
             throw e;
         }
     }
@@ -552,9 +543,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/analysis/priority-actions")
     @Operation(
-        summary = "Get priority actions",
-        description = "Get top priority actions from weakness/strength analysis",
-        tags = {"Personalized Learning - Task 2"}
+        summary = "Nhận các hành động ưu tiên",
+        description = "Get top priority actions from weakness/strength analysis"
     )
     @ApiResponse(
         responseCode = "200",
@@ -564,7 +554,7 @@ public class PersonalizedLearningController {
         @AuthenticationPrincipal User user,
         @RequestParam(defaultValue = "5", required = false) int limit
     ) {
-        log.info("[TASK 2] GET /api/ai/personalized/analysis/priority-actions - userId: {}, limit: {}", user.getId(), limit);
+        log.info("GET /api/ai/personalized/analysis/priority-actions - userId: {}, limit: {}", user.getId(), limit);
         
         // Cap limit at 10
         limit = Math.min(limit, 10);
@@ -581,7 +571,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 2] Error getting priority actions for user {}: {}", user.getId(), e.getMessage(), e);
+            log.error("Error getting priority actions for user {}: {}", user.getId(), e.getMessage(), e);
             throw e;
         }
     }
@@ -628,9 +618,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/recommendations")
     @Operation(
-        summary = "AI Learning Recommendations (TASK 3)",
-        description = "Nhận gợi ý học tập cá nhân hóa từ AI dựa trên phân tích điểm yếu/điểm mạnh",
-        tags = {"Personalized Learning - Task 3"}
+        summary = "AI Learning Recommendations",
+        description = "Nhận gợi ý học tập cá nhân hóa từ AI dựa trên phân tích điểm yếu/điểm mạnh"
     )
     @ApiResponse(
         responseCode = "200",
@@ -652,7 +641,7 @@ public class PersonalizedLearningController {
     public ResponseEntity<RecommendationResponse> generateRecommendations(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 3] GET /api/ai/personalized/recommendations - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/recommendations - userId: {}", user.getId());
         
         try {
             var recommendations = recommendationService.generateRecommendations(user.getId());
@@ -665,7 +654,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 3] Lỗi tạo gợi ý cho userId: {}: {}",
+            log.error("Lỗi tạo gợi ý cho userId: {}: {}",
                       user.getId(), e.getMessage(), e);
             throw e;
         }
@@ -688,9 +677,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/recommendations/quick-wins")
     @Operation(
-        summary = "Gợi ý nhanh chóng (TASK 3)",
-        description = "Nhận gợi ý dễ áp dụng với tác động cao (impact=HIGH, effort=EASY)",
-        tags = {"Personalized Learning - Task 3"}
+        summary = "Gợi ý nhanh chóng",
+        description = "Nhận gợi ý dễ áp dụng với tác động cao (impact=HIGH, effort=EASY)"
     )
     @ApiResponse(
         responseCode = "200",
@@ -699,7 +687,7 @@ public class PersonalizedLearningController {
     public ResponseEntity<?> getQuickWins(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 3] GET /api/ai/personalized/recommendations/quick-wins - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/recommendations/quick-wins - userId: {}", user.getId());
         
         try {
             var quickWins = recommendationService.getQuickWins(user.getId());
@@ -713,7 +701,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 3] Lỗi lấy quick wins cho userId: {}: {}", user.getId(), e.getMessage(), e);
+            log.error("Lỗi lấy quick wins cho userId: {}: {}", user.getId(), e.getMessage(), e);
             throw e;
         }
     }
@@ -735,9 +723,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/recommendations/long-term")
     @Operation(
-        summary = "Gợi ý dài hạn (TASK 3)",
-        description = "Nhận gợi ý yêu cầu cam kết dài hạn với giá trị lớn (impact=HIGH, effort=CHALLENGING)",
-        tags = {"Personalized Learning - Task 3"}
+        summary = "Gợi ý dài hạn",
+        description = "Nhận gợi ý yêu cầu cam kết dài hạn với giá trị lớn (impact=HIGH, effort=CHALLENGING)"
     )
     @ApiResponse(
         responseCode = "200",
@@ -746,7 +733,7 @@ public class PersonalizedLearningController {
     public ResponseEntity<?> getLongTermGoals(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 3] GET /api/ai/personalized/recommendations/long-term - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/recommendations/long-term - userId: {}", user.getId());
         
         try {
             var longTermGoals = recommendationService.getLongTermGoals(user.getId());
@@ -760,7 +747,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 3] Lỗi lấy long-term goals cho userId: {}: {}", user.getId(), e.getMessage(), e);
+            log.error("Lỗi lấy long-term goals cho userId: {}: {}", user.getId(), e.getMessage(), e);
             throw e;
         }
     }
@@ -782,9 +769,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/recommendations/critical")
     @Operation(
-        summary = "Gợi ý khẩn cấp (TASK 3)",
-        description = "Nhận gợi ý để xử lý điểm yếu khẩn cấp (severity=CRITICAL)",
-        tags = {"Personalized Learning - Task 3"}
+        summary = "Gợi ý khẩn cấp",
+        description = "Nhận gợi ý để xử lý điểm yếu khẩn cấp (severity=CRITICAL)"
     )
     @ApiResponse(
         responseCode = "200",
@@ -793,7 +779,7 @@ public class PersonalizedLearningController {
     public ResponseEntity<?> getCriticalRecommendations(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 3] GET /api/ai/personalized/recommendations/critical - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/recommendations/critical - userId: {}", user.getId());
         
         try {
             var critical = recommendationService.getCriticalRecommendations(user.getId());
@@ -807,7 +793,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 3] Lỗi lấy critical recommendations cho userId: {}: {}", user.getId(), e.getMessage(), e);
+            log.error("Lỗi lấy critical recommendations cho userId: {}: {}", user.getId(), e.getMessage(), e);
             throw e;
         }
     }
@@ -830,9 +816,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/recommendations/weekly-schedule")
     @Operation(
-        summary = "Lịch trình hàng tuần (TASK 3)",
-        description = "Nhận lịch trình học tập cụ thể cho 7 ngày",
-        tags = {"Personalized Learning - Task 3"}
+        summary = "Lịch trình hàng tuần",
+        description = "Nhận lịch trình học tập cụ thể cho 7 ngày"
     )
     @ApiResponse(
         responseCode = "200",
@@ -841,7 +826,7 @@ public class PersonalizedLearningController {
     public ResponseEntity<?> getWeeklySchedule(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 3] GET /api/ai/personalized/recommendations/weekly-schedule - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/recommendations/weekly-schedule - userId: {}", user.getId());
         
         try {
             var weeklySchedule = recommendationService.getWeeklySchedule(user.getId());
@@ -855,7 +840,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 3] Lỗi lấy weekly schedule cho userId: {}: {}", user.getId(), e.getMessage(), e);
+            log.error("Lỗi lấy weekly schedule cho userId: {}: {}", user.getId(), e.getMessage(), e);
             throw e;
         }
     }
@@ -902,9 +887,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/plan")
     @Operation(
-        summary = "Kế hoạch học tập 4 tuần (TASK 4)",
-        description = "Nhận kế hoạch học tập chi tiết 4 tuần (28 ngày) từ gợi ý cá nhân hóa",
-        tags = {"Personalized Learning - Task 4"}
+        summary = "Kế hoạch học tập 4 tuần",
+        description = "Nhận kế hoạch học tập chi tiết 4 tuần (28 ngày) từ gợi ý cá nhân hóa"
     )
     @ApiResponse(
         responseCode = "200",
@@ -926,20 +910,20 @@ public class PersonalizedLearningController {
     public ResponseEntity<LearningPlanResponse> createLearningPlan(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 4] GET /api/ai/personalized/plan - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/plan - userId: {}", user.getId());
         
         try {
             var plan = learningPlanService.createLearningPlan(user.getId());
             
             LearningPlanResponse response = learningPlanMapper.toResponse(plan);
             
-            log.info("[TASK 4] Kế hoạch được tạo thành công cho userId: {} (4 tuần, {} ngày)",
+            log.info("Kế hoạch được tạo thành công cho userId: {} (4 tuần, {} ngày)",
                      user.getId(), plan.getWeeks() != null ? plan.getWeeks().size() * 7 : 28);
             
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 4] Lỗi tạo kế hoạch cho userId: {}: {}",
+            log.error("Lỗi tạo kế hoạch cho userId: {}: {}",
                       user.getId(), e.getMessage(), e);
             throw e;
         }
@@ -964,9 +948,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/plan/weekly-breakdown")
     @Operation(
-        summary = "Chi tiết 4 tuần của kế hoạch (TASK 4)",
-        description = "Nhận chi tiết mục tiêu, chủ đề, và hoạt động cho mỗi tuần",
-        tags = {"Personalized Learning - Task 4"}
+        summary = "Chi tiết 4 tuần của kế hoạch",
+        description = "Nhận chi tiết mục tiêu, chủ đề, và hoạt động cho mỗi tuần"
     )
     @ApiResponse(
         responseCode = "200",
@@ -975,7 +958,7 @@ public class PersonalizedLearningController {
     public ResponseEntity<?> getWeeklyBreakdown(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 4] GET /api/ai/personalized/plan/weekly-breakdown - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/plan/weekly-breakdown - userId: {}", user.getId());
         
         try {
             var weeks = learningPlanService.getWeeklyBreakdown(user.getId());
@@ -989,7 +972,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 4] Lỗi lấy chi tiết tuần cho userId: {}: {}", user.getId(), e.getMessage(), e);
+            log.error("[Lỗi lấy chi tiết tuần cho userId: {}: {}", user.getId(), e.getMessage(), e);
             throw e;
         }
     }
@@ -1012,9 +995,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/plan/milestones")
     @Operation(
-        summary = "Các cột mốc của kế hoạch (TASK 4)",
-        description = "Nhận danh sách cột mốc/milestone cần đạt được trong 4 tuần",
-        tags = {"Personalized Learning - Task 4"}
+        summary = "Các cột mốc của kế hoạch",
+        description = "Nhận danh sách cột mốc/milestone cần đạt được trong 4 tuần"
     )
     @ApiResponse(
         responseCode = "200",
@@ -1023,7 +1005,7 @@ public class PersonalizedLearningController {
     public ResponseEntity<?> getMilestones(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 4] GET /api/ai/personalized/plan/milestones - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/plan/milestones - userId: {}", user.getId());
         
         try {
             var milestones = learningPlanService.getMilestones(user.getId());
@@ -1037,7 +1019,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 4] Lỗi lấy milestones cho userId: {}: {}", user.getId(), e.getMessage(), e);
+            log.error("Lỗi lấy milestones cho userId: {}: {}", user.getId(), e.getMessage(), e);
             throw e;
         }
     }
@@ -1066,9 +1048,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/plan/week/{weekNumber}")
     @Operation(
-        summary = "Chi tiết tuần cụ thể (TASK 4)",
-        description = "Nhận chi tiết 7 ngày và các nhiệm vụ cho một tuần cụ thể",
-        tags = {"Personalized Learning - Task 4"}
+        summary = "Chi tiết tuần cụ thể",
+        description = "Nhận chi tiết 7 ngày và các nhiệm vụ cho một tuần cụ thể"
     )
     @ApiResponse(
         responseCode = "200",
@@ -1080,9 +1061,9 @@ public class PersonalizedLearningController {
     )
     public ResponseEntity<?> getWeekDetails(
         @AuthenticationPrincipal User user,
-        @RequestParam(required = true) int weekNumber
+        @PathVariable(name = "weekNumber") int weekNumber
     ) {
-        log.info("[TASK 4] GET /api/ai/personalized/plan/week/{} - userId: {}", weekNumber, user.getId());
+        log.info("GET /api/ai/personalized/plan/week/{} - userId: {}", weekNumber, user.getId());
         
         // Kiểm tra weekNumber hợp lệ
         if (weekNumber < 1 || weekNumber > 4) {
@@ -1105,7 +1086,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 4] Lỗi lấy chi tiết tuần {} cho userId: {}: {}", 
+            log.error("Lỗi lấy chi tiết tuần {} cho userId: {}: {}", 
                 weekNumber, user.getId(), e.getMessage(), e);
             throw e;
         }
@@ -1120,9 +1101,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/daily-practice")
     @Operation(
-        summary = "Hoạt động hôm nay (TASK 5)",
-        description = "Nhận gợi ý hoạt động học tập được tối ưu hóa cho hôm nay",
-        tags = {"Personalized Learning - Task 5"}
+        summary = "Hoạt động hôm nay",
+        description = "Nhận gợi ý hoạt động học tập được tối ưu hóa cho hôm nay"
     )
     @ApiResponse(
         responseCode = "200",
@@ -1132,19 +1112,19 @@ public class PersonalizedLearningController {
     public ResponseEntity<DailyPracticeResponse> getDailyPractice(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 5] GET /api/ai/personalized/daily-practice - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/daily-practice - userId: {}", user.getId());
         
         try {
             var practice = dailyPracticeService.getDailyPractice(user.getId());
             DailyPracticeResponse response = dailyPracticeMapper.toResponse(practice);
             
-            log.info("[TASK 5] Hoạt động hôm nay cho userId: {} ({} hoạt động)",
+            log.info("Hoạt động hôm nay cho userId: {} ({} hoạt động)",
                      user.getId(), practice.getActivities() != null ? practice.getActivities().size() : 0);
             
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 5] Lỗi lấy hoạt động cho userId: {}: {}",
+            log.error("Lỗi lấy hoạt động cho userId: {}: {}",
                       user.getId(), e.getMessage(), e);
             throw e;
         }
@@ -1157,9 +1137,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/daily-practice/week/{weekNumber}/day/{dayOfWeek}")
     @Operation(
-        summary = "Hoạt động cho ngày cụ thể (TASK 5)",
-        description = "Nhận gợi ý hoạt động cho một ngày cụ thể trong kế hoạch",
-        tags = {"Personalized Learning - Task 5"}
+        summary = "Hoạt động cho ngày cụ thể",
+        description = "Nhận gợi ý hoạt động cho một ngày cụ thể trong kế hoạch"
     )
     @ApiResponse(
         responseCode = "200",
@@ -1170,7 +1149,7 @@ public class PersonalizedLearningController {
         @RequestParam(required = true) int weekNumber,
         @RequestParam(required = true) String dayOfWeek
     ) {
-        log.info("[TASK 5] Lấy hoạt động cho tuần {} ngày {} userId: {}", 
+        log.info("Lấy hoạt động cho tuần {} ngày {} userId: {}", 
                  weekNumber, dayOfWeek, user.getId());
         
         if (weekNumber < 1 || weekNumber > 4) {
@@ -1184,7 +1163,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 5] Lỗi: {}", e.getMessage(), e);
+            log.error("Lỗi: {}", e.getMessage(), e);
             throw e;
         }
     }
@@ -1196,9 +1175,8 @@ public class PersonalizedLearningController {
      */
     @PostMapping("/daily-practice/complete")
     @Operation(
-        summary = "Đánh dấu hoàn thành (TASK 5)",
-        description = "Đánh dấu hoạt động hôm nay đã hoàn thành",
-        tags = {"Personalized Learning - Task 5"}
+        summary = "Đánh dấu hoàn thành",
+        description = "Đánh dấu hoạt động hôm nay đã hoàn thành"
     )
     @ApiResponse(
         responseCode = "200",
@@ -1209,7 +1187,7 @@ public class PersonalizedLearningController {
         @AuthenticationPrincipal User user,
         @RequestParam(defaultValue = "true") boolean completed
     ) {
-        log.info("[TASK 5] Đánh dấu hoàn thành cho userId: {} - {}", user.getId(), completed);
+        log.info("Đánh dấu hoàn thành cho userId: {} - {}", user.getId(), completed);
         
         try {
             dailyPracticeService.markDayAsCompleted(user.getId(), completed);
@@ -1222,7 +1200,7 @@ public class PersonalizedLearningController {
             ));
             
         } catch (Exception e) {
-            log.error("[TASK 5] Lỗi đánh dấu: {}", e.getMessage(), e);
+            log.error("Lỗi đánh dấu: {}", e.getMessage(), e);
             throw e;
         }
     }
@@ -1234,9 +1212,8 @@ public class PersonalizedLearningController {
      */
     @PostMapping("/daily-practice/notes")
     @Operation(
-        summary = "Lưu ghi chú (TASK 5)",
-        description = "Lưu ghi chú cá nhân cho hoạt động hôm nay",
-        tags = {"Personalized Learning - Task 5"}
+        summary = "Lưu ghi chú",
+        description = "Lưu ghi chú cá nhân cho hoạt động hôm nay"
     )
     @ApiResponse(
         responseCode = "200",
@@ -1247,7 +1224,7 @@ public class PersonalizedLearningController {
         @AuthenticationPrincipal User user,
         @RequestParam(required = true) String notes
     ) {
-        log.info("[TASK 5] Lưu ghi chú cho userId: {}", user.getId());
+        log.info("Lưu ghi chú cho userId: {}", user.getId());
         
         try {
             dailyPracticeService.saveDailyNotes(user.getId(), notes);
@@ -1259,7 +1236,7 @@ public class PersonalizedLearningController {
             ));
             
         } catch (Exception e) {
-            log.error("[TASK 5] Lỗi lưu ghi chú: {}", e.getMessage(), e);
+            log.error("Lỗi lưu ghi chú: {}", e.getMessage(), e);
             throw e;
         }
     }
@@ -1307,9 +1284,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/adaptive-difficulty")
     @Operation(
-        summary = "Phân tích độ khó tự động (TASK 6)",
-        description = "Phân tích hiệu suất và gợi ý điều chỉnh độ khó dựa trên hoạt động",
-        tags = {"Personalized Learning - Task 6"}
+        summary = "Phân tích độ khó tự động",
+        description = "Phân tích hiệu suất và gợi ý điều chỉnh độ khó dựa trên hoạt động"
     )
     @ApiResponse(
         responseCode = "200",
@@ -1331,19 +1307,19 @@ public class PersonalizedLearningController {
     public ResponseEntity<AdaptiveDifficultyResponse> analyzeAdaptiveDifficulty(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 6] GET /api/ai/personalized/adaptive-difficulty - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/adaptive-difficulty - userId: {}", user.getId());
         
         try {
             var analysis = adaptiveDifficultyService.analyzeAndRecommendDifficulty(user.getId());
             
             AdaptiveDifficultyResponse response = adaptiveDifficultyMapper.toResponse(analysis);
             
-            log.info("[TASK 6] Phân tích độ khó hoàn thành cho userId: {}", user.getId());
+            log.info("Phân tích độ khó hoàn thành cho userId: {}", user.getId());
             
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 6] Lỗi phân tích độ khó cho userId: {}: {}",
+            log.error("Lỗi phân tích độ khó cho userId: {}: {}",
                       user.getId(), e.getMessage(), e);
             throw e;
         }
@@ -1356,9 +1332,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/adaptive-difficulty/ease")
     @Operation(
-        summary = "Các chủ đề nên làm dễ hơn (TASK 6)",
-        description = "Nhận danh sách chủ đề hiệu suất thấp cần làm dễ hơn",
-        tags = {"Personalized Learning - Task 6"}
+        summary = "Các chủ đề nên làm dễ hơn",
+        description = "Nhận danh sách chủ đề hiệu suất thấp cần làm dễ hơn"
     )
     @ApiResponse(
         responseCode = "200",
@@ -1367,7 +1342,7 @@ public class PersonalizedLearningController {
     public ResponseEntity<?> getTopicsToEase(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 6] GET /api/ai/personalized/adaptive-difficulty/ease - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/adaptive-difficulty/ease - userId: {}", user.getId());
         
         try {
             var topicsToEase = adaptiveDifficultyService.getTopicsToEase(user.getId());
@@ -1381,7 +1356,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 6] Lỗi lấy topics to ease cho userId: {}: {}", user.getId(), e.getMessage(), e);
+            log.error("Lỗi lấy topics to ease cho userId: {}: {}", user.getId(), e.getMessage(), e);
             throw e;
         }
     }
@@ -1393,9 +1368,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/adaptive-difficulty/challenge")
     @Operation(
-        summary = "Các chủ đề nên làm khó hơn (TASK 6)",
-        description = "Nhận danh sách chủ đề hiệu suất cao sẵn sàng chứng cự",
-        tags = {"Personalized Learning - Task 6"}
+        summary = "Các chủ đề nên làm khó hơn",
+        description = "Nhận danh sách chủ đề hiệu suất cao sẵn sàng chứng cự"
     )
     @ApiResponse(
         responseCode = "200",
@@ -1404,7 +1378,7 @@ public class PersonalizedLearningController {
     public ResponseEntity<?> getTopicsToChallenge(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 6] GET /api/ai/personalized/adaptive-difficulty/challenge - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/adaptive-difficulty/challenge - userId: {}", user.getId());
         
         try {
             var topicsToChallenge = adaptiveDifficultyService.getTopicsToChallenge(user.getId());
@@ -1418,7 +1392,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 6] Lỗi lấy topics to challenge cho userId: {}: {}", user.getId(), e.getMessage(), e);
+            log.error("Lỗi lấy topics to challenge cho userId: {}: {}", user.getId(), e.getMessage(), e);
             throw e;
         }
     }
@@ -1435,9 +1409,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/adaptive-difficulty/topic/{topic}/recommended")
     @Operation(
-        summary = "Độ khó được đề xuất cho chủ đề (TASK 6)",
-        description = "Nhận độ khó được đề xuất (1-10) cho một chủ đề cụ thể",
-        tags = {"Personalized Learning - Task 6"}
+        summary = "Độ khó được đề xuất cho chủ đề",
+        description = "Nhận độ khó được đề xuất (1-10) cho một chủ đề cụ thể"
     )
     @ApiResponse(
         responseCode = "200",
@@ -1447,7 +1420,7 @@ public class PersonalizedLearningController {
         @AuthenticationPrincipal User user,
         @PathVariable(required = true) String topic
     ) {
-        log.info("[TASK 6] GET /api/ai/personalized/adaptive-difficulty/topic/{}/recommended - userId: {}",
+        log.info("GET /api/ai/personalized/adaptive-difficulty/topic/{}/recommended - userId: {}",
                  topic, user.getId());
         
         try {
@@ -1464,7 +1437,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 6] Lỗi lấy recommended difficulty cho userId: {}, topic: {}: {}",
+            log.error("Lỗi lấy recommended difficulty cho userId: {}, topic: {}: {}",
                       user.getId(), topic, e.getMessage(), e);
             throw e;
         }
@@ -1516,9 +1489,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/progress-analysis")
     @Operation(
-        summary = "Phân tích tiến độ học tập (TASK 7)",
-        description = "Phân tích tiến độ hướng tới mục tiêu và dự đoán ngày hoàn thành",
-        tags = {"Personalized Learning - Task 7"}
+        summary = "Phân tích tiến độ học tập",
+        description = "Phân tích tiến độ hướng tới mục tiêu và dự đoán ngày hoàn thành"
     )
     @ApiResponse(
         responseCode = "200",
@@ -1540,20 +1512,20 @@ public class PersonalizedLearningController {
     public ResponseEntity<ProgressAnalysisResponse> analyzeProgress(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 7] GET /api/ai/personalized/progress-analysis - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/progress-analysis - userId: {}", user.getId());
         
         try {
             var analysis = progressAnalysisService.analyzeProgress(user.getId());
             
             ProgressAnalysisResponse response = progressAnalysisMapper.toResponse(analysis);
             
-            log.info("[TASK 7] Phân tích tiến độ hoàn thành cho userId: {}, completion: {}%",
+            log.info("Phân tích tiến độ hoàn thành cho userId: {}, completion: {}%",
                      user.getId(), analysis.getCompletionPercentage());
             
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 7] Lỗi phân tích tiến độ cho userId: {}: {}",
+            log.error("Lỗi phân tích tiến độ cho userId: {}: {}",
                       user.getId(), e.getMessage(), e);
             throw e;
         }
@@ -1566,9 +1538,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/progress-analysis/milestones")
     @Operation(
-        summary = "Các milestone và tiến độ (TASK 7)",
-        description = "Nhận danh sách milestone đã hoàn thành, hiện tại, và tiếp theo",
-        tags = {"Personalized Learning - Task 7"}
+        summary = "Các milestone và tiến độ",
+        description = "Nhận danh sách milestone đã hoàn thành, hiện tại, và tiếp theo"
     )
     @ApiResponse(
         responseCode = "200",
@@ -1577,7 +1548,7 @@ public class PersonalizedLearningController {
     public ResponseEntity<?> getMilestoneProgress(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 7] GET /api/ai/personalized/progress-analysis/milestones - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/progress-analysis/milestones - userId: {}", user.getId());
         
         try {
             var completed = progressAnalysisService.getCompletedMilestones(user.getId());
@@ -1594,7 +1565,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 7] Lỗi lấy milestone progress cho userId: {}: {}", user.getId(), e.getMessage(), e);
+            log.error("Lỗi lấy milestone progress cho userId: {}: {}", user.getId(), e.getMessage(), e);
             throw e;
         }
     }
@@ -1606,9 +1577,8 @@ public class PersonalizedLearningController {
      */
     @GetMapping("/progress-analysis/prediction")
     @Operation(
-        summary = "Dự đoán ngày hoàn thành (TASK 7)",
-        description = "Nhận dự đoán ngày hoàn thành kế hoạch và xác suất hoàn thành đúng hạn",
-        tags = {"Personalized Learning - Task 7"}
+        summary = "Dự đoán ngày hoàn thành",
+        description = "Nhận dự đoán ngày hoàn thành kế hoạch và xác suất hoàn thành đúng hạn"
     )
     @ApiResponse(
         responseCode = "200",
@@ -1617,7 +1587,7 @@ public class PersonalizedLearningController {
     public ResponseEntity<?> getPrediction(
         @AuthenticationPrincipal User user
     ) {
-        log.info("[TASK 7] GET /api/ai/personalized/progress-analysis/prediction - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/progress-analysis/prediction - userId: {}", user.getId());
         
         try {
             var completionDate = progressAnalysisService.getEstimatedCompletionDate(user.getId());
@@ -1635,7 +1605,7 @@ public class PersonalizedLearningController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            log.error("[TASK 7] Lỗi lấy prediction cho userId: {}: {}", user.getId(), e.getMessage(), e);
+            log.error("Lỗi lấy prediction cho userId: {}: {}", user.getId(), e.getMessage(), e);
             throw e;
         }
     }

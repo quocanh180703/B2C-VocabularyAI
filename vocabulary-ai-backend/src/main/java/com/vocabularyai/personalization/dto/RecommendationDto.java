@@ -74,24 +74,28 @@ public class RecommendationDto {
      * Danh sách tất cả gợi ý (10-15 item)
      */
     @JsonProperty("recommendations")
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(contentUsing = RecommendationItemDeserializer.class)
     private List<RecommendationItem> recommendations;
     
     /**
      * Gợi ý nhanh chóng (dễ áp dụng, có tác động cao)
      */
     @JsonProperty("quickWins")
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(contentUsing = RecommendationItemDeserializer.class)
     private List<RecommendationItem> quickWins;
     
     /**
      * Gợi ý dài hạn (cần thời gian nhưng có giá trị lớn)
      */
     @JsonProperty("longTermGoals")
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(contentUsing = RecommendationItemDeserializer.class)
     private List<RecommendationItem> longTermGoals;
     
     /**
      * Gợi ý khẩn cấp (địa chỉ điểm yếu CRITICAL)
      */
     @JsonProperty("criticalRecommendations")
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(contentUsing = RecommendationItemDeserializer.class)
     private List<RecommendationItem> criticalRecommendations;
     
     /**
@@ -199,12 +203,14 @@ public class RecommendationDto {
          * Tác động dự kiến (HIGH, MEDIUM, LOW)
          */
         @JsonProperty("expectedImpact")
+        @com.fasterxml.jackson.annotation.JsonAlias({"impact"})
         private String expectedImpact;
         
         /**
          * Mức độ nỗ lực cần thiết (EASY, MODERATE, CHALLENGING)
          */
         @JsonProperty("effortLevel")
+        @com.fasterxml.jackson.annotation.JsonAlias({"effort"})
         private String effortLevel;
         
         /**

@@ -25,6 +25,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,7 +54,7 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
     @Value("${gemini.api-key:}")
     private String geminiApiKey;
     
-    @Value("${gemini.model:gemini-1.5-pro-latest}")
+    @Value("${gemini.model:gemini-3.1-flash-lite}")
     private String modelName;
     
     @Value("${ai.rate-limit.daily-tokens:1000000}")
@@ -304,10 +305,13 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
     
     /**
      * Call Gemini API via REST endpoint
+     * 
+     * Makes actual HTTP POST request to Google Gemini API:
+     * https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent
      */
     private String callGeminiAPI(String prompt) {
         try {
-            // Build request
+            // Build request body
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             
@@ -321,18 +325,66 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
             
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
             
-            // Call API
+            // Build URL with API key
             String url = GEMINI_API_URL.replace("{model}", modelName) + "?key=" + geminiApiKey;
             
-            // Note: This is a simplified example. In production, you'd use proper RestTemplate configuration
-            log.debug("Calling Gemini API endpoint: {}", url);
+            // Make actual REST call to Gemini API
+            log.debug("[TASK AI] Calling Gemini API - model: {}, timeout: 30s", modelName);
             
-            // For now, return a mock response (actual implementation would make the REST call)
-            return "Mock response from Gemini API - in production, replace with actual HTTP call";
+            var response = restTemplate.postForEntity(
+                new URI(url),
+                entity,
+                Map.class
+            );
             
+            log.debug("[TASK AI] Gemini API response status: {}", response.getStatusCode());
+            
+            // Parse response
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                Map<String, Object> body = response.getBody();
+                
+                // Extract text from: response.candidates[0].content.parts[0].text
+                @SuppressWarnings("unchecked")
+                List<Map<String, Object>> candidates = (List<Map<String, Object>>) body.get("candidates");
+                
+                if (candidates != null && !candidates.isEmpty()) {
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> candidate = candidates.get(0);
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> contentMap = (Map<String, Object>) candidate.get("content");
+                    
+                    if (contentMap != null) {
+                        @SuppressWarnings("unchecked")
+                        List<Map<String, Object>> partsList = (List<Map<String, Object>>) contentMap.get("parts");
+                        
+                        if (partsList != null && !partsList.isEmpty()) {
+                            String text = (String) partsList.get(0).get("text");
+                            
+                            if (text != null && !text.trim().isEmpty()) {
+                                log.debug("[TASK AI] Gemini response received, length: {} chars", text.length());
+                                return text;
+                            }
+                        }
+                    }
+                }
+                
+                log.error("[TASK AI] Invalid Gemini response structure: {}", body);
+                throw new ExternalServiceException(
+                    "Invalid Gemini response structure - missing candidates/content/parts"
+                );
+            }
+            
+            log.error("[TASK AI] Gemini API HTTP error - status: {}", response.getStatusCode());
+            throw new ExternalServiceException(
+                "Gemini API HTTP " + response.getStatusCode() + " - " + response.getBody()
+            );
+            
+        } catch (RestClientException e) {
+            log.error("[TASK AI] Gemini API HTTP error: {}", e.getMessage(), e);
+            throw e;
         } catch (Exception e) {
-            log.error("Error calling Gemini API: {}", e.getMessage());
-            throw new RestClientException("Failed to call Gemini API", e);
+            log.error("[TASK AI] Unexpected error calling Gemini API: {}", e.getMessage(), e);
+            throw new RestClientException("Failed to call Gemini API: " + e.getMessage(), e);
         }
     }
     

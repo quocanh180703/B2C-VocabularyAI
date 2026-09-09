@@ -26,7 +26,6 @@ import java.util.Locale;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class DailyPracticeServiceImpl implements DailyPracticeService {
     
     private final LearningPlanService learningPlanService;
@@ -111,6 +110,7 @@ public class DailyPracticeServiceImpl implements DailyPracticeService {
      * Lấy gợi ý cho ngày cụ thể
      */
     @Override
+    @Transactional(readOnly = false)
     public DailyPracticeDto getDailyPracticeForDay(Long userId, int weekNumber, String dayOfWeek) {
         log.info("[TASK 5] Lấy hoạt động cho tuần {} ngày {} userId: {}", weekNumber, dayOfWeek, userId);
         

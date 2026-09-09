@@ -47,7 +47,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class ProgressAnalysisServiceImpl implements ProgressAnalysisService {
     
     private final LearningPlanService learningPlanService;
@@ -168,6 +167,7 @@ public class ProgressAnalysisServiceImpl implements ProgressAnalysisService {
      * Lấy tỉ lệ hoàn thành (%)
      */
     @Override
+    @Transactional(readOnly = false)
     public Double getCompletionPercentage(Long userId) {
         ProgressAnalysisDto analysis = analyzeProgress(userId);
         if (analysis == null) {
@@ -180,6 +180,7 @@ public class ProgressAnalysisServiceImpl implements ProgressAnalysisService {
      * Lấy ngày dự kiến hoàn thành
      */
     @Override
+    @Transactional(readOnly = false)
     public LocalDateTime getEstimatedCompletionDate(Long userId) {
         ProgressAnalysisDto analysis = analyzeProgress(userId);
         if (analysis == null) {
@@ -192,6 +193,7 @@ public class ProgressAnalysisServiceImpl implements ProgressAnalysisService {
      * Lấy danh sách milestone đã hoàn thành
      */
     @Override
+    @Transactional(readOnly = false)
     public List<ProgressAnalysisDto.MilestoneProgressItem> getCompletedMilestones(Long userId) {
         ProgressAnalysisDto analysis = analyzeProgress(userId);
         if (analysis == null || analysis.getCompletedMilestones() == null) {
@@ -204,6 +206,7 @@ public class ProgressAnalysisServiceImpl implements ProgressAnalysisService {
      * Lấy milestone hiện tại
      */
     @Override
+    @Transactional(readOnly = false)
     public ProgressAnalysisDto.MilestoneProgressItem getCurrentMilestone(Long userId) {
         ProgressAnalysisDto analysis = analyzeProgress(userId);
         if (analysis == null) {
@@ -216,6 +219,7 @@ public class ProgressAnalysisServiceImpl implements ProgressAnalysisService {
      * Lấy milestone tiếp theo
      */
     @Override
+    @Transactional(readOnly = false)
     public ProgressAnalysisDto.MilestoneProgressItem getNextMilestone(Long userId) {
         ProgressAnalysisDto analysis = analyzeProgress(userId);
         if (analysis == null) {
@@ -228,6 +232,7 @@ public class ProgressAnalysisServiceImpl implements ProgressAnalysisService {
      * Tính toán velocity
      */
     @Override
+    @Transactional(readOnly = false)
     public ProgressAnalysisDto.VelocityAnalysis calculateVelocity(Long userId) {
         ProgressAnalysisDto analysis = analyzeProgress(userId);
         if (analysis == null) {
@@ -242,6 +247,7 @@ public class ProgressAnalysisServiceImpl implements ProgressAnalysisService {
      * Lấy số ngày sớm/muộn
      */
     @Override
+    @Transactional(readOnly = false)
     public Integer getDaysAheadOrBehind(Long userId) {
         ProgressAnalysisDto analysis = analyzeProgress(userId);
         if (analysis == null) {
@@ -254,6 +260,7 @@ public class ProgressAnalysisServiceImpl implements ProgressAnalysisService {
      * Lấy xác suất hoàn thành đúng hạn
      */
     @Override
+    @Transactional(readOnly = false)
     public Double getOnTimeCompletionProbability(Long userId) {
         ProgressAnalysisDto analysis = analyzeProgress(userId);
         if (analysis == null) {

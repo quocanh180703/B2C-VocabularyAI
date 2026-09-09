@@ -3,6 +3,7 @@ package com.vocabularyai.personalization.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocabularyai.ai.service.gemini.GeminiAIClientService;
 import com.vocabularyai.ai.service.cache.CacheService;
+import com.vocabularyai.ai.util.JsonResponseExtractor;
 import com.vocabularyai.common.exception.ForbiddenException;
 import com.vocabularyai.common.exception.RateLimitExceededException;
 import com.vocabularyai.common.exception.ResourceNotFoundException;
@@ -44,7 +45,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class WeaknessStrengthServiceImpl implements WeaknessStrengthService {
     
     private final LearningProfileService learningProfileService;
@@ -336,13 +337,18 @@ public class WeaknessStrengthServiceImpl implements WeaknessStrengthService {
     
     /**
      * Parse Gemini AI response JSON into WeaknessStrengthDto
+     * 
+     * Handles markdown code fences and other text wrapping
      */
     private WeaknessStrengthDto parseAIResponse(String aiResponse, Long userId, String userName) {
         try {
             log.debug("[TASK 2] Parsing AI JSON response for userId: {}", userId);
             
+            // Extract JSON from response (handles markdown, embedded JSON, etc.)
+            String jsonString = JsonResponseExtractor.extractJsonString(aiResponse);
+            
             // Parse JSON response
-            WeaknessStrengthDto dto = objectMapper.readValue(aiResponse, WeaknessStrengthDto.class);
+            WeaknessStrengthDto dto = objectMapper.readValue(jsonString, WeaknessStrengthDto.class);
             
             // Set userId, userName, and timestamp
             dto.setUserId(userId);

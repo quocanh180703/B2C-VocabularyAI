@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/words")
 @RequiredArgsConstructor
 @Tag(name = "Words", description = "Vocabulary word management endpoints")
+@SecurityRequirement(name = "bearerAuth")
+@PreAuthorize("isAuthenticated()")
 public class WordController {
     
     private final WordService wordService;

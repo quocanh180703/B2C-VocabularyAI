@@ -45,7 +45,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class AdaptiveDifficultyServiceImpl implements AdaptiveDifficultyService {
     
     private final LearningPlanService learningPlanService;
