@@ -1,5 +1,6 @@
 package com.vocabularyai.speaking.controller;
 
+import com.vocabularyai.common.validator.ValidAudioFile;
 import com.vocabularyai.speaking.dto.response.SpeakingPracticeResponse;
 import com.vocabularyai.speaking.service.SpeakingPracticeService;
 import com.vocabularyai.user.entity.User;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -130,7 +132,13 @@ public class SpeakingPracticeController {
         @RequestParam(name = "sessionId") Long sessionId,
         
         @Parameter(description = "Audio file (MP3, WAV, WebM, OGG), max 10MB", required = true)
-        @RequestParam(name = "audioFile") MultipartFile audioFile,
+        @RequestParam(name = "audioFile") 
+        @Valid @ValidAudioFile(
+            maxSize = 52428800, // 50MB
+            allowedMimeTypes = {"audio/wav", "audio/mpeg", "audio/mp4", "audio/webm", "audio/ogg", "audio/flac"},
+            allowedExtensions = {"wav", "mp3", "m4a", "webm", "ogg", "flac"}
+        )
+        MultipartFile audioFile,
         
         @AuthenticationPrincipal User user
     ) {

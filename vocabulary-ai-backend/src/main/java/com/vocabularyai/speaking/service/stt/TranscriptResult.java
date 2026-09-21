@@ -7,68 +7,60 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * TranscriptResult
- * 
- * Kết quả từ Speech-to-Text service sau khi convert audio → text
+ * Result of Speech-to-Text transcription.
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TranscriptResult {
-    
+
     /**
-     * Nội dung transcript (text được chuyển từ audio)
-     * Ví dụ: "Hello, this is a test recording"
+     * Transcribed text from audio
      */
     @JsonProperty("transcript")
     private String transcript;
-    
+
     /**
-     * Độ tin cậy của transcript (0-100)
-     * Biểu thị độ chính xác của việc recognition
-     * Ví dụ: 95.5 = 95.5% confidence
+     * Confidence score (0-100)
+     * Higher = more confident in the transcription
      */
     @JsonProperty("confidence")
     private Double confidence;
-    
+
     /**
-     * Language code được detect/sử dụng
-     * Ví dụ: en-US, en-GB, vi-VN
+     * Language code detected (e.g., en-US)
      */
     @JsonProperty("languageCode")
     private String languageCode;
-    
+
     /**
-     * Duration của audio file (seconds)
-     * Nếu provider cung cấp thông tin này
+     * Duration of audio in seconds
      */
     @JsonProperty("durationSeconds")
     private Integer durationSeconds;
-    
+
     /**
-     * Provider được sử dụng để transcribe
-     * Ví dụ: google, azure, custom
+     * STT provider used (gemini, google_cloud, azure, aws)
      */
     @JsonProperty("provider")
     private String provider;
-    
+
     /**
-     * Danh sách các alternative transcriptions (nếu provider hỗ trợ)
-     * Chứa nhiều giả thuyết transcription theo độ tin cậy
+     * Processing time in milliseconds
      */
-    @JsonProperty("alternatives")
-    private java.util.List<AlternativeTranscript> alternatives;
-    
+    @JsonProperty("processingTimeMs")
+    private Long processingTimeMs;
+
     /**
-     * Alternative Transcript
+     * Whether transcription is successful
      */
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class AlternativeTranscript {
-        private String transcript;
-        private Double confidence;
-    }
+    @JsonProperty("success")
+    private Boolean success;
+
+    /**
+     * Error message if transcription failed
+     */
+    @JsonProperty("errorMessage")
+    private String errorMessage;
 }

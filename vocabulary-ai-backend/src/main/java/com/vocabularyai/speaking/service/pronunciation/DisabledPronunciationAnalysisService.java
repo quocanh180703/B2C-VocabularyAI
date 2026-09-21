@@ -6,52 +6,43 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 /**
- * DisabledPronunciationAnalysisService
- * 
- * Placeholder implementation khi pronunciation analysis bị disable
- * 
- * Returns fixed pronunciation score (80/100) mà không thực hiện analysis thực tế
- * 
- * ConditionalOnProperty: pronunciation.provider=disabled
+ * No-op Pronunciation Analysis service.
+ * Used when pronunciation analysis is disabled.
  */
-@Service
-@ConditionalOnProperty(
-    name = "speaking.pronunciation.provider",
-    havingValue = "disabled"
-)
 @Slf4j
+@Service
+@ConditionalOnProperty(name = "speaking.pronunciation.provider", havingValue = "disabled", matchIfMissing = true)
 public class DisabledPronunciationAnalysisService implements PronunciationAnalysisService {
-    
+
     @Override
-    public PronunciationAnalysisResult analyzePronunciation(
-            String audioFilePath,
-            String transcript,
-            String topic,
-            String level,
-            Long userId) {
-        
-        log.info("Pronunciation analysis is disabled - returning placeholder result");
-        
-        // Return placeholder result
-        return PronunciationAnalysisResult.builder()
-                .pronunciationScore(null)  // null để placeholder
-                .feedback("Pronunciation analysis is not enabled in this deployment")
-                .stressFeedback("")
-                .intonationFeedback("")
-                .wordLevelIssues(null)
-                .suggestions(null)
-                .analysisConfidence(0.0)
-                .provider("disabled")
-                .build();
+    public PronunciationAnalysisResult analyzePronunciation(String audioUrl, String transcript, String topic, String level, Long userId) {
+        log.debug("Pronunciation analysis is disabled");
+        return buildDisabledResult();
     }
-    
+
     @Override
     public boolean isProviderAvailable() {
         return false;
     }
-    
+
     @Override
-    public String getProviderName() {
+    public String getProviderType() {
         return "disabled";
+    }
+
+    @Override
+    public boolean isHealthy() {
+        return true; // Disabled service is always "healthy"
+    }
+
+    private PronunciationAnalysisResult buildDisabledResult() {
+        return PronunciationAnalysisResult.builder()
+            .pronunciationScore(0.0)
+            .feedback("Pronunciation analysis service is disabled")
+            .stressFeedback(null)
+            .intonationFeedback(null)
+            .analysisConfidence(0.0)
+            .provider("disabled")
+            .build();
     }
 }

@@ -83,6 +83,7 @@ public class FavoriteWordService {
     /**
      * Get all favorite words for user
      */
+    @Transactional(readOnly = true)
     public Page<FavoriteWordResponse> getUserFavorites(Long userId, Pageable pageable) {
         log.info("Getting favorite words for user {}", userId);
         
