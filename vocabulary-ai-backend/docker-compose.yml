@@ -1,0 +1,148 @@
+# ============================================================
+# Docker Compose Configuration
+# VocabularyAI Backend - MySQL 8, Redis 6, Adminer (DB Management)
+# ============================================================
+#
+# Usage:
+#   docker-compose up -d        # Start all services
+#   docker-compose down         # Stop all services
+#   docker-compose ps           # View running services
+#   docker-compose logs -f      # View logs (follow mode)
+#
+# Services:
+#   - mysql: Database (port 3306)
+#   - redis: Cache (port 6379)
+#   - adminer: DB Management UI (port 8081)
+#
+# ============================================================
+
+services:
+  # ============================================================
+  # MySQL 8.0 Database
+  # ============================================================
+  mysql:
+    image: mysql:8.0
+    container_name: vocabulary-ai-mysql
+    restart: always
+    
+    # Port mapping: host:container
+    ports:
+      - "3307:3306"
+    
+    # Environment variables
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-180703}
+      MYSQL_DATABASE: datn_2
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+      TZ: Asia/Ho_Chi_Minh
+    
+    # Volume for persistent data
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./src/main/resources/db/migration:/docker-entrypoint-initdb.d:ro
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD:-180703}"]
+      timeout: 30s
+      retries: 15
+      interval: 5s
+      start_period: 60s
+    
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    
+    # Network
+    networks:
+      - vocabulary-ai-network
+
+  # ============================================================
+  # Redis 6 Cache
+  # ============================================================
+  redis:
+    image: redis:7-alpine
+    container_name: vocabulary-ai-redis
+    restart: always
+    
+    # Port mapping
+    ports:
+      - "6379:6379"
+    
+    # Command with settings
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    
+    # Volume for persistence
+    volumes:
+      - redis_data:/data
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      timeout: 3s
+      retries: 5
+      interval: 5s
+    
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    
+    # Network
+    networks:
+      - vocabulary-ai-network
+
+  # ============================================================
+  # Adminer - Database Management Web UI
+  # Access: http://localhost:8081
+  # ============================================================
+  adminer:
+    image: adminer:latest
+    container_name: vocabulary-ai-adminer
+    restart: always
+    
+    # Port mapping
+    ports:
+      - "8081:8080"
+    
+    # Depends on MySQL
+    depends_on:
+      mysql:
+        condition: service_healthy
+    
+    # Environment
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+    
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+    
+    # Network
+    networks:
+      - vocabulary-ai-network
+
+# ============================================================
+# Volumes for persistent data
+# ============================================================
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+
+# ============================================================
+# Network
+# ============================================================
+networks:
+  vocabulary-ai-network:
+    driver: bridge

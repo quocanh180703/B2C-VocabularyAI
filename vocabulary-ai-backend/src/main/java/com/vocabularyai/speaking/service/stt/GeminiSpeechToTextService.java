@@ -36,10 +36,10 @@ public class GeminiSpeechToTextService implements SpeechToTextService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    @Value("${gemini:api-key}")
+    @Value("${gemini.api-key}")
     private String apiKey;
 
-    @Value("${gemini:model:gemini-3.1-flash-lite}")
+    @Value("${gemini.model:gemini-3.1-flash-lite}")
     private String model;
 
     @Value("${speaking.speech-to-text.language-code:en-US}")
@@ -128,6 +128,83 @@ public class GeminiSpeechToTextService implements SpeechToTextService {
         return "gemini";
     }
 
+    /**
+     * Transcribe audio from disk path
+     */
+    @Override
+    public TranscriptResult transcribeFromPath(String audioFilePath) {
+        return transcribeFromPath(audioFilePath, defaultLanguageCode);
+    }
+
+    /**
+     * Transcribe audio from disk path with language code
+     */
+    @Override
+    public TranscriptResult transcribeFromPath(String audioFilePath, String languageCode) {
+        long startTime = System.currentTimeMillis();
+        log.info("Transcribing audio from disk using Gemini STT provider - path: {}", audioFilePath);
+
+        try {
+            // Validate file path
+            if (audioFilePath == null || audioFilePath.isEmpty()) {
+                throw new SpeechToTextException("Audio file path is empty");
+            }
+
+            // Read file from disk
+            java.nio.file.Path path = java.nio.file.Paths.get(audioFilePath);
+            if (!java.nio.file.Files.exists(path)) {
+                throw new SpeechToTextException("Audio file not found at: " + audioFilePath);
+            }
+
+            byte[] audioBytes = java.nio.file.Files.readAllBytes(path);
+            String filename = path.getFileName().toString();
+            String mimeType = getMimeType(filename);
+
+            log.info("Processing audio file from disk: {}, size: {} bytes, type: {}", 
+                     filename, audioBytes.length, mimeType);
+
+            // Encode audio to base64
+            String base64Audio = Base64.getEncoder().encodeToString(audioBytes);
+
+            // Build prompt for Gemini
+            String transcriptPrompt = buildTranscriptionPrompt(languageCode);
+
+            // Call Gemini API with base64 encoded audio
+            String transcript = callGeminiForTranscription(base64Audio, mimeType, transcriptPrompt);
+
+            if (transcript == null || transcript.trim().isEmpty()) {
+                throw new SpeechToTextException("Gemini returned empty transcript");
+            }
+
+            // Estimate confidence
+            Double confidence = estimateConfidence(transcript);
+
+            long processingTime = System.currentTimeMillis() - startTime;
+
+            TranscriptResult result = TranscriptResult.builder()
+                .transcript(transcript.trim())
+                .confidence(confidence)
+                .languageCode(languageCode)
+                .durationSeconds(null)
+                .provider("gemini")
+                .processingTimeMs(processingTime)
+                .success(true)
+                .build();
+
+            log.info("Transcription successful: {} chars, confidence: {}, time: {}ms",
+                transcript.length(), confidence, processingTime);
+
+            return result;
+
+        } catch (java.io.IOException e) {
+            log.error("Failed to read audio file from disk: {}", audioFilePath, e);
+            return buildErrorResult(e.getMessage(), System.currentTimeMillis() - startTime);
+        } catch (Exception e) {
+            log.error("Failed to transcribe audio from disk with Gemini", e);
+            return buildErrorResult(e.getMessage(), System.currentTimeMillis() - startTime);
+        }
+    }
+
     @Override
     public boolean isHealthy() {
         try {
@@ -145,33 +222,52 @@ public class GeminiSpeechToTextService implements SpeechToTextService {
      */
     private String callGeminiForTranscription(String base64Audio, String mimeType, String prompt) {
         try {
-            String url = GEMINI_API_URL.replace("{model}", model) + "?key=" + apiKey;
-
+            if (apiKey == null || apiKey.trim().isEmpty()) {
+                throw new SpeechToTextException("Gemini API key is not configured. Please set GEMINI_API_KEY environment variable.");
+            }
+            
+            // Ensure model name has correct format (must have models/ prefix)
+            String modelName = model;
+            if (!modelName.startsWith("models/")) {
+                modelName = "models/" + modelName;
+            }
+            
+            String url = GEMINI_API_URL.replace("{model}", modelName) + "?key=" + apiKey;
+            
+            // TEMPORARY: Log URL info to see exact endpoint
+            String debugUrl = url.replaceAll("key=[^&]*", "key=***");
+            log.error("GEMINI_DEBUG_URL: " + debugUrl);
+            System.err.println("GEMINI_DEBUG_URL: " + debugUrl);
+            System.err.println("GEMINI_DEBUG_MODEL: " + modelName);
+            System.err.println("GEMINI_DEBUG_TEMPLATE: " + GEMINI_API_URL);
+            
             // Build request body
             String requestBody = String.format("""
                 {
-                  "contents": [{
-                    "parts": [
-                      {"text": "%s"},
-                      {"inlineData": {"mimeType": "%s", "data": "%s"}}
-                    ]
-                  }],
-                  "generationConfig": {
-                    "temperature": 0.3,
-                    "topP": 0.95,
-                    "maxOutputTokens": 500
-                  }
+                    "contents": [{
+                        "parts": [{
+                            "text": "%s",
+                            "inline_data": {
+                                "mime_type": "%s",
+                                "data": "%s"
+                            }
+                        }]
+                    }]
                 }
                 """, escapeJson(prompt), mimeType, base64Audio);
-
+            
+            // Prepare headers
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-
+            
+            // Create request
             HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
-
-            log.debug("Calling Gemini API for transcription");
+            
+            log.debug("Calling Gemini API at: {}", url.replaceAll("key=[^&]*", "key=***"));
+            
+            // Make API call
             ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
-
+            
             if (!response.getStatusCode().is2xxSuccessful()) {
                 throw new SpeechToTextException("Gemini API returned status: " + response.getStatusCode());
             }
@@ -277,6 +373,26 @@ public class GeminiSpeechToTextService implements SpeechToTextService {
             .replace("\n", "\\n")
             .replace("\r", "\\r")
             .replace("\t", "\\t");
+    }
+
+    /**
+     * Get MIME type based on file extension
+     */
+    private String getMimeType(String filename) {
+        if (filename == null || !filename.contains(".")) {
+            return "audio/mpeg"; // Default
+        }
+        
+        String ext = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
+        return switch (ext) {
+            case "mp3" -> "audio/mpeg";
+            case "wav" -> "audio/wav";
+            case "m4a" -> "audio/mp4";
+            case "webm" -> "audio/webm";
+            case "ogg" -> "audio/ogg";
+            case "flac" -> "audio/flac";
+            default -> "audio/mpeg";
+        };
     }
 
     /**

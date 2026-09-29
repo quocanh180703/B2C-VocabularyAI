@@ -95,6 +95,7 @@ public class LocalAudioStorageService implements AudioStorageService {
                 .fileSize(fileSize)
                 .mimeType(mimeType)
                 .storageType("local")
+                .storagePath(filePath.toString())  // ✅ Set absolute path for reading
                 .durationSeconds(null) // Duration extraction requires ffprobe
                 .build();
 

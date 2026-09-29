@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
+@org.springframework.context.annotation.Primary
 @ConditionalOnProperty(name = "speaking.pronunciation.provider", havingValue = "disabled", matchIfMissing = true)
 public class DisabledPronunciationAnalysisService implements PronunciationAnalysisService {
 

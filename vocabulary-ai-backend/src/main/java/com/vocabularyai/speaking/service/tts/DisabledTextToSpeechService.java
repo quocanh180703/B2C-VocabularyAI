@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
+@org.springframework.context.annotation.Primary
 @ConditionalOnProperty(name = "speaking.text-to-speech.provider", havingValue = "disabled", matchIfMissing = true)
 public class DisabledTextToSpeechService implements TextToSpeechService {
 

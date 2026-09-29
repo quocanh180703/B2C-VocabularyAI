@@ -2,6 +2,17 @@ package com.vocabularyai.auth.controller;
 
 import com.vocabularyai.auth.dto.*;
 import com.vocabularyai.auth.service.AuthService;
+import com.vocabularyai.ai.service.auth.RegisterOtpService;
+import com.vocabularyai.ai.service.auth.ForgotPasswordService;
+import com.vocabularyai.ai.dto.request.ValidateRegisterRequest;
+import com.vocabularyai.ai.dto.request.VerifyOtpRegisterRequest;
+import com.vocabularyai.ai.dto.request.SendOtpRequest;
+import com.vocabularyai.ai.dto.request.VerifyOtpForgotPasswordRequest;
+import com.vocabularyai.ai.dto.request.ResetPasswordRequest;
+import com.vocabularyai.ai.dto.response.ValidateRegisterResponse;
+import com.vocabularyai.ai.dto.response.RegisterSuccessResponse;
+import com.vocabularyai.ai.dto.response.SendOtpResponse;
+import com.vocabularyai.ai.dto.response.VerifyOtpForgotPasswordResponse;
 import com.vocabularyai.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -29,33 +40,162 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     
     private final AuthService authService;
+    private final RegisterOtpService registerOtpService;
+    private final ForgotPasswordService forgotPasswordService;
     
     /**
-     * User Registration
+     * Step 1: Validate Registration Information & Send OTP
+     * 
+     * Kiểm tra email/username có hợp lệ không, gửi OTP
      */
-    @PostMapping("/register")
+    @PostMapping("/register/validate")
     @Operation(
-        summary = "Register new user",
-        description = "Create a new user account"
+        summary = "Validate registration and send OTP",
+        description = "Step 1 of OTP registration: Validate email/username and send OTP code"
     )
     @ApiResponses({
         @io.swagger.v3.oas.annotations.responses.ApiResponse(
             responseCode = "200",
-            description = "User registered successfully"
+            description = "OTP sent successfully"
         ),
         @io.swagger.v3.oas.annotations.responses.ApiResponse(
             responseCode = "400",
             description = "Invalid request or user already exists"
         )
     })
-    public ResponseEntity<ApiResponse<AuthResponse>> register(
-            @Valid @RequestBody RegisterRequest request) {
-        log.info("Register request for username: {}", request.getUsername());
+    public ResponseEntity<ApiResponse<ValidateRegisterResponse>> validateRegister(
+            @Valid @RequestBody ValidateRegisterRequest request) {
+        log.info("Validate registration request for email: {}", request.getEmail());
         
-        AuthResponse authResponse = authService.register(request);
+        ValidateRegisterResponse response = registerOtpService.validateRegisterAndSendOtp(request);
         
         return ResponseEntity.ok(
-            ApiResponse.success("User registered successfully", authResponse)
+            ApiResponse.success("Mã OTP đã được gửi đến email", response)
+        );
+    }
+    
+    /**
+     * Step 2: Verify OTP & Create Account
+     * 
+     * Xác minh OTP, tạo tài khoản
+     * KHÔNG tự động đăng nhập - người dùng phải quay lại Login
+     */
+    @PostMapping("/register/verify-otp")
+    @Operation(
+        summary = "Verify OTP and create account",
+        description = "Step 2 of OTP registration: Verify OTP code and create user account (NO auto-login)"
+    )
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "200",
+            description = "Account created successfully"
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "400",
+            description = "Invalid OTP or request"
+        )
+    })
+    public ResponseEntity<ApiResponse<RegisterSuccessResponse>> verifyOtpRegister(
+            @Valid @RequestBody VerifyOtpRegisterRequest request) {
+        log.info("Verify OTP request for email: {}", request.getEmail());
+        
+        RegisterSuccessResponse response = registerOtpService.verifyOtpAndCreateAccount(request);
+        
+        return ResponseEntity.ok(
+            ApiResponse.success("Đăng ký tài khoản thành công! Vui lòng đăng nhập.", response)
+        );
+    }
+    
+    /**
+     * Step 1: Send OTP for Forgot Password
+     * 
+     * Gửi OTP đến email cho quên mật khẩu
+     */
+    @PostMapping("/forgot-password/send-otp")
+    @Operation(
+        summary = "Send OTP for password reset",
+        description = "Step 1 of forgot password: Send OTP code to user email"
+    )
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "200",
+            description = "OTP sent successfully"
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "404",
+            description = "User not found"
+        )
+    })
+    public ResponseEntity<ApiResponse<SendOtpResponse>> sendOtpForgotPassword(
+            @Valid @RequestBody SendOtpRequest request) {
+        log.info("Send OTP request for password reset to email: {}", request.getEmail());
+        
+        SendOtpResponse response = forgotPasswordService.sendOtp(request);
+        
+        return ResponseEntity.ok(
+            ApiResponse.success("Mã OTP đã được gửi đến email", response)
+        );
+    }
+    
+    /**
+     * Step 2: Verify OTP for Forgot Password
+     * 
+     * Xác minh OTP quên mật khẩu
+     */
+    @PostMapping("/forgot-password/verify-otp")
+    @Operation(
+        summary = "Verify OTP for password reset",
+        description = "Step 2 of forgot password: Verify OTP code"
+    )
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "200",
+            description = "OTP verified successfully"
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "400",
+            description = "Invalid OTP or reset token"
+        )
+    })
+    public ResponseEntity<ApiResponse<VerifyOtpForgotPasswordResponse>> verifyOtpForgotPassword(
+            @Valid @RequestBody VerifyOtpForgotPasswordRequest request) {
+        log.info("Verify OTP request for password reset at email: {}", request.getEmail());
+        
+        VerifyOtpForgotPasswordResponse response = forgotPasswordService.verifyOtp(request);
+        
+        return ResponseEntity.ok(
+            ApiResponse.success("Mã OTP đã được xác minh thành công!", response)
+        );
+    }
+    
+    /**
+     * Step 3: Reset Password (with auto-login)
+     * 
+     * Reset mật khẩu và TỰ ĐỘNG ĐĂNG NHẬP
+     */
+    @PostMapping("/forgot-password/reset")
+    @Operation(
+        summary = "Reset password and auto-login",
+        description = "Step 3 of forgot password: Reset password and get JWT tokens (auto-login)"
+    )
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "200",
+            description = "Password reset successful, JWT tokens returned"
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "400",
+            description = "Invalid verification token or request"
+        )
+    })
+    public ResponseEntity<ApiResponse<AuthResponse>> resetPassword(
+            @Valid @RequestBody ResetPasswordRequest request) {
+        log.info("Reset password request for email: {}", request.getEmail());
+        
+        AuthResponse response = forgotPasswordService.resetPassword(request);
+        
+        return ResponseEntity.ok(
+            ApiResponse.success("Mật khẩu đã được đặt lại thành công! Bạn đã tự động đăng nhập.", response)
         );
     }
     
@@ -79,7 +219,7 @@ public class AuthController {
     })
     public ResponseEntity<ApiResponse<AuthResponse>> login(
             @Valid @RequestBody LoginRequest request) {
-        log.info("Login request for username: {}", request.getUsername());
+        log.info("Login request for emailOrUsername: {}", request.getEmailOrUsername());
         
         AuthResponse authResponse = authService.login(request);
         

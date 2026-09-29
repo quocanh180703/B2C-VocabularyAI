@@ -31,7 +31,7 @@ public class GeminiPronunciationAnalysisService implements PronunciationAnalysis
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    @Value("${gemini:api-key}")
+    @Value("${gemini.api-key}")
     private String apiKey;
 
     @Value("${gemini:model:gemini-3.1-flash-lite}")

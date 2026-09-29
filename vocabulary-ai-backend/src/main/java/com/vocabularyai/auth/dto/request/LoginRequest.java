@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 /**
  * Login Request DTO
  * 
- * Used for user login
+ * Hỗ trợ login bằng email HOẶC username
+ * Trường emailOrUsername chấp nhận cả email và username
  */
 @Data
 @Builder
@@ -18,8 +19,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginRequest {
     
-    @NotBlank(message = ValidationConstants.USERNAME_NOT_BLANK)
-    private String username;
+    @NotBlank(message = "Email hoặc username không được để trống")
+    private String emailOrUsername;
     
     @NotBlank(message = ValidationConstants.PASSWORD_NOT_BLANK)
     private String password;

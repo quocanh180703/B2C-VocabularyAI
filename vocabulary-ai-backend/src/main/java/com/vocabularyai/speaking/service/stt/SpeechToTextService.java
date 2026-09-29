@@ -28,6 +28,25 @@ public interface SpeechToTextService {
     TranscriptResult transcribe(MultipartFile audioFile, String languageCode);
 
     /**
+     * Transcribe audio file from disk path to text with default language
+     *
+     * @param audioFilePath Path to audio file on disk
+     * @return TranscriptResult with transcribed text and metadata
+     * @throws SpeechToTextException if transcription fails
+     */
+    TranscriptResult transcribeFromPath(String audioFilePath);
+
+    /**
+     * Transcribe audio file from disk path to text with specified language code
+     *
+     * @param audioFilePath Path to audio file on disk
+     * @param languageCode Language code (e.g., en-US, vi-VN, fr-FR)
+     * @return TranscriptResult with transcribed text and metadata
+     * @throws SpeechToTextException if transcription fails
+     */
+    TranscriptResult transcribeFromPath(String audioFilePath, String languageCode);
+
+    /**
      * Get the STT provider type
      *
      * @return Provider name (gemini, google_cloud, azure, aws)

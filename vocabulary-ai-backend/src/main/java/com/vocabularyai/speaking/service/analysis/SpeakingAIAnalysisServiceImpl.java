@@ -66,6 +66,13 @@ public class SpeakingAIAnalysisServiceImpl implements SpeakingAIAnalysisService 
         log.info("Starting speaking analysis - attemptId: {}, sessionId: {}, userId: {}", 
                  attemptId, sessionId, userId);
         
+        // Validate input transcript
+        if (transcript == null || transcript.trim().isEmpty()) {
+            log.error("Invalid transcript for analysis - attemptId: {}", attemptId);
+            throw new SpeakingAIAnalysisException(
+                    "Transcript không hợp lệ hoặc rỗng");
+        }
+        
         try {
             // STEP 1: Validate inputs and fetch entities with ownership verification
             // First verify the session exists and belongs to user

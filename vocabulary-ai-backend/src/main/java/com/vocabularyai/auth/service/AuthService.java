@@ -45,51 +45,33 @@ public class AuthService {
     private final JwtProperties jwtProperties;
     
     /**
-     * Register new user
-     */
-    @Transactional
-    public AuthResponse register(RegisterRequest request) {
-        log.info("Registering new user with username: {}", request.getUsername());
-        
-        // Check if username already exists
-        if (userRepository.existsByUsername(request.getUsername())) {
-            log.warn("Username already exists: {}", request.getUsername());
-            throw DuplicateResourceException.of("Username", request.getUsername());
-        }
-        
-        // Check if email already exists
-        if (userRepository.existsByEmail(request.getEmail())) {
-            log.warn("Email already exists: {}", request.getEmail());
-            throw DuplicateResourceException.of("Email", request.getEmail());
-        }
-        
-        // Create new user
-        User user = User.builder()
-            .username(request.getUsername())
-            .email(request.getEmail())
-            .password(passwordEncoder.encode(request.getPassword()))
-            .fullName(request.getFullName())
-            .role(User.UserRole.STUDENT)
-            .status(User.UserStatus.ACTIVE)
-            .build();
-        
-        User savedUser = userRepository.save(user);
-        log.info("User registered successfully with id: {}", savedUser.getId());
-        
-        // Generate tokens
-        return generateAuthResponse(savedUser);
-    }
-    
-    /**
-     * Login user
+     * Login user with flexible emailOrUsername
+     * 
+     * Accepts both email and username for login
+     * - If input is email: finds user by email, then uses username for authentication
+     * - If input is username: uses directly for authentication
      */
     public AuthResponse login(LoginRequest request) {
-        log.info("User login attempt for username: {}", request.getUsername());
+        log.info("User login attempt for emailOrUsername: {}", request.getEmailOrUsername());
         
-        // Authenticate using Spring Security
+        // Determine if input is email or username
+        String usernameForAuth = request.getEmailOrUsername();
+        
+        if (isEmail(request.getEmailOrUsername())) {
+            // If email, find user by email and get username
+            User user = userRepository.findByEmail(request.getEmailOrUsername())
+                .orElseThrow(() -> {
+                    log.warn("User not found with email: {}", request.getEmailOrUsername());
+                    return new UnauthorizedException("Email hoặc username không hợp lệ");
+                });
+            usernameForAuth = user.getUsername();
+            log.debug("Email found, using username for authentication: {}", usernameForAuth);
+        }
+        
+        // Authenticate using Spring Security with username
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
-                request.getUsername(),
+                usernameForAuth,
                 request.getPassword()
             )
         );
@@ -98,6 +80,14 @@ public class AuthService {
         log.info("User logged in successfully: {}", user.getUsername());
         
         return generateAuthResponse(user);
+    }
+    
+    /**
+     * Check if input string is an email
+     * Simple regex check for email format
+     */
+    private boolean isEmail(String input) {
+        return input != null && input.contains("@");
     }
     
     /**

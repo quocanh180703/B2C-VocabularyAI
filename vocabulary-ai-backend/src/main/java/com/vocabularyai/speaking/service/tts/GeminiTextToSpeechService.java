@@ -33,10 +33,10 @@ public class GeminiTextToSpeechService implements TextToSpeechService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    @Value("${gemini:api-key}")
+    @Value("${gemini.api-key}")
     private String apiKey;
 
-    @Value("${gemini:model:gemini-3.1-flash-lite}")
+    @Value("${gemini:model:gemini-3.1-flash-lite")
     private String model;
 
     @Value("${speaking.text-to-speech.language-code:en-US}")
