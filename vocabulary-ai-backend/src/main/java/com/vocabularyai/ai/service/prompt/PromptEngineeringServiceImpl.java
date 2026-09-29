@@ -1,5 +1,6 @@
 package com.vocabularyai.ai.service.prompt;
 
+import com.vocabularyai.ai.config.SystemPromptConfig;
 import com.vocabularyai.ai.entity.AiMessage;
 import com.vocabularyai.ai.entity.AiConversationType;
 import com.vocabularyai.ai.entity.AiMessageRole;
@@ -20,69 +21,16 @@ import java.util.StringJoiner;
  * - Vocabulary explanations
  * - Grammar checking
  * - Learning hints with progressive difficulty
+ * 
+ * System prompts are loaded from application.yml via SystemPromptConfig
+ * (previously hard-coded, now externalized for easier maintenance)
  */
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class PromptEngineeringServiceImpl implements PromptEngineeringService {
     
-    // ==================== System Prompts ====================
-    
-    private static final String CHAT_SYSTEM_PROMPT = """
-        You are a helpful English learning assistant. Your role is to help users learn English in an engaging and supportive way.
-
-        Guidelines:
-        - Provide clear, concise explanations
-        - Use simple language when explaining complex concepts
-        - Encourage the user and provide positive feedback
-        - Correct mistakes gently with explanations
-        - Tailor responses to the user's learning level
-        - Use examples from everyday situations when possible
-        """;
-    
-    private static final String VOCABULARY_SYSTEM_PROMPT = """
-        You are an English vocabulary expert. Your task is to provide comprehensive explanations of English words.
-        
-        For each word explanation, include:
-        1. A clear, simple definition appropriate for English learners
-        2. Part of speech
-        3. 2-3 practical usage examples
-        4. Etymology or word origin if interesting
-        5. Related words (synonyms or antonyms)
-        6. Common phrases using this word
-        
-        Format the response with clear headings for each section.
-        """;
-    
-    private static final String GRAMMAR_SYSTEM_PROMPT = """
-        You are an expert English grammar checker and writing assistant.
-        
-        Analyze the provided text for:
-        - Grammar errors
-        - Spelling mistakes
-        - Punctuation issues
-        - Style and clarity improvements
-        
-        For each error, provide:
-        - The exact position (start and end character index)
-        - Type of error (grammar, spelling, punctuation, style)
-        - The suggested correction
-        - A brief explanation of why it's an error
-        
-        Also provide the fully corrected version of the entire text.
-        """;
-    
-    private static final String HINT_SYSTEM_PROMPT = """
-        You are an expert learning coach specializing in English vocabulary instruction.
-        
-        Your task is to provide learning hints that help students figure out answers themselves rather than just telling them.
-        Adapt hint difficulty based on attempt count:
-        - Level 1 (first attempt): Provide minimal hint - just the definition or translation
-        - Level 2 (second attempt): Provide moderate hint - definition + 1-2 examples
-        - Level 3 (third+ attempt): Provide detailed hint - full explanation + learning strategies
-        
-        Always encourage students and explain the learning purpose.
-        """;
+    private final SystemPromptConfig systemPromptConfig;
     
     // ==================== Chat Conversation Prompt Building ====================
     
@@ -90,8 +38,9 @@ public class PromptEngineeringServiceImpl implements PromptEngineeringService {
     public String buildChatPrompt(List<AiMessage> history, String newMessage, AiConversationType conversationType) {
         StringBuilder prompt = new StringBuilder();
         
-        // System prompt
-        prompt.append(CHAT_SYSTEM_PROMPT).append("\n\n");
+        // System prompt (loaded from application.yml)
+        String systemPrompt = systemPromptConfig.getChatSystemPrompt();
+        prompt.append(systemPrompt).append("\n\n");
         
         // Add conversation type context
         String typeContext = switch (conversationType) {
@@ -130,8 +79,9 @@ public class PromptEngineeringServiceImpl implements PromptEngineeringService {
     public String buildVocabularyPrompt(Word word, String userContext) {
         StringBuilder prompt = new StringBuilder();
         
-        // System prompt
-        prompt.append(VOCABULARY_SYSTEM_PROMPT).append("\n\n");
+        // System prompt (loaded from application.yml)
+        String systemPrompt = systemPromptConfig.getVocabularySystemPrompt();
+        prompt.append(systemPrompt).append("\n\n");
         
         // Add word details
         prompt.append("Word to explain: ").append(word.getWord()).append("\n");
@@ -168,8 +118,9 @@ public class PromptEngineeringServiceImpl implements PromptEngineeringService {
     public String buildGrammarPrompt(String text, String language) {
         StringBuilder prompt = new StringBuilder();
         
-        // System prompt
-        prompt.append(GRAMMAR_SYSTEM_PROMPT).append("\n\n");
+        // System prompt (loaded from application.yml)
+        String systemPrompt = systemPromptConfig.getGrammarSystemPrompt();
+        prompt.append(systemPrompt).append("\n\n");
         
         // Add language specification
         prompt.append("Language: ").append(language != null ? language : "English").append("\n\n");
@@ -213,8 +164,9 @@ public class PromptEngineeringServiceImpl implements PromptEngineeringService {
         
         StringBuilder prompt = new StringBuilder();
         
-        // System prompt
-        prompt.append(HINT_SYSTEM_PROMPT).append("\n\n");
+        // System prompt (loaded from application.yml)
+        String systemPrompt = systemPromptConfig.getHintSystemPrompt();
+        prompt.append(systemPrompt).append("\n\n");
         
         // Add student progress context
         prompt.append("Student Progress Information:\n");
@@ -340,32 +292,9 @@ public class PromptEngineeringServiceImpl implements PromptEngineeringService {
     public String buildSpeakingAnalysisPrompt(String transcript, String topic, String level) {
         StringBuilder prompt = new StringBuilder();
         
-        prompt.append("You are an expert English language teacher and speaking assessment specialist.\n");
-        prompt.append("Your task is to analyze a speaking transcript and provide comprehensive feedback.\n\n");
-        prompt.append("Evaluate the following aspects:\n");
-        prompt.append("1. Grammar - Correctness of sentence structure, tense usage, subject-verb agreement\n");
-        prompt.append("2. Vocabulary - Range of words used, appropriateness, word choice accuracy\n");
-        prompt.append("3. Fluency - Smoothness of speech, pace, natural rhythm (from transcript)\n");
-        prompt.append("4. Content - Relevance to topic, completeness of ideas, logical flow\n");
-        prompt.append("5. Overall Score - Weighted average of above scores (25% each, except pronunciation 0%)\n\n");
-        
-        prompt.append("Return ONLY a JSON response with this exact structure:\n");
-        prompt.append("{\n");
-        prompt.append("  \"grammarScore\": <0-100>,\n");
-        prompt.append("  \"vocabularyScore\": <0-100>,\n");
-        prompt.append("  \"fluencyScore\": <0-100>,\n");
-        prompt.append("  \"contentScore\": <0-100>,\n");
-        prompt.append("  \"overallScore\": <0-100>,\n");
-        prompt.append("  \"feedback\": \"<brief overall feedback>\",\n");
-        prompt.append("  \"strengths\": [\"<strength1>\", \"<strength2>\"],\n");
-        prompt.append("  \"weaknesses\": [\"<weakness1>\", \"<weakness2>\"]\n");
-        prompt.append("}\n\n");
-        
-        prompt.append("Important:\n");
-        prompt.append("- Be consistent with scoring\n");
-        prompt.append("- Scores must be between 0-100\n");
-        prompt.append("- Provide constructive feedback\n");
-        prompt.append("- Consider the user's level (").append(level).append(")\n\n");
+        // System prompt (loaded from application.yml)
+        String systemPrompt = systemPromptConfig.getSpeakingAnalysisSystemPrompt();
+        prompt.append(systemPrompt).append("\n\n");
         
         prompt.append("Topic: ").append(topic).append("\n");
         prompt.append("User's English Level: ").append(level).append(" (CEFR scale A1-C2)\n\n");
@@ -387,21 +316,9 @@ public class PromptEngineeringServiceImpl implements PromptEngineeringService {
     public String buildSpeakingFeedbackPrompt(String transcript, String topic, String level, String scores) {
         StringBuilder prompt = new StringBuilder();
         
-        prompt.append("You are an experienced English language teacher providing detailed feedback to a student.\n\n");
-        prompt.append("Generate constructive and encouraging feedback based on:\n");
-        prompt.append("- The student's spoken response (transcript)\n");
-        prompt.append("- The speaking topic/prompt\n");
-        prompt.append("- Their proficiency level\n");
-        prompt.append("- Their evaluation scores (if available)\n\n");
-        
-        prompt.append("Feedback should include:\n");
-        prompt.append("1. Corrections: Specific grammar/vocabulary errors with explanations\n");
-        prompt.append("2. Suggestions: Improvements they can make\n");
-        prompt.append("3. Strengths: What they did well\n");
-        prompt.append("4. Next Steps: What to practice\n\n");
-        
-        prompt.append("Use a supportive, encouraging tone.\n");
-        prompt.append("Format with clear sections.\n\n");
+        // System prompt (loaded from application.yml)
+        String systemPrompt = systemPromptConfig.getSpeakingFeedbackSystemPrompt();
+        prompt.append(systemPrompt).append("\n\n");
         
         prompt.append("Speaking Topic: ").append(topic).append("\n");
         prompt.append("Student Level: ").append(level).append("\n");
@@ -430,27 +347,9 @@ public class PromptEngineeringServiceImpl implements PromptEngineeringService {
     public String buildSpeakingCorrectionPrompt(String transcript, String errorType) {
         StringBuilder prompt = new StringBuilder();
         
-        prompt.append("You are an expert in English language correction and tutoring.\n\n");
-        prompt.append("Analyze the following transcript for ").append(errorType).append(" errors.\n");
-        prompt.append("For each error found, provide:\n");
-        prompt.append("- The original text\n");
-        prompt.append("- The correction\n");
-        prompt.append("- A brief explanation\n");
-        prompt.append("- An alternative expression if applicable\n\n");
-        
-        prompt.append("Return a JSON response with this structure:\n");
-        prompt.append("{\n");
-        prompt.append("  \"errors\": [\n");
-        prompt.append("    {\n");
-        prompt.append("      \"original\": \"<original text>\",\n");
-        prompt.append("      \"corrected\": \"<corrected text>\",\n");
-        prompt.append("      \"type\": \"grammar|vocabulary|pronunciation|style\",\n");
-        prompt.append("      \"explanation\": \"<why it's wrong>\",\n");
-        prompt.append("      \"alternative\": \"<optional alternative>\"\n");
-        prompt.append("    }\n");
-        prompt.append("  ],\n");
-        prompt.append("  \"correctedTranscript\": \"<full corrected version>\"\n");
-        prompt.append("}\n\n");
+        // System prompt (loaded from application.yml)
+        String systemPrompt = systemPromptConfig.getSpeakingCorrectionSystemPrompt();
+        prompt.append(systemPrompt).append("\n\n");
         
         prompt.append("Error Focus: ").append(errorType).append("\n\n");
         
