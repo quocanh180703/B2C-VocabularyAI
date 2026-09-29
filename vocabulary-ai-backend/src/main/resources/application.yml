@@ -372,3 +372,17 @@ speaking:
     local-path: "D:/vocabulary-ai-uploads/audio"  # Dùng đường dẫn tương đối để tránh lỗi AccessDenied trên ổ D:
   pronunciation:
     provider: disabled              # Tắt tạm thời tính năng phát âm nếu chưa cấu hình provider
+
+# ============================================================
+# 16. Payment Module Configuration (PayOS)
+# ============================================================
+payment:
+  payos:
+    api-key: ${PAYOS_API_KEY:}
+    client-id: ${PAYOS_CLIENT_ID:}
+    sandbox: ${PAYOS_SANDBOX:true}
+    base-url: ${PAYOS_BASE_URL:https://sandbox-api.payos.vn}
+  retry:
+    max-attempts: 3
+    initial-delay-ms: 1000
+    backoff-multiplier: 2.0
