@@ -31,24 +31,24 @@ public interface PaymentService {
      * 2. Check for existing active subscriptions (prevent duplicate)
      * 3. Generate unique order code
      * 4. Create PaymentOrder in database (status: PENDING)
-     * 5. Call PaymentGatewayService to create payment link
+     * 5. Call PaymentGatewayService to create payment link (using backend-configured URLs)
      * 6. Update PaymentOrder with payment URL
      * 7. Return response with checkout URL
      * 
+     * Note: Return and Cancel URLs are configured in backend (from PaymentProperties),
+     * not provided by client, to prevent clients from redirecting users to malicious sites.
+     * Package price is fetched from database, not accepted from client.
+     * 
      * @param userId User ID who is making payment
      * @param packageId Package ID to purchase
-     * @param returnUrl URL to redirect after successful payment
-     * @param cancelUrl URL to redirect after failed payment
      * @return Payment initiation response with checkout URL
-     * @throws IllegalArgumentException if user or package not found
+     * @throws IllegalArgumentException if package not found
      * @throws IllegalStateException if user already has active subscription
      * @throws com.vocabularyai.payment.exception.PaymentGatewayException if payment link creation fails
      */
     PayOSCreatePaymentLinkResponse initiatePayment(
         Long userId,
-        Long packageId,
-        String returnUrl,
-        String cancelUrl
+        Long packageId
     );
     
     /**

@@ -1,5 +1,6 @@
 package com.vocabularyai.payment.service;
 
+import com.vocabularyai.payment.config.PaymentProperties;
 import com.vocabularyai.payment.dto.payos.PayOSCreatePaymentLinkRequest;
 import com.vocabularyai.payment.dto.payos.PayOSCreatePaymentLinkResponse;
 import com.vocabularyai.payment.dto.payos.PayOSWebhookRequest;
@@ -41,14 +42,13 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentOrderRepository paymentOrderRepository;
     private final PaymentRepository paymentRepository;
     private final SubscriptionRepository subscriptionRepository;
+    private final PaymentProperties paymentProperties;
     
     @Override
     @Transactional
     public PayOSCreatePaymentLinkResponse initiatePayment(
             Long userId,
-            Long packageId,
-            String returnUrl,
-            String cancelUrl) {
+            Long packageId) {
         
         log.info("Initiating payment for userId: {}, packageId: {}", userId, packageId);
         
@@ -90,6 +90,18 @@ public class PaymentServiceImpl implements PaymentService {
         
         paymentOrder = paymentOrderRepository.save(paymentOrder);
         log.info("PaymentOrder created: id={}, orderCode={}", paymentOrder.getId(), orderCode);
+        
+        // Get return and cancel URLs from backend configuration
+        String returnUrl = paymentProperties.getReturnUrl();
+        String cancelUrl = paymentProperties.getCancelUrl();
+        
+        if (returnUrl == null || returnUrl.isBlank() || cancelUrl == null || cancelUrl.isBlank()) {
+            throw new IllegalStateException(
+                "Payment redirect URLs not configured. Please set payment.return-url and payment.cancel-url in application.yml"
+            );
+        }
+        
+        log.debug("Using configured redirect URLs - returnUrl: {}, cancelUrl: {}", returnUrl, cancelUrl);
         
         // Create payment link with gateway
         PayOSCreatePaymentLinkRequest gatewayRequest = PayOSCreatePaymentLinkRequest.builder()

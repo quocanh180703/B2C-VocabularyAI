@@ -105,13 +105,7 @@ public class PaymentController {
     })
     public ResponseEntity<ApiResponse<PayOSCreatePaymentLinkResponse>> initiatePayment(
             @Parameter(description = "Package ID to purchase", example = "1")
-            @RequestParam Long packageId,
-            
-            @Parameter(description = "Return URL after successful payment", example = "https://app.example.com/payment/success")
-            @RequestParam String returnUrl,
-            
-            @Parameter(description = "Cancel URL after failed payment", example = "https://app.example.com/payment/cancel")
-            @RequestParam String cancelUrl) {
+            @RequestParam Long packageId) {
         
         try {
             log.info("Payment initiation request received for packageId: {}", packageId);
@@ -120,11 +114,10 @@ public class PaymentController {
             Long userId = extractUserIdFromJwt();
             
             // Call payment service
+            // Return/Cancel URLs are configured in backend, not provided by client
             PayOSCreatePaymentLinkResponse response = paymentService.initiatePayment(
                 userId,
-                packageId,
-                returnUrl,
-                cancelUrl
+                packageId
             );
             
             log.info("Payment initiated successfully for userId: {}, packageId: {}", userId, packageId);
@@ -248,7 +241,7 @@ public class PaymentController {
     @PreAuthorize("isAuthenticated()")
     @Operation(
         summary = "Get payment order status",
-        description = "Retrieve details and status of a specific payment order",
+        description = "Retrieve details and status of a specific payment order. User can only access their own payment orders.",
         security = @SecurityRequirement(name = "Bearer Authentication")
     )
     @ApiResponses(value = {
@@ -259,6 +252,10 @@ public class PaymentController {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(
             responseCode = "401",
             description = "Unauthorized"
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "403",
+            description = "Forbidden - payment order does not belong to authenticated user"
         ),
         @io.swagger.v3.oas.annotations.responses.ApiResponse(
             responseCode = "404",
@@ -272,7 +269,18 @@ public class PaymentController {
         try {
             log.info("Getting payment order: {}", orderId);
             
+            // Extract user ID from JWT token
+            Long userId = extractUserIdFromJwt();
+            
             var paymentOrder = paymentService.getPaymentOrder(orderId);
+            
+            // Ownership validation - user can only access their own payment orders
+            if (!paymentOrder.getUserId().equals(userId)) {
+                log.warn("Unauthorized access attempt: user {} tried to access payment order {} of user {}", 
+                    userId, orderId, paymentOrder.getUserId());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiResponse.error("Access denied: This payment order does not belong to you"));
+            }
             
             return ResponseEntity.ok(ApiResponse.success("Payment order retrieved successfully", paymentOrder));
             

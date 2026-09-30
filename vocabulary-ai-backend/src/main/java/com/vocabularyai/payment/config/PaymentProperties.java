@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
  *     api-key: ...
  *     client-id: ...
  *     sandbox: true/false
+ *   return-url: https://app.example.com/payment/success
+ *   cancel-url: https://app.example.com/payment/cancel
  *   retry:
  *     max-attempts: 3
  *     initial-delay-ms: 1000
@@ -24,6 +26,8 @@ import org.springframework.stereotype.Component;
 public class PaymentProperties {
     
     private PayOS payos = new PayOS();
+    private String returnUrl;
+    private String cancelUrl;
     private Retry retry = new Retry();
     
     /**

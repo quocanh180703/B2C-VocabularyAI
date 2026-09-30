@@ -382,6 +382,9 @@ payment:
     client-id: ${PAYOS_CLIENT_ID:}
     sandbox: ${PAYOS_SANDBOX:true}
     base-url: ${PAYOS_BASE_URL:https://sandbox-api.payos.vn}
+  # Backend-configured redirect URLs (not from client)
+  return-url: ${PAYMENT_RETURN_URL:http://localhost:3000/payment/success}
+  cancel-url: ${PAYMENT_CANCEL_URL:http://localhost:3000/payment/cancel}
   retry:
     max-attempts: 3
     initial-delay-ms: 1000
