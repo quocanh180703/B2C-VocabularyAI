@@ -161,42 +161,6 @@ export function validateForm(values: Record<string, any>, schema: ValidationSche
 }
 
 
-/**
- * Package creation/update validation schema
- */
-export const packageValidationSchema: ValidationSchema = {
-  code: {
-    required: "Package code is required",
-    pattern: {
-      value: /^[A-Z_0-9]+$/,
-      message: "Code must contain only uppercase letters, numbers, and underscores",
-    },
-  },
-  name: {
-    required: "Package name is required",
-    minLength: { value: 3, message: "Name must be at least 3 characters" },
-    maxLength: { value: 100, message: "Name must be less than 100 characters" },
-  },
-  price: {
-    required: "Price is required",
-    custom: (value) => {
-      if (!Number.isFinite(Number(value)) || Number(value) <= 0) {
-        return "Price must be a positive number"
-      }
-      return undefined
-    },
-  },
-  durationDays: {
-    required: "Duration is required",
-    custom: (value) => {
-      if (!Number.isInteger(Number(value)) || Number(value) < 1) {
-        return "Duration must be at least 1 day"
-      }
-      return undefined
-    },
-  },
-}
-
 
 /**
  * Speaking Session validation schema
