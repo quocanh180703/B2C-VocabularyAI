@@ -45,51 +45,33 @@ public class AuthService {
     private final JwtProperties jwtProperties;
     
     /**
-     * Register new user
-     */
-    @Transactional
-    public AuthResponse register(RegisterRequest request) {
-        log.info("Registering new user with username: {}", request.getUsername());
-        
-        // Check if username already exists
-        if (userRepository.existsByUsername(request.getUsername())) {
-            log.warn("Username already exists: {}", request.getUsername());
-            throw DuplicateResourceException.of("Username", request.getUsername());
-        }
-        
-        // Check if email already exists
-        if (userRepository.existsByEmail(request.getEmail())) {
-            log.warn("Email already exists: {}", request.getEmail());
-            throw DuplicateResourceException.of("Email", request.getEmail());
-        }
-        
-        // Create new user
-        User user = User.builder()
-            .username(request.getUsername())
-            .email(request.getEmail())
-            .password(passwordEncoder.encode(request.getPassword()))
-            .fullName(request.getFullName())
-            .role(User.UserRole.STUDENT)
-            .status(User.UserStatus.ACTIVE)
-            .build();
-        
-        User savedUser = userRepository.save(user);
-        log.info("User registered successfully with id: {}", savedUser.getId());
-        
-        // Generate tokens
-        return generateAuthResponse(savedUser);
-    }
-    
-    /**
-     * Login user
+     * Login user with flexible emailOrUsername
+     * 
+     * Accepts both email and username for login
+     * - If input is email: finds user by email, then uses username for authentication
+     * - If input is username: uses directly for authentication
      */
     public AuthResponse login(LoginRequest request) {
-        log.info("User login attempt for username: {}", request.getUsername());
+        log.info("User login attempt for emailOrUsername: {}", request.getEmailOrUsername());
         
-        // Authenticate using Spring Security
+        // Determine if input is email or username
+        String usernameForAuth = request.getEmailOrUsername();
+        
+        if (isEmail(request.getEmailOrUsername())) {
+            // If email, find user by email and get username
+            User user = userRepository.findByEmail(request.getEmailOrUsername())
+                .orElseThrow(() -> {
+                    log.warn("User not found with email: {}", request.getEmailOrUsername());
+                    return new UnauthorizedException("Email hoặc username không hợp lệ");
+                });
+            usernameForAuth = user.getUsername();
+            log.debug("Email found, using username for authentication: {}", usernameForAuth);
+        }
+        
+        // Authenticate using Spring Security with username
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
-                request.getUsername(),
+                usernameForAuth,
                 request.getPassword()
             )
         );
@@ -101,7 +83,21 @@ public class AuthService {
     }
     
     /**
+     * Check if input string is an email
+     * Simple regex check for email format
+     */
+    private boolean isEmail(String input) {
+        return input != null && input.contains("@");
+    }
+    
+    /**
      * Refresh access token using refresh token
+     * 
+     * SECURITY:
+     * - Validate refresh token exists and not revoked
+     * - ✅ TASK 5: Validate user status (ACTIVE only)
+     * - Prevent INACTIVE/BANNED users from refreshing tokens
+     * - Generate new access token
      */
     @Transactional
     public AuthResponse refreshToken(RefreshTokenRequest request) {
@@ -122,6 +118,9 @@ public class AuthService {
         
         User user = refreshToken.getUser();
         
+        // ✅ TASK 5: Validate user status before refreshing
+        validateUserStatusForTokenRefresh(user);
+        
         // Generate new access token
         String newAccessToken = jwtProvider.generateAccessToken(
             user.getUsername(),
@@ -129,7 +128,8 @@ public class AuthService {
             user.getRole().name()
         );
         
-        log.info("Access token refreshed successfully for user: {}", user.getUsername());
+        log.info("Access token refreshed successfully for user: {} (status: {})", 
+                 user.getUsername(), user.getStatus());
         
         return AuthResponse.builder()
             .accessToken(newAccessToken)
@@ -138,6 +138,38 @@ public class AuthService {
             .expiresIn(jwtProperties.getAccessToken().getExpiration() / 1000)
             .user(UserResponse.fromEntity(user))
             .build();
+    }
+    
+    /**
+     * Validate user status for token refresh
+     * 
+     * Only ACTIVE users can refresh tokens
+     * INACTIVE/BANNED users are denied
+     * 
+     * @param user User to validate
+     * @throws UnauthorizedException If user is not ACTIVE
+     */
+    private void validateUserStatusForTokenRefresh(User user) {
+        if (user.getStatus() == User.UserStatus.INACTIVE) {
+            log.warn("Cannot refresh token for inactive user: {}", user.getUsername());
+            throw new UnauthorizedException(
+                "Your account is inactive (suspended). You cannot refresh your token."
+            );
+        }
+        
+        if (user.getStatus() == User.UserStatus.BANNED) {
+            log.warn("Cannot refresh token for banned user: {}", user.getUsername());
+            throw new UnauthorizedException(
+                "Your account is banned. You cannot refresh your token."
+            );
+        }
+        
+        if (user.getStatus() != User.UserStatus.ACTIVE) {
+            log.warn("Cannot refresh token for user with invalid status: {}", user.getStatus());
+            throw new UnauthorizedException(
+                "Your account has invalid status. Cannot refresh token."
+            );
+        }
     }
     
     /**

@@ -3,69 +3,60 @@ package com.vocabularyai.speaking.service.stt;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * SpeechToTextService Interface
- * 
- * Abstraction cho việc chuyển đổi audio thành text (Speech-to-Text / ASR)
- * 
- * Hỗ trợ multiple providers:
- * - Google Cloud Speech-to-Text (via REST API)
- * - Azure Cognitive Services Speech-to-Text
- * - AWS Transcribe
- * - Custom provider (tương lai)
- * 
- * Design Pattern:
- * - Provider-agnostic interface (không phụ thuộc vào provider cụ thể)
- * - Cho phép switch provider thông qua config
- * - Consistent output format (TranscriptResult)
- * 
- * Implementation phải đảm bảo:
- * - Audio file validation
- * - Error handling (timeout, provider error)
- * - Transcript validation
- * - Logging + metrics
+ * Interface for Speech-to-Text (STT) services.
+ * Abstracts different STT providers (Gemini, Google Cloud, Azure, AWS).
  */
 public interface SpeechToTextService {
-    
+
     /**
-     * Chuyển audio file thành transcript
-     * 
-     * Flow:
-     * 1. Validate audio file
-     * 2. Call provider API (Google Cloud Speech-to-Text / Azure / etc)
-     * 3. Parse response
-     * 4. Validate transcript
-     * 5. Return TranscriptResult
-     * 
-     * @param audioFile MultipartFile audio được upload
-     * @return TranscriptResult chứa transcript + confidence + metadata
-     * @throws SpeechToTextException nếu transcription thất bại
-     * @throws IllegalArgumentException nếu audio file không hợp lệ
+     * Transcribe audio file to text using default language (en-US)
+     *
+     * @param audioFile Audio file to transcribe
+     * @return TranscriptResult with transcribed text and metadata
+     * @throws SpeechToTextException if transcription fails
      */
     TranscriptResult transcribe(MultipartFile audioFile);
-    
+
     /**
-     * Chuyển audio file thành transcript với language code tùy chỉnh
-     * 
-     * @param audioFile MultipartFile audio
-     * @param languageCode Language code (e.g., en-US, vi-VN)
-     * @return TranscriptResult
-     * @throws SpeechToTextException nếu transcription thất bại
+     * Transcribe audio file to text with specified language code
+     *
+     * @param audioFile Audio file to transcribe
+     * @param languageCode Language code (e.g., en-US, vi-VN, fr-FR)
+     * @return TranscriptResult with transcribed text and metadata
+     * @throws SpeechToTextException if transcription fails
      */
     TranscriptResult transcribe(MultipartFile audioFile, String languageCode);
-    
+
     /**
-     * Lấy provider type hiện tại
-     * 
-     * @return Provider name (google, azure, aws, custom)
+     * Transcribe audio file from disk path to text with default language
+     *
+     * @param audioFilePath Path to audio file on disk
+     * @return TranscriptResult with transcribed text and metadata
+     * @throws SpeechToTextException if transcription fails
+     */
+    TranscriptResult transcribeFromPath(String audioFilePath);
+
+    /**
+     * Transcribe audio file from disk path to text with specified language code
+     *
+     * @param audioFilePath Path to audio file on disk
+     * @param languageCode Language code (e.g., en-US, vi-VN, fr-FR)
+     * @return TranscriptResult with transcribed text and metadata
+     * @throws SpeechToTextException if transcription fails
+     */
+    TranscriptResult transcribeFromPath(String audioFilePath, String languageCode);
+
+    /**
+     * Get the STT provider type
+     *
+     * @return Provider name (gemini, google_cloud, azure, aws)
      */
     String getProviderType();
-    
+
     /**
-     * Check xem service có sẵn sàng không
-     * 
-     * Dùng để health check, kiểm tra credentials, etc
-     * 
-     * @return true nếu service ready, false nếu có issue
+     * Check if STT service is healthy/available
+     *
+     * @return true if service is available, false otherwise
      */
     boolean isHealthy();
 }

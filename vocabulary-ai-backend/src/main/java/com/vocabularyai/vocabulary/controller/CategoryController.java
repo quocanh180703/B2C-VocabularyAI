@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/categories")
 @RequiredArgsConstructor
 @Tag(name = "Categories", description = "Category management endpoints")
+@SecurityRequirement(name = "bearerAuth")
+@PreAuthorize("isAuthenticated()")
 public class CategoryController {
     
     private final CategoryService categoryService;

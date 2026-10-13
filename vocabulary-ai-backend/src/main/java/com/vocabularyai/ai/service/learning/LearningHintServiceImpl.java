@@ -62,7 +62,6 @@ public class LearningHintServiceImpl implements LearningHintService {
     // ==================== Single Progress Hint ====================
     
     @Override
-    @Transactional(readOnly = true)
     public HintResponse generateHint(Long progressId, Integer attemptCount, Long userId) {
         log.info("Generating hint for progress: {}, attempt: {}, user: {}", 
             progressId, attemptCount, userId);
@@ -137,7 +136,6 @@ public class LearningHintServiceImpl implements LearningHintService {
     // ==================== Batch Hints Generation ====================
     
     @Override
-    @Transactional(readOnly = true)
     public List<HintResponse> generateHintsBatch(List<Long> progressIds, List<Integer> attemptCounts, Long userId) {
         log.info("Generating {} hints batch, user: {}", progressIds.size(), userId);
         

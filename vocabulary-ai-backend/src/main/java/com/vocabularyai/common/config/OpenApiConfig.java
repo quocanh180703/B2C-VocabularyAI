@@ -50,7 +50,13 @@ public class OpenApiConfig {
                     .name("Apache 2.0")
                     .url("https://www.apache.org/licenses/LICENSE-2.0.html")))
             .components(new Components()
-                .addSecuritySchemes("Bearer Authentication",
+                .addSecuritySchemes("bearer-jwt",
+                    new SecurityScheme()
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")
+                        .description("JWT token issued after successful login"))
+                .addSecuritySchemes("bearerAuth",
                     new SecurityScheme()
                         .type(SecurityScheme.Type.HTTP)
                         .scheme("bearer")

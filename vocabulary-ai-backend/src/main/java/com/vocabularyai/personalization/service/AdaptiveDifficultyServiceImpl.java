@@ -3,6 +3,7 @@ package com.vocabularyai.personalization.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocabularyai.ai.service.gemini.GeminiAIClientService;
 import com.vocabularyai.ai.service.cache.CacheService;
+import com.vocabularyai.common.exception.ForbiddenException;
 import com.vocabularyai.common.exception.RateLimitExceededException;
 import com.vocabularyai.common.exception.ResourceNotFoundException;
 import com.vocabularyai.personalization.dto.AdaptiveDifficultyDto;
@@ -44,7 +45,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class AdaptiveDifficultyServiceImpl implements AdaptiveDifficultyService {
     
     private final LearningPlanService learningPlanService;
@@ -64,13 +64,14 @@ public class AdaptiveDifficultyServiceImpl implements AdaptiveDifficultyService 
      * 
      * Quy trình:
      * 1. Xác thực người dùng tồn tại
-     * 2. Kiểm tra cache
-     * 3. Lấy lịch sử hoạt động gần đây (7 ngày)
-     * 4. Tính toán hiệu suất theo chủ đề
-     * 5. Gọi Gemini AI để phân tích và gợi ý
-     * 6. Phân tích phản hồi JSON
-     * 7. Cache kết quả
-     * 8. Trả về gợi ý
+     * 2. Xác thực quyền sở hữu (TASK 10 - Cache Authorization)
+     * 3. Kiểm tra cache
+     * 4. Lấy lịch sử hoạt động gần đây (7 ngày)
+     * 5. Tính toán hiệu suất theo chủ đề
+     * 6. Gọi Gemini AI để phân tích và gợi ý
+     * 7. Phân tích phản hồi JSON
+     * 8. Cache kết quả
+     * 9. Trả về gợi ý
      */
     @Override
     public AdaptiveDifficultyDto analyzeAndRecommendDifficulty(Long userId) {
@@ -79,6 +80,9 @@ public class AdaptiveDifficultyServiceImpl implements AdaptiveDifficultyService 
         // Xác thực người dùng tồn tại
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người dùng: " + userId));
+        
+        // TASK 10: Xác thực quyền sở hữu - Verify requesting user matches requested userId
+        verifyUserOwnership(userId);
         
         // Kiểm tra cache trước
         AdaptiveDifficultyDto cached = getCachedAnalysis(userId);
@@ -405,6 +409,39 @@ public class AdaptiveDifficultyServiceImpl implements AdaptiveDifficultyService 
         } catch (Exception e) {
             log.error("[TASK 6] Lỗi phân tích phản hồi JSON: {}", e.getMessage(), e);
             throw new AdaptiveDifficultyException("Lỗi phân tích phản hồi AI: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * TASK 10: Verify ownership - Ensure requesting user matches requested userId
+     * 
+     * Throws ForbiddenException if user doesn't have permission
+     */
+    private void verifyUserOwnership(Long requestedUserId) {
+        try {
+            // Get currently authenticated user from Security Context
+            org.springframework.security.core.Authentication authentication = 
+                org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            
+            if (authentication == null || !authentication.isAuthenticated()) {
+                throw new ForbiddenException("User not authenticated");
+            }
+            
+            User currentUser = (User) authentication.getPrincipal();
+            
+            // Verify requesting user owns this resource
+            if (!currentUser.getId().equals(requestedUserId)) {
+                log.warn("[TASK 10] Unauthorized cache access attempt: userId={} requested by userId={}",
+                         requestedUserId, currentUser.getId());
+                throw new ForbiddenException("You don't have permission to access this resource");
+            }
+            
+            log.debug("[TASK 10] Cache access verified for userId: {}", requestedUserId);
+        } catch (ForbiddenException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("[TASK 10] Cache ownership verification failed: {}", e.getMessage(), e);
+            throw new ForbiddenException("Authorization verification failed");
         }
     }
 }

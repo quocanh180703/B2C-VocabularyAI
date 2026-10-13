@@ -8,8 +8,11 @@ import com.vocabularyai.speaking.dto.response.SpeakingSessionSummaryResponse;
 import com.vocabularyai.speaking.entity.SpeakingLevel;
 import com.vocabularyai.speaking.entity.SpeakingSession;
 import com.vocabularyai.speaking.entity.SpeakingStatus;
+import com.vocabularyai.speaking.entity.SpeakingAttempt;
 import com.vocabularyai.speaking.mapper.SpeakingSessionMapper;
 import com.vocabularyai.speaking.repository.SpeakingSessionRepository;
+import com.vocabularyai.speaking.repository.SpeakingAttemptRepository;
+import com.vocabularyai.speaking.service.storage.AudioStorageService;
 import com.vocabularyai.user.entity.User;
 import com.vocabularyai.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * SpeakingSessionService Implementation
@@ -41,6 +45,8 @@ public class SpeakingSessionServiceImpl implements SpeakingSessionService {
     private final SpeakingSessionMapper sessionMapper;
     private final SpeakingAttemptService attemptService;
     private final SpeakingFeedbackService feedbackService;
+    private final SpeakingAttemptRepository attemptRepository;
+    private final AudioStorageService audioStorageService;
     
     @Override
     public SpeakingSessionResponse createSession(Long userId, CreateSpeakingSessionRequest request) {
@@ -219,6 +225,31 @@ public class SpeakingSessionServiceImpl implements SpeakingSessionService {
         // Verify ownership
         SpeakingSession session = getSessionAndVerifyOwnership(sessionId, userId);
         
+        // Xóa tất cả audio files của attempts trước khi xóa session
+        try {
+            List<SpeakingAttempt> attempts = attemptRepository.findBySessionIdOrderByAttemptNumber(sessionId);
+            
+            for (SpeakingAttempt attempt : attempts) {
+                if (attempt.getAudioUrl() != null && !attempt.getAudioUrl().isEmpty()) {
+                    try {
+                        audioStorageService.deleteAudio(attempt.getAudioUrl());
+                        log.debug("Audio file được xóa từ storage: attemptId={}, audioUrl={}", 
+                                attempt.getId(), attempt.getAudioUrl());
+                    } catch (Exception e) {
+                        log.warn("Không thể xóa audio file từ storage: attemptId={}, audioUrl={}, error: {}", 
+                                attempt.getId(), attempt.getAudioUrl(), e.getMessage());
+                        // Không throw exception, tiếp tục xóa các file khác
+                    }
+                }
+            }
+            
+            log.info("Đã xóa {} audio files của phiên: sessionId={}", attempts.size(), sessionId);
+            
+        } catch (Exception e) {
+            log.warn("Lỗi khi xóa audio files: sessionId={}, error: {}", sessionId, e.getMessage());
+            // Không throw exception, tiếp tục xóa phiên từ DB
+        }
+        
         // Xóa phiên (cascade delete sẽ xóa attempts và feedback)
         sessionRepository.delete(session);
         log.info("Phiên đã xóa: sessionId={}", sessionId);
@@ -237,15 +268,19 @@ public class SpeakingSessionServiceImpl implements SpeakingSessionService {
     }
     
     /**
-     * Lấy session và xác minh user sở hữu
+     * Lấy session và xác minh user sở hữu (IDOR prevention)
      * 
-     * @throws IllegalArgumentException nếu session không tồn tại hoặc user không sở hữu
+     * ✅ TASK 9: Fixed to throw ForbiddenException for proper 403 status
+     * 
+     * @throws ForbiddenException nếu user không sở hữu session
      */
     private SpeakingSession getSessionAndVerifyOwnership(Long sessionId, Long userId) {
         return sessionRepository.findByIdAndUserId(sessionId, userId)
                 .orElseThrow(() -> {
-                    log.warn("Truy cập không được phép: sessionId={}, userId={}", sessionId, userId);
-                    return new IllegalArgumentException("Phiên không tồn tại hoặc bạn không có quyền truy cập");
+                    log.warn("IDOR prevention: Unauthorized access attempt: sessionId={}, userId={}", sessionId, userId);
+                    return new com.vocabularyai.common.exception.ForbiddenException(
+                        "You don't have permission to access this speaking session"
+                    );
                 });
     }
     

@@ -1,0 +1,2549 @@
+2026-10-11 14:18:54 [main] INFO  c.v.VocabularyAiApplication - Starting VocabularyAiApplication v1.0.0 using Java 21.0.4 with PID 8436 (D:\demo-datn\vocabulary-ai-backend\target\vocabulary-ai-backend-1.0.0.jar started by hoang in D:\demo-datn)
+2026-10-11 14:18:54 [main] DEBUG c.v.VocabularyAiApplication - Running with Spring Boot v3.3.0, Spring v6.1.8
+2026-10-11 14:18:54 [main] INFO  c.v.VocabularyAiApplication - No active profile set, falling back to 1 default profile: "default"
+2026-10-11 14:19:05 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-11 14:19:05 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-11 14:19:10 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 4420 ms. Found 35 JPA repository interfaces.
+2026-10-11 14:19:15 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-11 14:19:16 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-11 14:19:16 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.admin.repository.AdminAiRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:16 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.admin.repository.AdminPackagesRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:16 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.admin.repository.AdminPaymentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:17 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.admin.repository.AdminQuizRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:17 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.admin.repository.AdminReportsRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:17 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.admin.repository.AdminSpeakingRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:17 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.admin.repository.AdminStudentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:17 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.admin.repository.AdminSubscriptionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:17 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.admin.repository.AdminSystemRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:17 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.admin.repository.AdminVocabularyRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:18 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.ai.repository.AiConversationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:18 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.ai.repository.AiMessageRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:18 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.ai.repository.OtpVerificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:18 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.ai.repository.PasswordResetTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:18 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.ai.repository.PendingRegistrationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:18 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.ai.repository.RateLimitRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:18 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.auth.repository.RefreshTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.learning.repository.LearningHistoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.learning.repository.LearningProgressRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.payment.repository.PackageRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.payment.repository.PaymentOrderRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.payment.repository.PaymentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.payment.repository.SubscriptionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.quiz.repository.QuestionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.quiz.repository.QuizAnswerRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.quiz.repository.QuizAttemptRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.quiz.repository.QuizRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.speaking.repository.SpeakingAttemptRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.speaking.repository.SpeakingFeedbackRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.speaking.repository.SpeakingSessionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.user.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.vocabulary.repository.CategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:19 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.vocabulary.repository.CefrWordRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:20 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.vocabulary.repository.FavoriteWordRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:20 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.vocabularyai.vocabulary.repository.WordRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-10-11 14:19:20 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 3809 ms. Found 0 Redis repository interfaces.
+2026-10-11 14:19:27 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-10-11 14:19:28 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-10-11 14:19:28 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.24]
+2026-10-11 14:19:28 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-10-11 14:19:28 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 34169 ms
+2026-10-11 14:19:30 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-10-11 14:19:32 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@29592929
+2026-10-11 14:19:32 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-10-11 14:19:32 [main] INFO  o.f.c.i.license.VersionPrinter - Flyway Community Edition 9.22.3 by Redgate
+2026-10-11 14:19:32 [main] INFO  o.f.c.i.license.VersionPrinter - See release notes here: https://rd.gt/416ObMi
+2026-10-11 14:19:32 [main] INFO  o.f.c.i.license.VersionPrinter - 
+2026-10-11 14:19:33 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:mysql://localhost:3306/datn_2 (MySQL 9.3)
+2026-10-11 14:19:33 [main] WARN  o.f.c.i.database.base.Database - Flyway upgrade recommended: MySQL 9.3 is newer than this version of Flyway and support has not been tested. The latest supported version of MySQL is 8.0.
+2026-10-11 14:19:33 [main] INFO  o.f.core.internal.command.DbValidate - Successfully validated 6 migrations (execution time 00:00.106s)
+2026-10-11 14:19:33 [main] INFO  o.f.core.internal.command.DbMigrate - Current version of schema `datn_2`: 99
+2026-10-11 14:19:33 [main] INFO  o.f.core.internal.command.DbMigrate - Schema `datn_2` is up to date. No migration necessary.
+2026-10-11 14:19:34 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-10-11 14:19:34 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.2.Final
+2026-10-11 14:19:34 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-10-11 14:19:36 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-10-11 14:19:36 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-10-11 14:19:36 [main] WARN  org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-10-11 14:19:41 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table ai_conversations 
+       modify column summary LONGTEXT
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table ai_messages 
+       modify column content LONGTEXT not null
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table ai_messages 
+       modify column metadata JSON
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table categories 
+       modify column description TEXT
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table cefr_words 
+       modify column definition LONGTEXT
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table packages 
+       modify column description TEXT
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table payment_orders 
+       modify column payment_url TEXT
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table questions 
+       modify column content TEXT not null
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table questions 
+       modify column explanation TEXT
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table questions 
+       modify column options JSON not null
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table quiz_attempts 
+       modify column score DECIMAL(5,2) not null
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table quizzes 
+       modify column description TEXT
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table speaking_attempts 
+       modify column transcript LONGTEXT
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table speaking_attempts 
+       modify column transcript_confidence DECIMAL(5,2)
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table speaking_feedback 
+       modify column content_score DECIMAL(5,2)
+2026-10-11 14:19:41 [main] DEBUG org.hibernate.SQL - 
+    alter table speaking_feedback 
+       modify column corrections JSON
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table speaking_feedback 
+       modify column feedback LONGTEXT
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table speaking_feedback 
+       modify column fluency_score DECIMAL(5,2)
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table speaking_feedback 
+       modify column grammar_score DECIMAL(5,2)
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table speaking_feedback 
+       modify column overall_score DECIMAL(5,2)
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table speaking_feedback 
+       modify column pronunciation_score DECIMAL(5,2)
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table speaking_feedback 
+       modify column strengths JSON
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table speaking_feedback 
+       modify column suggestions JSON
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table speaking_feedback 
+       modify column vocabulary_score DECIMAL(5,2)
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table speaking_feedback 
+       modify column weaknesses JSON
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table speaking_sessions 
+       modify column description LONGTEXT
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table speaking_sessions 
+       modify column overall_score DECIMAL(5,2)
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table words 
+       modify column audio_url LONGTEXT
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table words 
+       modify column definition LONGTEXT
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table words 
+       modify column example LONGTEXT
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table words 
+       modify column image_url LONGTEXT
+2026-10-11 14:19:42 [main] DEBUG org.hibernate.SQL - 
+    alter table words 
+       modify column meaning LONGTEXT
+2026-10-11 14:19:42 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-11 14:19:43 [main] DEBUG c.v.a.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2026-10-11 14:19:44 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-10-11 14:19:54 [main] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name daoAuthenticationProvider
+2026-10-11 14:19:54 [main] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2026-10-11 14:19:58 [main] INFO  c.vocabularyai.ai.config.RedisConfig - Initializing RedisTemplate with Jackson2JsonRedisSerializer
+2026-10-11 14:19:58 [main] INFO  c.vocabularyai.ai.config.RedisConfig - RedisTemplate initialized successfully with JSON serialization
+2026-10-11 14:20:01 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - 175 mappings in 'requestMappingHandlerMapping'
+2026-10-11 14:20:01 [main] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2026-10-11 14:20:02 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@400cc92c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1ca77862, org.springframework.security.web.context.SecurityContextHolderFilter@69ac6b6a, org.springframework.security.web.header.HeaderWriterFilter@26892f11, org.springframework.web.filter.CorsFilter@6094cec2, org.springframework.security.web.authentication.logout.LogoutFilter@19d47ee1, com.vocabularyai.auth.security.JwtAuthenticationFilter@2799f9a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7eae7761, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4ffa42ba, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@70c90744, org.springframework.security.web.session.SessionManagementFilter@24639c85, org.springframework.security.web.access.ExceptionTranslationFilter@2b042010, org.springframework.security.web.access.intercept.AuthorizationFilter@6247d611]
+2026-10-11 14:20:02 [main] INFO  c.v.s.s.storage.AudioStorageConfig - Speaking Module Audio Storage initialized with provider: local
+2026-10-11 14:20:03 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2026-10-11 14:20:03 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2026-10-11 14:20:05 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2026-10-11 14:20:05 [main] INFO  c.v.VocabularyAiApplication - Started VocabularyAiApplication in 72.891 seconds (process running for 74.796)
+2026-10-11 14:20:06 [main] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.username=? 
+    limit
+        ?
+2026-10-11 14:20:29 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-11 14:20:29 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-10-11 14:20:29 [http-nio-8080-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
+2026-10-11 14:20:29 [http-nio-8080-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
+2026-10-11 14:20:29 [http-nio-8080-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Detected FixedThemeResolver
+2026-10-11 14:20:29 [http-nio-8080-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@3754e4b2
+2026-10-11 14:20:29 [http-nio-8080-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@232f6e23
+2026-10-11 14:20:29 [http-nio-8080-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2026-10-11 14:20:29 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-10-11 14:20:29 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /auth/login
+2026-10-11 14:20:29 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing POST /auth/login
+2026-10-11 14:20:29 [http-nio-8080-exec-2] DEBUG c.v.a.s.JwtAuthenticationFilter - No JWT token found in Authorization header
+2026-10-11 14:20:29 [http-nio-8080-exec-2] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-10-11 14:20:29 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured POST /auth/login
+2026-10-11 14:20:29 [http-nio-8080-exec-2] DEBUG o.s.web.servlet.DispatcherServlet - POST "/api/auth/login", parameters={}
+2026-10-11 14:20:29 [http-nio-8080-exec-2] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.auth.controller.AuthController#login(LoginRequest)
+2026-10-11 14:20:30 [http-nio-8080-exec-2] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest(emailOrUsername=admin@vocabularyai.com, password=Admin123@)]
+2026-10-11 14:20:30 [http-nio-8080-exec-2] INFO  c.v.auth.controller.AuthController - Login request for emailOrUsername: admin@vocabularyai.com
+2026-10-11 14:20:30 [http-nio-8080-exec-2] INFO  c.v.auth.service.AuthService - User login attempt for emailOrUsername: admin@vocabularyai.com
+2026-10-11 14:20:30 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-10-11 14:20:30 [http-nio-8080-exec-2] DEBUG c.v.auth.service.AuthService - Email found, using username for authentication: admin
+2026-10-11 14:20:30 [http-nio-8080-exec-2] DEBUG c.v.a.s.CustomUserDetailsService - Loading user details for username: admin
+2026-10-11 14:20:30 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:30 [http-nio-8080-exec-2] DEBUG c.v.a.s.CustomUserDetailsService - User loaded successfully for username: admin (status: ACTIVE)
+2026-10-11 14:20:30 [http-nio-8080-exec-2] DEBUG o.s.s.a.d.DaoAuthenticationProvider - Authenticated user
+2026-10-11 14:20:30 [http-nio-8080-exec-2] INFO  c.v.auth.service.AuthService - User logged in successfully: admin
+2026-10-11 14:20:31 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    /* insert for
+        com.vocabularyai.auth.entity.RefreshToken */insert 
+    into
+        refresh_tokens (created_at, expires_at, revoked, token, user_id) 
+    values
+        (?, ?, ?, ?, ?)
+2026-10-11 14:20:31 [http-nio-8080-exec-2] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:31 [http-nio-8080-exec-2] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Login successful, data=AuthResponse(accessToken=eyJhbGciOiJIUzUxMi (truncated)...]
+2026-10-11 14:20:31 [http-nio-8080-exec-2] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:31 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /users/me
+2026-10-11 14:20:31 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /learning/review-queue?page=0&size=1
+2026-10-11 14:20:31 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /words/favorites?page=0&size=3
+2026-10-11 14:20:31 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /learning/statistics
+2026-10-11 14:20:31 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /quizzes/history?page=0&size=1
+2026-10-11 14:20:31 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /users/me
+2026-10-11 14:20:31 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /learning/statistics
+2026-10-11 14:20:31 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /learning/review-queue?page=0&size=1
+2026-10-11 14:20:31 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /words/favorites?page=0&size=3
+2026-10-11 14:20:31 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /quizzes/history?page=0&size=1
+2026-10-11 14:20:31 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
+2026-10-11 14:20:31 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /learning/review-queue?page=0&size=1
+2026-10-11 14:20:31 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /words/favorites?page=0&size=3
+2026-10-11 14:20:31 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /learning/statistics
+2026-10-11 14:20:31 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /quizzes/history?page=0&size=1
+2026-10-11 14:20:32 [http-nio-8080-exec-2] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:32 [http-nio-8080-exec-2] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:32 [http-nio-8080-exec-3] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:32 [http-nio-8080-exec-3] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:32 [http-nio-8080-exec-5] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:32 [http-nio-8080-exec-10] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:32 [http-nio-8080-exec-5] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:32 [http-nio-8080-exec-10] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:32 [http-nio-8080-exec-10] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:32 [http-nio-8080-exec-2] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:32 [http-nio-8080-exec-3] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:32 [http-nio-8080-exec-5] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:32 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:32 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:32 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:32 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:32 [http-nio-8080-exec-5] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:32 [http-nio-8080-exec-10] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:32 [http-nio-8080-exec-2] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:32 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /words/favorites?page=0&size=3
+2026-10-11 14:20:32 [http-nio-8080-exec-3] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:32 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /quizzes/history?page=0&size=1
+2026-10-11 14:20:32 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
+2026-10-11 14:20:32 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /learning/review-queue?page=0&size=1
+2026-10-11 14:20:32 [http-nio-8080-exec-10] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/quizzes/history?page=0&size=1", parameters={masked}
+2026-10-11 14:20:32 [http-nio-8080-exec-2] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/users/me", parameters={}
+2026-10-11 14:20:32 [http-nio-8080-exec-5] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/words/favorites?page=0&size=3", parameters={masked}
+2026-10-11 14:20:32 [http-nio-8080-exec-10] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.quiz.controller.QuizController#getQuizHistory(Integer, Integer)
+2026-10-11 14:20:32 [http-nio-8080-exec-3] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/learning/review-queue?page=0&size=1", parameters={masked}
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:32 [http-nio-8080-exec-2] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.user.controller.UserController#getCurrentUser()
+2026-10-11 14:20:32 [http-nio-8080-exec-5] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.vocabulary.controller.FavoriteWordController#getFavoriteWords(Integer, Integer)
+2026-10-11 14:20:32 [http-nio-8080-exec-3] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.learning.controller.LearningController#getWordsNeedingReview(Integer, Integer)
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /learning/statistics
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/learning/statistics", parameters={}
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.learning.controller.LearningController#getStatistics()
+2026-10-11 14:20:32 [http-nio-8080-exec-2] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.user.controller.UserController.getCurrentUser(); target is of class [com.vocabularyai.user.controller.UserController]
+2026-10-11 14:20:32 [http-nio-8080-exec-10] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.quiz.controller.QuizController.getQuizHistory(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.quiz.controller.QuizController]
+2026-10-11 14:20:32 [http-nio-8080-exec-5] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.vocabulary.controller.FavoriteWordController.getFavoriteWords(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.vocabulary.controller.FavoriteWordController]
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getStatistics(); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:32 [http-nio-8080-exec-3] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getWordsNeedingReview(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:32 [http-nio-8080-exec-10] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.quiz.controller.QuizController.getQuizHistory(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.quiz.controller.QuizController]
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getStatistics(); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:32 [http-nio-8080-exec-5] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.vocabulary.controller.FavoriteWordController.getFavoriteWords(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.vocabulary.controller.FavoriteWordController]
+2026-10-11 14:20:32 [http-nio-8080-exec-3] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getWordsNeedingReview(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:32 [http-nio-8080-exec-2] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.user.controller.UserController.getCurrentUser(); target is of class [com.vocabularyai.user.controller.UserController]
+2026-10-11 14:20:32 [http-nio-8080-exec-10] INFO  c.v.quiz.controller.QuizController - Getting quiz history
+2026-10-11 14:20:32 [http-nio-8080-exec-6] INFO  c.v.l.controller.LearningController - Getting progress statistics
+2026-10-11 14:20:32 [http-nio-8080-exec-5] INFO  c.v.v.c.FavoriteWordController - Getting favorite words for current user
+2026-10-11 14:20:32 [http-nio-8080-exec-3] INFO  c.v.l.controller.LearningController - Getting words needing review
+2026-10-11 14:20:32 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:32 [http-nio-8080-exec-2] INFO  c.v.user.controller.UserController - Getting current user profile
+2026-10-11 14:20:32 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:32 [http-nio-8080-exec-5] INFO  c.v.v.service.FavoriteWordService - Getting favorite words for user 1
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:32 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:32 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:32 [http-nio-8080-exec-10] INFO  c.v.quiz.service.QuizService - Getting quiz history for user: 1
+2026-10-11 14:20:32 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        fw1_0.id,
+        fw1_0.created_at,
+        fw1_0.user_id,
+        fw1_0.word_id 
+    from
+        favorite_words fw1_0 
+    where
+        fw1_0.user_id=? 
+    order by
+        fw1_0.created_at desc 
+    limit
+        ?, ?
+2026-10-11 14:20:32 [http-nio-8080-exec-6] INFO  c.v.learning.service.LearningService - Getting progress statistics for user 1
+2026-10-11 14:20:32 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        qa1_0.id,
+        qa1_0.correct_answers,
+        qa1_0.created_at,
+        qa1_0.quiz_id,
+        qa1_0.score,
+        qa1_0.started_at,
+        qa1_0.submitted_at,
+        qa1_0.total_questions,
+        qa1_0.user_id 
+    from
+        quiz_attempts qa1_0 
+    where
+        qa1_0.user_id=? 
+    order by
+        qa1_0.created_at desc 
+    limit
+        ?, ?
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=?
+2026-10-11 14:20:32 [http-nio-8080-exec-3] INFO  c.v.learning.service.LearningService - Getting words needing review for user 1
+2026-10-11 14:20:32 [http-nio-8080-exec-2] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:32 [http-nio-8080-exec-10] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:32 [http-nio-8080-exec-5] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:32 [http-nio-8080-exec-2] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=User profile retrieved successfully, data=UserResponse(id=1, usern (truncated)...]
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=? 
+        and lp1_0.status=?
+2026-10-11 14:20:32 [http-nio-8080-exec-10] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Quiz history retrieved successfully, data=Page 1 of 0 containing U (truncated)...]
+2026-10-11 14:20:32 [http-nio-8080-exec-5] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Favorite words retrieved successfully, data=Page 1 of 0 containing (truncated)...]
+2026-10-11 14:20:32 [http-nio-8080-exec-2] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:32 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        lp 
+    FROM
+        LearningProgress lp 
+    WHERE
+        lp.user.id = :userId 
+        AND lp.nextReviewAt IS NOT NULL 
+        AND lp.nextReviewAt <= :now 
+    order by
+        lp.nextReviewAt desc */ select
+            lp1_0.id,
+            lp1_0.correct_count,
+            lp1_0.created_at,
+            lp1_0.last_reviewed_at,
+            lp1_0.next_review_at,
+            lp1_0.review_count,
+            lp1_0.status,
+            lp1_0.updated_at,
+            lp1_0.user_id,
+            lp1_0.word_id,
+            lp1_0.wrong_count 
+        from
+            learning_progress lp1_0 
+        where
+            lp1_0.user_id=? 
+            and lp1_0.next_review_at is not null 
+            and lp1_0.next_review_at<=? 
+        order by
+            lp1_0.next_review_at desc 
+        limit
+            ?, ?
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=? 
+        and lp1_0.status=?
+2026-10-11 14:20:32 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
+2026-10-11 14:20:32 [http-nio-8080-exec-3] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:32 [http-nio-8080-exec-1] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=? 
+        and lp1_0.status=?
+2026-10-11 14:20:32 [http-nio-8080-exec-5] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:32 [http-nio-8080-exec-10] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:32 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /words/favorites?page=0&size=3
+2026-10-11 14:20:32 [http-nio-8080-exec-3] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Words needing review retrieved successfully, data=Page 1 of 0 cont (truncated)...]
+2026-10-11 14:20:32 [http-nio-8080-exec-1] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:32 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /quizzes/history?page=0&size=1
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        lp 
+    FROM
+        LearningProgress lp 
+    WHERE
+        lp.user.id = :userId 
+        AND lp.nextReviewAt IS NOT NULL 
+        AND lp.nextReviewAt <= :now */ select
+            lp1_0.id,
+            lp1_0.correct_count,
+            lp1_0.created_at,
+            lp1_0.last_reviewed_at,
+            lp1_0.next_review_at,
+            lp1_0.review_count,
+            lp1_0.status,
+            lp1_0.updated_at,
+            lp1_0.user_id,
+            lp1_0.word_id,
+            lp1_0.wrong_count 
+        from
+            learning_progress lp1_0 
+        where
+            lp1_0.user_id=? 
+            and lp1_0.next_review_at is not null 
+            and lp1_0.next_review_at<=?
+2026-10-11 14:20:32 [http-nio-8080-exec-7] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:32 [http-nio-8080-exec-3] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:32 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /learning/review-queue?page=0&size=1
+2026-10-11 14:20:32 [http-nio-8080-exec-8] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:32 [http-nio-8080-exec-1] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lh1_0.id) 
+    from
+        learning_history lh1_0 
+    where
+        lh1_0.user_id=?
+2026-10-11 14:20:32 [http-nio-8080-exec-7] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:32 [http-nio-8080-exec-9] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:32 [http-nio-8080-exec-8] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:32 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:32 [http-nio-8080-exec-7] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        COUNT(lh) 
+    FROM
+        LearningHistory lh 
+    WHERE
+        lh.user.id = :userId 
+        AND lh.isCorrect = true */ select
+            count(lh1_0.id) 
+        from
+            learning_history lh1_0 
+        where
+            lh1_0.user_id=? 
+            and lh1_0.is_correct=1
+2026-10-11 14:20:32 [http-nio-8080-exec-9] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:32 [http-nio-8080-exec-8] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:32 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:32 [http-nio-8080-exec-1] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:32 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
+2026-10-11 14:20:32 [http-nio-8080-exec-9] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        COALESCE(SUM(CASE 
+            WHEN lh.isCorrect = true 
+                THEN 1 
+            ELSE 0 
+    END), 0) * 100.0 / COALESCE(SUM(CASE 
+        WHEN lh.isCorrect IS NOT NULL 
+            THEN 1 
+        ELSE 0 
+END), 1) 
+FROM
+    LearningHistory lh 
+WHERE
+    lh.user.id = :userId */ select
+        ((coalesce(sum(case 
+            when lh1_0.is_correct=1 
+                then 1 
+            else 0 
+    end), 0)*100.0)/coalesce(sum(case 
+        when lh1_0.is_correct is not null 
+            then 1 
+        else 0 
+end), 1)) 
+from
+    learning_history lh1_0 
+where
+    lh1_0.user_id=?
+2026-10-11 14:20:32 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:32 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:32 [http-nio-8080-exec-7] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:32 [http-nio-8080-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/users/me", parameters={}
+2026-10-11 14:20:32 [http-nio-8080-exec-9] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:32 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /words/favorites?page=0&size=3
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Progress statistics retrieved successfully, data=ProgressStatistic (truncated)...]
+2026-10-11 14:20:32 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /learning/review-queue?page=0&size=1
+2026-10-11 14:20:32 [http-nio-8080-exec-1] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.user.controller.UserController#getCurrentUser()
+2026-10-11 14:20:32 [http-nio-8080-exec-8] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:32 [http-nio-8080-exec-7] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/words/favorites?page=0&size=3", parameters={masked}
+2026-10-11 14:20:32 [http-nio-8080-exec-6] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:32 [http-nio-8080-exec-9] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/learning/review-queue?page=0&size=1", parameters={masked}
+2026-10-11 14:20:32 [http-nio-8080-exec-1] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.user.controller.UserController.getCurrentUser(); target is of class [com.vocabularyai.user.controller.UserController]
+2026-10-11 14:20:32 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /quizzes/history?page=0&size=1
+2026-10-11 14:20:32 [http-nio-8080-exec-7] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.vocabulary.controller.FavoriteWordController#getFavoriteWords(Integer, Integer)
+2026-10-11 14:20:32 [http-nio-8080-exec-9] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.learning.controller.LearningController#getWordsNeedingReview(Integer, Integer)
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /learning/statistics
+2026-10-11 14:20:33 [http-nio-8080-exec-1] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.user.controller.UserController.getCurrentUser(); target is of class [com.vocabularyai.user.controller.UserController]
+2026-10-11 14:20:33 [http-nio-8080-exec-8] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/quizzes/history?page=0&size=1", parameters={masked}
+2026-10-11 14:20:33 [http-nio-8080-exec-9] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getWordsNeedingReview(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:33 [http-nio-8080-exec-8] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.quiz.controller.QuizController#getQuizHistory(Integer, Integer)
+2026-10-11 14:20:33 [http-nio-8080-exec-7] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.vocabulary.controller.FavoriteWordController.getFavoriteWords(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.vocabulary.controller.FavoriteWordController]
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:33 [http-nio-8080-exec-1] INFO  c.v.user.controller.UserController - Getting current user profile
+2026-10-11 14:20:33 [http-nio-8080-exec-9] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getWordsNeedingReview(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:33 [http-nio-8080-exec-8] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.quiz.controller.QuizController.getQuizHistory(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.quiz.controller.QuizController]
+2026-10-11 14:20:33 [http-nio-8080-exec-7] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.vocabulary.controller.FavoriteWordController.getFavoriteWords(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.vocabulary.controller.FavoriteWordController]
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:33 [http-nio-8080-exec-9] INFO  c.v.l.controller.LearningController - Getting words needing review
+2026-10-11 14:20:33 [http-nio-8080-exec-7] INFO  c.v.v.c.FavoriteWordController - Getting favorite words for current user
+2026-10-11 14:20:33 [http-nio-8080-exec-8] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.quiz.controller.QuizController.getQuizHistory(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.quiz.controller.QuizController]
+2026-10-11 14:20:33 [http-nio-8080-exec-8] INFO  c.v.quiz.controller.QuizController - Getting quiz history
+2026-10-11 14:20:33 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:33 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:33 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:33 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:33 [http-nio-8080-exec-8] INFO  c.v.quiz.service.QuizService - Getting quiz history for user: 1
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:33 [http-nio-8080-exec-1] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:33 [http-nio-8080-exec-9] INFO  c.v.learning.service.LearningService - Getting words needing review for user 1
+2026-10-11 14:20:33 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        qa1_0.id,
+        qa1_0.correct_answers,
+        qa1_0.created_at,
+        qa1_0.quiz_id,
+        qa1_0.score,
+        qa1_0.started_at,
+        qa1_0.submitted_at,
+        qa1_0.total_questions,
+        qa1_0.user_id 
+    from
+        quiz_attempts qa1_0 
+    where
+        qa1_0.user_id=? 
+    order by
+        qa1_0.created_at desc 
+    limit
+        ?, ?
+2026-10-11 14:20:33 [http-nio-8080-exec-1] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=User profile retrieved successfully, data=UserResponse(id=1, usern (truncated)...]
+2026-10-11 14:20:33 [http-nio-8080-exec-7] INFO  c.v.v.service.FavoriteWordService - Getting favorite words for user 1
+2026-10-11 14:20:33 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        lp 
+    FROM
+        LearningProgress lp 
+    WHERE
+        lp.user.id = :userId 
+        AND lp.nextReviewAt IS NOT NULL 
+        AND lp.nextReviewAt <= :now 
+    order by
+        lp.nextReviewAt desc */ select
+            lp1_0.id,
+            lp1_0.correct_count,
+            lp1_0.created_at,
+            lp1_0.last_reviewed_at,
+            lp1_0.next_review_at,
+            lp1_0.review_count,
+            lp1_0.status,
+            lp1_0.updated_at,
+            lp1_0.user_id,
+            lp1_0.word_id,
+            lp1_0.wrong_count 
+        from
+            learning_progress lp1_0 
+        where
+            lp1_0.user_id=? 
+            and lp1_0.next_review_at is not null 
+            and lp1_0.next_review_at<=? 
+        order by
+            lp1_0.next_review_at desc 
+        limit
+            ?, ?
+2026-10-11 14:20:33 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        fw1_0.id,
+        fw1_0.created_at,
+        fw1_0.user_id,
+        fw1_0.word_id 
+    from
+        favorite_words fw1_0 
+    where
+        fw1_0.user_id=? 
+    order by
+        fw1_0.created_at desc 
+    limit
+        ?, ?
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:33 [http-nio-8080-exec-8] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:33 [http-nio-8080-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:33 [http-nio-8080-exec-9] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /learning/statistics
+2026-10-11 14:20:33 [http-nio-8080-exec-7] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:33 [http-nio-8080-exec-8] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Quiz history retrieved successfully, data=Page 1 of 0 containing U (truncated)...]
+2026-10-11 14:20:33 [http-nio-8080-exec-9] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Words needing review retrieved successfully, data=Page 1 of 0 cont (truncated)...]
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/learning/statistics", parameters={}
+2026-10-11 14:20:33 [http-nio-8080-exec-7] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Favorite words retrieved successfully, data=Page 1 of 0 containing (truncated)...]
+2026-10-11 14:20:33 [http-nio-8080-exec-8] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:33 [http-nio-8080-exec-9] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.learning.controller.LearningController#getStatistics()
+2026-10-11 14:20:33 [http-nio-8080-exec-7] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getStatistics(); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getStatistics(); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:33 [http-nio-8080-exec-4] INFO  c.v.l.controller.LearningController - Getting progress statistics
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:33 [http-nio-8080-exec-4] INFO  c.v.learning.service.LearningService - Getting progress statistics for user 1
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=?
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=? 
+        and lp1_0.status=?
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=? 
+        and lp1_0.status=?
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=? 
+        and lp1_0.status=?
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        lp 
+    FROM
+        LearningProgress lp 
+    WHERE
+        lp.user.id = :userId 
+        AND lp.nextReviewAt IS NOT NULL 
+        AND lp.nextReviewAt <= :now */ select
+            lp1_0.id,
+            lp1_0.correct_count,
+            lp1_0.created_at,
+            lp1_0.last_reviewed_at,
+            lp1_0.next_review_at,
+            lp1_0.review_count,
+            lp1_0.status,
+            lp1_0.updated_at,
+            lp1_0.user_id,
+            lp1_0.word_id,
+            lp1_0.wrong_count 
+        from
+            learning_progress lp1_0 
+        where
+            lp1_0.user_id=? 
+            and lp1_0.next_review_at is not null 
+            and lp1_0.next_review_at<=?
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lh1_0.id) 
+    from
+        learning_history lh1_0 
+    where
+        lh1_0.user_id=?
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        COUNT(lh) 
+    FROM
+        LearningHistory lh 
+    WHERE
+        lh.user.id = :userId 
+        AND lh.isCorrect = true */ select
+            count(lh1_0.id) 
+        from
+            learning_history lh1_0 
+        where
+            lh1_0.user_id=? 
+            and lh1_0.is_correct=1
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        COALESCE(SUM(CASE 
+            WHEN lh.isCorrect = true 
+                THEN 1 
+            ELSE 0 
+    END), 0) * 100.0 / COALESCE(SUM(CASE 
+        WHEN lh.isCorrect IS NOT NULL 
+            THEN 1 
+        ELSE 0 
+END), 1) 
+FROM
+    LearningHistory lh 
+WHERE
+    lh.user.id = :userId */ select
+        ((coalesce(sum(case 
+            when lh1_0.is_correct=1 
+                then 1 
+            else 0 
+    end), 0)*100.0)/coalesce(sum(case 
+        when lh1_0.is_correct is not null 
+            then 1 
+        else 0 
+end), 1)) 
+from
+    learning_history lh1_0 
+where
+    lh1_0.user_id=?
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Progress statistics retrieved successfully, data=ProgressStatistic (truncated)...]
+2026-10-11 14:20:33 [http-nio-8080-exec-4] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:41 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /words/favorites?page=0&size=999
+2026-10-11 14:20:41 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /words/favorites?page=0&size=999
+2026-10-11 14:20:41 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/cefr-words/search?page=0&size=20
+2026-10-11 14:20:41 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/cefr-words/search?page=0&size=20
+2026-10-11 14:20:41 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /learning/words?page=0&size=999
+2026-10-11 14:20:41 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /learning/words?page=0&size=999
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /words/favorites?page=0&size=999
+2026-10-11 14:20:41 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/cefr-words/search?page=0&size=20
+2026-10-11 14:20:41 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /learning/words?page=0&size=999
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:41 [http-nio-8080-exec-9] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:41 [http-nio-8080-exec-7] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:41 [http-nio-8080-exec-9] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:41 [http-nio-8080-exec-7] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:41 [http-nio-8080-exec-9] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:41 [http-nio-8080-exec-7] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:41 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:41 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /words/favorites?page=0&size=999
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/words/favorites?page=0&size=999", parameters={masked}
+2026-10-11 14:20:41 [http-nio-8080-exec-9] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.vocabulary.controller.FavoriteWordController#getFavoriteWords(Integer, Integer)
+2026-10-11 14:20:41 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/cefr-words/search?page=0&size=20
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.vocabulary.controller.FavoriteWordController.getFavoriteWords(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.vocabulary.controller.FavoriteWordController]
+2026-10-11 14:20:41 [http-nio-8080-exec-7] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:41 [http-nio-8080-exec-9] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/api/cefr-words/search?page=0&size=20", parameters={masked}
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.vocabulary.controller.FavoriteWordController.getFavoriteWords(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.vocabulary.controller.FavoriteWordController]
+2026-10-11 14:20:41 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /learning/words?page=0&size=999
+2026-10-11 14:20:41 [http-nio-8080-exec-9] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.vocabulary.controller.CefrWordController#searchWords(String, CEFRLevel, int, int)
+2026-10-11 14:20:41 [http-nio-8080-exec-8] INFO  c.v.v.c.FavoriteWordController - Getting favorite words for current user
+2026-10-11 14:20:41 [http-nio-8080-exec-7] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/learning/words?page=0&size=999", parameters={masked}
+2026-10-11 14:20:41 [http-nio-8080-exec-9] INFO  c.v.v.controller.CefrWordController - GET /cefr-words/search - query: null, level: null, page: 0, size: 20
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:41 [http-nio-8080-exec-7] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Mapped to ResourceHttpRequestHandler [classpath [vocabulary-ai-frontend/dist/]]
+2026-10-11 14:20:41 [http-nio-8080-exec-7] DEBUG o.s.w.s.r.ResourceHttpRequestHandler - Resource not found
+2026-10-11 14:20:41 [http-nio-8080-exec-8] INFO  c.v.v.service.FavoriteWordService - Getting favorite words for user 1
+2026-10-11 14:20:41 [http-nio-8080-exec-7] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.vocabularyai.common.exception.GlobalExceptionHandler#handleException(Exception, WebRequest)
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        fw1_0.id,
+        fw1_0.created_at,
+        fw1_0.user_id,
+        fw1_0.word_id 
+    from
+        favorite_words fw1_0 
+    where
+        fw1_0.user_id=? 
+    order by
+        fw1_0.created_at desc 
+    limit
+        ?, ?
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Favorite words retrieved successfully, data=Page 1 of 0 containing (truncated)...]
+2026-10-11 14:20:41 [http-nio-8080-exec-8] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /words/favorites?page=0&size=999
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /words/favorites?page=0&size=999
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/words/favorites?page=0&size=999", parameters={masked}
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.vocabulary.controller.FavoriteWordController#getFavoriteWords(Integer, Integer)
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.vocabulary.controller.FavoriteWordController.getFavoriteWords(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.vocabulary.controller.FavoriteWordController]
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.vocabulary.controller.FavoriteWordController.getFavoriteWords(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.vocabulary.controller.FavoriteWordController]
+2026-10-11 14:20:41 [http-nio-8080-exec-4] INFO  c.v.v.c.FavoriteWordController - Getting favorite words for current user
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:41 [http-nio-8080-exec-4] INFO  c.v.v.service.FavoriteWordService - Getting favorite words for user 1
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        fw1_0.id,
+        fw1_0.created_at,
+        fw1_0.user_id,
+        fw1_0.word_id 
+    from
+        favorite_words fw1_0 
+    where
+        fw1_0.user_id=? 
+    order by
+        fw1_0.created_at desc 
+    limit
+        ?, ?
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Favorite words retrieved successfully, data=Page 1 of 0 containing (truncated)...]
+2026-10-11 14:20:41 [http-nio-8080-exec-4] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:42 [http-nio-8080-exec-7] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/problem+json', given [application/json] and supported [application/problem+json]
+2026-10-11 14:20:42 [http-nio-8080-exec-7] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ProblemDetail[type='about:blank', title='Not Found', status=404, detail='No static resource learning (truncated)...]
+2026-10-11 14:20:42 [http-nio-8080-exec-7] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource learning/words.]
+2026-10-11 14:20:42 [http-nio-8080-exec-7] DEBUG o.s.web.servlet.DispatcherServlet - Completed 404 NOT_FOUND
+2026-10-11 14:20:42 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /learning/words?page=0&size=999
+2026-10-11 14:20:42 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing OPTIONS /api/cefr-words/statistics
+2026-10-11 14:20:42 [http-nio-8080-exec-2] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:42 [http-nio-8080-exec-2] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:42 [http-nio-8080-exec-2] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:42 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/cefr-words/statistics
+2026-10-11 14:20:42 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:42 [http-nio-8080-exec-10] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:42 [http-nio-8080-exec-10] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:42 [http-nio-8080-exec-2] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:42 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /learning/words?page=0&size=999
+2026-10-11 14:20:42 [http-nio-8080-exec-10] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:42 [http-nio-8080-exec-2] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/learning/words?page=0&size=999", parameters={masked}
+2026-10-11 14:20:42 [http-nio-8080-exec-2] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Mapped to ResourceHttpRequestHandler [classpath [vocabulary-ai-frontend/dist/]]
+2026-10-11 14:20:42 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:42 [http-nio-8080-exec-2] DEBUG o.s.w.s.r.ResourceHttpRequestHandler - Resource not found
+2026-10-11 14:20:42 [http-nio-8080-exec-10] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:42 [http-nio-8080-exec-2] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.vocabularyai.common.exception.GlobalExceptionHandler#handleException(Exception, WebRequest)
+2026-10-11 14:20:42 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/cefr-words/statistics
+2026-10-11 14:20:42 [http-nio-8080-exec-10] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/api/cefr-words/statistics", parameters={}
+2026-10-11 14:20:42 [http-nio-8080-exec-2] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/problem+json', given [application/json] and supported [application/problem+json]
+2026-10-11 14:20:42 [http-nio-8080-exec-10] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.vocabulary.controller.CefrWordController#getStatistics()
+2026-10-11 14:20:42 [http-nio-8080-exec-2] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ProblemDetail[type='about:blank', title='Not Found', status=404, detail='No static resource learning (truncated)...]
+2026-10-11 14:20:42 [http-nio-8080-exec-10] INFO  c.v.v.controller.CefrWordController - GET /cefr-words/statistics
+2026-10-11 14:20:42 [http-nio-8080-exec-2] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource learning/words.]
+2026-10-11 14:20:42 [http-nio-8080-exec-2] DEBUG o.s.web.servlet.DispatcherServlet - Completed 404 NOT_FOUND
+2026-10-11 14:20:43 [http-nio-8080-exec-10] DEBUG c.v.v.service.CefrWordService - Getting CEFR word statistics
+2026-10-11 14:20:43 [http-nio-8080-exec-9] DEBUG c.v.v.service.CefrWordService - Searching CEFR words: query='null', level=null, page=0, size=20
+2026-10-11 14:20:43 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(cw1_0.id) 
+    from
+        cefr_words cw1_0 
+    where
+        cw1_0.cefr_level=?
+2026-10-11 14:20:43 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        cw1_0.id,
+        cw1_0.cefr_level,
+        cw1_0.created_at,
+        cw1_0.definition,
+        cw1_0.language,
+        cw1_0.lemma,
+        cw1_0.part_of_speech,
+        cw1_0.pronunciation,
+        cw1_0.source,
+        cw1_0.updated_at 
+    from
+        cefr_words cw1_0 
+    order by
+        cw1_0.lemma 
+    limit
+        ?, ?
+2026-10-11 14:20:43 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(cw1_0.id) 
+    from
+        cefr_words cw1_0 
+    where
+        cw1_0.cefr_level=?
+2026-10-11 14:20:43 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(cw1_0.id) 
+    from
+        cefr_words cw1_0 
+    where
+        cw1_0.cefr_level=?
+2026-10-11 14:20:43 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(cw1_0.id) 
+    from
+        cefr_words cw1_0
+2026-10-11 14:20:43 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(cw1_0.id) 
+    from
+        cefr_words cw1_0 
+    where
+        cw1_0.cefr_level=?
+2026-10-11 14:20:43 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(cw1_0.id) 
+    from
+        cefr_words cw1_0 
+    where
+        cw1_0.cefr_level=?
+2026-10-11 14:20:43 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    /* select
+        count(*) 
+    from
+        CefrWord x */ select
+            count(*) 
+        from
+            cefr_words cw1_0
+2026-10-11 14:20:43 [http-nio-8080-exec-10] DEBUG o.s.web.servlet.DispatcherServlet - Failed to complete request: org.springframework.data.redis.serializer.SerializationException: Cannot serialize
+2026-10-11 14:20:43 [http-nio-8080-exec-10] ERROR o.a.c.c.C.[.[.[.[dispatcherServlet] - Servlet.service() for servlet [dispatcherServlet] in context with path [/api] threw exception [Request processing failed: org.springframework.data.redis.serializer.SerializationException: Cannot serialize] with root cause
+java.lang.IllegalArgumentException: DefaultSerializer requires a Serializable payload but received an object of type [com.vocabularyai.vocabulary.service.CefrWordService$CefrWordStatistics]
+	at org.springframework.core.serializer.DefaultSerializer.serialize(DefaultSerializer.java:43)
+	at org.springframework.core.serializer.Serializer.serializeToByteArray(Serializer.java:56)
+	at org.springframework.core.serializer.support.SerializingConverter.convert(SerializingConverter.java:60)
+	at org.springframework.core.serializer.support.SerializingConverter.convert(SerializingConverter.java:33)
+	at org.springframework.data.redis.serializer.JdkSerializationRedisSerializer.serialize(JdkSerializationRedisSerializer.java:92)
+	at org.springframework.data.redis.serializer.DefaultRedisElementWriter.write(DefaultRedisElementWriter.java:41)
+	at org.springframework.data.redis.serializer.RedisSerializationContext$SerializationPair.write(RedisSerializationContext.java:292)
+	at org.springframework.data.redis.cache.RedisCache.serializeCacheValue(RedisCache.java:368)
+	at org.springframework.data.redis.cache.RedisCache.put(RedisCache.java:226)
+	at org.springframework.cache.interceptor.AbstractCacheInvoker.doPut(AbstractCacheInvoker.java:87)
+	at org.springframework.cache.interceptor.CacheAspectSupport$CachePutRequest.performCachePut(CacheAspectSupport.java:1031)
+	at org.springframework.cache.interceptor.CacheAspectSupport$CachePutRequest.apply(CacheAspectSupport.java:1016)
+	at org.springframework.cache.interceptor.CacheAspectSupport.evaluate(CacheAspectSupport.java:560)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:433)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:395)
+	at org.springframework.cache.interceptor.CacheInterceptor.invoke(CacheInterceptor.java:74)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720)
+	at com.vocabularyai.vocabulary.service.CefrWordService$$SpringCGLIB$$0.getStatistics(<generated>)
+	at com.vocabularyai.vocabulary.controller.CefrWordController.getStatistics(CefrWordController.java:242)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.vocabularyai.auth.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:99)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:389)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-10-11 14:20:43 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /error
+2026-10-11 14:20:43 [http-nio-8080-exec-10] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-10-11 14:20:43 [http-nio-8080-exec-10] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
+2026-10-11 14:20:43 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/cefr-words/statistics
+2026-10-11 14:20:43 [http-nio-8080-exec-1] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:43 [http-nio-8080-exec-1] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:43 [http-nio-8080-exec-1] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:43 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:43 [http-nio-8080-exec-1] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:43 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/cefr-words/statistics
+2026-10-11 14:20:43 [http-nio-8080-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/api/cefr-words/statistics", parameters={}
+2026-10-11 14:20:44 [http-nio-8080-exec-1] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.vocabulary.controller.CefrWordController#getStatistics()
+2026-10-11 14:20:44 [http-nio-8080-exec-1] INFO  c.v.v.controller.CefrWordController - GET /cefr-words/statistics
+2026-10-11 14:20:44 [http-nio-8080-exec-1] DEBUG c.v.v.service.CefrWordService - Getting CEFR word statistics
+2026-10-11 14:20:44 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(cw1_0.id) 
+    from
+        cefr_words cw1_0 
+    where
+        cw1_0.cefr_level=?
+2026-10-11 14:20:44 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(cw1_0.id) 
+    from
+        cefr_words cw1_0 
+    where
+        cw1_0.cefr_level=?
+2026-10-11 14:20:44 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(cw1_0.id) 
+    from
+        cefr_words cw1_0 
+    where
+        cw1_0.cefr_level=?
+2026-10-11 14:20:44 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(cw1_0.id) 
+    from
+        cefr_words cw1_0 
+    where
+        cw1_0.cefr_level=?
+2026-10-11 14:20:44 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(cw1_0.id) 
+    from
+        cefr_words cw1_0 
+    where
+        cw1_0.cefr_level=?
+2026-10-11 14:20:44 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    /* select
+        count(*) 
+    from
+        CefrWord x */ select
+            count(*) 
+        from
+            cefr_words cw1_0
+2026-10-11 14:20:44 [http-nio-8080-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Failed to complete request: org.springframework.data.redis.serializer.SerializationException: Cannot serialize
+2026-10-11 14:20:44 [http-nio-8080-exec-1] ERROR o.a.c.c.C.[.[.[.[dispatcherServlet] - Servlet.service() for servlet [dispatcherServlet] in context with path [/api] threw exception [Request processing failed: org.springframework.data.redis.serializer.SerializationException: Cannot serialize] with root cause
+java.lang.IllegalArgumentException: DefaultSerializer requires a Serializable payload but received an object of type [com.vocabularyai.vocabulary.service.CefrWordService$CefrWordStatistics]
+	at org.springframework.core.serializer.DefaultSerializer.serialize(DefaultSerializer.java:43)
+	at org.springframework.core.serializer.Serializer.serializeToByteArray(Serializer.java:56)
+	at org.springframework.core.serializer.support.SerializingConverter.convert(SerializingConverter.java:60)
+	at org.springframework.core.serializer.support.SerializingConverter.convert(SerializingConverter.java:33)
+	at org.springframework.data.redis.serializer.JdkSerializationRedisSerializer.serialize(JdkSerializationRedisSerializer.java:92)
+	at org.springframework.data.redis.serializer.DefaultRedisElementWriter.write(DefaultRedisElementWriter.java:41)
+	at org.springframework.data.redis.serializer.RedisSerializationContext$SerializationPair.write(RedisSerializationContext.java:292)
+	at org.springframework.data.redis.cache.RedisCache.serializeCacheValue(RedisCache.java:368)
+	at org.springframework.data.redis.cache.RedisCache.put(RedisCache.java:226)
+	at org.springframework.cache.interceptor.AbstractCacheInvoker.doPut(AbstractCacheInvoker.java:87)
+	at org.springframework.cache.interceptor.CacheAspectSupport$CachePutRequest.performCachePut(CacheAspectSupport.java:1031)
+	at org.springframework.cache.interceptor.CacheAspectSupport$CachePutRequest.apply(CacheAspectSupport.java:1016)
+	at org.springframework.cache.interceptor.CacheAspectSupport.evaluate(CacheAspectSupport.java:560)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:433)
+	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:395)
+	at org.springframework.cache.interceptor.CacheInterceptor.invoke(CacheInterceptor.java:74)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720)
+	at com.vocabularyai.vocabulary.service.CefrWordService$$SpringCGLIB$$0.getStatistics(<generated>)
+	at com.vocabularyai.vocabulary.controller.CefrWordController.getStatistics(CefrWordController.java:242)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.vocabularyai.auth.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:99)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:389)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-10-11 14:20:44 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /error
+2026-10-11 14:20:44 [http-nio-8080-exec-1] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-10-11 14:20:44 [http-nio-8080-exec-1] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
+2026-10-11 14:20:44 [http-nio-8080-exec-9] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:44 [http-nio-8080-exec-9] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [Page 1 of 248 containing com.vocabularyai.vocabulary.dto.CefrWordResponse instances]
+2026-10-11 14:20:44 [http-nio-8080-exec-9] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:44 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/cefr-words/search?page=0&size=20
+2026-10-11 14:20:44 [http-nio-8080-exec-5] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:44 [http-nio-8080-exec-5] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:44 [http-nio-8080-exec-5] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:44 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:44 [http-nio-8080-exec-5] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:44 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/cefr-words/search?page=0&size=20
+2026-10-11 14:20:44 [http-nio-8080-exec-5] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/api/cefr-words/search?page=0&size=20", parameters={masked}
+2026-10-11 14:20:44 [http-nio-8080-exec-5] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.vocabulary.controller.CefrWordController#searchWords(String, CEFRLevel, int, int)
+2026-10-11 14:20:44 [http-nio-8080-exec-5] INFO  c.v.v.controller.CefrWordController - GET /cefr-words/search - query: null, level: null, page: 0, size: 20
+2026-10-11 14:20:44 [http-nio-8080-exec-5] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:44 [http-nio-8080-exec-5] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [Page 1 of 248 containing com.vocabularyai.vocabulary.dto.CefrWordResponse instances]
+2026-10-11 14:20:44 [http-nio-8080-exec-5] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:47 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
+2026-10-11 14:20:47 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /learning/statistics
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /learning/review-queue?page=0&size=1
+2026-10-11 14:20:47 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /quizzes/history?page=0&size=1
+2026-10-11 14:20:47 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /words/favorites?page=0&size=3
+2026-10-11 14:20:47 [http-nio-8080-exec-8] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:47 [http-nio-8080-exec-6] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:47 [http-nio-8080-exec-7] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:47 [http-nio-8080-exec-3] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:47 [http-nio-8080-exec-7] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:47 [http-nio-8080-exec-8] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:47 [http-nio-8080-exec-6] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:47 [http-nio-8080-exec-3] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:47 [http-nio-8080-exec-8] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:47 [http-nio-8080-exec-7] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:47 [http-nio-8080-exec-6] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:47 [http-nio-8080-exec-3] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:47 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:47 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:47 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:47 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:47 [http-nio-8080-exec-8] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:47 [http-nio-8080-exec-6] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:47 [http-nio-8080-exec-7] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:47 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /learning/statistics
+2026-10-11 14:20:47 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
+2026-10-11 14:20:47 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /words/favorites?page=0&size=3
+2026-10-11 14:20:47 [http-nio-8080-exec-7] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/words/favorites?page=0&size=3", parameters={masked}
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /learning/review-queue?page=0&size=1
+2026-10-11 14:20:47 [http-nio-8080-exec-8] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/learning/statistics", parameters={}
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/learning/review-queue?page=0&size=1", parameters={masked}
+2026-10-11 14:20:47 [http-nio-8080-exec-3] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:47 [http-nio-8080-exec-6] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/users/me", parameters={}
+2026-10-11 14:20:47 [http-nio-8080-exec-7] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.vocabulary.controller.FavoriteWordController#getFavoriteWords(Integer, Integer)
+2026-10-11 14:20:47 [http-nio-8080-exec-8] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.learning.controller.LearningController#getStatistics()
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.learning.controller.LearningController#getWordsNeedingReview(Integer, Integer)
+2026-10-11 14:20:47 [http-nio-8080-exec-7] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.vocabulary.controller.FavoriteWordController.getFavoriteWords(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.vocabulary.controller.FavoriteWordController]
+2026-10-11 14:20:47 [http-nio-8080-exec-8] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getStatistics(); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getWordsNeedingReview(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:47 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /quizzes/history?page=0&size=1
+2026-10-11 14:20:47 [http-nio-8080-exec-6] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.user.controller.UserController#getCurrentUser()
+2026-10-11 14:20:47 [http-nio-8080-exec-7] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.vocabulary.controller.FavoriteWordController.getFavoriteWords(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.vocabulary.controller.FavoriteWordController]
+2026-10-11 14:20:47 [http-nio-8080-exec-8] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getStatistics(); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getWordsNeedingReview(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:47 [http-nio-8080-exec-4] INFO  c.v.l.controller.LearningController - Getting words needing review
+2026-10-11 14:20:47 [http-nio-8080-exec-3] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/quizzes/history?page=0&size=1", parameters={masked}
+2026-10-11 14:20:47 [http-nio-8080-exec-6] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.user.controller.UserController.getCurrentUser(); target is of class [com.vocabularyai.user.controller.UserController]
+2026-10-11 14:20:47 [http-nio-8080-exec-7] INFO  c.v.v.c.FavoriteWordController - Getting favorite words for current user
+2026-10-11 14:20:47 [http-nio-8080-exec-8] INFO  c.v.l.controller.LearningController - Getting progress statistics
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:47 [http-nio-8080-exec-3] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.quiz.controller.QuizController#getQuizHistory(Integer, Integer)
+2026-10-11 14:20:47 [http-nio-8080-exec-6] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.user.controller.UserController.getCurrentUser(); target is of class [com.vocabularyai.user.controller.UserController]
+2026-10-11 14:20:47 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:47 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:47 [http-nio-8080-exec-4] INFO  c.v.learning.service.LearningService - Getting words needing review for user 1
+2026-10-11 14:20:47 [http-nio-8080-exec-3] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.quiz.controller.QuizController.getQuizHistory(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.quiz.controller.QuizController]
+2026-10-11 14:20:47 [http-nio-8080-exec-6] INFO  c.v.user.controller.UserController - Getting current user profile
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        lp 
+    FROM
+        LearningProgress lp 
+    WHERE
+        lp.user.id = :userId 
+        AND lp.nextReviewAt IS NOT NULL 
+        AND lp.nextReviewAt <= :now 
+    order by
+        lp.nextReviewAt desc */ select
+            lp1_0.id,
+            lp1_0.correct_count,
+            lp1_0.created_at,
+            lp1_0.last_reviewed_at,
+            lp1_0.next_review_at,
+            lp1_0.review_count,
+            lp1_0.status,
+            lp1_0.updated_at,
+            lp1_0.user_id,
+            lp1_0.word_id,
+            lp1_0.wrong_count 
+        from
+            learning_progress lp1_0 
+        where
+            lp1_0.user_id=? 
+            and lp1_0.next_review_at is not null 
+            and lp1_0.next_review_at<=? 
+        order by
+            lp1_0.next_review_at desc 
+        limit
+            ?, ?
+2026-10-11 14:20:47 [http-nio-8080-exec-3] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.quiz.controller.QuizController.getQuizHistory(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.quiz.controller.QuizController]
+2026-10-11 14:20:47 [http-nio-8080-exec-7] INFO  c.v.v.service.FavoriteWordService - Getting favorite words for user 1
+2026-10-11 14:20:47 [http-nio-8080-exec-8] INFO  c.v.learning.service.LearningService - Getting progress statistics for user 1
+2026-10-11 14:20:47 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:47 [http-nio-8080-exec-3] INFO  c.v.quiz.controller.QuizController - Getting quiz history
+2026-10-11 14:20:47 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=?
+2026-10-11 14:20:47 [http-nio-8080-exec-6] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:47 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        fw1_0.id,
+        fw1_0.created_at,
+        fw1_0.user_id,
+        fw1_0.word_id 
+    from
+        favorite_words fw1_0 
+    where
+        fw1_0.user_id=? 
+    order by
+        fw1_0.created_at desc 
+    limit
+        ?, ?
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Words needing review retrieved successfully, data=Page 1 of 0 cont (truncated)...]
+2026-10-11 14:20:47 [http-nio-8080-exec-6] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=User profile retrieved successfully, data=UserResponse(id=1, usern (truncated)...]
+2026-10-11 14:20:47 [http-nio-8080-exec-4] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:47 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=? 
+        and lp1_0.status=?
+2026-10-11 14:20:47 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:47 [http-nio-8080-exec-7] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:47 [http-nio-8080-exec-6] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:47 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=? 
+        and lp1_0.status=?
+2026-10-11 14:20:47 [http-nio-8080-exec-7] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Favorite words retrieved successfully, data=Page 1 of 0 containing (truncated)...]
+2026-10-11 14:20:48 [http-nio-8080-exec-3] INFO  c.v.quiz.service.QuizService - Getting quiz history for user: 1
+2026-10-11 14:20:48 [http-nio-8080-exec-7] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:48 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=? 
+        and lp1_0.status=?
+2026-10-11 14:20:48 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        qa1_0.id,
+        qa1_0.correct_answers,
+        qa1_0.created_at,
+        qa1_0.quiz_id,
+        qa1_0.score,
+        qa1_0.started_at,
+        qa1_0.submitted_at,
+        qa1_0.total_questions,
+        qa1_0.user_id 
+    from
+        quiz_attempts qa1_0 
+    where
+        qa1_0.user_id=? 
+    order by
+        qa1_0.created_at desc 
+    limit
+        ?, ?
+2026-10-11 14:20:48 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        lp 
+    FROM
+        LearningProgress lp 
+    WHERE
+        lp.user.id = :userId 
+        AND lp.nextReviewAt IS NOT NULL 
+        AND lp.nextReviewAt <= :now */ select
+            lp1_0.id,
+            lp1_0.correct_count,
+            lp1_0.created_at,
+            lp1_0.last_reviewed_at,
+            lp1_0.next_review_at,
+            lp1_0.review_count,
+            lp1_0.status,
+            lp1_0.updated_at,
+            lp1_0.user_id,
+            lp1_0.word_id,
+            lp1_0.wrong_count 
+        from
+            learning_progress lp1_0 
+        where
+            lp1_0.user_id=? 
+            and lp1_0.next_review_at is not null 
+            and lp1_0.next_review_at<=?
+2026-10-11 14:20:48 [http-nio-8080-exec-3] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /learning/review-queue?page=0&size=1
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /words/favorites?page=0&size=3
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:48 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lh1_0.id) 
+    from
+        learning_history lh1_0 
+    where
+        lh1_0.user_id=?
+2026-10-11 14:20:48 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /users/me
+2026-10-11 14:20:48 [http-nio-8080-exec-3] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Quiz history retrieved successfully, data=Page 1 of 0 containing U (truncated)...]
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:48 [http-nio-8080-exec-10] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:48 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        COUNT(lh) 
+    FROM
+        LearningHistory lh 
+    WHERE
+        lh.user.id = :userId 
+        AND lh.isCorrect = true */ select
+            count(lh1_0.id) 
+        from
+            learning_history lh1_0 
+        where
+            lh1_0.user_id=? 
+            and lh1_0.is_correct=1
+2026-10-11 14:20:48 [http-nio-8080-exec-3] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:48 [http-nio-8080-exec-10] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /quizzes/history?page=0&size=1
+2026-10-11 14:20:48 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        COALESCE(SUM(CASE 
+            WHEN lh.isCorrect = true 
+                THEN 1 
+            ELSE 0 
+    END), 0) * 100.0 / COALESCE(SUM(CASE 
+        WHEN lh.isCorrect IS NOT NULL 
+            THEN 1 
+        ELSE 0 
+END), 1) 
+FROM
+    LearningHistory lh 
+WHERE
+    lh.user.id = :userId */ select
+        ((coalesce(sum(case 
+            when lh1_0.is_correct=1 
+                then 1 
+            else 0 
+    end), 0)*100.0)/coalesce(sum(case 
+        when lh1_0.is_correct is not null 
+            then 1 
+        else 0 
+end), 1)) 
+from
+    learning_history lh1_0 
+where
+    lh1_0.user_id=?
+2026-10-11 14:20:48 [http-nio-8080-exec-10] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:48 [http-nio-8080-exec-8] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:48 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:48 [http-nio-8080-exec-8] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Progress statistics retrieved successfully, data=ProgressStatistic (truncated)...]
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:48 [http-nio-8080-exec-10] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:48 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /users/me
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:48 [http-nio-8080-exec-10] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/users/me", parameters={}
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /words/favorites?page=0&size=3
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:48 [http-nio-8080-exec-8] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /learning/statistics
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /learning/review-queue?page=0&size=1
+2026-10-11 14:20:48 [http-nio-8080-exec-10] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.user.controller.UserController#getCurrentUser()
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/words/favorites?page=0&size=3", parameters={masked}
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token extracted from request, length: 230
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token (first 50 chars): eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ0eXBlI
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/learning/review-queue?page=0&size=1", parameters={masked}
+2026-10-11 14:20:48 [http-nio-8080-exec-10] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.user.controller.UserController.getCurrentUser(); target is of class [com.vocabularyai.user.controller.UserController]
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.vocabulary.controller.FavoriteWordController#getFavoriteWords(Integer, Integer)
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated - username: admin, role: ADMIN
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.learning.controller.LearningController#getWordsNeedingReview(Integer, Integer)
+2026-10-11 14:20:48 [http-nio-8080-exec-10] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.user.controller.UserController.getCurrentUser(); target is of class [com.vocabularyai.user.controller.UserController]
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getWordsNeedingReview(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:48 [http-nio-8080-exec-10] INFO  c.v.user.controller.UserController - Getting current user profile
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /quizzes/history?page=0&size=1
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.vocabulary.controller.FavoriteWordController.getFavoriteWords(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.vocabulary.controller.FavoriteWordController]
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getWordsNeedingReview(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/quizzes/history?page=0&size=1", parameters={masked}
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.vocabulary.controller.FavoriteWordController.getFavoriteWords(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.vocabulary.controller.FavoriteWordController]
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG c.v.a.s.JwtAuthenticationFilter - JWT token validated for username: admin (status: ACTIVE)
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /learning/statistics
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/learning/statistics", parameters={}
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.learning.controller.LearningController#getStatistics()
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getStatistics(); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.learning.controller.LearningController.getStatistics(); target is of class [com.vocabularyai.learning.controller.LearningController]
+2026-10-11 14:20:48 [http-nio-8080-exec-5] INFO  c.v.l.controller.LearningController - Getting progress statistics
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:48 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:48 [http-nio-8080-exec-2] INFO  c.v.l.controller.LearningController - Getting words needing review
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.vocabularyai.quiz.controller.QuizController#getQuizHistory(Integer, Integer)
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:48 [http-nio-8080-exec-1] INFO  c.v.v.c.FavoriteWordController - Getting favorite words for current user
+2026-10-11 14:20:48 [http-nio-8080-exec-5] INFO  c.v.learning.service.LearningService - Getting progress statistics for user 1
+2026-10-11 14:20:48 [http-nio-8080-exec-10] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=?
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.quiz.controller.QuizController.getQuizHistory(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.quiz.controller.QuizController]
+2026-10-11 14:20:48 [http-nio-8080-exec-2] INFO  c.v.learning.service.LearningService - Getting words needing review for user 1
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:48 [http-nio-8080-exec-10] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=User profile retrieved successfully, data=UserResponse(id=1, usern (truncated)...]
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        lp 
+    FROM
+        LearningProgress lp 
+    WHERE
+        lp.user.id = :userId 
+        AND lp.nextReviewAt IS NOT NULL 
+        AND lp.nextReviewAt <= :now 
+    order by
+        lp.nextReviewAt desc */ select
+            lp1_0.id,
+            lp1_0.correct_count,
+            lp1_0.created_at,
+            lp1_0.last_reviewed_at,
+            lp1_0.next_review_at,
+            lp1_0.review_count,
+            lp1_0.status,
+            lp1_0.updated_at,
+            lp1_0.user_id,
+            lp1_0.word_id,
+            lp1_0.wrong_count 
+        from
+            learning_progress lp1_0 
+        where
+            lp1_0.user_id=? 
+            and lp1_0.next_review_at is not null 
+            and lp1_0.next_review_at<=? 
+        order by
+            lp1_0.next_review_at desc 
+        limit
+            ?, ?
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.vocabularyai.quiz.controller.QuizController.getQuizHistory(java.lang.Integer,java.lang.Integer); target is of class [com.vocabularyai.quiz.controller.QuizController]
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=? 
+        and lp1_0.status=?
+2026-10-11 14:20:48 [http-nio-8080-exec-1] INFO  c.v.v.service.FavoriteWordService - Getting favorite words for user 1
+2026-10-11 14:20:48 [http-nio-8080-exec-10] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:48 [http-nio-8080-exec-9] INFO  c.v.quiz.controller.QuizController - Getting quiz history
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        fw1_0.id,
+        fw1_0.created_at,
+        fw1_0.user_id,
+        fw1_0.word_id 
+    from
+        favorite_words fw1_0 
+    where
+        fw1_0.user_id=? 
+    order by
+        fw1_0.created_at desc 
+    limit
+        ?, ?
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Words needing review retrieved successfully, data=Page 1 of 0 cont (truncated)...]
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=? 
+        and lp1_0.status=?
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.status,
+        u1_0.updated_at,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+2026-10-11 14:20:48 [http-nio-8080-exec-2] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Favorite words retrieved successfully, data=Page 1 of 0 containing (truncated)...]
+2026-10-11 14:20:48 [http-nio-8080-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lp1_0.id) 
+    from
+        learning_progress lp1_0 
+    where
+        lp1_0.user_id=? 
+        and lp1_0.status=?
+2026-10-11 14:20:48 [http-nio-8080-exec-9] INFO  c.v.quiz.service.QuizService - Getting quiz history for user: 1
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        lp 
+    FROM
+        LearningProgress lp 
+    WHERE
+        lp.user.id = :userId 
+        AND lp.nextReviewAt IS NOT NULL 
+        AND lp.nextReviewAt <= :now */ select
+            lp1_0.id,
+            lp1_0.correct_count,
+            lp1_0.created_at,
+            lp1_0.last_reviewed_at,
+            lp1_0.next_review_at,
+            lp1_0.review_count,
+            lp1_0.status,
+            lp1_0.updated_at,
+            lp1_0.user_id,
+            lp1_0.word_id,
+            lp1_0.wrong_count 
+        from
+            learning_progress lp1_0 
+        where
+            lp1_0.user_id=? 
+            and lp1_0.next_review_at is not null 
+            and lp1_0.next_review_at<=?
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        qa1_0.id,
+        qa1_0.correct_answers,
+        qa1_0.created_at,
+        qa1_0.quiz_id,
+        qa1_0.score,
+        qa1_0.started_at,
+        qa1_0.submitted_at,
+        qa1_0.total_questions,
+        qa1_0.user_id 
+    from
+        quiz_attempts qa1_0 
+    where
+        qa1_0.user_id=? 
+    order by
+        qa1_0.created_at desc 
+    limit
+        ?, ?
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Quiz history retrieved successfully, data=Page 1 of 0 containing U (truncated)...]
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        count(lh1_0.id) 
+    from
+        learning_history lh1_0 
+    where
+        lh1_0.user_id=?
+2026-10-11 14:20:48 [http-nio-8080-exec-9] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        COUNT(lh) 
+    FROM
+        LearningHistory lh 
+    WHERE
+        lh.user.id = :userId 
+        AND lh.isCorrect = true */ select
+            count(lh1_0.id) 
+        from
+            learning_history lh1_0 
+        where
+            lh1_0.user_id=? 
+            and lh1_0.is_correct=1
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        COALESCE(SUM(CASE 
+            WHEN lh.isCorrect = true 
+                THEN 1 
+            ELSE 0 
+    END), 0) * 100.0 / COALESCE(SUM(CASE 
+        WHEN lh.isCorrect IS NOT NULL 
+            THEN 1 
+        ELSE 0 
+END), 1) 
+FROM
+    LearningHistory lh 
+WHERE
+    lh.user.id = :userId */ select
+        ((coalesce(sum(case 
+            when lh1_0.is_correct=1 
+                then 1 
+            else 0 
+    end), 0)*100.0)/coalesce(sum(case 
+        when lh1_0.is_correct is not null 
+            then 1 
+        else 0 
+end), 1)) 
+from
+    learning_history lh1_0 
+where
+    lh1_0.user_id=?
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json] and supported [application/json, application/*+json]
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ApiResponse(success=true, message=Progress statistics retrieved successfully, data=ProgressStatistic (truncated)...]
+2026-10-11 14:20:48 [http-nio-8080-exec-5] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-10-11 14:39:58 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-11 14:39:58 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-10-11 14:39:59 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

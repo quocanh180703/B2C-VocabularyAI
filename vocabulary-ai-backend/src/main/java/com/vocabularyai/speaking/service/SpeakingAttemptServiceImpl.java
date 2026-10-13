@@ -7,6 +7,7 @@ import com.vocabularyai.speaking.entity.SpeakingSession;
 import com.vocabularyai.speaking.mapper.SpeakingAttemptMapper;
 import com.vocabularyai.speaking.repository.SpeakingAttemptRepository;
 import com.vocabularyai.speaking.repository.SpeakingSessionRepository;
+import com.vocabularyai.speaking.service.storage.AudioStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +39,7 @@ public class SpeakingAttemptServiceImpl implements SpeakingAttemptService {
     private final SpeakingAttemptRepository attemptRepository;
     private final SpeakingSessionRepository sessionRepository;
     private final SpeakingAttemptMapper attemptMapper;
+    private final AudioStorageService audioStorageService;
     
     @Value("${speaking.audio.max-file-size:52428800}")
     private long maxFileSize;
@@ -192,7 +194,18 @@ public class SpeakingAttemptServiceImpl implements SpeakingAttemptService {
         // Verify ownership
         SpeakingAttempt attempt = getAttemptAndVerifyOwnership(attemptId, userId);
         
-        // TODO: Xóa file audio từ storage
+        // Xóa file audio từ storage (nếu có audioUrl)
+        if (attempt.getAudioUrl() != null && !attempt.getAudioUrl().isEmpty()) {
+            try {
+                audioStorageService.deleteAudio(attempt.getAudioUrl());
+                log.info("Audio file được xóa từ storage: attemptId={}, audioUrl={}", 
+                        attemptId, attempt.getAudioUrl());
+            } catch (Exception e) {
+                log.warn("Không thể xóa audio file từ storage: attemptId={}, audioUrl={}, error: {}", 
+                        attemptId, attempt.getAudioUrl(), e.getMessage());
+                // Không throw exception, tiếp tục xóa attempt từ DB
+            }
+        }
         
         // Xóa attempt (cascade delete sẽ xóa feedback)
         attemptRepository.delete(attempt);

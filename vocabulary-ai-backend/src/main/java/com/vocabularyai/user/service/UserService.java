@@ -1,5 +1,6 @@
 package com.vocabularyai.user.service;
 
+import com.vocabularyai.ai.service.cache.CacheInvalidationService;
 import com.vocabularyai.common.exception.BadRequestException;
 import com.vocabularyai.common.exception.ResourceNotFoundException;
 import com.vocabularyai.user.dto.UpdateUserRequest;
@@ -26,6 +27,7 @@ public class UserService {
     
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CacheInvalidationService cacheInvalidationService;
     
     /**
      * Get user by ID
@@ -143,5 +145,45 @@ public class UserService {
         userRepository.save(user);
         
         log.info("Password changed successfully for userId: {}", userId);
+    }
+    
+    /**
+     * TASK 11: Update user status and invalidate caches
+     * 
+     * Updates user status (ACTIVE, INACTIVE, BANNED)
+     * When status changes to INACTIVE or BANNED, invalidates all user-specific caches
+     * 
+     * Security flow:
+     * 1. User status updated in database
+     * 2. All user caches invalidated (AI analysis, recommendations, etc.)
+     * 3. Future requests:
+     *    - Authentication fails (JwtAuthenticationFilter checks status)
+     *    - Or if somehow bypassed, service layer checks status again
+     *    - Cache miss (deleted) forces recomputation from database
+     * 
+     * @param userId User ID to update
+     * @param newStatus New status (ACTIVE, INACTIVE, BANNED)
+     */
+    @Transactional
+    public void updateUserStatus(Long userId, User.UserStatus newStatus) {
+        log.info("[TASK 11] Updating user status for userId: {} to status: {}", userId, newStatus);
+        
+        User user = getUserById(userId);
+        User.UserStatus oldStatus = user.getStatus();
+        
+        // Update status
+        user.setStatus(newStatus);
+        userRepository.save(user);
+        
+        log.info("[TASK 11] User status updated successfully for userId: {} ({} → {})", 
+                 userId, oldStatus, newStatus);
+        
+        // TASK 11: If status changed to INACTIVE or BANNED, invalidate all caches
+        if ((newStatus == User.UserStatus.INACTIVE || newStatus == User.UserStatus.BANNED) &&
+            oldStatus != newStatus) {
+            
+            log.info("[TASK 11] Invalidating caches due to status change for userId: {}", userId);
+            cacheInvalidationService.invalidateAllUserCaches(userId);
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.vocabularyai.vocabulary.dto;
 
 import com.vocabularyai.common.validation.ValidationConstants;
-import com.vocabularyai.vocabulary.entity.Word;
+import com.vocabularyai.vocabulary.entity.CEFRLevel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -43,5 +43,5 @@ public class CreateWordRequest {
     private String imageUrl;
     
     @NotNull(message = ValidationConstants.WORD_LEVEL_NOT_NULL)
-    private Word.WordLevel level;
+    private CEFRLevel level;
 }

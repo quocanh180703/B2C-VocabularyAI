@@ -3,54 +3,42 @@ package com.vocabularyai.speaking.service.pronunciation;
 import com.vocabularyai.speaking.service.pronunciation.dto.PronunciationAnalysisResult;
 
 /**
- * PronunciationAnalysisService
- * 
- * Dịch vụ phân tích phát âm cho bài nói
- * 
- * Đánh giá chất lượng phát âm dựa trên:
- * - Audio file và transcript
- * - Pronunciation clarity
- * - Stress và intonation (nếu provider hỗ trợ)
- * - Word-level issues nếu provider hỗ trợ
- * 
- * Abstraction này cho phép thay đổi provider trong tương lai:
- * - Gemini-based analysis (MVP)
- * - Google Cloud Speech-to-Text pronunciation assessment
- * - Azure Speech Services pronunciation assessment
- * - Chuyên dụng pronunciation provider
+ * Interface for Pronunciation Analysis services.
+ * Analyzes and compares user pronunciation against reference.
  */
 public interface PronunciationAnalysisService {
-    
+
     /**
-     * Phân tích phát âm từ audio và transcript
-     * 
-     * @param audioFilePath Đường dẫn tới file audio
-     * @param transcript Nội dung transcript từ Speech-to-Text
-     * @param topic Chủ đề/context bài nói
-     * @param level Trình độ tiếng Anh của user (A1-C2)
-     * @param userId User ID (cho rate limiting)
-     * @return PronunciationAnalysisResult chứa pronunciation score, feedback và word-level issues
-     * @throws PronunciationAnalysisException nếu phân tích thất bại
+     * Analyze pronunciation based on audio URL and transcript
+     *
+     * @param audioUrl URL/path to audio file
+     * @param transcript The user's transcribed speech
+     * @param topic The speaking topic/reference text
+     * @param level Speaking level (A1-C2)
+     * @param userId User ID (for context)
+     * @return PronunciationAnalysisResult with detailed feedback
+     * @throws PronunciationAnalysisException if analysis fails
      */
-    PronunciationAnalysisResult analyzePronunciation(
-            String audioFilePath,
-            String transcript,
-            String topic,
-            String level,
-            Long userId
-    );
-    
+    PronunciationAnalysisResult analyzePronunciation(String audioUrl, String transcript, String topic, String level, Long userId);
+
     /**
-     * Check xem provider có hỗ trợ pronunciation assessment không
-     * 
-     * @return true nếu provider được enable, false nếu disabled/placeholder
+     * Check if pronunciation analysis provider is available
+     *
+     * @return true if provider is configured and not disabled
      */
     boolean isProviderAvailable();
-    
+
     /**
-     * Lấy tên provider hiện tại
-     * 
-     * @return Provider name (e.g., "gemini", "google-cloud", "azure")
+     * Get the analysis provider type
+     *
+     * @return Provider name (gemini, google_cloud, azure, aws, disabled)
      */
-    String getProviderName();
+    String getProviderType();
+
+    /**
+     * Check if pronunciation analysis service is healthy
+     *
+     * @return true if service is available, false otherwise
+     */
+    boolean isHealthy();
 }

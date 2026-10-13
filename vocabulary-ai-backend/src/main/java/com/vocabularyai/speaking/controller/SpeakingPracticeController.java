@@ -1,5 +1,6 @@
 package com.vocabularyai.speaking.controller;
 
+import com.vocabularyai.common.validator.ValidAudioFile;
 import com.vocabularyai.speaking.dto.response.SpeakingPracticeResponse;
 import com.vocabularyai.speaking.service.SpeakingPracticeService;
 import com.vocabularyai.user.entity.User;
@@ -10,11 +11,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,9 +44,16 @@ import org.springframework.web.multipart.MultipartFile;
  * 4. Trả về SpeakingPracticeResponse với full details
  * 
  * Security:
- * - Require JWT authentication
- * - Verify user ownership (can only submit attempts for their own sessions)
+ * - Require JWT authentication (@PreAuthorize class-level)
+ * - Verify user ownership (can only submit attempts for their own sessions) - Service layer
  * - Rate limiting via RateLimitService
+ * - All 2 endpoints restricted to authenticated users only
+ * 
+ * Authorization Flow:
+ * 1. JWT Filter: Extract authentication
+ * 2. @PreAuthorize("isAuthenticated()"): Class-level authorization
+ * 3. Controller: Receives authenticated user
+ * 4. Service: Verify resource ownership (userId == session.userId)
  */
 @Slf4j
 @RestController
@@ -51,6 +61,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Tag(name = "Speaking Practice", description = "API cho AI Speaking Practice - upload audio, analyze, get feedback")
 @SecurityRequirement(name = "bearer-jwt")
+@PreAuthorize("isAuthenticated()")
 public class SpeakingPracticeController {
     
     private final SpeakingPracticeService speakingPracticeService;
@@ -121,7 +132,13 @@ public class SpeakingPracticeController {
         @RequestParam(name = "sessionId") Long sessionId,
         
         @Parameter(description = "Audio file (MP3, WAV, WebM, OGG), max 10MB", required = true)
-        @RequestParam(name = "audioFile") MultipartFile audioFile,
+        @RequestParam(name = "audioFile") 
+        @Valid @ValidAudioFile(
+            maxSize = 52428800, // 50MB
+            allowedMimeTypes = {"audio/wav", "audio/mpeg", "audio/mp4", "audio/webm", "audio/ogg", "audio/flac"},
+            allowedExtensions = {"wav", "mp3", "m4a", "webm", "ogg", "flac"}
+        )
+        MultipartFile audioFile,
         
         @AuthenticationPrincipal User user
     ) {

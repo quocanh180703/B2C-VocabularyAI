@@ -26,7 +26,6 @@ import java.util.Locale;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class DailyPracticeServiceImpl implements DailyPracticeService {
     
     private final LearningPlanService learningPlanService;
@@ -111,6 +110,7 @@ public class DailyPracticeServiceImpl implements DailyPracticeService {
      * Lấy gợi ý cho ngày cụ thể
      */
     @Override
+    @Transactional(readOnly = false)
     public DailyPracticeDto getDailyPracticeForDay(Long userId, int weekNumber, String dayOfWeek) {
         log.info("[TASK 5] Lấy hoạt động cho tuần {} ngày {} userId: {}", weekNumber, dayOfWeek, userId);
         
@@ -163,6 +163,25 @@ public class DailyPracticeServiceImpl implements DailyPracticeService {
     public void saveDailyNotes(Long userId, String notes) {
         log.info("[TASK 5] Lưu ghi chú cho userId: {}", userId);
         // Implementation sẽ lưu vào database
+    }
+    
+    /**
+     * TASK 11: Invalidate all cached daily practice data for a user
+     * Deletes all daily-practice cache entries: "ai:daily-practice:{userId}:*"
+     * Called when user status changes (BANNED/INACTIVE)
+     */
+    @Override
+    public void invalidateCache(Long userId) {
+        try {
+            log.debug("[TASK 11] Invalidating daily practice cache for userId: {}", userId);
+            String pattern = CACHE_KEY_PREFIX + userId + ":*";
+            cacheService.deletePattern(pattern);
+            log.debug("[TASK 11] Daily practice cache invalidated for userId: {}", userId);
+        } catch (Exception e) {
+            log.error("[TASK 11] Error invalidating daily practice cache for userId: {}: {}", 
+                      userId, e.getMessage(), e);
+            // Don't throw - cache is not security-critical, continue with operation
+        }
     }
     
     // ==================== Private Helpers ====================

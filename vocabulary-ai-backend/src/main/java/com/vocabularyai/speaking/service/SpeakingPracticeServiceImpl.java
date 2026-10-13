@@ -77,10 +77,19 @@ public class SpeakingPracticeServiceImpl implements SpeakingPracticeService {
             attempt = attemptRepository.save(attempt);
             log.debug("Created attempt: {}", attempt.getId());
             
-            // STEP 4: Speech-to-Text - cần pass MultipartFile trực tiếp, không phải URL
-            TranscriptResult transcriptResult = speechToTextService.transcribe(
-                    audioFile, 
+            // STEP 4: Speech-to-Text - transcribe from saved disk file
+            // Note: We use the disk path instead of MultipartFile to avoid Tomcat temp file cleanup issues
+            TranscriptResult transcriptResult = speechToTextService.transcribeFromPath(
+                    audioMetadata.getStoragePath(),
                     speakingProperties.getSpeechToText().getLanguageCode());
+            
+            // Validate transcript is not null
+            if (transcriptResult == null || transcriptResult.getTranscript() == null || 
+                    transcriptResult.getTranscript().trim().isEmpty()) {
+                log.error("STT failed: no transcript returned for sessionId: {}, userId: {}", sessionId, userId);
+                throw new SpeakingPracticeException(
+                        "Không thể nhận diện giọng nói. Vui lòng nói rõ hơn hoặc thử lại.");
+            }
             
             attempt.setTranscript(transcriptResult.getTranscript());
             attempt.setTranscriptConfidence(transcriptResult.getConfidence());

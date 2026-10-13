@@ -1,187 +1,416 @@
+# ============================================================
+# VocabularyAI Backend - Application Configuration (Unified)
+# ============================================================
+# Single configuration file - no need for application-dev.yml or application-prod.yml
+
+# ============================================================
+# 1. Spring Configuration
+# ============================================================
 spring:
   application:
     name: vocabulary-ai-backend
-
-  # MySQL Configuration
+  
+  # ============================================================
+  # 2. Database Configuration (MySQL)
+  # ============================================================
   datasource:
     url: jdbc:mysql://localhost:3306/datn_2?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
-    username: root
+    username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:180703}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-  # JPA/Hibernate Configuration
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  # ============================================================
+  # 3. JPA/Hibernate Configuration
+  # ============================================================
   jpa:
     hibernate:
-      ddl-auto: validate
-    show-sql: false
+      ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
-        format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
         use_sql_comments: true
         jdbc:
           batch_size: 20
           fetch_size: 50
+        order_inserts: true
+        order_updates: true
     open-in-view: false
-
-  # Flyway Configuration
+  
+  # ============================================================
+  # 4. Flyway Database Migration
+  # ============================================================
   flyway:
-    locations: classpath:db/migration
-    baseline-on-migrate: true
     enabled: true
-
-  # Redis Configuration
-  data:
+    baselineOnMigrate: true
+    baselineVersion: 0
+    baselineDescription: "Initial baseline - all tables created in V1__comprehensive_schema.sql"
+    locations: classpath:db/migration
+    validateOnMigrate: true
+    cleanDisabled: true
+  
+  # ============================================================
+  # 5. Email Configuration (SMTP - Gmail)
+  # ============================================================
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:your-email@gmail.com}
+    password: ${MAIL_PASSWORD:your-gmail-app-password}
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 10000
+          timeout: 10000
+          writetimeout: 10000
+  
+  # ============================================================
+  # 5.1 Thymeleaf Configuration
+  # ============================================================
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+  
+  # ============================================================
+  # 6. Redis Cache Configuration
+  # ============================================================
+  cache:
+    type: redis
     redis:
-      host: ${REDIS_HOST:localhost}
-      port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD:}
-      timeout: 60000ms
-      jedis:
-        pool:
-          max-active: 8
-          max-idle: 8
-          min-idle: 0
-          max-wait: -1ms
+      time-to-live: 3600000  # 1 hour default TTL (milliseconds)
+      key-prefix: "vocab-ai:"  # Prefix for all cache keys
+      cache-null-values: false  # Don't cache null values
+  
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+    timeout: 60000
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1ms
 
-  # Jackson Configuration
-  jackson:
-    serialization:
-      write-dates-as-timestamps: false
-      indent-output: true
-    deserialization:
-      fail-on-unknown-properties: false
-
-# Server Configuration
+# ============================================================
+# 7. Server Configuration
+# ============================================================
 server:
   port: ${SERVER_PORT:8080}
   servlet:
     context-path: /api
+  error:
+    include-message: always
+    include-stacktrace: always
   compression:
     enabled: true
     min-response-size: 1024
 
-# Logging Configuration
+# ============================================================
+# 8. Logging Configuration
+# ============================================================
 logging:
   level:
     root: INFO
     com.vocabularyai: DEBUG
-    org.springframework.web: INFO
     org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
     org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql: TRACE
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} %highlight(%-5level) %logger{36} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/vocabulary-ai.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 30
 
-# JWT Configuration
+# ============================================================
+# 9. Application-Specific Configuration
+# ============================================================
+
+# OTP Configuration
+app:
+  name: VocabularyAI
+  
+  debug:
+    enabled: true  # Set to false in production
+  
+  frontend-url: ${FRONTEND_URL:http://localhost:3000}
+  
+  otp:
+    length: 6
+    expiry-minutes: 5
+    max-attempts: 5
+  
+  password-reset:
+    token-expiry-hours: 1
+  
+  email:
+    from: noreply@vocabularyai.com
+    from-name: VocabularyAI
+
+# ============================================================
+# 10. JWT Configuration
+# ============================================================
 jwt:
   access-token:
-    expiration: 900000 # 15 minutes in milliseconds
-    secret: ${JWT_SECRET:vocabulary-ai-secret-key-change-in-production-environment-please}
+    expiration: 3600000  # 1 hour
+    secret: dev-secret-key-access-token-change-in-production-min-256-bits-12345678
   refresh-token:
-    expiration: 2592000000 # 30 days in milliseconds
-    secret: ${JWT_REFRESH_SECRET:vocabulary-ai-refresh-secret-key-change-in-production-environment-please}
+    expiration: 604800000  # 7 days
+    secret: dev-secret-key-refresh-token-change-in-production-min-256-bits-12345678
 
-# Gemini AI Configuration
+# ============================================================
+# 11. Cloudinary Configuration (Audio Storage)
+# ============================================================
+cloudinary:
+  url: ${CLOUDINARY_URL:cloudinary://your_api_key:your_api_secret@your_cloud_name}
+
+# ============================================================
+# 11.5 Gemini AI Configuration
+# ============================================================
 gemini:
-  api-key: ${GEMINI_API_KEY:}
-  model: gemini-1.5-pro-latest
-  temperature: 0.7
-  top-p: 0.9
-  max-tokens: 2048
-  request-timeout: 30000
+  api-key: ${GEMINI_API_KEY:your_gemini_api_key_here}
+  model: ${GEMINI_MODEL:gemini-3.1-flash-lite}
 
-# AI Integration Configuration
+# ============================================================
+# 11.6 OpenAI Whisper Configuration (Speech-to-Text)
+# ============================================================
+whisper:
+  api-key: ${OPENAI_API_KEY:your_openai_api_key_here}
+  model: ${WHISPER_MODEL:whisper-1}
+  language: ${WHISPER_LANGUAGE:en}
+  timeout-seconds: 30
+  max-retries: 3
+
+# ============================================================
+# 11.7 AI Rate Limiting Configuration
+# ============================================================
 ai:
-  cache:
-    ttl-hours: 24
-    conversation-ttl-minutes: 30
-    grammar-ttl-hours: 1
-    hint-ttl-hours: 1
   rate-limit:
-    daily-tokens: 1000000
-    daily-requests: 1000
-  streaming:
-    enabled: true
+    daily-tokens: 1000000  # 1M tokens per day
+    daily-requests: 1000   # 1000 requests per day
   retry:
     max-attempts: 5
     initial-delay-ms: 1000
-    max-delay-ms: 16000
   circuit-breaker:
     failure-threshold: 5
     reset-timeout-seconds: 30
+  
+  # ============================================================
+  # 11.8 AI System Prompts Configuration
+  # ============================================================
+  prompts:
+    system:
+      vocabulary:
+        en: |
+          You are an English vocabulary tutor for Vietnamese learners.
+          
+          Your goal is to help learners understand and remember English vocabulary.
+          
+          Rules:
+          1. Adapt the explanation to the learner's CEFR level (A1, A2, B1, B2, C1, C2).
+          2. Give a simple and clear English definition appropriate for the learner's level.
+          3. Provide the Vietnamese meaning or translation.
+          4. Identify the part of speech (noun, verb, adjective, etc.).
+          5. Provide 2-3 practical usage examples in English with Vietnamese translation.
+          6. Provide relevant synonyms and antonyms when appropriate.
+          7. Explain common usage patterns and common mistakes learners make with this word.
+          8. Do not use unnecessarily advanced English vocabulary in the explanation.
+          9. Keep the explanation educational, practical and encouraging.
+          10. When learner level is provided, adapt content specifically to that CEFR level.
+          11. Return valid JSON only. Do not include Markdown code fences (```) or explanations outside JSON object.
+      
+      grammar:
+        en: |
+          You are an expert English grammar correction tutor for Vietnamese learners.
+          
+          Your goal is to help learners improve their English writing by identifying and correcting errors.
+          
+          Rules:
+          1. Preserve the original meaning and intent of the learner's sentence completely.
+          2. Identify all significant grammar errors, spelling mistakes, punctuation issues and style problems.
+          3. Provide the corrected sentence for each error.
+          4. Explain each important correction with a brief, clear explanation appropriate to learner's level.
+          5. Provide practical improvement suggestions when appropriate.
+          6. Adapt explanations and suggestions to the learner's English level.
+          7. Do not unnecessarily rewrite the sentence into more advanced English than necessary.
+          8. Be constructive, educational and encouraging in tone.
+          9. For each error, provide: startOffset, endOffset, errorType, suggestion, explanation.
+          10. Return valid JSON only. Do not include Markdown code fences or explanations outside JSON object.
+      
+      hint:
+        en: |
+          You are an expert English learning tutor specializing in providing learning hints.
+          
+          Your goal is to provide helpful hints that guide learners to solve problems independently, not reveal answers directly.
+          
+          Rules:
+          1. Do not immediately reveal the correct answer or full definition.
+          2. Provide a contextual, guiding clue appropriate to the learner's level.
+          3. Adapt the hint complexity and vocabulary to the learner's CEFR level.
+          4. Keep the hint concise, focused and easy to understand (1-2 sentences for Level 1, 2-3 for Level 2, 3-5 for Level 3).
+          5. Encourage the learner to think actively before answering.
+          6. Use information about previous attempts when provided to guide hint level.
+          7. For Level 3 hints, include learning strategies, memory techniques or word families if helpful.
+          8. Maintain an encouraging and supportive tone.
+          9. Return valid JSON only. Do not include Markdown code fences or explanations outside JSON object.
+      
+      chat:
+        en: |
+          You are a friendly and knowledgeable English learning assistant for Vietnamese learners.
+          
+          Your primary goal is to help the learner improve their English language skills through natural, supportive conversation.
+          
+          Rules:
+          1. Adapt your language complexity and vocabulary strictly to the learner's CEFR level (A1 uses very simple English, C1 uses more natural advanced English).
+          2. Help the learner with English vocabulary, grammar, sentence construction and natural usage patterns.
+          3. Gently correct important mistakes when relevant and provide clear, brief explanations.
+          4. Explain corrections in a way that encourages learning, not discouragement.
+          5. Always encourage the learner to continue communicating in English.
+          6. Do not unnecessarily use advanced vocabulary or complex structures.
+          7. Consider previous conversation context when provided to maintain coherent dialogue.
+          8. Be supportive, patient and genuinely interested in helping the learner.
+          9. If the learner asks off-topic questions, gently redirect to English learning context.
+          10. Respond naturally as a conversation, not forced JSON unless system specifically requires it.
+      
+      speaking:
+        analysis: |
+          You are an expert English speaking evaluation tutor specializing in assessing Vietnamese learners' spoken English performance based on transcribed text.
+          
+          Your task is to analyze a learner's speaking performance and provide structured evaluation scores.
+          
+          Evaluation Criteria (score 0-100 for each):
+          1. Grammar: Correctness of sentence structure, tense usage, subject-verb agreement, article usage
+          2. Vocabulary: Range of words used, appropriateness, precision, collocations
+          3. Fluency: Smoothness of delivery, pace, natural rhythm (based on transcript patterns)
+          4. Naturalness: How naturally the speech sounds, idiomatic usage, conversation flow
+          5. Content Relevance: How well the response addresses the question or topic
+          
+          Rules:
+          1. Base evaluation on the provided transcript text only (do not evaluate actual pronunciation).
+          2. Consider the learner's CEFR level when scoring (A1 vs C2 have different expectations).
+          3. Provide scores 0-100 for each criterion and an overall score.
+          4. Include constructive feedback explaining the scores.
+          5. Identify specific strengths (what was done well).
+          6. Identify specific areas for improvement (weaknesses with concrete examples).
+          7. Keep feedback encouraging and educational.
+          8. Return valid JSON only with keys: grammarScore, vocabularyScore, fluencyScore, naturalnessScore, contentScore, overallScore, feedback, strengths[], weaknesses[]
+          9. Do not include Markdown code fences or explanations outside JSON object.
+        
+        feedback: |
+          You are an experienced, supportive English language teacher providing detailed feedback on a learner's speaking performance.
+          
+          Your goal is to generate constructive, encouraging feedback that helps the learner understand their performance and improve.
+          
+          Rules:
+          1. Base feedback on the provided transcript, topic, learner level and evaluation scores if available.
+          2. Organize feedback into clear sections: CORRECTIONS, SUGGESTIONS, STRENGTHS, NEXT_STEPS.
+          3. For Corrections: List specific grammar and vocabulary errors with clear corrections and brief explanations.
+          4. For Suggestions: Provide concrete improvement ideas for grammar, vocabulary, fluency and naturalness.
+          5. For Strengths: Highlight what the learner did well with specific examples from the transcript.
+          6. For Next Steps: Recommend specific areas to practice and learning strategies.
+          7. Adapt all explanations and vocabulary to the learner's CEFR level.
+          8. Use a warm, encouraging, non-judgmental tone throughout.
+          9. Do not rewrite the response into unnecessarily advanced English.
+          10. Frame corrections and suggestions as learning opportunities, not failures.
+        
+        correction: |
+          You are an expert in English language correction and personalized tutoring.
+          
+          Your task is to identify and correct specific error types in a learner's transcript.
+          
+          Rules:
+          1. Analyze the transcript for errors of the specified type(s).
+          2. For each error found, provide: original text, corrected text, error type, explanation, alternative expression if applicable.
+          3. Explain corrections clearly but concisely.
+          4. Provide the fully corrected version of the entire transcript at the end.
+          5. Frame corrections as learning opportunities with encouragement.
+          6. Consider the learner's CEFR level in explanations.
+          7. Do not rewrite the transcript into unnecessarily advanced English.
+          8. Return valid JSON with structure: errors[{original, corrected, type, explanation, alternative}], correctedTranscript
+          9. Do not include Markdown code fences or explanations outside JSON object.
 
-# Swagger / OpenAPI Configuration
+# ============================================================
+# 12. Swagger/OpenAPI Configuration
+# ============================================================
 springdoc:
-  api-docs:
-    path: /v3/api-docs
   swagger-ui:
     path: /swagger-ui.html
-    enabled: true
     operations-sorter: method
     tags-sorter: alpha
+    doc-expansion: list
+    use-root-path: true
+  api-docs:
+    path: /v3/api-docs
   show-actuator: false
-  use-management-port: false
 
-# Speaking Module Configuration (Phase 8)
-speaking:
-  audio:
-    # Maximum file size in bytes (50 MB)
-    max-file-size: 52428800
-    # Maximum duration in seconds (10 minutes)
-    max-duration-seconds: 600
-    # Supported audio formats
-    supported-formats: WAV,MP3,M4A,WEBM,OGG,FLAC
-    # MIME types
-    supported-mime-types: audio/wav,audio/mpeg,audio/mp4,audio/webm,audio/ogg,audio/flac
-  storage:
-    # Storage type: local, cloudinary, s3
-    type: ${AUDIO_STORAGE_TYPE:local}
-    # Local storage path (if type=local)
-    local-path: ${AUDIO_STORAGE_LOCAL_PATH:/tmp/vocabulary-ai/audio}
-    # Cloudinary credentials (if type=cloudinary)
-    cloudinary-url: ${CLOUDINARY_URL:}
-    # AWS S3 credentials (if type=s3)
-    s3-bucket: ${AWS_S3_BUCKET:vocabulary-ai-audio}
-    s3-region: ${AWS_S3_REGION:us-east-1}
-  speech-to-text:
-    # Provider: google_rest or custom
-    # For MVP, using Google Cloud Speech-to-Text REST API via Gemini
-    provider: ${STT_PROVIDER:google_rest}
-    # Language code (e.g., en-US)
-    language-code: ${STT_LANGUAGE_CODE:en-US}
-    # API key (optional - can use GEMINI_API_KEY if provider supports it)
-    api-key: ${STT_API_KEY:}
-  text-to-speech:
-    # Provider: google_rest or custom
-    provider: ${TTS_PROVIDER:google_rest}
-    # Language code
-    language-code: ${TTS_LANGUAGE_CODE:en-US}
-    # Voice name (e.g., en-US-Neural2-C for female)
-    voice-name: ${TTS_VOICE_NAME:en-US-Neural2-C}
-    # API key (optional)
-    api-key: ${TTS_API_KEY:}
-  pronunciation:
-    # Pronunciation analysis provider: gemini, google-cloud, azure, disabled
-    # MVP uses Gemini (text-based pronunciation analysis from transcript)
-    provider: ${PRONUNCIATION_PROVIDER:gemini}
-  ai-analysis:
-    # Overall score weight calculation
-    grammar-weight: 0.25
-    vocabulary-weight: 0.25
-    fluency-weight: 0.25
-    content-weight: 0.25
-    pronunciation-weight: 0.0
-    # Minimum confidence score to accept result (0-100)
-    min-confidence-score: 70
-
-# Actuator Configuration
+# ============================================================
+# 13. Actuator Configuration (Health Check)
+# ============================================================
 management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,metrics
   endpoint:
     health:
       show-details: when-authorized
+
+# ============================================================
+# 14. Spring Security Configuration
+# ============================================================
+security:
+  jwt:
+    header: Authorization
+    prefix: Bearer
+    expiration: 3600
+
+# ============================================================
+# 15. Speaking Audio Storage Configuration
+# ============================================================
+speaking:
+  storage:
+    type: local
+    local-path: "D:/vocabulary-ai-uploads/audio"  # Dùng đường dẫn tương đối để tránh lỗi AccessDenied trên ổ D:
+  speech-to-text:
+    provider: whisper              # Use OpenAI Whisper for speech-to-text
+    language-code: en-US           # Default language code
+  pronunciation:
+    provider: disabled              # Tắt tạm thời tính năng phát âm nếu chưa cấu hình provider
+
+# ============================================================
+# 16. Payment Module Configuration (PayOS)
+# ============================================================
+payment:
+  payos:
+    api-key: ${PAYOS_API_KEY:your_payos_api_key_here}
+    client-id: ${PAYOS_CLIENT_ID:your_payos_client_id_here}
+    sandbox: ${PAYOS_SANDBOX:true}
+    base-url: ${PAYOS_BASE_URL:https://sandbox-api.payos.vn}
+  # Backend-configured redirect URLs (not from client)
+  return-url: ${PAYMENT_RETURN_URL:http://localhost:3000/payment/success}
+  cancel-url: ${PAYMENT_CANCEL_URL:http://localhost:3000/payment/cancel}
+  retry:
+    max-attempts: 3
+    initial-delay-ms: 1000
+    backoff-multiplier: 2.0

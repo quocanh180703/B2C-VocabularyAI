@@ -1,6 +1,7 @@
 package com.vocabularyai.quiz.service;
 
 import com.vocabularyai.common.exception.BadRequestException;
+import com.vocabularyai.common.exception.ForbiddenException;
 import com.vocabularyai.common.exception.ResourceNotFoundException;
 import com.vocabularyai.quiz.dto.*;
 import com.vocabularyai.quiz.entity.*;
@@ -122,11 +123,10 @@ public class QuizService {
      * Submit quiz answers and calculate score
      */
     @Transactional
-    public QuizAttemptResponse submitQuiz(Long attemptId, SubmitQuizRequest request) {
-        log.info("Submitting quiz attempt: {}", attemptId);
+    public QuizAttemptResponse submitQuiz(Long attemptId, Long userId, SubmitQuizRequest request) {
+        log.info("Submitting quiz attempt: {} for user: {}", attemptId, userId);
         
-        QuizAttempt attempt = attemptRepository.findById(attemptId)
-            .orElseThrow(() -> ResourceNotFoundException.of("QuizAttempt", "id", attemptId));
+        QuizAttempt attempt = getAttemptAndVerifyOwnership(attemptId, userId);
         
         if (attempt.isCompleted()) {
             throw new BadRequestException("Quiz already submitted");
@@ -194,6 +194,29 @@ public class QuizService {
     /**
      * Get quiz attempt with answers
      */
+    public QuizAttemptWithAnswersResponse getQuizAttemptWithAnswers(Long attemptId, Long userId) {
+        log.info("Getting quiz attempt: {} for user: {}", attemptId, userId);
+        
+        QuizAttempt attempt = getAttemptAndVerifyOwnership(attemptId, userId);
+        
+        if (!attempt.isCompleted()) {
+            throw new BadRequestException("Quiz attempt not completed");
+        }
+        
+        var answers = answerRepository.findByAttemptId(attemptId).stream()
+            .map(qa -> QuizAnswerDetailResponse.fromEntity(qa))
+            .collect(Collectors.toList());
+        
+        return QuizAttemptWithAnswersResponse.builder()
+            .attempt(QuizAttemptResponse.fromEntity(attempt))
+            .answers(answers)
+            .build();
+    }
+    
+    /**
+     * Get quiz attempt with answers (public version - no userId check)
+     * Used internally for public endpoints
+     */
     public QuizAttemptWithAnswersResponse getQuizAttemptWithAnswers(Long attemptId) {
         log.info("Getting quiz attempt: {}", attemptId);
         
@@ -228,5 +251,20 @@ public class QuizService {
             pageable,
             attempts.getTotalElements()
         );
+    }
+    
+    /**
+     * Get quiz attempt and verify ownership (IDOR prevention)
+     * 
+     * ✅ TASK 9: Fixed HTTP status from 400 to 403
+     * Throws ForbiddenException instead of BadRequestException
+     * to return proper 403 Forbidden status code
+     */
+    private QuizAttempt getAttemptAndVerifyOwnership(Long attemptId, Long userId) {
+        return attemptRepository.findByIdAndUserId(attemptId, userId)
+            .orElseThrow(() -> {
+                log.warn("IDOR prevention: Unauthorized access attempt: attemptId={}, userId={}", attemptId, userId);
+                return new ForbiddenException("You don't have permission to access this quiz attempt");
+            });
     }
 }

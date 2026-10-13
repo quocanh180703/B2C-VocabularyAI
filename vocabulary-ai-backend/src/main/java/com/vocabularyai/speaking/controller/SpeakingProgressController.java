@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +34,15 @@ import org.springframework.web.bind.annotation.*;
  * - GET /api/ai/speaking/progress/milestones - Get achievements
  * 
  * Security:
- * - Require JWT authentication
- * - Users can only see their own progress
+ * - Require JWT authentication (@PreAuthorize class-level)
+ * - Users can only see their own progress - Service layer responsibility
+ * - All 4 endpoints restricted to authenticated users only
+ * 
+ * Authorization Flow:
+ * 1. JWT Filter: Extract authentication
+ * 2. @PreAuthorize("isAuthenticated()"): Class-level authorization
+ * 3. Controller: Receives authenticated user
+ * 4. Service: Verify resource ownership (userId == progress.userId)
  */
 @Slf4j
 @RestController
@@ -42,6 +50,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Tag(name = "Speaking Progress", description = "API để tracking tiến độ học speaking (statistics, trends, milestones)")
 @SecurityRequirement(name = "bearer-jwt")
+@PreAuthorize("isAuthenticated()")
 public class SpeakingProgressController {
     
     private final SpeakingProgressService progressService;

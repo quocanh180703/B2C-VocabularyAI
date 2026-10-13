@@ -24,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +42,17 @@ import org.springframework.web.bind.annotation.*;
  * - PUT /api/ai/speaking/sessions/{id}/complete - Hoàn thành phiên
  * - PUT /api/ai/speaking/sessions/{id}/cancel - Hủy phiên
  * - DELETE /api/ai/speaking/sessions/{id} - Xóa phiên
+ * 
+ * Security:
+ * - Require JWT authentication (@PreAuthorize class-level)
+ * - User can only manage their own sessions - Service layer responsibility
+ * - All 10 endpoints restricted to authenticated users only
+ * 
+ * Authorization Flow:
+ * 1. JWT Filter: Extract authentication
+ * 2. @PreAuthorize("isAuthenticated()"): Class-level authorization
+ * 3. Controller: Receives authenticated user
+ * 4. Service: Verify resource ownership (userId == session.userId)
  */
 @RestController
 @RequestMapping("/api/ai/speaking/sessions")
@@ -48,6 +60,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Tag(name = "Speaking Sessions", description = "API cho quản lý Speaking Sessions")
 @SecurityRequirement(name = "bearer-jwt")
+@PreAuthorize("isAuthenticated()")
 public class SpeakingSessionController {
     
     private final SpeakingSessionService sessionService;

@@ -55,4 +55,11 @@ public class AudioMetadata {
      */
     @JsonProperty("durationSeconds")
     private Integer durationSeconds;
+    
+    /**
+     * Absolute path to audio file on disk (for local storage)
+     * Used for reading file after upload
+     */
+    @JsonProperty("storagePath")
+    private String storagePath;
 }

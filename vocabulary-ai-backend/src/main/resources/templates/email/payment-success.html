@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .header .checkmark {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .greeting {
+            font-size: 16px;
+            margin-bottom: 25px;
+            color: #333;
+        }
+        
+        .success-message {
+            background-color: #ecfdf5;
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            color: #047857;
+            font-weight: 500;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .info-value {
+            color: #333;
+            text-align: right;
+            word-break: break-word;
+        }
+        
+        .price-section {
+            background: linear-gradient(135deg, #f0f9ff 0%, #eff6ff 100%);
+            padding: 20px;
+            border-radius: 6px;
+            margin: 25px 0;
+            border: 1px solid #bfdbfe;
+        }
+        
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0 0 0;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #bfdbfe;
+            font-size: 18px;
+            font-weight: bold;
+            color: #0369a1;
+        }
+        
+        .cta-section {
+            text-align: center;
+            margin: 35px 0;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 40px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.6);
+        }
+        
+        .benefits {
+            background-color: #f9fafb;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 25px 0;
+        }
+        
+        .benefits-title {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #667eea;
+            margin-bottom: 12px;
+        }
+        
+        .benefit-item {
+            padding: 8px 0;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .benefit-item:before {
+            content: "✓ ";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .support-box {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 25px 0;
+            font-size: 13px;
+            color: #0369a1;
+            border-left: 3px solid #0369a1;
+        }
+        
+        .footer {
+            background-color: #f5f5f5;
+            padding: 25px 30px;
+            text-align: center;
+            border-top: 1px solid #eee;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .footer-text {
+            margin: 5px 0;
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 15px 0;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            background-color: #d1fae5;
+            color: #065f46;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 0;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .info-row, .price-row, .total-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .info-value, .price-row > span:last-child, .total-row > span:last-child {
+                text-align: left;
+            }
+            
+            .cta-button {
+                width: 100%;
+                padding: 12px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="checkmark">✓</div>
+            <h1>Thanh toán thành công!</h1>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <div class="greeting">
+                Xin chào <strong th:text="${customerName}">Nguyễn Văn A</strong>,
+            </div>
+            
+            <div class="success-message">
+                Cảm ơn bạn đã đăng ký Premium! Thanh toán của bạn đã được xác nhận thành công.
+            </div>
+            
+            <!-- Order Information -->
+            <div class="section">
+                <div class="section-title">📋 Thông tin đơn hàng</div>
+                <div class="info-row">
+                    <span class="info-label">Mã đơn hàng:</span>
+                    <span class="info-value" th:text="${orderCode}">ORD_123456</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Ngày thanh toán:</span>
+                    <span class="info-value" th:text="${paidDate}">01/10/2026</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Trạng thái:</span>
+                    <span class="info-value"><span class="status-badge">✓ ĐÃ THANH TOÁN</span></span>
+                </div>
+            </div>
+            
+            <!-- Package Information -->
+            <div class="section">
+                <div class="section-title">🎁 Gói Premium</div>
+                <div class="info-row">
+                    <span class="info-label">Tên gói:</span>
+                    <span class="info-value" th:text="${packageName}">Premium Annual</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Thời hạn:</span>
+                    <span class="info-value" th:text="${duration}">1 năm (365 ngày)</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Ngày bắt đầu:</span>
+                    <span class="info-value" th:text="${subscriptionStartDate}">01/10/2026</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Ngày hết hạn:</span>
+                    <span class="info-value" th:text="${subscriptionEndDate}">01/10/2027</span>
+                </div>
+            </div>
+            
+            <!-- Price Summary -->
+            <div class="price-section">
+                <div class="section-title" style="border-bottom: 1px solid #bfdbfe; color: #0369a1;">💰 Chi tiết thanh toán</div>
+                <div class="price-row">
+                    <span>Giá gói:</span>
+                    <span th:text="${amount}">899.000 VNĐ</span>
+                </div>
+                <div class="price-row">
+                    <span>Giảm giá:</span>
+                    <span>0 VNĐ</span>
+                </div>
+                <div class="total-row">
+                    <span>Tổng cộng:</span>
+                    <span th:text="${amount}">899.000 VNĐ</span>
+                </div>
+            </div>
+            
+            <!-- Payment Details -->
+            <div class="section">
+                <div class="section-title">🔐 Chi tiết giao dịch</div>
+                <div class="info-row">
+                    <span class="info-label">Phương thức thanh toán:</span>
+                    <span class="info-value">PayOS</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Mã giao dịch:</span>
+                    <span class="info-value" th:text="${transactionCode}">TXN_1694000001_12345</span>
+                </div>
+            </div>
+            
+            <!-- Benefits -->
+            <div class="benefits">
+                <div class="benefits-title">🌟 Quyền lợi Premium của bạn</div>
+                <div class="benefit-item">Truy cập tất cả bài học AI nâng cao</div>
+                <div class="benefit-item">Tính năng Speech Recognition không giới hạn</div>
+                <div class="benefit-item">Hỗ trợ học tập cá nhân 24/7</div>
+                <div class="benefit-item">Tải xuống tài liệu học tập</div>
+                <div class="benefit-item">Không có quảng cáo</div>
+            </div>
+            
+            <!-- CTA Button -->
+            <div class="cta-section">
+                <a href="${frontendUrl}/dashboard" class="cta-button">Bắt đầu học tập ngay →</a>
+            </div>
+            
+            <!-- Support -->
+            <div class="support-box">
+                <strong>❓ Cần hỗ trợ?</strong><br>
+                Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi qua 
+                <a href="https://vocabularyai.com/support" style="color: #0369a1; text-decoration: none;">trung tâm hỗ trợ</a> 
+                hoặc trả lời email này.
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-text">© 2024 VocabularyAI. Tất cả các quyền được bảo lưu.</div>
+            <div class="divider"></div>
+            <div class="footer-text">Email này được gửi tự động. Vui lòng không trả lời trực tiếp.</div>
+            <div class="footer-text">
+                <a href="https://vocabularyai.com" style="color: #0369a1; text-decoration: none;">Trang chủ</a> | 
+                <a href="https://vocabularyai.com/privacy" style="color: #0369a1; text-decoration: none;">Chính sách bảo mật</a> | 
+                <a href="https://vocabularyai.com/terms" style="color: #0369a1; text-decoration: none;">Điều khoản sử dụng</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

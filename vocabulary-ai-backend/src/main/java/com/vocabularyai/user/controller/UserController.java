@@ -4,6 +4,7 @@ import com.vocabularyai.common.response.ApiResponse;
 import com.vocabularyai.user.dto.ChangePasswordRequest;
 import com.vocabularyai.user.dto.UpdateUserRequest;
 import com.vocabularyai.user.dto.UserResponse;
+import com.vocabularyai.user.entity.User;
 import com.vocabularyai.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -82,6 +83,35 @@ public class UserController {
         userService.changePassword(userId, request.getOldPassword(), request.getNewPassword());
         return ResponseEntity.ok(
             ApiResponse.success("Password updated successfully")
+        );
+    }
+    
+    /**
+     * TASK 11: Update user status (ADMIN only)
+     * 
+     * Admin endpoint to manage user account status
+     * - ACTIVE: Normal user
+     * - INACTIVE: Account suspended
+     * - BANNED: Account banned
+     * 
+     * When status changes to INACTIVE or BANNED, all user-specific caches are invalidated
+     */
+    @PutMapping("/{userId}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+        summary = "Update user status",
+        description = "Update user account status (ADMIN only). Updates status and invalidates user caches."
+    )
+    public ResponseEntity<ApiResponse<UserResponse>> updateUserStatus(
+            @PathVariable Long userId,
+            @RequestParam User.UserStatus status) {
+        log.info("Updating user status for userId: {} to status: {} by admin", userId, status);
+        
+        userService.updateUserStatus(userId, status);
+        UserResponse userResponse = UserResponse.fromEntity(userService.getUserById(userId));
+        
+        return ResponseEntity.ok(
+            ApiResponse.success("User status updated successfully", userResponse)
         );
     }
 }

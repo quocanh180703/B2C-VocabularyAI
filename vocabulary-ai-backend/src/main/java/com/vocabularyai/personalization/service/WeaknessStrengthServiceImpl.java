@@ -3,6 +3,8 @@ package com.vocabularyai.personalization.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocabularyai.ai.service.gemini.GeminiAIClientService;
 import com.vocabularyai.ai.service.cache.CacheService;
+import com.vocabularyai.ai.util.JsonResponseExtractor;
+import com.vocabularyai.common.exception.ForbiddenException;
 import com.vocabularyai.common.exception.RateLimitExceededException;
 import com.vocabularyai.common.exception.ResourceNotFoundException;
 import com.vocabularyai.personalization.dto.LearningProfileDto;
@@ -43,7 +45,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class WeaknessStrengthServiceImpl implements WeaknessStrengthService {
     
     private final LearningProfileService learningProfileService;
@@ -61,13 +63,14 @@ public class WeaknessStrengthServiceImpl implements WeaknessStrengthService {
      * 
      * Flow:
      * 1. Verify user exists
-     * 2. Check cache for existing analysis
-     * 3. Get learning profile (TASK 1)
-     * 4. Build Gemini analysis prompt
-     * 5. Call Gemini AI for analysis
-     * 6. Parse JSON response to WeaknessStrengthDto
-     * 7. Cache results
-     * 8. Return analysis
+     * 2. Verify ownership (TASK 10 - Cache Authorization)
+     * 3. Check cache for existing analysis
+     * 4. Get learning profile (TASK 1)
+     * 5. Build Gemini analysis prompt
+     * 6. Call Gemini AI for analysis
+     * 7. Parse JSON response to WeaknessStrengthDto
+     * 8. Cache results
+     * 9. Return analysis
      */
     @Override
     public WeaknessStrengthDto analyzeWeaknessesAndStrengths(Long userId) {
@@ -76,6 +79,9 @@ public class WeaknessStrengthServiceImpl implements WeaknessStrengthService {
         // Verify user exists
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userId));
+        
+        // TASK 10: Verify ownership - Verify requesting user matches requested userId
+        verifyUserOwnership(userId);
         
         // Check cache first
         WeaknessStrengthDto cached = getCachedAnalysis(userId);
@@ -331,13 +337,18 @@ public class WeaknessStrengthServiceImpl implements WeaknessStrengthService {
     
     /**
      * Parse Gemini AI response JSON into WeaknessStrengthDto
+     * 
+     * Handles markdown code fences and other text wrapping
      */
     private WeaknessStrengthDto parseAIResponse(String aiResponse, Long userId, String userName) {
         try {
             log.debug("[TASK 2] Parsing AI JSON response for userId: {}", userId);
             
+            // Extract JSON from response (handles markdown, embedded JSON, etc.)
+            String jsonString = JsonResponseExtractor.extractJsonString(aiResponse);
+            
             // Parse JSON response
-            WeaknessStrengthDto dto = objectMapper.readValue(aiResponse, WeaknessStrengthDto.class);
+            WeaknessStrengthDto dto = objectMapper.readValue(jsonString, WeaknessStrengthDto.class);
             
             // Set userId, userName, and timestamp
             dto.setUserId(userId);
@@ -360,6 +371,39 @@ public class WeaknessStrengthServiceImpl implements WeaknessStrengthService {
         } catch (Exception e) {
             log.error("[TASK 2] Failed to parse AI response: {}", e.getMessage(), e);
             throw new WeaknessStrengthException("Failed to parse AI analysis response: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * TASK 10: Verify ownership - Ensure requesting user matches requested userId
+     * 
+     * Throws ForbiddenException if user doesn't have permission
+     */
+    private void verifyUserOwnership(Long requestedUserId) {
+        try {
+            // Get currently authenticated user from Security Context
+            org.springframework.security.core.Authentication authentication = 
+                org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            
+            if (authentication == null || !authentication.isAuthenticated()) {
+                throw new ForbiddenException("User not authenticated");
+            }
+            
+            User currentUser = (User) authentication.getPrincipal();
+            
+            // Verify requesting user owns this resource
+            if (!currentUser.getId().equals(requestedUserId)) {
+                log.warn("[TASK 10] Unauthorized cache access attempt: userId={} requested by userId={}",
+                         requestedUserId, currentUser.getId());
+                throw new ForbiddenException("You don't have permission to access this resource");
+            }
+            
+            log.debug("[TASK 10] Cache access verified for userId: {}", requestedUserId);
+        } catch (ForbiddenException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("[TASK 10] Cache ownership verification failed: {}", e.getMessage(), e);
+            throw new ForbiddenException("Authorization verification failed");
         }
     }
 }

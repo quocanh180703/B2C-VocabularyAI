@@ -1,6 +1,6 @@
 package com.vocabularyai.vocabulary.dto;
 
-import com.vocabularyai.vocabulary.entity.Word;
+import com.vocabularyai.vocabulary.entity.CEFRLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,5 +23,5 @@ public class UpdateWordRequest {
     private String example;
     private String audioUrl;
     private String imageUrl;
-    private Word.WordLevel level;
+    private CEFRLevel level;
 }

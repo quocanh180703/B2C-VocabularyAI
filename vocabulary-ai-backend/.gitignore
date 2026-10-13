@@ -22,10 +22,12 @@ release.properties
 *.pid
 *.pid.lock
 
-# Environment
+# Environment - NEVER commit these files with actual secrets!
 .env
 .env.local
 .env.*.local
+.env.prod
+.env.staging
 
 # Spring Boot
 build/
@@ -35,3 +37,17 @@ target/
 node_modules/
 npm-debug.log
 yarn-error.log
+
+# OS specific files
+Thumbs.db
+.DS_Store
+
+# Local uploads directory
+/audio/
+/uploads/
+/temp/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3

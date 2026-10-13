@@ -1,6 +1,9 @@
 package com.vocabularyai.common.exception;
 
 import com.vocabularyai.common.response.ApiResponse;
+import com.vocabularyai.speaking.exception.AudioDurationException;
+import com.vocabularyai.speaking.exception.FileSizeExceededException;
+import com.vocabularyai.speaking.exception.InvalidAudioFormatException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,13 +57,25 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     
     /**
      * Handle UnauthorizedException -> 401
+     * 
+     * ✅ TASK 5: User Status validation
+     * - "Your account is inactive (suspended). Please contact support."
+     * - "Your account is banned. You cannot refresh your token."
+     * 
+     * ✅ TASK 6: Standardized error response
      */
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ApiResponse<?>> handleUnauthorizedException(
             UnauthorizedException ex, WebRequest request) {
         log.warn("Unauthorized: {}", ex.getMessage());
         
-        ApiResponse<?> response = ApiResponse.error(ex.getMessage());
+        // TASK 6: Standardized error response with error details
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("code", "UNAUTHORIZED");
+        errorDetails.put("details", ex.getMessage());
+        errorDetails.put("timestamp", LocalDateTime.now());
+        
+        ApiResponse<?> response = ApiResponse.error(ex.getMessage(), errorDetails);
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
     
@@ -71,19 +87,33 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             ForbiddenException ex, WebRequest request) {
         log.warn("Forbidden: {}", ex.getMessage());
         
-        ApiResponse<?> response = ApiResponse.error(ex.getMessage());
+        // TASK 6: Standardized error response
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("code", "FORBIDDEN");
+        errorDetails.put("details", ex.getMessage());
+        errorDetails.put("timestamp", LocalDateTime.now());
+        
+        ApiResponse<?> response = ApiResponse.error(ex.getMessage(), errorDetails);
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
     
     /**
      * Handle AccessDeniedException (Spring Security) -> 403
+     * 
+     * ✅ TASK 6: Standardized 403 Forbidden response
      */
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiResponse<?>> handleAccessDeniedException(
             AccessDeniedException ex, WebRequest request) {
         log.warn("Access denied: {}", ex.getMessage());
         
-        ApiResponse<?> response = ApiResponse.error("Access denied");
+        // TASK 6: Standardized error response
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("code", "FORBIDDEN");
+        errorDetails.put("details", "You don't have permission to access this resource");
+        errorDetails.put("timestamp", LocalDateTime.now());
+        
+        ApiResponse<?> response = ApiResponse.error("Access denied", errorDetails);
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
     
@@ -159,14 +189,63 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
     
     /**
-     * Handle all other exceptions -> 500
+     * Handle InvalidAudioFormatException -> 400
      */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<?>> handleGlobalException(
-            Exception ex, WebRequest request) {
-        log.error("Unexpected error", ex);
+    @ExceptionHandler(InvalidAudioFormatException.class)
+    public ResponseEntity<ApiResponse<?>> handleInvalidAudioFormatException(
+            InvalidAudioFormatException ex, WebRequest request) {
+        log.warn("Invalid audio format: {}", ex.getMessage());
         
-        ApiResponse<?> response = ApiResponse.error("Internal server error");
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("code", "INVALID_AUDIO_FORMAT");
+        errorDetails.put("details", ex.getMessage());
+        errorDetails.put("timestamp", LocalDateTime.now());
+        
+        ApiResponse<?> response = ApiResponse.error(ex.getMessage(), errorDetails);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+    
+    /**
+     * Handle FileSizeExceededException -> 413
+     */
+    @ExceptionHandler(FileSizeExceededException.class)
+    public ResponseEntity<ApiResponse<?>> handleFileSizeExceededException(
+            FileSizeExceededException ex, WebRequest request) {
+        log.warn("File size exceeded: {} bytes > {} bytes", ex.getActualSize(), ex.getMaxSize());
+        
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("code", "FILE_SIZE_EXCEEDED");
+        errorDetails.put("maxSizeBytes", ex.getMaxSize());
+        errorDetails.put("maxSizeMB", ex.getMaxSize() / (1024 * 1024));
+        errorDetails.put("actualSizeBytes", ex.getActualSize());
+        errorDetails.put("actualSizeMB", String.format("%.2f", ex.getActualSize() / (1024.0 * 1024.0)));
+        errorDetails.put("message", "Tập tin audio quá lớn. Vui lòng chọn tập tin nhỏ hơn " + (ex.getMaxSize() / (1024 * 1024)) + "MB");
+        errorDetails.put("timestamp", LocalDateTime.now());
+        
+        ApiResponse<?> response = ApiResponse.error(ex.getMessage(), errorDetails);
+        return new ResponseEntity<>(response, HttpStatus.PAYLOAD_TOO_LARGE);
+    }
+    
+    /**
+     * Handle AudioDurationException -> 400
+     */
+    @ExceptionHandler(AudioDurationException.class)
+    public ResponseEntity<ApiResponse<?>> handleAudioDurationException(
+            AudioDurationException ex, WebRequest request) {
+        log.warn("Invalid audio duration: {} seconds (min: {}, max: {})", 
+                ex.getActualDurationSeconds(), ex.getMinDurationSeconds(), ex.getMaxDurationSeconds());
+        
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("code", "INVALID_AUDIO_DURATION");
+        errorDetails.put("minDurationSeconds", ex.getMinDurationSeconds());
+        errorDetails.put("maxDurationSeconds", ex.getMaxDurationSeconds());
+        errorDetails.put("actualDurationSeconds", ex.getActualDurationSeconds());
+        errorDetails.put("message", String.format("Độ dài âm thanh phải từ %d đến %d giây", 
+                ex.getMinDurationSeconds(), ex.getMaxDurationSeconds()));
+        errorDetails.put("timestamp", LocalDateTime.now());
+        
+        ApiResponse<?> response = ApiResponse.error(ex.getMessage(), errorDetails);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    
 }

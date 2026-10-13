@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 /**
  * ChatController
@@ -52,6 +53,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 @PreAuthorize("isAuthenticated()")
+@SecurityRequirement(name = "bearerAuth")
 public class ChatController {
     
     private final ChatService chatService;

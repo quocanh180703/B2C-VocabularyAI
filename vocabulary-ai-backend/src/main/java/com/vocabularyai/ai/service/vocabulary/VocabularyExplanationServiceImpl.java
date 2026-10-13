@@ -5,6 +5,7 @@ import com.vocabularyai.ai.dto.response.ExplanationResponse;
 import com.vocabularyai.ai.service.cache.CacheService;
 import com.vocabularyai.ai.service.gemini.GeminiAIClientService;
 import com.vocabularyai.ai.service.prompt.PromptEngineeringService;
+import com.vocabularyai.ai.util.JsonResponseExtractor;
 import com.vocabularyai.vocabulary.entity.Word;
 import com.vocabularyai.vocabulary.repository.WordRepository;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +57,6 @@ public class VocabularyExplanationServiceImpl implements VocabularyExplanationSe
     // ==================== Single Word Explanation ====================
     
     @Override
-    @Transactional(readOnly = true)
     public ExplanationResponse explainWord(Long wordId, String context, Long userId) {
         log.info("Explaining word: {}, context: {}, user: {}", wordId, context, userId);
         
@@ -112,7 +112,6 @@ public class VocabularyExplanationServiceImpl implements VocabularyExplanationSe
     // ==================== Batch Words Explanation ====================
     
     @Override
-    @Transactional(readOnly = true)
     public List<ExplanationResponse> explainWords(List<Long> wordIds, Long userId) {
         log.info("Explaining {} words, user: {}", wordIds.size(), userId);
         
@@ -325,11 +324,16 @@ public class VocabularyExplanationServiceImpl implements VocabularyExplanationSe
      *   "etymology": "...",
      *   "relatedWords": ["...", "..."]
      * }
+     * 
+     * Handles markdown code fences and other text wrapping via JsonResponseExtractor
      */
     private ExplanationResponse parseExplanationResponse(Word word, String aiResponse) {
         try {
-            // Try to parse as JSON
-            Map<String, Object> parsed = objectMapper.readValue(aiResponse, Map.class);
+            // Extract JSON from response (handles markdown, etc.)
+            String jsonString = JsonResponseExtractor.extractJsonString(aiResponse);
+            
+            // Parse JSON
+            Map<String, Object> parsed = objectMapper.readValue(jsonString, Map.class);
             
             return ExplanationResponse.builder()
                 .wordId(word.getId())

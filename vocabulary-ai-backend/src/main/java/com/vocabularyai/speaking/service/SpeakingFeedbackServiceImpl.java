@@ -39,13 +39,13 @@ public class SpeakingFeedbackServiceImpl implements SpeakingFeedbackService {
         log.debug("Lấy feedback của attempt: attemptId={}, userId={}", attemptId, userId);
         
         SpeakingFeedback feedback = feedbackRepository.findByAttemptId(attemptId)
-                .orElseThrow(() -> new IllegalArgumentException("Feedback không tồn tại cho attempt: " + attemptId));
+                .orElseThrow(() -> com.vocabularyai.common.exception.ResourceNotFoundException.of("SpeakingFeedback", "attemptId", attemptId));
         
-        // Verify user ownership qua session
+        // ✅ TASK 9: Verify user ownership - throw ForbiddenException for 403
         Long sessionId = feedback.getAttempt().getSession().getId();
         if (!sessionRepository.existsByIdAndUserId(sessionId, userId)) {
-            log.warn("Truy cập không được phép: attemptId={}, userId={}", attemptId, userId);
-            throw new IllegalArgumentException("Bạn không có quyền truy cập feedback này");
+            log.warn("IDOR prevention: Unauthorized access attempt: attemptId={}, userId={}", attemptId, userId);
+            throw new com.vocabularyai.common.exception.ForbiddenException("You don't have permission to access this feedback");
         }
         
         return feedbackMapper.toResponse(feedback);
@@ -56,10 +56,10 @@ public class SpeakingFeedbackServiceImpl implements SpeakingFeedbackService {
     public Optional<SpeakingFeedbackResponse> getSessionFeedback(Long sessionId, Long userId) {
         log.debug("Lấy feedback của phiên: sessionId={}, userId={}", sessionId, userId);
         
-        // Verify session ownership
+        // ✅ TASK 9: Verify session ownership - throw ForbiddenException for 403
         if (!sessionRepository.existsByIdAndUserId(sessionId, userId)) {
-            log.warn("Truy cập không được phép: sessionId={}, userId={}", sessionId, userId);
-            throw new IllegalArgumentException("Phiên không tồn tại hoặc bạn không có quyền truy cập");
+            log.warn("IDOR prevention: Unauthorized access attempt: sessionId={}, userId={}", sessionId, userId);
+            throw new com.vocabularyai.common.exception.ForbiddenException("You don't have permission to access this session feedback");
         }
         
         return feedbackRepository.findBySessionId(sessionId)
@@ -71,10 +71,10 @@ public class SpeakingFeedbackServiceImpl implements SpeakingFeedbackService {
     public Page<SpeakingFeedbackResponse> listFeedbackBySession(Long sessionId, Long userId, Pageable pageable) {
         log.debug("Lấy danh sách feedback của phiên: sessionId={}, userId={}", sessionId, userId);
         
-        // Verify session ownership
+        // ✅ TASK 9: Verify session ownership - throw ForbiddenException for 403
         if (!sessionRepository.existsByIdAndUserId(sessionId, userId)) {
-            log.warn("Truy cập không được phép: sessionId={}, userId={}", sessionId, userId);
-            throw new IllegalArgumentException("Phiên không tồn tại hoặc bạn không có quyền truy cập");
+            log.warn("IDOR prevention: Unauthorized access attempt: sessionId={}, userId={}", sessionId, userId);
+            throw new com.vocabularyai.common.exception.ForbiddenException("You don't have permission to access this session");
         }
         
         return feedbackRepository.findAllAttemptFeedbackBySessionIdPaginated(sessionId, pageable)
@@ -86,10 +86,10 @@ public class SpeakingFeedbackServiceImpl implements SpeakingFeedbackService {
     public Page<SpeakingFeedbackResponse> listFeedbackBySessionSortedByScore(Long sessionId, Long userId, Pageable pageable) {
         log.debug("Lấy feedback sắp xếp theo điểm tổng: sessionId={}, userId={}", sessionId, userId);
         
-        // Verify session ownership
+        // ✅ TASK 9: Verify session ownership - throw ForbiddenException for 403
         if (!sessionRepository.existsByIdAndUserId(sessionId, userId)) {
-            log.warn("Truy cập không được phép: sessionId={}, userId={}", sessionId, userId);
-            throw new IllegalArgumentException("Phiên không tồn tại hoặc bạn không có quyền truy cập");
+            log.warn("IDOR prevention: Unauthorized access attempt: sessionId={}, userId={}", sessionId, userId);
+            throw new com.vocabularyai.common.exception.ForbiddenException("You don't have permission to access this session");
         }
         
         return feedbackRepository.findAttemptFeedbackBySessionIdOrderByOverallScore(sessionId, pageable)
@@ -101,10 +101,10 @@ public class SpeakingFeedbackServiceImpl implements SpeakingFeedbackService {
     public Page<SpeakingFeedbackResponse> listFeedbackBySessionSortedByGrammar(Long sessionId, Long userId, Pageable pageable) {
         log.debug("Lấy feedback sắp xếp theo điểm ngữ pháp: sessionId={}, userId={}", sessionId, userId);
         
-        // Verify session ownership
+        // ✅ TASK 9: Verify session ownership - throw ForbiddenException for 403
         if (!sessionRepository.existsByIdAndUserId(sessionId, userId)) {
-            log.warn("Truy cập không được phép: sessionId={}, userId={}", sessionId, userId);
-            throw new IllegalArgumentException("Phiên không tồn tại hoặc bạn không có quyền truy cập");
+            log.warn("IDOR prevention: Unauthorized access attempt: sessionId={}, userId={}", sessionId, userId);
+            throw new com.vocabularyai.common.exception.ForbiddenException("You don't have permission to access this session");
         }
         
         return feedbackRepository.findAttemptFeedbackBySessionIdOrderByGrammarScore(sessionId, pageable)
@@ -116,10 +116,10 @@ public class SpeakingFeedbackServiceImpl implements SpeakingFeedbackService {
     public Page<SpeakingFeedbackResponse> listFeedbackBySessionSortedByVocabulary(Long sessionId, Long userId, Pageable pageable) {
         log.debug("Lấy feedback sắp xếp theo điểm từ vựng: sessionId={}, userId={}", sessionId, userId);
         
-        // Verify session ownership
+        // ✅ TASK 9: Verify session ownership - throw ForbiddenException for 403
         if (!sessionRepository.existsByIdAndUserId(sessionId, userId)) {
-            log.warn("Truy cập không được phép: sessionId={}, userId={}", sessionId, userId);
-            throw new IllegalArgumentException("Phiên không tồn tại hoặc bạn không có quyền truy cập");
+            log.warn("IDOR prevention: Unauthorized access attempt: sessionId={}, userId={}", sessionId, userId);
+            throw new com.vocabularyai.common.exception.ForbiddenException("You don't have permission to access this session");
         }
         
         return feedbackRepository.findAttemptFeedbackBySessionIdOrderByVocabularyScore(sessionId, pageable)
@@ -185,10 +185,10 @@ public class SpeakingFeedbackServiceImpl implements SpeakingFeedbackService {
     public Optional<SpeakingFeedbackResponse> getBestFeedbackInSession(Long sessionId, Long userId) {
         log.debug("Lấy feedback tốt nhất: sessionId={}, userId={}", sessionId, userId);
         
-        // Verify session ownership
+        // ✅ TASK 9: Verify session ownership - throw ForbiddenException for 403
         if (!sessionRepository.existsByIdAndUserId(sessionId, userId)) {
-            log.warn("Truy cập không được phép: sessionId={}, userId={}", sessionId, userId);
-            throw new IllegalArgumentException("Phiên không tồn tại hoặc bạn không có quyền truy cập");
+            log.warn("IDOR prevention: Unauthorized access attempt: sessionId={}, userId={}", sessionId, userId);
+            throw new com.vocabularyai.common.exception.ForbiddenException("You don't have permission to access this session");
         }
         
         // Lấy trang đầu tiên với 1 item (sắp xếp theo điểm cao nhất)
