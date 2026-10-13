@@ -133,6 +133,52 @@ public interface PaymentService {
     boolean cancelSubscription(Long subscriptionId);
     
     /**
+     * Get all active packages available for purchase
+     * 
+     * @return List of active Package entities
+     */
+    java.util.List<?> getActivePackages();
+    
+    /**
+     * Get subscription by ID
+     * 
+     * @param subscriptionId Subscription ID
+     * @return Subscription entity
+     * @throws IllegalArgumentException if not found
+     */
+    Subscription getSubscription(Long subscriptionId);
+    
+    /**
+     * Get user's payment history with pagination
+     * 
+     * @param userId User ID
+     * @param page Page number (0-indexed)
+     * @param size Page size
+     * @return Paginated payment orders with package name
+     */
+    Page<?> getPaymentHistory(Long userId, int page, int size);
+    
+    /**
+     * Pagination wrapper for payment history
+     */
+    class Page<T> {
+        public java.util.List<T> content;
+        public long totalElements;
+        public int totalPages;
+        public int currentPage;
+        public int pageSize;
+        
+        public Page(java.util.List<T> content, long totalElements, int totalPages, 
+                   int currentPage, int pageSize) {
+            this.content = content;
+            this.totalElements = totalElements;
+            this.totalPages = totalPages;
+            this.currentPage = currentPage;
+            this.pageSize = pageSize;
+        }
+    }
+    
+    /**
      * DTO for subscription status information
      */
     class SubscriptionStatus {
@@ -154,3 +200,5 @@ public interface PaymentService {
         }
     }
 }
+
+

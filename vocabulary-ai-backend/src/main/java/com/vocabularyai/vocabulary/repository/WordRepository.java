@@ -11,63 +11,49 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * Repository for Word entity
+ * WordRepository
+ * 
+ * Data access layer for Word entity (User Vocabulary)
+ * This is for user-created vocabulary entries, not CEFR dataset
+ * For CEFR words, use CefrWordRepository instead
  */
 @Repository
 public interface WordRepository extends JpaRepository<Word, Long> {
-    
+
     /**
-     * Find word by word string
+     * Find word by word text
+     * 
+     * @param word Word text
+     * @return Word if exists, empty if not
      */
     Optional<Word> findByWord(String word);
-    
+
     /**
-     * Find words by category with pagination
-     */
-    Page<Word> findByCategoryId(Long categoryId, Pageable pageable);
-    
-    /**
-     * Find words by category and level with pagination
-     */
-    Page<Word> findByCategoryIdAndLevel(Long categoryId, Word.WordLevel level, Pageable pageable);
-    
-    /**
-     * Search words by keyword (word, meaning, or definition)
+     * Search words by word text or meaning (paginated)
+     * 
+     * @param query Search keyword
+     * @param pageable Pagination info
+     * @return Page of matching words
      */
     @Query("SELECT w FROM Word w WHERE " +
-           "LOWER(w.word) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "LOWER(w.meaning) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "LOWER(w.definition) LIKE LOWER(CONCAT('%', :keyword, '%'))")
-    Page<Word> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
-    
+           "LOWER(w.word) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+           "LOWER(w.meaning) LIKE LOWER(CONCAT('%', :query, '%'))")
+    Page<Word> searchByWordOrMeaning(@Param("query") String query, Pageable pageable);
+
     /**
-     * Search words by keyword and level
+     * Find words by level (paginated)
+     * 
+     * @param level CEFR level string (A1, A2, B1, B2, C1, C2)
+     * @param pageable Pagination info
+     * @return Page of words at this level
      */
-    @Query("SELECT w FROM Word w WHERE " +
-           "(LOWER(w.word) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "LOWER(w.meaning) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "LOWER(w.definition) LIKE LOWER(CONCAT('%', :keyword, '%'))) AND " +
-           "w.level = :level")
-    Page<Word> searchByKeywordAndLevel(@Param("keyword") String keyword, @Param("level") Word.WordLevel level, Pageable pageable);
-    
+    Page<Word> findByLevel(String level, Pageable pageable);
+
     /**
-     * Search words by keyword and category
+     * Count words by level
+     * 
+     * @param level CEFR level string
+     * @return Count of words at this level
      */
-    @Query("SELECT w FROM Word w WHERE " +
-           "w.category.id = :categoryId AND " +
-           "(LOWER(w.word) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "LOWER(w.meaning) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "LOWER(w.definition) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    Page<Word> searchByKeywordAndCategory(@Param("keyword") String keyword, @Param("categoryId") Long categoryId, Pageable pageable);
-    
-    /**
-     * Search words by keyword, category and level
-     */
-    @Query("SELECT w FROM Word w WHERE " +
-           "w.category.id = :categoryId AND " +
-           "w.level = :level AND " +
-           "(LOWER(w.word) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "LOWER(w.meaning) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "LOWER(w.definition) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    Page<Word> searchByKeywordCategoryAndLevel(@Param("keyword") String keyword, @Param("categoryId") Long categoryId, @Param("level") Word.WordLevel level, Pageable pageable);
+    long countByLevel(String level);
 }

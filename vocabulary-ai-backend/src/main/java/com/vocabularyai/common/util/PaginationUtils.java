@@ -49,6 +49,28 @@ public class PaginationUtils {
     }
     
     /**
+     * Create Pageable with sort string (e.g., "createdAt,desc" or "createdAt")
+     * Format: "fieldName" (defaults to ASC) or "fieldName,direction" where direction is "asc" or "desc"
+     */
+    public static Pageable createPageable(Integer page, Integer size, String sort) {
+        int pageNum = page != null && page >= 0 ? page : DEFAULT_PAGE;
+        int pageSize = size != null && size > 0 ? Math.min(size, MAX_SIZE) : DEFAULT_SIZE;
+        
+        if (sort == null || sort.isBlank()) {
+            return PageRequest.of(pageNum, pageSize);
+        }
+        
+        String[] parts = sort.split(",");
+        String fieldName = parts[0].trim();
+        Sort.Direction direction = (parts.length > 1 && "desc".equalsIgnoreCase(parts[1].trim())) 
+            ? Sort.Direction.DESC 
+            : Sort.Direction.ASC;
+        
+        Sort sortObj = Sort.by(direction, fieldName);
+        return PageRequest.of(pageNum, pageSize, sortObj);
+    }
+    
+    /**
      * Get default page number
      */
     public static int getDefaultPage() {

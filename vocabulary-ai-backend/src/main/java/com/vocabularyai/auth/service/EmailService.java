@@ -1,11 +1,14 @@
 package com.vocabularyai.ai.service.auth;
 
+import com.vocabularyai.ai.dto.PaymentEmailData;
+
 /**
  * Service interface for email operations
  * 
  * Handles sending emails for:
  * - OTP verification
  * - Password reset confirmation
+ * - Payment success notification
  */
 public interface EmailService {
     
@@ -42,4 +45,15 @@ public interface EmailService {
      * @throws RuntimeException if email sending fails
      */
     void sendRegistrationSuccessEmail(String email, String username, String fullName);
+    
+    /**
+     * Send payment success email
+     * 
+     * Sent after successful payment via PayOS webhook
+     * Uses Thymeleaf template rendering for HTML email
+     * 
+     * @param paymentData Payment email data containing customer and order information
+     * @throws RuntimeException if email sending fails
+     */
+    void sendPaymentSuccessEmail(PaymentEmailData paymentData);
 }

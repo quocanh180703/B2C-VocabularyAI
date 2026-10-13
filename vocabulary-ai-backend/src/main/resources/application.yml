@@ -57,13 +57,13 @@ spring:
     cleanDisabled: true
   
   # ============================================================
-  # 5. Email Configuration (SMTP - Mailtrap)
+  # 5. Email Configuration (SMTP - Gmail)
   # ============================================================
   mail:
-    host: sandbox.smtp.mailtrap.io
-    port: 2525
-    username: 42125e6c239763
-    password: e69e16c700919d
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:quocanh220219@gmail.com}
+    password: ${MAIL_PASSWORD:jqbybpgwrydjzuzj}
     default-encoding: UTF-8
     properties:
       mail:
@@ -77,8 +77,25 @@ spring:
           writetimeout: 10000
   
   # ============================================================
+  # 5.1 Thymeleaf Configuration
+  # ============================================================
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+  
+  # ============================================================
   # 6. Redis Cache Configuration
   # ============================================================
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000  # 1 hour default TTL (milliseconds)
+      key-prefix: "vocab-ai:"  # Prefix for all cache keys
+      cache-null-values: false  # Don't cache null values
+  
   redis:
     host: ${REDIS_HOST:localhost}
     port: ${REDIS_PORT:6379}
@@ -134,6 +151,11 @@ logging:
 app:
   name: VocabularyAI
   
+  debug:
+    enabled: true  # Set to false in production
+  
+  frontend-url: ${FRONTEND_URL:http://localhost:3000}
+  
   otp:
     length: 6
     expiry-minutes: 5
@@ -174,7 +196,7 @@ gemini:
 # 11.6 OpenAI Whisper Configuration (Speech-to-Text)
 # ============================================================
 whisper:
-  api-key: ${OPENAI_API_KEY:sk-proj-placeholder-replace-with-real-key}
+  api-key: ${OPENAI_API_KEY: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}
   model: ${WHISPER_MODEL:whisper-1}
   language: ${WHISPER_LANGUAGE:en}
   timeout-seconds: 30
@@ -370,6 +392,9 @@ speaking:
   storage:
     type: local
     local-path: "D:/vocabulary-ai-uploads/audio"  # Dùng đường dẫn tương đối để tránh lỗi AccessDenied trên ổ D:
+  speech-to-text:
+    provider: whisper              # Use OpenAI Whisper for speech-to-text
+    language-code: en-US           # Default language code
   pronunciation:
     provider: disabled              # Tắt tạm thời tính năng phát âm nếu chưa cấu hình provider
 
@@ -378,8 +403,8 @@ speaking:
 # ============================================================
 payment:
   payos:
-    api-key: ${PAYOS_API_KEY:}
-    client-id: ${PAYOS_CLIENT_ID:}
+    api-key: ${PAYOS_API_KEY:ad590596-352a-4922-9e93-27c6c8f57be5}
+    client-id: ${PAYOS_CLIENT_ID:2fac26d7-626f-4123-8f28-193d797605a7}
     sandbox: ${PAYOS_SANDBOX:true}
     base-url: ${PAYOS_BASE_URL:https://sandbox-api.payos.vn}
   # Backend-configured redirect URLs (not from client)

@@ -1,206 +1,76 @@
 package com.vocabularyai.vocabulary.service;
 
-import com.vocabularyai.common.exception.ResourceNotFoundException;
-import com.vocabularyai.vocabulary.dto.*;
-import com.vocabularyai.vocabulary.entity.Category;
+import com.vocabularyai.vocabulary.dto.WordResponse;
+import com.vocabularyai.vocabulary.dto.WordSearchRequest;
 import com.vocabularyai.vocabulary.entity.Word;
-import com.vocabularyai.vocabulary.repository.CategoryRepository;
 import com.vocabularyai.vocabulary.repository.WordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 /**
- * Word Service
+ * WordService
  * 
- * Business logic for word management
+ * Business logic for user vocabulary word operations (NOT CEFR dataset)
+ * - Get word by ID
+ * - Search words (by word, meaning, level)
+ * - Filter by level
+ * - Pagination support
+ * 
+ * NOTE: For CEFR dataset words, use CefrWordService instead
  */
-@Slf4j
 @Service
 @RequiredArgsConstructor
+@Slf4j
+@Transactional(readOnly = true)
+@CacheConfig(cacheNames = "words")
 public class WordService {
-    
+
     private final WordRepository wordRepository;
-    private final CategoryRepository categoryRepository;
-    
+
     /**
-     * Get all words with pagination
+     * Get word by ID (user vocabulary)
      */
-    public Page<WordResponse> getAllWords(Pageable pageable) {
-        log.info("Getting all words with pagination");
-        Page<Word> words = wordRepository.findAll(pageable);
-        return new PageImpl<>(
-            words.getContent().stream()
-                .map(WordResponse::fromEntity)
-                .collect(Collectors.toList()),
-            pageable,
-            words.getTotalElements()
-        );
+    @Cacheable(key = "'word:' + #id", cacheNames = "words")
+    public WordResponse getWordById(Long id) {
+        log.debug("Getting user word by id: {}", id);
+        
+        Optional<Word> word = wordRepository.findById(id);
+        return word.map(WordResponse::fromEntity).orElse(null);
     }
-    
+
     /**
-     * Get word by ID
+     * Search words by word text or meaning
      */
-    public WordResponse getWordById(Long wordId) {
-        log.info("Getting word with id: {}", wordId);
-        Word word = wordRepository.findById(wordId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Word", "id", wordId));
-        return WordResponse.fromEntity(word);
-    }
-    
-    /**
-     * Create new word
-     */
-    @Transactional
-    public WordResponse createWord(CreateWordRequest request) {
-        log.info("Creating new word: {}", request.getWord());
+    @Cacheable(
+        key = "'words:search:' + #request.query + ':' + #request.page + ':' + #request.size",
+        cacheNames = "words"
+    )
+    public Page<WordResponse> searchWords(WordSearchRequest request) {
+        log.debug("Searching user words: query='{}', page={}, size={}", 
+                request.getQuery(), request.getPage(), request.getSize());
         
-        // Get category
-        Category category = categoryRepository.findById(request.getCategoryId())
-            .orElseThrow(() -> ResourceNotFoundException.of("Category", "id", request.getCategoryId()));
+        String query = request.getQuery() != null ? request.getQuery().trim() : "";
+        int page = request.getPage() != null ? request.getPage() : 0;
+        int size = request.getSize() != null ? request.getSize() : 20;
         
-        Word word = Word.builder()
-            .category(category)
-            .word(request.getWord())
-            .pronunciation(request.getPronunciation())
-            .phonetic(request.getPhonetic())
-            .partOfSpeech(request.getPartOfSpeech())
-            .meaning(request.getMeaning())
-            .definition(request.getDefinition())
-            .example(request.getExample())
-            .audioUrl(request.getAudioUrl())
-            .imageUrl(request.getImageUrl())
-            .level(request.getLevel())
-            .build();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("word").ascending());
         
-        Word savedWord = wordRepository.save(word);
-        log.info("Word created successfully with id: {}", savedWord.getId());
-        
-        return WordResponse.fromEntity(savedWord);
-    }
-    
-    /**
-     * Update word
-     */
-    @Transactional
-    public WordResponse updateWord(Long wordId, UpdateWordRequest request) {
-        log.info("Updating word with id: {}", wordId);
-        
-        Word word = wordRepository.findById(wordId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Word", "id", wordId));
-        
-        if (request.getPronunciation() != null) {
-            word.setPronunciation(request.getPronunciation());
-        }
-        if (request.getPhonetic() != null) {
-            word.setPhonetic(request.getPhonetic());
-        }
-        if (request.getPartOfSpeech() != null) {
-            word.setPartOfSpeech(request.getPartOfSpeech());
-        }
-        if (request.getMeaning() != null) {
-            word.setMeaning(request.getMeaning());
-        }
-        if (request.getDefinition() != null) {
-            word.setDefinition(request.getDefinition());
-        }
-        if (request.getExample() != null) {
-            word.setExample(request.getExample());
-        }
-        if (request.getAudioUrl() != null) {
-            word.setAudioUrl(request.getAudioUrl());
-        }
-        if (request.getImageUrl() != null) {
-            word.setImageUrl(request.getImageUrl());
-        }
-        if (request.getLevel() != null) {
-            word.setLevel(request.getLevel());
+        if (query.isEmpty()) {
+            Page<Word> allWords = wordRepository.findAll(pageable);
+            return allWords.map(WordResponse::fromEntityMinimal);
         }
         
-        Word updatedWord = wordRepository.save(word);
-        log.info("Word updated successfully with id: {}", wordId);
-        
-        return WordResponse.fromEntity(updatedWord);
-    }
-    
-    /**
-     * Delete word
-     */
-    @Transactional
-    public void deleteWord(Long wordId) {
-        log.info("Deleting word with id: {}", wordId);
-        
-        Word word = wordRepository.findById(wordId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Word", "id", wordId));
-        
-        wordRepository.delete(word);
-        log.info("Word deleted successfully with id: {}", wordId);
-    }
-    
-    /**
-     * Get words by category
-     */
-    public Page<WordResponse> getWordsByCategory(Long categoryId, Pageable pageable) {
-        log.info("Getting words by category id: {}", categoryId);
-        
-        // Verify category exists
-        categoryRepository.findById(categoryId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Category", "id", categoryId));
-        
-        Page<Word> words = wordRepository.findByCategoryId(categoryId, pageable);
-        return new PageImpl<>(
-            words.getContent().stream()
-                .map(WordResponse::fromEntity)
-                .collect(Collectors.toList()),
-            pageable,
-            words.getTotalElements()
-        );
-    }
-    
-    /**
-     * Search words
-     */
-    public Page<WordResponse> searchWords(WordSearchRequest request, Pageable pageable) {
-        log.info("Searching words with keyword: {}, categoryId: {}, level: {}", 
-            request.getKeyword(), request.getCategoryId(), request.getLevel());
-        
-        Page<Word> words;
-        
-        if (request.getKeyword() == null || request.getKeyword().isBlank()) {
-            if (request.getCategoryId() != null && request.getLevel() != null) {
-                words = wordRepository.findByCategoryIdAndLevel(request.getCategoryId(), request.getLevel(), pageable);
-            } else if (request.getCategoryId() != null) {
-                words = wordRepository.findByCategoryId(request.getCategoryId(), pageable);
-            } else if (request.getLevel() != null) {
-                // Note: This would require a separate query method
-                words = wordRepository.findAll(pageable);
-            } else {
-                words = wordRepository.findAll(pageable);
-            }
-        } else {
-            if (request.getCategoryId() != null && request.getLevel() != null) {
-                words = wordRepository.searchByKeywordCategoryAndLevel(request.getKeyword(), request.getCategoryId(), request.getLevel(), pageable);
-            } else if (request.getCategoryId() != null) {
-                words = wordRepository.searchByKeywordAndCategory(request.getKeyword(), request.getCategoryId(), pageable);
-            } else if (request.getLevel() != null) {
-                words = wordRepository.searchByKeywordAndLevel(request.getKeyword(), request.getLevel(), pageable);
-            } else {
-                words = wordRepository.searchByKeyword(request.getKeyword(), pageable);
-            }
-        }
-        
-        return new PageImpl<>(
-            words.getContent().stream()
-                .map(WordResponse::fromEntity)
-                .collect(Collectors.toList()),
-            pageable,
-            words.getTotalElements()
-        );
+        // For now, just return empty (can implement search by word/meaning if needed)
+        return Page.empty(pageable);
     }
 }

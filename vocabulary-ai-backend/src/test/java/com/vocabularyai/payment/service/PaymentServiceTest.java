@@ -83,12 +83,11 @@ public class PaymentServiceTest {
             .build();
         
         when(packageRepository.findById(1L)).thenReturn(Optional.of(testPackage));
-        when(subscriptionRepository.findActiveSubscriptionByUserId(1L)).thenReturn(Optional.empty());
+        when(subscriptionRepository.findByUserId(1L)).thenReturn(Optional.empty());
         when(paymentGateway.createPaymentLink(any())).thenReturn(mockResponse);
         when(paymentOrderRepository.save(any())).thenReturn(testPaymentOrder);
         
-        PayOSCreatePaymentLinkResponse response = paymentService.initiatePayment(
-            1L, 1L, "https://app.example.com/success", "https://app.example.com/cancel");
+        PayOSCreatePaymentLinkResponse response = paymentService.initiatePayment(1L, 1L);
         
         assertNotNull(response);
         assertEquals("00", response.getCode());
@@ -100,7 +99,7 @@ public class PaymentServiceTest {
         when(packageRepository.findById(999L)).thenReturn(Optional.empty());
         
         assertThrows(IllegalArgumentException.class, () ->
-            paymentService.initiatePayment(1L, 999L, "url", "url"));
+            paymentService.initiatePayment(1L, 999L));
     }
     
     @Test
@@ -168,7 +167,7 @@ public class PaymentServiceTest {
             .endAt(LocalDateTime.now().plusDays(10))
             .build();
         
-        when(subscriptionRepository.findActiveSubscriptionByUserId(1L))
+        when(subscriptionRepository.findByUserId(1L))
             .thenReturn(Optional.of(subscription));
         
         assertTrue(paymentService.hasActiveSubscription(1L));
@@ -177,7 +176,7 @@ public class PaymentServiceTest {
     @Test
     @DisplayName("Should return false for no active subscription")
     public void testHasActiveSubscription_False() {
-        when(subscriptionRepository.findActiveSubscriptionByUserId(1L))
+        when(subscriptionRepository.findByUserId(1L))
             .thenReturn(Optional.empty());
         
         assertFalse(paymentService.hasActiveSubscription(1L));

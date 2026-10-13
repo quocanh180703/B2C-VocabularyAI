@@ -86,6 +86,8 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(authorize -> authorize
+                // Allow OPTIONS requests (CORS preflight) without authentication
+                .requestMatchers(request -> request.getMethod().equals("OPTIONS")).permitAll()
                 // Public endpoints (without /api prefix since context-path is /api)
                 .requestMatchers(
                     "/auth/**",
@@ -112,8 +114,20 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
             "http://localhost:3000",
             "http://localhost:3001",
+            "http://localhost:5173",
+            "http://localhost:8443",
+            "https://localhost:3000",
+            "https://localhost:3001",
+            "https://localhost:5173",
+            "https://localhost:8443",
             "http://127.0.0.1:3000",
-            "http://127.0.0.1:3001"
+            "http://127.0.0.1:3001",
+            "http://127.0.0.1:5173",
+            "http://127.0.0.1:8443",
+            "https://127.0.0.1:3000",
+            "https://127.0.0.1:3001",
+            "https://127.0.0.1:5173",
+            "https://127.0.0.1:8443"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
@@ -121,7 +135,8 @@ public class SecurityConfig {
         configuration.setMaxAge(3600L);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", configuration);
+        // Register for all paths since context path is /api
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 }

@@ -1,5 +1,6 @@
 package com.vocabularyai.ai.service.auth;
 
+import com.vocabularyai.ai.dto.PaymentEmailData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,6 +8,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
@@ -21,6 +24,7 @@ import jakarta.mail.internet.MimeMessage;
 public class EmailServiceImpl implements EmailService {
     
     private final JavaMailSender mailSender;
+    private final SpringTemplateEngine templateEngine;
     
     @Value("${app.email.from:noreply@vocabularyai.com}")
     private String fromEmail;
@@ -195,5 +199,47 @@ public class EmailServiceImpl implements EmailService {
             "Chúc bạn có trải nghiệm tuyệt vời!\n\n" +
             "Trân trọng,\n" +
             "Đội ngũ " + appName;
+    }
+    
+    @Override
+    public void sendPaymentSuccessEmail(PaymentEmailData paymentData) {
+        log.info("Sending payment success email to: {}", paymentData.getEmail());
+        
+        try {
+            // Create Context with payment data for Thymeleaf template rendering
+            Context context = new Context();
+            context.setVariable("customerName", paymentData.getCustomerName());
+            context.setVariable("orderCode", paymentData.getOrderCode());
+            context.setVariable("paidDate", paymentData.getPaidDate());
+            context.setVariable("packageName", paymentData.getPackageName());
+            context.setVariable("duration", paymentData.getDuration());
+            context.setVariable("subscriptionStartDate", paymentData.getSubscriptionStartDate());
+            context.setVariable("subscriptionEndDate", paymentData.getSubscriptionEndDate());
+            context.setVariable("amount", paymentData.getAmount());
+            context.setVariable("transactionCode", paymentData.getTransactionCode());
+            context.setVariable("frontendUrl", paymentData.getFrontendUrl());
+            
+            // Render the Thymeleaf template
+            String htmlBody = templateEngine.process("email/payment-success", context);
+            
+            // Send email with rendered HTML
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            
+            helper.setFrom(fromEmail);
+            helper.setTo(paymentData.getEmail());
+            helper.setSubject("Xác nhận thanh toán - Đơn hàng " + paymentData.getOrderCode());
+            helper.setText(htmlBody, true);
+            
+            mailSender.send(mimeMessage);
+            log.info("Payment success email sent successfully to: {}", paymentData.getEmail());
+            
+        } catch (MessagingException e) {
+            log.error("Failed to send payment success email to: {}", paymentData.getEmail(), e);
+            throw new RuntimeException("Failed to send payment success email: " + e.getMessage());
+        } catch (Exception e) {
+            log.error("Unexpected error while sending payment success email to: {}", paymentData.getEmail(), e);
+            throw new RuntimeException("Unexpected error while sending payment success email: " + e.getMessage());
+        }
     }
 }

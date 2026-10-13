@@ -5,6 +5,7 @@ import com.vocabularyai.ai.dto.response.ExplanationResponse;
 import com.vocabularyai.ai.entity.AiMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

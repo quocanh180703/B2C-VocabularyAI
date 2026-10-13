@@ -1,5 +1,7 @@
 package com.vocabularyai.payment.service;
 
+import com.vocabularyai.ai.dto.PaymentEmailData;
+import com.vocabularyai.ai.service.auth.EmailService;
 import com.vocabularyai.payment.config.PaymentProperties;
 import com.vocabularyai.payment.dto.payos.PayOSCreatePaymentLinkRequest;
 import com.vocabularyai.payment.dto.payos.PayOSCreatePaymentLinkResponse;
@@ -15,13 +17,17 @@ import com.vocabularyai.payment.repository.PaymentOrderRepository;
 import com.vocabularyai.payment.repository.PaymentRepository;
 import com.vocabularyai.payment.repository.SubscriptionRepository;
 import com.vocabularyai.payment.service.gateway.PaymentGatewayService;
+import com.vocabularyai.user.entity.User;
+import com.vocabularyai.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -43,6 +49,11 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final PaymentProperties paymentProperties;
+    private final EmailService emailService;
+    private final UserRepository userRepository;
+    
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
     
     @Override
     @Transactional
@@ -232,6 +243,14 @@ public class PaymentServiceImpl implements PaymentService {
         log.info("Subscription created: id={}, userId={}, endAt={}", subscription.getId(), 
             paymentOrder.getUserId(), endAt);
         
+        // Send payment success email
+        try {
+            sendPaymentSuccessEmail(paymentOrder, payment, pkg, subscription);
+        } catch (Exception e) {
+            // Log error but don't fail the payment processing - email is non-critical
+            log.error("Failed to send payment success email for orderCode: {}", orderCode, e);
+        }
+        
         log.info("Payment webhook processed successfully for orderCode: {}", orderCode);
         
         return true;
@@ -299,6 +318,61 @@ public class PaymentServiceImpl implements PaymentService {
         return true;
     }
     
+    @Override
+    public java.util.List<?> getActivePackages() {
+        return packageRepository.findByStatus("ACTIVE");
+    }
+    
+    @Override
+    public Subscription getSubscription(Long subscriptionId) {
+        return subscriptionRepository.findById(subscriptionId)
+            .orElseThrow(() -> new IllegalArgumentException("Subscription not found: " + subscriptionId));
+    }
+    
+    @Override
+    public PaymentService.Page<?> getPaymentHistory(Long userId, int page, int size) {
+        java.util.List<PaymentOrder> orders = paymentOrderRepository.findByUserId(userId);
+        
+        // Manual pagination
+        int totalElements = orders.size();
+        int totalPages = (int) Math.ceil((double) totalElements / size);
+        
+        // Sort by created date descending
+        orders.sort((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()));
+        
+        // Get page
+        int fromIndex = page * size;
+        int toIndex = Math.min(fromIndex + size, orders.size());
+        
+        if (fromIndex >= orders.size()) {
+            return new PaymentService.Page<>(java.util.Collections.emptyList(), totalElements, totalPages, page, size);
+        }
+        
+        java.util.List<PaymentOrder> pageContent = orders.subList(fromIndex, toIndex);
+        
+        // Enrich with package name
+        java.util.List<Map<String, Object>> enrichedContent = pageContent.stream().map(order -> {
+            Package pkg = packageRepository.findById(order.getPackageId())
+                .orElse(null);
+            
+            Map<String, Object> entry = new java.util.HashMap<>();
+            entry.put("id", order.getId());
+            entry.put("orderCode", order.getOrderCode());
+            entry.put("amount", order.getAmount());
+            entry.put("status", order.getStatus());
+            entry.put("paidAt", order.getPaidAt());
+            entry.put("packageName", pkg != null ? pkg.getName() : "Unknown");
+            entry.put("transactionCode", 
+                paymentRepository.findByPaymentOrderId(order.getId())
+                    .map(Payment::getTransactionCode)
+                    .orElse(null));
+            entry.put("createdAt", order.getCreatedAt());
+            return entry;
+        }).collect(java.util.stream.Collectors.toList());
+        
+        return new PaymentService.Page<>(enrichedContent, totalElements, totalPages, page, size);
+    }
+
     /**
      * Generate unique order code
      * Format: ORD_{timestamp}_{randomId}
@@ -307,5 +381,43 @@ public class PaymentServiceImpl implements PaymentService {
         long timestamp = System.currentTimeMillis();
         int randomId = (int) (Math.random() * 100000);
         return String.format("ORD_%d_%d", timestamp, randomId);
+    }
+    
+    /**
+     * Send payment success email to customer
+     * 
+     * Extracts customer information from User entity and builds PaymentEmailData
+     * to render payment-success.html template via EmailService
+     * 
+     * @param paymentOrder The payment order containing userId
+     * @param payment The payment record with transaction details
+     * @param pkg The package purchased
+     * @param subscription The created subscription with dates
+     */
+    private void sendPaymentSuccessEmail(PaymentOrder paymentOrder, Payment payment, Package pkg, Subscription subscription) {
+        log.debug("Preparing payment success email for orderId: {}", paymentOrder.getId());
+        
+        // Get user information
+        User user = userRepository.findById(paymentOrder.getUserId())
+            .orElseThrow(() -> new IllegalArgumentException("User not found: " + paymentOrder.getUserId()));
+        
+        // Build payment email data
+        PaymentEmailData emailData = PaymentEmailData.builder()
+            .customerName(user.getFullName() != null ? user.getFullName() : user.getUsername())
+            .email(user.getEmail())
+            .orderCode(paymentOrder.getOrderCode())
+            .paidDate(payment.getPaidAt())
+            .packageName(pkg.getName())
+            .duration(pkg.getDurationDays())
+            .subscriptionStartDate(subscription.getStartAt())
+            .subscriptionEndDate(subscription.getEndAt())
+            .amount(payment.getAmount())
+            .transactionCode(payment.getTransactionCode())
+            .frontendUrl(frontendUrl)
+            .build();
+        
+        // Send email via EmailService
+        emailService.sendPaymentSuccessEmail(emailData);
+        log.info("Payment success email sent for orderId: {}, userId: {}", paymentOrder.getId(), paymentOrder.getUserId());
     }
 }

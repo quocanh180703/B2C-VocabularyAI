@@ -11,7 +11,6 @@ import com.vocabularyai.ai.entity.AiMessageRole;
 import com.vocabularyai.learning.entity.LearningProgress;
 import com.vocabularyai.learning.entity.LearningProgress.LearningStatus;
 import com.vocabularyai.vocabulary.entity.Word;
-import com.vocabularyai.vocabulary.entity.Word.WordLevel;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -72,7 +71,7 @@ public class AIIntegrationTest {
             .partOfSpeech("noun")
             .definition("a commercial enterprise or profession")
             .example("She runs a successful business.")
-            .level(WordLevel.B1)
+            .level("B1")
             .build();
         
         String userContext = "job interview";

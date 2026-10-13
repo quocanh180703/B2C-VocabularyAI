@@ -1,190 +1,88 @@
 package com.vocabularyai.vocabulary.controller;
 
-import com.vocabularyai.common.response.ApiResponse;
-import com.vocabularyai.common.util.PaginationUtils;
-import com.vocabularyai.vocabulary.dto.*;
+import com.vocabularyai.vocabulary.dto.WordResponse;
+import com.vocabularyai.vocabulary.dto.WordSearchRequest;
 import com.vocabularyai.vocabulary.service.WordService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Word Controller
+ * WordController
  * 
- * API endpoints for word/vocabulary management
+ * REST API for user vocabulary words (NOT CEFR dataset)
+ * For CEFR dataset, use CefrWordController instead
+ * 
+ * Endpoints:
+ * - GET /api/words/{id} - Get word by ID
+ * - GET /api/words/search - Search words
  */
 @Slf4j
 @RestController
-@RequestMapping("/words")
+@RequestMapping("/api/words")
 @RequiredArgsConstructor
-@Tag(name = "Words", description = "Vocabulary word management endpoints")
-@SecurityRequirement(name = "bearerAuth")
-@PreAuthorize("isAuthenticated()")
+@Tag(name = "User Words", description = "User vocabulary word management")
 public class WordController {
-    
+
     private final WordService wordService;
-    
+
     /**
-     * Get all words
-     */
-    @GetMapping
-    @Operation(summary = "Get all words", description = "Retrieve all vocabulary words with pagination")
-    public ResponseEntity<ApiResponse<Page<WordResponse>>> getAllWords(
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "20") Integer size) {
-        log.info("Getting all words");
-        
-        Pageable pageable = PaginationUtils.createPageableDesc(page, size, "createdAt");
-        Page<WordResponse> words = wordService.getAllWords(pageable);
-        
-        return ResponseEntity.ok(
-            ApiResponse.success("Words retrieved successfully", words)
-        );
-    }
-    
-    /**
-     * Get word by ID
+     * GET /api/words/{id}
+     * 
+     * Get user word by ID
      */
     @GetMapping("/{id}")
-    @Operation(summary = "Get word by ID", description = "Retrieve a specific vocabulary word")
-    public ResponseEntity<ApiResponse<WordResponse>> getWordById(@PathVariable Long id) {
-        log.info("Getting word with id: {}", id);
-        
+    @Operation(summary = "Get user word by ID", description = "Retrieve a specific user vocabulary word by its ID")
+    @ApiResponse(responseCode = "200", description = "Word found")
+    @ApiResponse(responseCode = "404", description = "Word not found")
+    public ResponseEntity<WordResponse> getWordById(
+            @Parameter(description = "Word ID")
+            @PathVariable Long id
+    ) {
+        log.info("GET /words/{} - Get user word by ID", id);
+
         WordResponse word = wordService.getWordById(id);
-        return ResponseEntity.ok(
-            ApiResponse.success("Word retrieved successfully", word)
-        );
+        if (word == null) {
+            log.warn("User word not found: {}", id);
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(word);
     }
-    
+
     /**
-     * Create new word (Admin only)
-     */
-    @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    @Operation(
-        summary = "Create new word",
-        description = "Create a new vocabulary word (Admin only)"
-    )
-    @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<ApiResponse<WordResponse>> createWord(
-            @Valid @RequestBody CreateWordRequest request) {
-        log.info("Creating new word: {}", request.getWord());
-        
-        WordResponse word = wordService.createWord(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-            ApiResponse.success("Word created successfully", word)
-        );
-    }
-    
-    /**
-     * Update word (Admin only)
-     */
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    @Operation(
-        summary = "Update word",
-        description = "Update an existing vocabulary word (Admin only)"
-    )
-    @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<ApiResponse<WordResponse>> updateWord(
-            @PathVariable Long id,
-            @Valid @RequestBody UpdateWordRequest request) {
-        log.info("Updating word with id: {}", id);
-        
-        WordResponse word = wordService.updateWord(id, request);
-        return ResponseEntity.ok(
-            ApiResponse.success("Word updated successfully", word)
-        );
-    }
-    
-    /**
-     * Delete word (Admin only)
-     */
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    @Operation(
-        summary = "Delete word",
-        description = "Delete a vocabulary word (Admin only)"
-    )
-    @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<ApiResponse<?>> deleteWord(@PathVariable Long id) {
-        log.info("Deleting word with id: {}", id);
-        
-        wordService.deleteWord(id);
-        return ResponseEntity.ok(
-            ApiResponse.success("Word deleted successfully")
-        );
-    }
-    
-    /**
-     * Get words by category
-     */
-    @GetMapping("/category/{categoryId}")
-    @Operation(
-        summary = "Get words by category",
-        description = "Retrieve all words in a specific category"
-    )
-    public ResponseEntity<ApiResponse<Page<WordResponse>>> getWordsByCategory(
-            @PathVariable Long categoryId,
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "20") Integer size) {
-        log.info("Getting words for category: {}", categoryId);
-        
-        Pageable pageable = PaginationUtils.createPageableDesc(page, size, "createdAt");
-        Page<WordResponse> words = wordService.getWordsByCategory(categoryId, pageable);
-        
-        return ResponseEntity.ok(
-            ApiResponse.success("Words retrieved successfully", words)
-        );
-    }
-    
-    /**
-     * Search words
+     * GET /api/words/search
+     * 
+     * Search user words
      */
     @GetMapping("/search")
-    @Operation(
-        summary = "Search words",
-        description = "Search vocabulary words by keyword, category, and level"
-    )
-    public ResponseEntity<ApiResponse<Page<WordResponse>>> searchWords(
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) Long categoryId,
-            @RequestParam(required = false) String level,
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "20") Integer size) {
-        log.info("Searching words with keyword: {}, categoryId: {}, level: {}", keyword, categoryId, level);
-        
-        WordSearchRequest request = WordSearchRequest.builder()
-            .keyword(keyword)
-            .categoryId(categoryId)
-            .level(level != null ? WordResponse_mapper.stringToWordLevel(level) : null)
-            .build();
-        
-        Pageable pageable = PaginationUtils.createPageableDesc(page, size, "createdAt");
-        Page<WordResponse> words = wordService.searchWords(request, pageable);
-        
-        return ResponseEntity.ok(
-            ApiResponse.success("Words retrieved successfully", words)
-        );
-    }
-}
+    @Operation(summary = "Search user words", description = "Search user vocabulary words by text or meaning")
+    @ApiResponse(responseCode = "200", description = "Search completed")
+    public ResponseEntity<Page<WordResponse>> searchWords(
+            @Parameter(description = "Search query")
+            @RequestParam(required = false) String query,
 
-// Helper class for enum conversion
-class WordResponse_mapper {
-    public static com.vocabularyai.vocabulary.entity.Word.WordLevel stringToWordLevel(String level) {
-        try {
-            return com.vocabularyai.vocabulary.entity.Word.WordLevel.valueOf(level);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
+            @Parameter(description = "Page number")
+            @RequestParam(defaultValue = "0") int page,
+
+            @Parameter(description = "Page size")
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        log.info("GET /words/search - query: {}, page: {}, size: {}", query, page, size);
+
+        WordSearchRequest request = WordSearchRequest.builder()
+                .query(query)
+                .page(page)
+                .size(size)
+                .build();
+
+        Page<WordResponse> results = wordService.searchWords(request);
+        return ResponseEntity.ok(results);
     }
 }

@@ -72,15 +72,14 @@ public class PaymentControllerTest {
     @WithMockUser(username = "testuser")
     @DisplayName("Should initiate payment successfully")
     public void testInitiatePayment_Success() throws Exception {
-        when(userService.getCurrentUser()).thenReturn(testUser);
-        when(paymentService.initiatePayment(1L, 1L, "https://app.example.com/success", "https://app.example.com/cancel"))
+        when(jwtProvider.getUserId(anyString(), anyString())).thenReturn(1L);
+        when(jwtProperties.getAccessToken()).thenReturn(mock(JwtProperties.AccessToken.class));
+        when(paymentService.initiatePayment(1L, 1L))
             .thenReturn(paymentResponse);
         
         mockMvc.perform(post("/api/payments/initiate")
-            .param("packageId", "1")
-            .param("returnUrl", "https://app.example.com/success")
-            .param("cancelUrl", "https://app.example.com/cancel"))
-            .andExpect(status().isCreated())
+            .param("packageId", "1"))
+            .andExpect(status().isOk())
             .andExpect(jsonPath("$.success").value(true));
     }
     
@@ -88,14 +87,13 @@ public class PaymentControllerTest {
     @WithMockUser(username = "testuser")
     @DisplayName("Should reject invalid package ID")
     public void testInitiatePayment_InvalidPackage() throws Exception {
-        when(userService.getCurrentUser()).thenReturn(testUser);
-        when(paymentService.initiatePayment(1L, 999L, anyString(), anyString()))
+        when(jwtProvider.getUserId(anyString(), anyString())).thenReturn(1L);
+        when(jwtProperties.getAccessToken()).thenReturn(mock(JwtProperties.AccessToken.class));
+        when(paymentService.initiatePayment(1L, 999L))
             .thenThrow(new IllegalArgumentException("Package not found"));
         
         mockMvc.perform(post("/api/payments/initiate")
-            .param("packageId", "999")
-            .param("returnUrl", "https://app.example.com/success")
-            .param("cancelUrl", "https://app.example.com/cancel"))
+            .param("packageId", "999"))
             .andExpect(status().isBadRequest());
     }
     
@@ -227,7 +225,8 @@ public class PaymentControllerTest {
     @WithMockUser(username = "testuser")
     @DisplayName("Should get subscription status")
     public void testGetSubscriptionStatus_Success() throws Exception {
-        when(userService.getCurrentUser()).thenReturn(testUser);
+        when(jwtProvider.getUserId(anyString(), anyString())).thenReturn(1L);
+        when(jwtProperties.getAccessToken()).thenReturn(mock(JwtProperties.AccessToken.class));
         
         mockMvc.perform(get("/api/subscriptions/status"))
             .andExpect(status().isOk())

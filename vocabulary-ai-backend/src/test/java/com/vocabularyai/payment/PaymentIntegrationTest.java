@@ -79,9 +79,7 @@ public class PaymentIntegrationTest {
         // Act
         PayOSCreatePaymentLinkResponse response = paymentService.initiatePayment(
             testUserId,
-            testPackageId,
-            "https://app.example.com/success",
-            "https://app.example.com/cancel"
+            testPackageId
         );
         
         // Assert
@@ -101,9 +99,7 @@ public class PaymentIntegrationTest {
         // Arrange
         paymentService.initiatePayment(
             testUserId,
-            testPackageId,
-            "https://app.example.com/success",
-            "https://app.example.com/cancel"
+            testPackageId
         );
         
         // Manually create subscription for test
@@ -123,9 +119,7 @@ public class PaymentIntegrationTest {
         assertThrows(IllegalStateException.class, () -> {
             paymentService.initiatePayment(
                 testUserId,
-                testPackageId,
-                "https://app.example.com/success",
-                "https://app.example.com/cancel"
+                testPackageId
             );
         });
     }
@@ -139,9 +133,7 @@ public class PaymentIntegrationTest {
         assertThrows(IllegalArgumentException.class, () -> {
             paymentService.initiatePayment(
                 testUserId,
-                999999L,
-                "https://app.example.com/success",
-                "https://app.example.com/cancel"
+                999999L
             );
         });
     }

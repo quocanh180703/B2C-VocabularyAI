@@ -25,6 +25,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * Payment Controller - REST Endpoints for Payment Operations
  * 
@@ -356,6 +358,224 @@ public class PaymentController {
     }
     
     /**
+     * Get Available Packages
+     * 
+     * Endpoint: GET /api/payments/packages
+     * Auth: Optional (can be called by anonymous users)
+     * 
+     * Returns list of all active subscription packages
+     * 
+     * Response (200 OK):
+     * {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "code": "PREMIUM_MONTHLY",
+     *       "name": "Premium Monthly",
+     *       "price": 99000,
+     *       "durationDays": 30,
+     *       "description": "..."
+     *     },
+     *     {
+     *       "id": 2,
+     *       "code": "PREMIUM_YEARLY",
+     *       "name": "Premium Yearly",
+     *       "price": 899000,
+     *       "durationDays": 365,
+     *       "description": "..."
+     *     }
+     *   ]
+     * }
+     */
+    @GetMapping("/packages")
+    @Operation(
+        summary = "Get available packages",
+        description = "Retrieve list of all active subscription packages"
+    )
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "200",
+            description = "Packages retrieved successfully"
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "500",
+            description = "Server error"
+        )
+    })
+    public ResponseEntity<ApiResponse<java.util.List<?>>> getPackages() {
+        try {
+            log.info("Getting available packages");
+            
+            var packages = paymentService.getActivePackages();
+            
+            log.info("Retrieved {} packages", packages.size());
+            
+            return ResponseEntity.ok(ApiResponse.success("Packages retrieved successfully", packages));
+            
+        } catch (Exception e) {
+            log.error("Failed to get packages", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error("Failed to retrieve packages"));
+        }
+    }
+    
+    /**
+     * Cancel Subscription
+     * 
+     * Endpoint: POST /api/subscriptions/cancel
+     * Auth: Required (JWT token)
+     * 
+     * Request:
+     * {
+     *   "subscriptionId": 1
+     * }
+     * 
+     * Response (200 OK):
+     * {
+     *   "success": true,
+     *   "data": {
+     *     "subscriptionId": 1,
+     *     "status": "CANCELLED",
+     *     "cancelledAt": "2024-01-15T12:00:00"
+     *   }
+     * }
+     */
+    @PostMapping("/subscriptions/cancel")
+    @PreAuthorize("isAuthenticated()")
+    @Operation(
+        summary = "Cancel subscription",
+        description = "Cancel user's active subscription",
+        security = @SecurityRequirement(name = "Bearer Authentication")
+    )
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "200",
+            description = "Subscription cancelled successfully"
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "400",
+            description = "Invalid subscription or user not authorized"
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized"
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "404",
+            description = "Subscription not found"
+        )
+    })
+    public ResponseEntity<ApiResponse<?>> cancelSubscription(
+            @RequestBody CancelSubscriptionRequest request) {
+        
+        try {
+            log.info("Cancel subscription request: subscriptionId={}", request.getSubscriptionId());
+            
+            Long userId = extractUserIdFromJwt();
+            
+            // Verify user owns this subscription
+            var subscription = paymentService.getSubscription(request.getSubscriptionId());
+            if (!subscription.getUserId().equals(userId)) {
+                log.warn("Unauthorized cancellation attempt: user {} tried to cancel subscription {} of user {}", 
+                    userId, request.getSubscriptionId(), subscription.getUserId());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiResponse.error("Not authorized to cancel this subscription"));
+            }
+            
+            paymentService.cancelSubscription(request.getSubscriptionId());
+            
+            log.info("Subscription cancelled successfully: {}", request.getSubscriptionId());
+            
+            return ResponseEntity.ok(ApiResponse.success("Subscription cancelled successfully", 
+                Map.of(
+                    "subscriptionId", request.getSubscriptionId(),
+                    "status", "CANCELLED",
+                    "cancelledAt", java.time.LocalDateTime.now()
+                )));
+            
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid cancellation request: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
+        } catch (Exception e) {
+            log.error("Failed to cancel subscription", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error("Failed to cancel subscription"));
+        }
+    }
+    
+    /**
+     * Get Payment History
+     * 
+     * Endpoint: GET /api/payments/history?page=0&size=10
+     * Auth: Required (JWT token)
+     * 
+     * Returns paginated list of user's payment orders
+     * 
+     * Response (200 OK):
+     * {
+     *   "success": true,
+     *   "data": {
+     *     "content": [
+     *       {
+     *         "id": 1,
+     *         "orderCode": "ORD_1694000001_12345",
+     *         "amount": 99000,
+     *         "status": "PAID",
+     *         "paidAt": "2024-01-01T12:00:00",
+     *         "packageName": "Premium Monthly",
+     *         "transactionCode": "TXN_..."
+     *       }
+     *     ],
+     *     "totalElements": 1,
+     *     "totalPages": 1,
+     *     "currentPage": 0,
+     *     "pageSize": 10
+     *   }
+     * }
+     */
+    @GetMapping("/history")
+    @PreAuthorize("isAuthenticated()")
+    @Operation(
+        summary = "Get payment history",
+        description = "Retrieve paginated payment order history for authenticated user",
+        security = @SecurityRequirement(name = "Bearer Authentication")
+    )
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "200",
+            description = "Payment history retrieved successfully"
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized"
+        )
+    })
+    public ResponseEntity<ApiResponse<?>> getPaymentHistory(
+            @Parameter(description = "Page number (0-indexed)", example = "0")
+            @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Page size", example = "10")
+            @RequestParam(defaultValue = "10") int size) {
+        
+        try {
+            Long userId = extractUserIdFromJwt();
+            
+            log.info("Getting payment history for userId: {}, page: {}, size: {}", userId, page, size);
+            
+            var paymentHistory = paymentService.getPaymentHistory(userId, page, size);
+            
+            log.info("Retrieved payment orders for user: {}", userId);
+            
+            return ResponseEntity.ok(ApiResponse.success("Payment history retrieved successfully", paymentHistory));
+            
+        } catch (Exception e) {
+            log.error("Failed to get payment history", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error("Failed to retrieve payment history"));
+        }
+    }
+    
+    /**
      * Extract user ID from JWT token
      * 
      * @return User ID from JWT
@@ -384,4 +604,14 @@ public class PaymentController {
         
         throw new IllegalStateException("Cannot extract user ID from authentication");
     }
+}
+
+/**
+ * DTO for cancel subscription request
+ */
+@lombok.Data
+@lombok.NoArgsConstructor
+@lombok.AllArgsConstructor
+class CancelSubscriptionRequest {
+    private Long subscriptionId;
 }
