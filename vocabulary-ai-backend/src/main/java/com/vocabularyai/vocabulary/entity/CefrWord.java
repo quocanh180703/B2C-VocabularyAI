@@ -103,6 +103,24 @@ public class CefrWord {
     private String definition;
 
     /**
+     * Vietnamese meaning of the word according to its part of speech
+     */
+    @Column(name = "vietnamese_meaning", length = 500)
+    private String vietnameseMeaning;
+
+    /**
+     * Usage example sentence
+     */
+    @Column(name = "example", columnDefinition = "TEXT")
+    private String example;
+
+    /**
+     * Vietnamese translation of example sentence
+     */
+    @Column(name = "example_translation", columnDefinition = "TEXT")
+    private String exampleTranslation;
+
+    /**
      * Source of definition
      * 
      * Usually "oxford_3000_5000" (Oxford English Dictionary)

@@ -27,7 +27,11 @@ public interface FavoriteWordRepository extends JpaRepository<FavoriteWord, Long
     /**
      * Get all favorite words for user with pagination
      */
-    Page<FavoriteWord> findByUserId(Long userId, Pageable pageable);
+    @org.springframework.data.jpa.repository.Query(
+        value = "SELECT fw FROM FavoriteWord fw JOIN FETCH fw.word WHERE fw.user.id = :userId",
+        countQuery = "SELECT COUNT(fw) FROM FavoriteWord fw WHERE fw.user.id = :userId"
+    )
+    Page<FavoriteWord> findByUserId(@org.springframework.data.repository.query.Param("userId") Long userId, Pageable pageable);
     
     /**
      * Delete favorite word for user

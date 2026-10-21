@@ -27,9 +27,9 @@ import java.time.LocalDateTime;
         @Index(name = "idx_subscription_package_id", columnList = "package_id")
     }
 )
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 @Builder
 public class Subscription {
     
@@ -98,6 +98,21 @@ public class Subscription {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
     
+    public Subscription() {
+    }
+
+    public Subscription(Long id, Long userId, Long packageId, Long paymentId, String status, LocalDateTime startAt, LocalDateTime endAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.userId = userId;
+        this.packageId = packageId;
+        this.paymentId = paymentId;
+        this.status = status;
+        this.startAt = startAt;
+        this.endAt = endAt;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     /**
      * JPA lifecycle callback - set createdAt before persist
      */

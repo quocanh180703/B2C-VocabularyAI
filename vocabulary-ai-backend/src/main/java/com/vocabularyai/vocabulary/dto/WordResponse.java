@@ -67,6 +67,9 @@ public class WordResponse {
      * Convert from Word entity (user vocabulary)
      */
     public static WordResponse fromEntity(Word word) {
+        if (word == null) {
+            return null;
+        }
         return WordResponse.builder()
                 .id(word.getId())
                 .word(word.getWord())
@@ -89,6 +92,9 @@ public class WordResponse {
      * Used for list responses to reduce payload size
      */
     public static WordResponse fromEntityMinimal(Word word) {
+        if (word == null) {
+            return null;
+        }
         return WordResponse.builder()
                 .id(word.getId())
                 .word(word.getWord())

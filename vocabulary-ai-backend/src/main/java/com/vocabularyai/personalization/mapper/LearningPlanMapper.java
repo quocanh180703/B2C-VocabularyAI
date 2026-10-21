@@ -16,6 +16,7 @@ public interface LearningPlanMapper {
     /**
      * Ánh xạ LearningPlanDto sang API response
      */
+    @Mapping(target = "data", source = "dto")
     @Mapping(target = "statusCode", constant = "200")
     @Mapping(target = "message", constant = "Kế hoạch được tạo thành công")
     @Mapping(target = "timestamp", expression = "java(System.currentTimeMillis())")

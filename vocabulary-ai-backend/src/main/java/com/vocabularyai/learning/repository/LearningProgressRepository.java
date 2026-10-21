@@ -25,17 +25,25 @@ public interface LearningProgressRepository extends JpaRepository<LearningProgre
     /**
      * Get all learning progress for user with pagination
      */
-    Page<LearningProgress> findByUserId(Long userId, Pageable pageable);
+    @Query(value = "SELECT lp FROM LearningProgress lp JOIN FETCH lp.word WHERE lp.user.id = :userId",
+           countQuery = "SELECT COUNT(lp) FROM LearningProgress lp WHERE lp.user.id = :userId")
+    Page<LearningProgress> findByUserId(@Param("userId") Long userId, Pageable pageable);
     
     /**
      * Get learning progress by status
      */
-    Page<LearningProgress> findByUserIdAndStatus(Long userId, LearningProgress.LearningStatus status, Pageable pageable);
+    @Query(value = "SELECT lp FROM LearningProgress lp JOIN FETCH lp.word WHERE lp.user.id = :userId AND lp.status = :status",
+           countQuery = "SELECT COUNT(lp) FROM LearningProgress lp WHERE lp.user.id = :userId AND lp.status = :status")
+    Page<LearningProgress> findByUserIdAndStatus(@Param("userId") Long userId, @Param("status") LearningProgress.LearningStatus status, Pageable pageable);
     
     /**
      * Get words that need review (next_review_at is past current time)
      */
-    @Query("SELECT lp FROM LearningProgress lp WHERE " +
+    @Query(value = "SELECT lp FROM LearningProgress lp JOIN FETCH lp.word WHERE " +
+           "lp.user.id = :userId AND " +
+           "lp.nextReviewAt IS NOT NULL AND " +
+           "lp.nextReviewAt <= :now",
+           countQuery = "SELECT COUNT(lp) FROM LearningProgress lp WHERE " +
            "lp.user.id = :userId AND " +
            "lp.nextReviewAt IS NOT NULL AND " +
            "lp.nextReviewAt <= :now")

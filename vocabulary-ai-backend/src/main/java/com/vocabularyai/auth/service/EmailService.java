@@ -1,6 +1,6 @@
-package com.vocabularyai.ai.service.auth;
+package com.vocabularyai.auth.service;
 
-import com.vocabularyai.ai.dto.PaymentEmailData;
+import com.vocabularyai.payment.dto.payos.PaymentEmailData;
 
 /**
  * Service interface for email operations

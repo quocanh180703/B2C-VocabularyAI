@@ -21,4 +21,9 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
      * Count questions in quiz
      */
     long countByQuizId(Long quizId);
+
+    /**
+     * Delete questions by quiz ID
+     */
+    void deleteByQuizId(Long quizId);
 }

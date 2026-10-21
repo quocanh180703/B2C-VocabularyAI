@@ -51,9 +51,30 @@ public interface WordRepository extends JpaRepository<Word, Long> {
 
     /**
      * Count words by level
-     * 
-     * @param level CEFR level string
-     * @return Count of words at this level
      */
     long countByLevel(String level);
+
+    @Query("SELECT COUNT(w) FROM Word w WHERE w.meaning IS NULL OR TRIM(w.meaning) = ''")
+    long countWordsMissingMeaning();
+
+    @Query("SELECT COUNT(w) FROM Word w WHERE w.example IS NULL OR TRIM(w.example) = ''")
+    long countWordsMissingExample();
+
+    @Query("SELECT COUNT(w) FROM Word w WHERE w.pronunciation IS NULL OR TRIM(w.pronunciation) = ''")
+    long countWordsMissingPronunciation();
+
+    @Query("SELECT COUNT(w) FROM Word w WHERE w.definition IS NULL OR TRIM(w.definition) = ''")
+    long countWordsMissingDefinition();
+
+    @Query("SELECT w FROM Word w WHERE w.example IS NULL OR TRIM(w.example) = '' ORDER BY w.id ASC")
+    Page<Word> findWordsMissingExample(Pageable pageable);
+
+    @Query("SELECT w FROM Word w WHERE w.meaning IS NULL OR TRIM(w.meaning) = '' ORDER BY w.id ASC")
+    Page<Word> findWordsMissingMeaning(Pageable pageable);
+
+    @Query("SELECT w FROM Word w WHERE w.pronunciation IS NULL OR TRIM(w.pronunciation) = '' ORDER BY w.id ASC")
+    Page<Word> findWordsMissingPronunciation(Pageable pageable);
+
+    @Query("SELECT w FROM Word w WHERE w.definition IS NULL OR TRIM(w.definition) = '' ORDER BY w.id ASC")
+    Page<Word> findWordsMissingDefinition(Pageable pageable);
 }

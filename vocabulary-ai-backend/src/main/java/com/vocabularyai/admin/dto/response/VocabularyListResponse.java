@@ -37,8 +37,14 @@ public class VocabularyListResponse implements Serializable {
     @Schema(description = "CEFR level", example = "B1")
     private String cefr;
     
-    @Schema(description = "English meaning", example = "pleasing to look at or listen to")
+    @Schema(description = "Meaning / Vietnamese meaning", example = "sự khác biệt")
     private String meaning;
+    
+    @Schema(description = "Vietnamese meaning", example = "sự khác biệt, điều khác nhau")
+    private String vietnameseMeaning;
+    
+    @Schema(description = "English definition", example = "The quality of being different.")
+    private String definition;
     
     @Schema(description = "Source dataset", example = "oxford_3000_5000")
     private String source;

@@ -119,12 +119,18 @@ public class CefrWordService {
         int page = request.getPage() != null ? request.getPage() : 0;
         int size = request.getSize() != null ? request.getSize() : 20;
         
-        // Build sort
-        Sort.Direction direction = "desc".equalsIgnoreCase(request.getSortOrder()) 
-                ? Sort.Direction.DESC 
-                : Sort.Direction.ASC;
-        Sort sort = Sort.by(direction, request.getSortBy() != null ? request.getSortBy() : "lemma");
-        Pageable pageable = PageRequest.of(page, size, sort);
+        // Build pageable: If user is searching with a query and didn't specify explicit sortBy,
+        // use unsorted PageRequest so the repository's exact match & CEFR level ranking takes precedence
+        Pageable pageable;
+        if (!query.isEmpty() && request.getSortBy() == null) {
+            pageable = PageRequest.of(page, size);
+        } else {
+            Sort.Direction direction = "desc".equalsIgnoreCase(request.getSortOrder()) 
+                    ? Sort.Direction.DESC 
+                    : Sort.Direction.ASC;
+            Sort sort = Sort.by(direction, request.getSortBy() != null ? request.getSortBy() : "lemma");
+            pageable = PageRequest.of(page, size, sort);
+        }
         
         // If no query, return all words at level or all words
         if (query.isEmpty()) {
@@ -173,7 +179,7 @@ public class CefrWordService {
             return Page.empty();
         }
         
-        Pageable pageable = PageRequest.of(0, limit, Sort.by("lemma").ascending());
+        Pageable pageable = PageRequest.of(0, limit);
         Page<CefrWord> results = cefrWordRepository.searchByLemmaPrefix(prefix.trim(), pageable);
         
         return results.map(CefrWordResponse::fromEntityMinimal);
@@ -192,6 +198,26 @@ public class CefrWordService {
         
         Optional<CefrWord> word = cefrWordRepository.findRandomByLevel(level.toString());
         return word.map(CefrWordResponse::fromEntity).orElse(null);
+    }
+
+    /**
+     * Get random words batch for flashcards
+     * 
+     * NOT CACHED: Random words should be different each time
+     * 
+     * @param level CEFR level (optional, all levels if null)
+     * @param limit Maximum number of words (1 to 100)
+     * @return List of random CefrWordResponse objects
+     */
+    public List<CefrWordResponse> getRandomWords(CEFRLevel level, int limit) {
+        String levelStr = level != null ? level.toString() : null;
+        int safeLimit = Math.min(Math.max(limit, 1), 100);
+        log.debug("Getting random CEFR words: level={}, limit={}", levelStr, safeLimit);
+        
+        List<CefrWord> words = cefrWordRepository.findRandomWordsByLevel(levelStr, safeLimit);
+        return words.stream()
+                .map(CefrWordResponse::fromEntityMinimal)
+                .toList();
     }
 
     /**

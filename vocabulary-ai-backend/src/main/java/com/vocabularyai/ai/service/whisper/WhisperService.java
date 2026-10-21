@@ -37,11 +37,13 @@ public class WhisperService {
     @Value("${whisper.api-key:}")
     private String apiKey;
     
-    @Value("${whisper.model:whisper-1}")
+    @Value("${whisper.model:whisper-large-v3}")
     private String model;
     
-    private static final String WHISPER_API_URL = "https://api.openai.com/v1/audio/transcriptions";
-    private static final int MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB - OpenAI limit
+    @Value("${whisper.url:https://api.groq.com/openai/v1/audio/transcriptions}")
+    private String apiUrl;
+    
+    private static final int MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB limit
     
     /**
      * Transcribe audio file to text using OpenAI Whisper
@@ -79,9 +81,9 @@ public class WhisperService {
                 new HttpEntity<>(body, headers);
             
             // Call API
-            log.debug("📤 Calling Whisper API: {}", WHISPER_API_URL);
+            log.debug("📤 Calling Whisper API: {}", apiUrl);
             ResponseEntity<String> response = restTemplate.postForEntity(
-                WHISPER_API_URL,
+                apiUrl,
                 request,
                 String.class
             );
@@ -144,9 +146,9 @@ public class WhisperService {
                 new HttpEntity<>(body, headers);
             
             // Call API
-            log.debug("📤 Calling Whisper API: {}", WHISPER_API_URL);
+            log.debug("📤 Calling Whisper API: {}", apiUrl);
             ResponseEntity<String> response = restTemplate.postForEntity(
-                WHISPER_API_URL,
+                apiUrl,
                 request,
                 String.class
             );

@@ -1,7 +1,7 @@
-package com.vocabularyai.ai.service.auth;
+package com.vocabularyai.auth.service;
 
-import com.vocabularyai.ai.entity.OtpVerification;
-import com.vocabularyai.ai.repository.OtpVerificationRepository;
+import com.vocabularyai.auth.entity.OtpVerification;
+import com.vocabularyai.auth.repository.OtpVerificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

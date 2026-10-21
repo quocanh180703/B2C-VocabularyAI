@@ -1,4 +1,4 @@
-package com.vocabularyai.ai.dto.response;
+package com.vocabularyai.auth.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,19 +18,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class VerifyOtpForgotPasswordResponse {
-    
+
     /**
      * Thông báo xác nhận OTP hợp lệ
      */
     private String message;
-    
+
     /**
      * Verification token dùng cho bước reset mật khẩu
      * Token này là một chuỗi mã hóa Base64 từ reset token + timestamp
      * Được sử dụng để ngăn chặn tấn công
      */
     private String verificationToken;
-    
+
     /**
      * Hướng dẫn tiếp theo
      */

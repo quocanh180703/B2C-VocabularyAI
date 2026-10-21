@@ -41,6 +41,12 @@ public class VocabularyDetailResponse implements Serializable {
     @Schema(description = "English definition", example = "pleasing to look at or listen to; of a high standard")
     private String definition;
     
+    @Schema(description = "Vietnamese meaning", example = "xinh đẹp, đáng yêu")
+    private String vietnameseMeaning;
+    
+    @Schema(description = "Meaning / Vietnamese translation", example = "xinh đẹp")
+    private String meaning;
+    
     @Schema(description = "Source dataset", example = "oxford_3000_5000")
     private String source;
     

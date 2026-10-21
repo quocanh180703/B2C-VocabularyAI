@@ -14,6 +14,7 @@ public interface ProgressAnalysisMapper {
     /**
      * Ánh xạ ProgressAnalysisDto sang API response
      */
+    @Mapping(target = "data", source = "dto")
     @Mapping(target = "statusCode", constant = "200")
     @Mapping(target = "message", constant = "Phân tích tiến độ được tạo thành công")
     @Mapping(target = "timestamp", expression = "java(java.time.LocalDateTime.now())")

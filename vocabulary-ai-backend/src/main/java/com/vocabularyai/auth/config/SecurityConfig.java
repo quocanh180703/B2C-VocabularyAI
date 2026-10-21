@@ -18,6 +18,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
@@ -36,11 +38,15 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
-@RequiredArgsConstructor
 public class SecurityConfig {
     
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    
+    public SecurityConfig(UserDetailsService userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.userDetailsService = userDetailsService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
     
     /**
      * Password encoder using BCrypt
@@ -77,11 +83,13 @@ public class SecurityConfig {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
-            .exceptionHandling(exceptionHandling -> {
-                // ✅ TASK 6: Use GlobalExceptionHandler for standardized error responses
-                // authenticationEntryPoint will be handled by GlobalExceptionHandler
-                // Both 401 and 403 errors will have consistent response format
-            })
+            .exceptionHandling(exceptionHandling -> exceptionHandling
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setContentType("application/json;charset=UTF-8");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("{\"success\":false,\"message\":\"Unauthorized: Vui lòng đăng nhập\",\"data\":null,\"errors\":{\"code\":\"UNAUTHORIZED\",\"details\":\"" + authException.getMessage() + "\"}}");
+                })
+            )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
@@ -92,10 +100,22 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/auth/**",
                     "/health/**",
+                    "/error",
+                    "/error/**",
                     "/v3/api-docs/**",
                     "/swagger-ui/**",
-                    "/swagger-ui.html"
+                    "/swagger-ui.html",
+                    "/cefr-words",
+                    "/cefr-words/**",
+                    "/words",
+                    "/words/**",
+                    "/payments/packages",
+                    "/api/payments/packages",
+                    "/payments/webhook",
+                    "/api/payments/webhook"
                 ).permitAll()
+                // Allow viewing published quizzes without requiring login
+                .requestMatchers(HttpMethod.GET, "/quizzes", "/quizzes/**").permitAll()
                 // All other requests require authentication
                 .anyRequest().authenticated()
             )
@@ -111,22 +131,36 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(Arrays.asList(
+            "http://localhost:*",
+            "https://localhost:*",
+            "http://127.0.0.1:*",
+            "https://127.0.0.1:*"
+        ));
         configuration.setAllowedOrigins(Arrays.asList(
             "http://localhost:3000",
             "http://localhost:3001",
             "http://localhost:5173",
+            "http://localhost:5174",
+            "http://localhost:5175",
             "http://localhost:8443",
             "https://localhost:3000",
             "https://localhost:3001",
             "https://localhost:5173",
+            "https://localhost:5174",
+            "https://localhost:5175",
             "https://localhost:8443",
             "http://127.0.0.1:3000",
             "http://127.0.0.1:3001",
             "http://127.0.0.1:5173",
+            "http://127.0.0.1:5174",
+            "http://127.0.0.1:5175",
             "http://127.0.0.1:8443",
             "https://127.0.0.1:3000",
             "https://127.0.0.1:3001",
             "https://127.0.0.1:5173",
+            "https://127.0.0.1:5174",
+            "https://127.0.0.1:5175",
             "https://127.0.0.1:8443"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));

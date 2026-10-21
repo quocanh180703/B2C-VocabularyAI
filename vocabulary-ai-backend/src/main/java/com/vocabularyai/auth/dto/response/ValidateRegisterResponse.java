@@ -1,4 +1,4 @@
-package com.vocabularyai.ai.dto.response;
+package com.vocabularyai.auth.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,21 +21,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ValidateRegisterResponse {
-    
+
     /**
      * Thông báo xác nhận
      */
     private String message;
-    
+
     /**
      * Email được xác thực
      */
     private String email;
-    
+
     /**
      * Thời gian OTP hết hạn (tính bằng giây)
      * Ví dụ: 300 = 5 phút
      */
     private Integer expiresIn;
 }
-

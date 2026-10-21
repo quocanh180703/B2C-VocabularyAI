@@ -122,7 +122,13 @@ public class SpeakingPracticeServiceImpl implements SpeakingPracticeService {
                 }
             }
             
-            // STEP 7: Update learning progress
+            // STEP 7: Update session score in database
+            if (analysisResult.getAnalysisScores() != null && analysisResult.getAnalysisScores().getOverall() != null) {
+                session.setOverallScore(analysisResult.getAnalysisScores().getOverall());
+                session = sessionRepository.save(session);
+            }
+            
+            // Update learning progress
             updateLearningProgress(userId, analysisResult);
             
             // STEP 8: Build response

@@ -1,9 +1,9 @@
-package com.vocabularyai.ai.service.auth;
+package com.vocabularyai.auth.service;
 
-import com.vocabularyai.ai.dto.request.ValidateRegisterRequest;
-import com.vocabularyai.ai.dto.request.VerifyOtpRegisterRequest;
-import com.vocabularyai.ai.dto.response.ValidateRegisterResponse;
-import com.vocabularyai.ai.dto.response.RegisterSuccessResponse;
+import com.vocabularyai.auth.dto.request.ValidateRegisterRequest;
+import com.vocabularyai.auth.dto.request.VerifyOtpRegisterRequest;
+import com.vocabularyai.auth.dto.response.ValidateRegisterResponse;
+import com.vocabularyai.auth.dto.response.RegisterSuccessResponse;
 
 /**
  * Service interface cho quy trình đăng ký với OTP
@@ -13,7 +13,7 @@ import com.vocabularyai.ai.dto.response.RegisterSuccessResponse;
  * - Bước 2: Xác minh OTP + tạo tài khoản
  */
 public interface RegisterOtpService {
-    
+
     /**
      * Bước 1: Xác thực thông tin đăng ký
      * 
@@ -32,7 +32,7 @@ public interface RegisterOtpService {
      * @throws RuntimeException nếu email hoặc username đã tồn tại
      */
     ValidateRegisterResponse validateRegisterAndSendOtp(ValidateRegisterRequest request);
-    
+
     /**
      * Bước 2: Xác minh OTP và tạo tài khoản
      * 

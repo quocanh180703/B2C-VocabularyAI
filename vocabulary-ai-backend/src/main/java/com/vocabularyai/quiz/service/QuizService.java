@@ -38,6 +38,7 @@ public class QuizService {
     /**
      * Get all published quizzes
      */
+    @Transactional(readOnly = true)
     public Page<QuizResponse> getPublishedQuizzes(Pageable pageable) {
         log.info("Getting published quizzes");
         Page<Quiz> quizzes = quizRepository.findByStatus(Quiz.QuizStatus.PUBLISHED, pageable);
@@ -53,6 +54,7 @@ public class QuizService {
     /**
      * Get quiz by ID
      */
+    @Transactional(readOnly = true)
     public QuizResponse getQuizById(Long quizId) {
         log.info("Getting quiz with id: {}", quizId);
         Quiz quiz = quizRepository.findById(quizId)
@@ -60,6 +62,22 @@ public class QuizService {
         return QuizResponse.fromEntity(quiz);
     }
     
+    /**
+     * Get all quizzes (Admin)
+     */
+    @Transactional(readOnly = true)
+    public Page<QuizResponse> getAllQuizzes(Pageable pageable) {
+        log.info("Getting all quizzes (Admin)");
+        Page<Quiz> quizzes = quizRepository.findAll(pageable);
+        return new PageImpl<>(
+            quizzes.getContent().stream()
+                .map(QuizResponse::fromEntity)
+                .collect(Collectors.toList()),
+            pageable,
+            quizzes.getTotalElements()
+        );
+    }
+
     /**
      * Create new quiz (Admin)
      */
@@ -71,8 +89,8 @@ public class QuizService {
             .title(request.getTitle())
             .description(request.getDescription())
             .level(request.getLevel())
-            .timeLimit(request.getTimeLimit())
-            .status(Quiz.QuizStatus.DRAFT)
+            .timeLimit(request.getTimeLimit() != null ? request.getTimeLimit() : 600)
+            .status(Quiz.QuizStatus.PUBLISHED)
             .build();
         
         if (request.getCategoryId() != null) {
@@ -85,6 +103,47 @@ public class QuizService {
         log.info("Quiz created successfully with id: {}", saved.getId());
         
         return QuizResponse.fromEntity(saved);
+    }
+
+    /**
+     * Update quiz (Admin)
+     */
+    @Transactional
+    public QuizResponse updateQuiz(Long quizId, CreateQuizRequest request, String status) {
+        log.info("Updating quiz id: {}", quizId);
+        Quiz quiz = quizRepository.findById(quizId)
+            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+
+        if (request.getTitle() != null && !request.getTitle().isBlank()) {
+            quiz.setTitle(request.getTitle());
+        }
+        if (request.getDescription() != null) {
+            quiz.setDescription(request.getDescription());
+        }
+        if (request.getLevel() != null) {
+            quiz.setLevel(request.getLevel());
+        }
+        if (request.getTimeLimit() != null) {
+            quiz.setTimeLimit(request.getTimeLimit());
+        }
+        if (status != null && !status.isBlank()) {
+            try {
+                quiz.setStatus(Quiz.QuizStatus.valueOf(status.toUpperCase()));
+            } catch (Exception ignored) {}
+        }
+        quiz.setUpdatedAt(LocalDateTime.now());
+        Quiz updated = quizRepository.save(quiz);
+        return QuizResponse.fromEntity(updated);
+    }
+
+    /**
+     * Delete quiz (Admin)
+     */
+    @Transactional
+    public void deleteQuiz(Long quizId) {
+        log.info("Deleting quiz: {}", quizId);
+        questionRepository.deleteByQuizId(quizId);
+        quizRepository.deleteById(quizId);
     }
     
     /**
@@ -171,6 +230,7 @@ public class QuizService {
     /**
      * Get quiz with questions (for taking quiz)
      */
+    @Transactional(readOnly = true)
     public QuizWithQuestionsResponse getQuizForTaking(Long quizId) {
         log.info("Getting quiz for taking: {}", quizId);
         
@@ -194,6 +254,7 @@ public class QuizService {
     /**
      * Get quiz attempt with answers
      */
+    @Transactional(readOnly = true)
     public QuizAttemptWithAnswersResponse getQuizAttemptWithAnswers(Long attemptId, Long userId) {
         log.info("Getting quiz attempt: {} for user: {}", attemptId, userId);
         
@@ -217,6 +278,7 @@ public class QuizService {
      * Get quiz attempt with answers (public version - no userId check)
      * Used internally for public endpoints
      */
+    @Transactional(readOnly = true)
     public QuizAttemptWithAnswersResponse getQuizAttemptWithAnswers(Long attemptId) {
         log.info("Getting quiz attempt: {}", attemptId);
         
@@ -240,6 +302,7 @@ public class QuizService {
     /**
      * Get user's quiz history
      */
+    @Transactional(readOnly = true)
     public Page<QuizAttemptResponse> getUserQuizHistory(Long userId, Pageable pageable) {
         log.info("Getting quiz history for user: {}", userId);
         

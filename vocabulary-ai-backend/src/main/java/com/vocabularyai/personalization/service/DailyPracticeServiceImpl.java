@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -51,6 +52,7 @@ public class DailyPracticeServiceImpl implements DailyPracticeService {
         // Lấy ngày hôm nay
         LocalDateTime today = LocalDateTime.now();
         String dayOfWeek = today.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH).toUpperCase();
+        int currentWeek = 1;
         
         // Kiểm tra cache
         String cacheKey = CACHE_KEY_PREFIX + userId + ":" + today.toLocalDate();
@@ -65,7 +67,7 @@ public class DailyPracticeServiceImpl implements DailyPracticeService {
             LearningPlanDto plan = learningPlanService.createLearningPlan(userId);
             
             // Tìm tuần hiện tại
-            int currentWeek = getCurrentWeek(plan, today);
+            currentWeek = getCurrentWeek(plan, today);
             
             // Lấy chi tiết ngày từ kế hoạch
             LearningPlanDto.DayPlanDto dayPlan = 
@@ -101,8 +103,14 @@ public class DailyPracticeServiceImpl implements DailyPracticeService {
             return practice;
             
         } catch (Exception e) {
-            log.error("[TASK 5] Lỗi lấy hoạt động cho userId: {}: {}", userId, e.getMessage(), e);
-            throw e;
+            log.warn("[TASK 5] AI daily practice encountered error ({}), using fallback practice", e.getMessage());
+            DailyPracticeDto fallback = buildFallbackPractice(userId, user.getFullName(), today, currentWeek, dayOfWeek);
+            try {
+                cacheService.set(cacheKey, fallback, CACHE_TTL_SECONDS);
+            } catch (Exception ce) {
+                log.debug("Cache error: {}", ce.getMessage());
+            }
+            return fallback;
         }
     }
     
@@ -123,12 +131,11 @@ public class DailyPracticeServiceImpl implements DailyPracticeService {
                 learningPlanService.getDayDetails(userId, weekNumber, dayOfWeek);
             
             if (dayPlan == null) {
-                throw new DailyPracticeException("Không tìm thấy chi tiết ngày");
+                return buildFallbackPractice(userId, user.getFullName(), LocalDateTime.now(), weekNumber, dayOfWeek);
             }
             
             if (geminiAIClientService.isRateLimitExceeded(userId)) {
-                throw new RateLimitExceededException("Rate limit vượt quá",
-                    System.currentTimeMillis() / 1000 + 3600, "HOURLY");
+                return buildFallbackPractice(userId, user.getFullName(), LocalDateTime.now(), weekNumber, dayOfWeek);
             }
             
             String prompt = buildDailyPrompt(dayPlan, plan, weekNumber);
@@ -140,8 +147,8 @@ public class DailyPracticeServiceImpl implements DailyPracticeService {
             return practice;
             
         } catch (Exception e) {
-            log.error("[TASK 5] Lỗi: {}", e.getMessage(), e);
-            throw e;
+            log.warn("[TASK 5] Lỗi lấy hoạt động ngày cụ thể: {}, trả về fallback", e.getMessage());
+            return buildFallbackPractice(userId, user.getFullName(), LocalDateTime.now(), weekNumber, dayOfWeek);
         }
     }
     
@@ -261,5 +268,59 @@ public class DailyPracticeServiceImpl implements DailyPracticeService {
             log.error("[TASK 5] Lỗi phân tích: {}", e.getMessage(), e);
             throw new DailyPracticeException("Lỗi phân tích phản hồi: " + e.getMessage(), e);
         }
+    }
+
+    private DailyPracticeDto buildFallbackPractice(Long userId, String userName, LocalDateTime date, int weekNumber, String dayOfWeek) {
+        List<DailyPracticeDto.ActivityDto> acts = List.of(
+            DailyPracticeDto.ActivityDto.builder()
+                .order(1)
+                .title("Ôn tập 5 từ vựng đến hạn (SRS)")
+                .description("Luyện tập các từ bạn đang học để củng cố trí nhớ dài hạn.")
+                .type("VOCABULARY")
+                .durationMinutes(8)
+                .objective("Củng cố trí nhớ dài hạn")
+                .instructions("Lướt flashcard và kiểm tra phản xạ nghĩa")
+                .difficulty("MODERATE")
+                .mandatory(true)
+                .build(),
+            DailyPracticeDto.ActivityDto.builder()
+                .order(2)
+                .title("Thử sức với Quiz Business English B1")
+                .description("Cải thiện kỹ năng chọn từ ngữ cảnh và ngữ pháp thương mại.")
+                .type("QUIZ")
+                .durationMinutes(10)
+                .objective("Cải thiện kỹ năng chọn từ ngữ cảnh")
+                .instructions("Hoàn thành trọn vẹn 1 bài trắc nghiệm")
+                .difficulty("MODERATE")
+                .mandatory(true)
+                .build(),
+            DailyPracticeDto.ActivityDto.builder()
+                .order(3)
+                .title("Luyện nói chủ đề \"Giới thiệu bản thân\"")
+                .description("Nói 45 giây để AI phân tích độ trôi chảy và phát âm.")
+                .type("SPEAKING")
+                .durationMinutes(7)
+                .objective("Luyện phản xạ và phát âm đuôi")
+                .instructions("Nói vào micro theo chủ đề gợi ý")
+                .difficulty("EASY")
+                .mandatory(false)
+                .build()
+        );
+
+        return DailyPracticeDto.builder()
+            .userId(userId)
+            .userName(userName != null ? userName : "Học viên")
+            .date(date != null ? date : LocalDateTime.now())
+            .dayOfWeek(dayOfWeek != null ? dayOfWeek : "TODAY")
+            .weekNumber(weekNumber > 0 ? weekNumber : 1)
+            .dayTitle("Bài tập hôm nay")
+            .dailyGoal("Tích lũy 25 phút luyện tập đa kỹ năng")
+            .motivationalTip("Mỗi ngày tích lũy 15 phút, sau 1 tháng bạn sẽ bất ngờ với vốn từ của mình!")
+            .expectedDifficulty("MODERATE")
+            .activities(acts)
+            .totalDurationMinutes(25)
+            .completed(false)
+            .createdAt(LocalDateTime.now())
+            .build();
     }
 }

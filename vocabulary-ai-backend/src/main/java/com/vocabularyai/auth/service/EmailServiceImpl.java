@@ -1,6 +1,6 @@
-package com.vocabularyai.ai.service.auth;
+package com.vocabularyai.auth.service;
 
-import com.vocabularyai.ai.dto.PaymentEmailData;
+import com.vocabularyai.payment.dto.payos.PaymentEmailData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

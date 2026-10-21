@@ -1,4 +1,4 @@
-package com.vocabularyai.ai.entity;
+package com.vocabularyai.auth.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

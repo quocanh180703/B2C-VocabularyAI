@@ -1,4 +1,4 @@
-package com.vocabularyai.auth.dto;
+package com.vocabularyai.auth.dto.request;
 
 import com.vocabularyai.common.validation.ValidationConstants;
 import jakarta.validation.constraints.NotBlank;
@@ -18,10 +18,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginRequest {
-    
+
     @NotBlank(message = "Email hoặc username không được để trống")
     private String emailOrUsername;
-    
+
     @NotBlank(message = ValidationConstants.PASSWORD_NOT_BLANK)
     private String password;
 }

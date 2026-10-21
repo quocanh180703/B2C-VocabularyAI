@@ -48,6 +48,9 @@ public class CefrWordResponse implements Serializable {
     @Schema(description = "Word definition in English")
     private String definition;
 
+    @Schema(description = "Vietnamese meaning of word according to its part of speech", example = "sự khác biệt, điều khác nhau")
+    private String vietnameseMeaning;
+
     @Schema(description = "Source of definition", example = "oxford_3000_5000")
     private String source;
 
@@ -71,6 +74,7 @@ public class CefrWordResponse implements Serializable {
                 .partOfSpeech(word.getPartOfSpeech())
                 .pronunciation(word.getPronunciation())
                 .definition(word.getDefinition())
+                .vietnameseMeaning(word.getVietnameseMeaning())
                 .source(word.getSource())
                 .language(word.getLanguage())
                 .createdAt(word.getCreatedAt())
@@ -90,6 +94,8 @@ public class CefrWordResponse implements Serializable {
                 .cefrLevel(word.getCefrLevel())
                 .partOfSpeech(word.getPartOfSpeech())
                 .pronunciation(word.getPronunciation())
+                .definition(word.getDefinition())
+                .vietnameseMeaning(word.getVietnameseMeaning())
                 .build();
     }
 }

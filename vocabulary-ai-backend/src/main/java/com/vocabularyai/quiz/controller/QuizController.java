@@ -26,19 +26,21 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/quizzes")
-@RequiredArgsConstructor
 @Tag(name = "Quizzes", description = "Quiz management and taking endpoints")
 public class QuizController {
     
     private final QuizService quizService;
     private final UserService userService;
     
+    public QuizController(QuizService quizService, UserService userService) {
+        this.quizService = quizService;
+        this.userService = userService;
+    }
+    
     /**
      * Get all published quizzes
      */
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
-    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Get published quizzes", description = "Retrieve all published quizzes")
     public ResponseEntity<ApiResponse<Page<QuizResponse>>> getPublishedQuizzes(
             @RequestParam(required = false, defaultValue = "0") Integer page,
@@ -52,13 +54,72 @@ public class QuizController {
             ApiResponse.success("Quizzes retrieved successfully", quizzes)
         );
     }
+
+    /**
+     * Get all quizzes including drafts (Admin)
+     */
+    @GetMapping("/admin/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Get all quizzes (admin)", description = "Retrieve all quizzes including draft and published")
+    public ResponseEntity<ApiResponse<Page<QuizResponse>>> getAllQuizzes(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "50") Integer size) {
+        log.info("Getting all quizzes for admin");
+        Pageable pageable = PaginationUtils.createPageableDesc(page, size, "createdAt");
+        Page<QuizResponse> quizzes = quizService.getAllQuizzes(pageable);
+        return ResponseEntity.ok(ApiResponse.success("All quizzes retrieved successfully", quizzes));
+    }
+
+    /**
+     * Create quiz (Admin)
+     */
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Create quiz", description = "Create a new quiz (admin only)")
+    public ResponseEntity<ApiResponse<QuizResponse>> createQuiz(
+            @Valid @RequestBody CreateQuizRequest request) {
+        log.info("Admin creating quiz: {}", request.getTitle());
+        QuizResponse quiz = quizService.createQuiz(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            ApiResponse.success("Quiz created successfully", quiz)
+        );
+    }
+
+    /**
+     * Update quiz (Admin)
+     */
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Update quiz", description = "Update quiz details (admin only)")
+    public ResponseEntity<ApiResponse<QuizResponse>> updateQuiz(
+            @PathVariable Long id,
+            @RequestBody CreateQuizRequest request,
+            @RequestParam(required = false) String status) {
+        log.info("Admin updating quiz: {}", id);
+        QuizResponse quiz = quizService.updateQuiz(id, request, status);
+        return ResponseEntity.ok(ApiResponse.success("Quiz updated successfully", quiz));
+    }
+
+    /**
+     * Delete quiz (Admin)
+     */
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Delete quiz", description = "Delete a quiz and its questions (admin only)")
+    public ResponseEntity<ApiResponse<Void>> deleteQuiz(@PathVariable Long id) {
+        log.info("Admin deleting quiz: {}", id);
+        quizService.deleteQuiz(id);
+        return ResponseEntity.ok(ApiResponse.success("Quiz deleted successfully", null));
+    }
     
     /**
      * Get quiz by ID (with questions for taking)
      */
     @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
-    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Get quiz with questions", description = "Get quiz details and questions for taking")
     public ResponseEntity<ApiResponse<QuizWithQuestionsResponse>> getQuizForTaking(
             @PathVariable Long id) {

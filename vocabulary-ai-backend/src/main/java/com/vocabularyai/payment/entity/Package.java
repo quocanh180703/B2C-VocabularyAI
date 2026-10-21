@@ -22,9 +22,9 @@ import java.time.LocalDateTime;
         @Index(name = "idx_package_code", columnList = "code")
     }
 )
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 @Builder
 public class Package {
     
@@ -88,6 +88,21 @@ public class Package {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
     
+    public Package() {
+    }
+
+    public Package(Long id, String code, String name, BigDecimal price, Integer durationDays, String status, String description, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.price = price;
+        this.durationDays = durationDays;
+        this.status = status;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     /**
      * JPA lifecycle callback - set createdAt before persist
      */

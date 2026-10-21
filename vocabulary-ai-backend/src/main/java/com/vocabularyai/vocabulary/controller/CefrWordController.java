@@ -18,24 +18,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * CefrWordController
  * 
  * REST API for CEFR vocabulary words
  * 
- * Endpoints:
- * - GET /api/cefr-words - List all words (paginated, filterable)
- * - GET /api/cefr-words/{id} - Get word by ID
- * - GET /api/cefr-words/lemma/{lemma} - Get word by lemma
- * - GET /api/cefr-words/search - Search words
- * - GET /api/cefr-words/random - Get random word
- * - GET /api/cefr-words/statistics - Get word statistics
+ * Endpoints (context-path /api is added by Spring):
+ * - GET /cefr-words - List all words (paginated, filterable)
+ * - GET /cefr-words/{id} - Get word by ID
+ * - GET /cefr-words/lemma/{lemma} - Get word by lemma
+ * - GET /cefr-words/search - Search words
+ * - GET /cefr-words/random - Get random word
+ * - GET /cefr-words/statistics - Get word statistics
  * 
  * Authentication: Not required for these endpoints (public)
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/cefr-words")
+@RequestMapping("/cefr-words")
 @RequiredArgsConstructor
 @Tag(name = "CEFR Words", description = "CEFR vocabulary word management and search")
 public class CefrWordController {
@@ -224,6 +226,30 @@ public class CefrWordController {
         }
 
         return ResponseEntity.ok(word);
+    }
+
+    /**
+     * GET /api/cefr-words/random-batch
+     * 
+     * Get batch of random words at specific CEFR level (for flashcards)
+     * 
+     * @param level CEFR level (optional)
+     * @param limit Batch size (default 25)
+     * @return List of random CEFR words
+     */
+    @GetMapping("/random-batch")
+    @Operation(summary = "Get random CEFR words batch", description = "Retrieve random words at specific CEFR level (for flashcards)")
+    @ApiResponse(responseCode = "200", description = "Random CEFR words found")
+    public ResponseEntity<List<CefrWordResponse>> getRandomWordsBatch(
+            @Parameter(description = "CEFR level", example = "B1")
+            @RequestParam(required = false) CEFRLevel level,
+
+            @Parameter(description = "Batch size", example = "25")
+            @RequestParam(defaultValue = "25") int limit
+    ) {
+        log.info("GET /cefr-words/random-batch - level: {}, limit: {}", level, limit);
+        List<CefrWordResponse> words = cefrWordService.getRandomWords(level, limit);
+        return ResponseEntity.ok(words);
     }
 
     /**

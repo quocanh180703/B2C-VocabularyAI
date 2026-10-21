@@ -88,9 +88,14 @@ public interface AdminStudentRepository extends JpaRepository<AdminQueryResult, 
            "FROM User u " +
            "LEFT JOIN LearningHistory s ON u.id = s.user.id " +
            "WHERE u.role = 'STUDENT' AND " +
-           "(LOWER(u.email) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+           "(LOWER(u.username) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+           "LOWER(u.email) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
            "LOWER(u.fullName) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) " +
-           "GROUP BY u.id, u.username, u.email, u.fullName, u.status, u.createdAt")
+           "GROUP BY u.id, u.username, u.email, u.fullName, u.status, u.createdAt " +
+           "ORDER BY CASE " +
+           "WHEN LOWER(u.username) = LOWER(:searchTerm) OR LOWER(u.email) = LOWER(:searchTerm) OR LOWER(u.fullName) = LOWER(:searchTerm) THEN 0 " +
+           "WHEN LOWER(u.username) LIKE LOWER(CONCAT(:searchTerm, '%')) OR LOWER(u.email) LIKE LOWER(CONCAT(:searchTerm, '%')) OR LOWER(u.fullName) LIKE LOWER(CONCAT(:searchTerm, '%')) THEN 1 " +
+           "ELSE 2 END, u.createdAt DESC")
     Page<?> searchStudents(@Param("searchTerm") String searchTerm, Pageable pageable);
     
     // ==================== Student Detail ====================

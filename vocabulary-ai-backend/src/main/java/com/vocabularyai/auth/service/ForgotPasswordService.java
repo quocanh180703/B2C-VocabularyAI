@@ -1,11 +1,11 @@
-package com.vocabularyai.ai.service.auth;
+package com.vocabularyai.auth.service;
 
-import com.vocabularyai.ai.dto.request.SendOtpRequest;
-import com.vocabularyai.ai.dto.request.VerifyOtpForgotPasswordRequest;
-import com.vocabularyai.ai.dto.request.ResetPasswordRequest;
-import com.vocabularyai.ai.dto.response.SendOtpResponse;
-import com.vocabularyai.ai.dto.response.VerifyOtpForgotPasswordResponse;
-import com.vocabularyai.auth.dto.AuthResponse;
+import com.vocabularyai.auth.dto.request.SendOtpRequest;
+import com.vocabularyai.auth.dto.request.VerifyOtpForgotPasswordRequest;
+import com.vocabularyai.auth.dto.request.ResetPasswordRequest;
+import com.vocabularyai.auth.dto.response.AuthResponse;
+import com.vocabularyai.auth.dto.response.SendOtpResponse;
+import com.vocabularyai.auth.dto.response.VerifyOtpForgotPasswordResponse;
 
 /**
  * Service interface cho quy trình quên mật khẩu với OTP
@@ -16,7 +16,7 @@ import com.vocabularyai.auth.dto.AuthResponse;
  * - Bước 3: Reset mật khẩu + TỰ ĐỘNG ĐĂNG NHẬP
  */
 public interface ForgotPasswordService {
-    
+
     /**
      * Bước 1: Gửi OTP quên mật khẩu
      * 
@@ -35,7 +35,7 @@ public interface ForgotPasswordService {
      * @throws RuntimeException nếu email không tồn tại hoặc user không hoạt động
      */
     SendOtpResponse sendOtp(SendOtpRequest request);
-    
+
     /**
      * Bước 2: Xác minh OTP quên mật khẩu
      * 
@@ -55,7 +55,7 @@ public interface ForgotPasswordService {
      * @throws RuntimeException nếu OTP không hợp lệ hoặc reset token sai
      */
     VerifyOtpForgotPasswordResponse verifyOtp(VerifyOtpForgotPasswordRequest request);
-    
+
     /**
      * Bước 3: Reset mật khẩu và TỰ ĐỘNG ĐĂNG NHẬP
      * 

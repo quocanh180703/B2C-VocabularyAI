@@ -25,12 +25,15 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/words")
-@RequiredArgsConstructor
+@RequestMapping({"/words", "/api/words"})
 @Tag(name = "User Words", description = "User vocabulary word management")
 public class WordController {
 
     private final WordService wordService;
+
+    public WordController(WordService wordService) {
+        this.wordService = wordService;
+    }
 
     /**
      * GET /api/words/{id}

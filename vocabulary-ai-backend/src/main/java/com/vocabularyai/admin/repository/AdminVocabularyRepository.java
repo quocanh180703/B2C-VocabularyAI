@@ -34,7 +34,9 @@ public interface AdminVocabularyRepository extends JpaRepository<AdminQueryResul
            "cw.pronunciation as pronunciation, " +
            "cw.partOfSpeech as partOfSpeech, " +
            "cw.cefrLevel as cefr, " +
-           "cw.definition as meaning, " +
+           "cw.vietnameseMeaning as vietnameseMeaning, " +
+           "COALESCE(cw.vietnameseMeaning, cw.definition) as meaning, " +
+           "cw.definition as definition, " +
            "cw.source as source, " +
            "cw.createdAt as createdAt) " +
            "FROM CefrWord cw " +
@@ -54,7 +56,9 @@ public interface AdminVocabularyRepository extends JpaRepository<AdminQueryResul
            "cw.pronunciation as pronunciation, " +
            "cw.partOfSpeech as partOfSpeech, " +
            "cw.cefrLevel as cefr, " +
-           "cw.definition as meaning, " +
+           "cw.vietnameseMeaning as vietnameseMeaning, " +
+           "COALESCE(cw.vietnameseMeaning, cw.definition) as meaning, " +
+           "cw.definition as definition, " +
            "cw.source as source, " +
            "cw.createdAt as createdAt) " +
            "FROM CefrWord cw " +
@@ -75,13 +79,27 @@ public interface AdminVocabularyRepository extends JpaRepository<AdminQueryResul
            "cw.pronunciation as pronunciation, " +
            "cw.partOfSpeech as partOfSpeech, " +
            "cw.cefrLevel as cefr, " +
-           "cw.definition as meaning, " +
+           "cw.vietnameseMeaning as vietnameseMeaning, " +
+           "COALESCE(cw.vietnameseMeaning, cw.definition) as meaning, " +
+           "cw.definition as definition, " +
            "cw.source as source, " +
            "cw.createdAt as createdAt) " +
            "FROM CefrWord cw " +
            "WHERE LOWER(cw.lemma) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
-           "LOWER(cw.definition) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
-           "ORDER BY cw.lemma ASC")
+           "LOWER(cw.definition) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+           "LOWER(cw.vietnameseMeaning) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+           "ORDER BY CASE " +
+           "WHEN LOWER(cw.lemma) = LOWER(:searchTerm) THEN 0 " +
+           "WHEN LOWER(cw.lemma) LIKE LOWER(CONCAT(:searchTerm, '%')) THEN 1 " +
+           "ELSE 2 END, " +
+           "CASE " +
+           "WHEN cw.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.A1 THEN 1 " +
+           "WHEN cw.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.A2 THEN 2 " +
+           "WHEN cw.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.B1 THEN 3 " +
+           "WHEN cw.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.B2 THEN 4 " +
+           "WHEN cw.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.C1 THEN 5 " +
+           "ELSE 6 END, " +
+           "LENGTH(cw.lemma) ASC, cw.lemma ASC")
     Page<?> searchVocabulary(@Param("searchTerm") String searchTerm, Pageable pageable);
     
     /**
@@ -98,7 +116,9 @@ public interface AdminVocabularyRepository extends JpaRepository<AdminQueryResul
            "cw.pronunciation as pronunciation, " +
            "cw.partOfSpeech as partOfSpeech, " +
            "cw.cefrLevel as cefr, " +
-           "cw.definition as meaning, " +
+           "cw.vietnameseMeaning as vietnameseMeaning, " +
+           "COALESCE(cw.vietnameseMeaning, cw.definition) as meaning, " +
+           "cw.definition as definition, " +
            "cw.source as source, " +
            "cw.createdAt as createdAt) " +
            "FROM CefrWord cw " +
@@ -121,6 +141,8 @@ public interface AdminVocabularyRepository extends JpaRepository<AdminQueryResul
            "cw.pronunciation as pronunciation, " +
            "cw.partOfSpeech as partOfSpeech, " +
            "cw.cefrLevel as cefr, " +
+           "cw.vietnameseMeaning as vietnameseMeaning, " +
+           "COALESCE(cw.vietnameseMeaning, cw.definition) as meaning, " +
            "cw.definition as definition, " +
            "cw.source as source, " +
            "cw.language as language, " +
