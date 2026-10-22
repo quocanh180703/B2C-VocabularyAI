@@ -4,6 +4,7 @@ import com.cloudinary.Cloudinary;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,6 +44,7 @@ public class AudioStorageConfig {
      * Initialize Cloudinary client for Cloudinary storage provider
      */
     @Bean
+    @ConditionalOnMissingBean(Cloudinary.class)
     @ConditionalOnProperty(name = "speaking.storage.type", havingValue = "cloudinary")
     public Cloudinary cloudinary(@Value("${speaking.storage.cloudinary-url:}") String cloudinaryUrl) {
         log.info("Initializing Cloudinary client");

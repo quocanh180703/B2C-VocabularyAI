@@ -74,8 +74,8 @@ public class CefrWordController {
             return ResponseEntity.ok(words);
         }
 
-        // Return empty page for now (implement full list if needed)
-        return ResponseEntity.ok(Page.empty());
+        Page<CefrWordResponse> words = cefrWordService.getAllWords(page, size);
+        return ResponseEntity.ok(words);
     }
 
     /**

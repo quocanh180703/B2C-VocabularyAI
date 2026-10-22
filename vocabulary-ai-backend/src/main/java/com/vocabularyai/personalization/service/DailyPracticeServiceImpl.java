@@ -63,44 +63,27 @@ public class DailyPracticeServiceImpl implements DailyPracticeService {
         }
         
         try {
-            // Lấy kế hoạch (TASK 4)
+            // Lấy kế hoạch (TASK 4) - đã được cache trong L1/Redis từ Bước 3
             LearningPlanDto plan = learningPlanService.createLearningPlan(userId);
             
             // Tìm tuần hiện tại
             currentWeek = getCurrentWeek(plan, today);
             
-            // Lấy chi tiết ngày từ kế hoạch
-            LearningPlanDto.DayPlanDto dayPlan = 
-                learningPlanService.getDayDetails(userId, currentWeek, dayOfWeek);
+            // Lấy chi tiết ngày trực tiếp từ đối tượng plan đã có trong bộ nhớ (không gọi lại LLM)
+            LearningPlanDto.DayPlanDto dayPlan = extractDayPlan(plan, currentWeek, dayOfWeek);
             
-            if (dayPlan == null) {
-                log.warn("[TASK 5] Không tìm thấy chi tiết ngày cho userId: {}", userId);
-                throw new DailyPracticeException("Không tìm thấy chi tiết ngày trong kế hoạch");
+            if (dayPlan != null && dayPlan.getTasks() != null && !dayPlan.getTasks().isEmpty()) {
+                DailyPracticeDto practice = buildPracticeFromDayPlan(dayPlan, userId, user.getFullName(), today, currentWeek, dayOfWeek);
+                cacheService.set(cacheKey, practice, CACHE_TTL_SECONDS);
+                log.info("[TASK 5] Tạo hoạt động trực tiếp từ kế hoạch thành công cho userId: {} ({} hoạt động)",
+                    userId, practice.getActivities().size());
+                return practice;
             }
             
-            // Kiểm tra rate limit
-            if (geminiAIClientService.isRateLimitExceeded(userId)) {
-                log.warn("[TASK 5] Rate limit vượt quá cho userId: {}", userId);
-                throw new RateLimitExceededException("Rate limit vượt quá",
-                    System.currentTimeMillis() / 1000 + 3600, "HOURLY");
-            }
-            
-            // Xây dựng prompt
-            String prompt = buildDailyPrompt(dayPlan, plan, currentWeek);
-            
-            // Gọi Gemini
-            String response = geminiAIClientService.generateResponse(prompt, userId);
-            
-            // Phân tích phản hồi
-            DailyPracticeDto practice = parseResponse(response, userId, user.getFullName(), today, currentWeek, dayOfWeek);
-            
-            // Cache
-            cacheService.set(cacheKey, practice, CACHE_TTL_SECONDS);
-            
-            log.info("[TASK 5] Lấy hoạt động thành công cho userId: {} ({} hoạt động)",
-                userId, practice.getActivities() != null ? practice.getActivities().size() : 0);
-            
-            return practice;
+            // Nếu kế hoạch ngày chưa có chi tiết nhiệm vụ, trả về bài tập đề xuất tức thì để tránh timeout
+            DailyPracticeDto fallback = buildFallbackPractice(userId, user.getFullName(), today, currentWeek, dayOfWeek);
+            cacheService.set(cacheKey, fallback, CACHE_TTL_SECONDS);
+            return fallback;
             
         } catch (Exception e) {
             log.warn("[TASK 5] AI daily practice encountered error ({}), using fallback practice", e.getMessage());
@@ -127,27 +110,14 @@ public class DailyPracticeServiceImpl implements DailyPracticeService {
         
         try {
             LearningPlanDto plan = learningPlanService.createLearningPlan(userId);
-            LearningPlanDto.DayPlanDto dayPlan = 
-                learningPlanService.getDayDetails(userId, weekNumber, dayOfWeek);
+            LearningPlanDto.DayPlanDto dayPlan = extractDayPlan(plan, weekNumber, dayOfWeek);
             
-            if (dayPlan == null) {
-                return buildFallbackPractice(userId, user.getFullName(), LocalDateTime.now(), weekNumber, dayOfWeek);
+            if (dayPlan != null && dayPlan.getTasks() != null && !dayPlan.getTasks().isEmpty()) {
+                return buildPracticeFromDayPlan(dayPlan, userId, user.getFullName(), LocalDateTime.now(), weekNumber, dayOfWeek);
             }
             
-            if (geminiAIClientService.isRateLimitExceeded(userId)) {
-                return buildFallbackPractice(userId, user.getFullName(), LocalDateTime.now(), weekNumber, dayOfWeek);
-            }
-            
-            String prompt = buildDailyPrompt(dayPlan, plan, weekNumber);
-            String response = geminiAIClientService.generateResponse(prompt, userId);
-            
-            DailyPracticeDto practice = parseResponse(response, userId, user.getFullName(), 
-                LocalDateTime.now(), weekNumber, dayOfWeek);
-            
-            return practice;
-            
+            return buildFallbackPractice(userId, user.getFullName(), LocalDateTime.now(), weekNumber, dayOfWeek);
         } catch (Exception e) {
-            log.warn("[TASK 5] Lỗi lấy hoạt động ngày cụ thể: {}, trả về fallback", e.getMessage());
             return buildFallbackPractice(userId, user.getFullName(), LocalDateTime.now(), weekNumber, dayOfWeek);
         }
     }
@@ -319,6 +289,55 @@ public class DailyPracticeServiceImpl implements DailyPracticeService {
             .expectedDifficulty("MODERATE")
             .activities(acts)
             .totalDurationMinutes(25)
+            .completed(false)
+            .createdAt(LocalDateTime.now())
+            .build();
+    }
+
+    private LearningPlanDto.DayPlanDto extractDayPlan(LearningPlanDto plan, int weekNumber, String dayOfWeek) {
+        if (plan == null || plan.getWeeks() == null) return null;
+        return plan.getWeeks().stream()
+            .filter(w -> w.getWeekNumber() == weekNumber)
+            .flatMap(w -> w.getDays().stream())
+            .filter(d -> d.getDayOfWeek() != null && d.getDayOfWeek().equalsIgnoreCase(dayOfWeek))
+            .findFirst()
+            .orElse(null);
+    }
+
+    private DailyPracticeDto buildPracticeFromDayPlan(LearningPlanDto.DayPlanDto dayPlan, Long userId, String userName, LocalDateTime date, int weekNumber, String dayOfWeek) {
+        List<DailyPracticeDto.ActivityDto> acts = new java.util.ArrayList<>();
+        int order = 1;
+        if (dayPlan.getTasks() != null && !dayPlan.getTasks().isEmpty()) {
+            for (LearningPlanDto.TaskDto t : dayPlan.getTasks()) {
+                acts.add(DailyPracticeDto.ActivityDto.builder()
+                    .order(order++)
+                    .title(t.getTitle() != null ? t.getTitle() : "Hoạt động học tập")
+                    .description(t.getInstructions() != null ? t.getInstructions() : "Thực hành theo kế hoạch hàng ngày")
+                    .type(t.getType() != null ? t.getType() : "VOCABULARY")
+                    .durationMinutes(t.getDurationMinutes() != null ? t.getDurationMinutes() : 10)
+                    .objective(dayPlan.getDailyGoal() != null ? dayPlan.getDailyGoal() : "Củng cố kiến thức")
+                    .instructions(t.getInstructions() != null ? t.getInstructions() : "Thực hành hoàn thành bài tập")
+                    .difficulty(dayPlan.getExpectedDifficulty() != null ? dayPlan.getExpectedDifficulty() : "MODERATE")
+                    .mandatory(t.getOrder() == null || t.getOrder() <= 2)
+                    .build());
+            }
+        }
+        if (acts.isEmpty()) {
+            return buildFallbackPractice(userId, userName, date, weekNumber, dayOfWeek);
+        }
+        int totalMins = acts.stream().mapToInt(a -> a.getDurationMinutes() != null ? a.getDurationMinutes() : 10).sum();
+        return DailyPracticeDto.builder()
+            .userId(userId)
+            .userName(userName != null ? userName : "Học viên")
+            .date(date != null ? date : LocalDateTime.now())
+            .dayOfWeek(dayOfWeek != null ? dayOfWeek : "TODAY")
+            .weekNumber(weekNumber > 0 ? weekNumber : 1)
+            .dayTitle(dayPlan.getDayTitle() != null ? dayPlan.getDayTitle() : "Bài tập hôm nay")
+            .dailyGoal(dayPlan.getDailyGoal() != null ? dayPlan.getDailyGoal() : "Tập trung hoàn thành bài tập ngày")
+            .motivationalTip("Mỗi ngày tích lũy 15 phút, sau 1 tháng bạn sẽ bất ngờ với vốn từ của mình!")
+            .expectedDifficulty(dayPlan.getExpectedDifficulty() != null ? dayPlan.getExpectedDifficulty() : "MODERATE")
+            .activities(acts)
+            .totalDurationMinutes(totalMins > 0 ? totalMins : 25)
             .completed(false)
             .createdAt(LocalDateTime.now())
             .build();

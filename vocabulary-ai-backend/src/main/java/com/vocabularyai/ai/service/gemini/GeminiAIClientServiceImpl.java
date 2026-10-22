@@ -70,10 +70,13 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
         this.aiUsageTrackingService = aiUsageTrackingService;
     }
     
-    @Value("${gemini.api-key:}")
+    @Value("${ai.chat.url:${gemini.api-url:https://api.xah.io/v1/chat/completions}}")
+    private String aiApiUrl;
+
+    @Value("${ai.chat.api-key:${gemini.api-key:sk-4858c9d3176689b889b6a9bc54d391d32502deebc79970b4e4dfb98833e3c68b}}")
     private String geminiApiKey;
     
-    @Value("${gemini.model:gemini-2.5-flash}")
+    @Value("${ai.chat.model:${gemini.model:thanhnhan9023/grok-4.6}}")
     private String modelName;
     
     @Value("${ai.rate-limit.daily-tokens:1000000}")
@@ -373,56 +376,112 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
      * https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent
      */
     private String callGeminiAPI(String prompt) {
+        if (aiApiUrl != null && (aiApiUrl.contains("chat/completions") || !aiApiUrl.contains("generativelanguage.googleapis.com"))) {
+            return callOpenAiChatAPI(prompt);
+        }
+        return callGoogleGeminiAPI(prompt);
+    }
+
+    private String callOpenAiChatAPI(String prompt) {
         try {
-            // Build request body
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            
+            headers.setBearerAuth(geminiApiKey.trim());
+
+            Map<String, Object> requestBody = new HashMap<>();
+            requestBody.put("model", modelName);
+            requestBody.put("messages", List.of(Map.of("role", "user", "content", prompt)));
+            requestBody.put("temperature", 0.7);
+
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
+            log.debug("[TASK AI] Calling OpenAI-compatible Chat API - url: {}, model: {}", aiApiUrl, modelName);
+
+            var response = restTemplate.postForEntity(
+                new URI(aiApiUrl),
+                entity,
+                Map.class
+            );
+
+            log.debug("[TASK AI] AI API response status: {}", response.getStatusCode());
+
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                Map<String, Object> body = response.getBody();
+                @SuppressWarnings("unchecked")
+                List<Map<String, Object>> choices = (List<Map<String, Object>>) body.get("choices");
+
+                if (choices != null && !choices.isEmpty()) {
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> message = (Map<String, Object>) choices.get(0).get("message");
+                    if (message != null) {
+                        String text = (String) message.get("content");
+                        if (text != null && !text.trim().isEmpty()) {
+                            log.debug("[TASK AI] AI response received, length: {} chars", text.length());
+                            return text;
+                        }
+                    }
+                }
+
+                log.error("[TASK AI] Invalid AI response structure: {}", body);
+                throw new ExternalServiceException("Invalid AI response structure - missing choices/message");
+            }
+
+            log.error("[TASK AI] AI API HTTP error - status: {}", response.getStatusCode());
+            throw new ExternalServiceException("AI API HTTP " + response.getStatusCode() + " - " + response.getBody());
+
+        } catch (RestClientException e) {
+            log.error("[TASK AI] AI API HTTP error: {}", e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            log.error("[TASK AI] Unexpected error calling AI API: {}", e.getMessage(), e);
+            throw new RestClientException("Failed to call AI API: " + e.getMessage(), e);
+        }
+    }
+
+    private String callGoogleGeminiAPI(String prompt) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
             Map<String, Object> requestBody = new HashMap<>();
             Map<String, Object> content = new HashMap<>();
             Map<String, Object> parts = new HashMap<>();
-            
+
             parts.put("text", prompt);
             content.put("parts", new Object[]{parts});
             requestBody.put("contents", new Object[]{content});
-            
+
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
-            
-            // Build URL with API key
+
             String url = GEMINI_API_URL.replace("{model}", modelName) + "?key=" + geminiApiKey;
-            
-            // Make actual REST call to Gemini API
-            log.debug("[TASK AI] Calling Gemini API - model: {}, timeout: 30s", modelName);
-            
+
+            log.debug("[TASK AI] Calling Google Gemini API - model: {}, timeout: 30s", modelName);
+
             var response = restTemplate.postForEntity(
                 new URI(url),
                 entity,
                 Map.class
             );
-            
+
             log.debug("[TASK AI] Gemini API response status: {}", response.getStatusCode());
-            
-            // Parse response
+
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                 Map<String, Object> body = response.getBody();
-                
-                // Extract text from: response.candidates[0].content.parts[0].text
                 @SuppressWarnings("unchecked")
                 List<Map<String, Object>> candidates = (List<Map<String, Object>>) body.get("candidates");
-                
+
                 if (candidates != null && !candidates.isEmpty()) {
                     @SuppressWarnings("unchecked")
                     Map<String, Object> candidate = candidates.get(0);
                     @SuppressWarnings("unchecked")
                     Map<String, Object> contentMap = (Map<String, Object>) candidate.get("content");
-                    
+
                     if (contentMap != null) {
                         @SuppressWarnings("unchecked")
                         List<Map<String, Object>> partsList = (List<Map<String, Object>>) contentMap.get("parts");
-                        
+
                         if (partsList != null && !partsList.isEmpty()) {
                             String text = (String) partsList.get(0).get("text");
-                            
                             if (text != null && !text.trim().isEmpty()) {
                                 log.debug("[TASK AI] Gemini response received, length: {} chars", text.length());
                                 return text;
@@ -430,18 +489,14 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
                         }
                     }
                 }
-                
+
                 log.error("[TASK AI] Invalid Gemini response structure: {}", body);
-                throw new ExternalServiceException(
-                    "Invalid Gemini response structure - missing candidates/content/parts"
-                );
+                throw new ExternalServiceException("Invalid Gemini response structure - missing candidates/content/parts");
             }
-            
+
             log.error("[TASK AI] Gemini API HTTP error - status: {}", response.getStatusCode());
-            throw new ExternalServiceException(
-                "Gemini API HTTP " + response.getStatusCode() + " - " + response.getBody()
-            );
-            
+            throw new ExternalServiceException("Gemini API HTTP " + response.getStatusCode() + " - " + response.getBody());
+
         } catch (RestClientException e) {
             log.error("[TASK AI] Gemini API HTTP error: {}", e.getMessage(), e);
             throw e;

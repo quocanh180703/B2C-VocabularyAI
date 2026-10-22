@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,17 +29,14 @@ import org.springframework.web.bind.annotation.*;
  * Tạo audio pronunciation reference từ text
  * 
  * Endpoints:
+ * - GET  /api/ai/speaking/tts/stream - Phát trực tiếp MP3 stream cho tag audio
  * - POST /api/ai/speaking/tts/word - Generate TTS cho 1 từ
  * - POST /api/ai/speaking/tts/phrase - Generate TTS cho 1 cụm từ
- * - GET /api/ai/speaking/tts/sessions/{sessionId}/reference - Generate TTS cho topic
- * 
- * Security:
- * - Require JWT authentication
- * - Rate limiting: 1M tokens/day
+ * - GET  /api/ai/speaking/tts/sessions/{sessionId}/reference - Generate TTS cho topic
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/ai/speaking/tts")
+@RequestMapping({"/api/ai/speaking/tts", "/ai/speaking/tts"})
 @RequiredArgsConstructor
 @Tag(name = "Text-to-Speech", description = "API tạo audio pronunciation reference từ text")
 @SecurityRequirement(name = "bearer-jwt")
@@ -47,6 +45,84 @@ public class TextToSpeechController {
     
     private final TextToSpeechService textToSpeechService;
     private final SpeakingSessionRepository sessionRepository;
+
+    /**
+     * GET /api/ai/speaking/tts/stream
+     * 
+     * Phát trực tiếp file âm thanh MP3 từ text (hỗ trợ tag audio của browser không cần header auth)
+     */
+    @GetMapping(value = "/stream", produces = "audio/mpeg")
+    @PreAuthorize("permitAll()")
+    @Operation(summary = "Stream audio MP3 directly", description = "Phát trực tiếp file âm thanh MP3 cho từ hoặc câu")
+    public ResponseEntity<byte[]> streamTts(
+        @Parameter(description = "Văn bản hoặc từ cần phát âm", required = true)
+        @RequestParam String text,
+        @Parameter(description = "Giọng đọc (mặc định: alloy)")
+        @RequestParam(required = false, defaultValue = "alloy") String voice
+    ) {
+        if (text == null || text.trim().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        try {
+            byte[] audioBytes;
+            if (textToSpeechService instanceof com.vocabularyai.speaking.service.tts.XahTextToSpeechService xahService) {
+                audioBytes = xahService.synthesizeRawAudio(text, voice);
+            } else {
+                TextToSpeechResult result = textToSpeechService.synthesize(text, "en-US", voice);
+                if (result.getAudioUrl() != null && result.getAudioUrl().startsWith("data:audio/mp3;base64,")) {
+                    audioBytes = java.util.Base64.getDecoder().decode(result.getAudioUrl().substring("data:audio/mp3;base64,".length()));
+                } else {
+                    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+                }
+            }
+
+            return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"speech.mp3\"")
+                .header(HttpHeaders.CACHE_CONTROL, "public, max-age=86400")
+                .body(audioBytes);
+        } catch (Exception e) {
+            log.error("Failed to stream TTS audio for text: {}", text, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
+     * POST /api/ai/speaking/tts/synthesize
+     * 
+     * Tổng hợp âm thanh từ đoạn text bất kỳ
+     */
+    @PostMapping("/synthesize")
+    @Operation(summary = "Synthesize TTS audio for general text")
+    public ResponseEntity<TextToSpeechResponse> synthesizeText(
+        @RequestBody TextToSpeechRequest request
+    ) {
+        String input = request.getEffectiveText();
+        if (input.isEmpty()) {
+            throw new IllegalArgumentException("Text cannot be empty");
+        }
+
+        TextToSpeechResult result = textToSpeechService.synthesize(
+            input,
+            request.getLanguage() != null ? request.getLanguage() : "en-US"
+        );
+
+        TextToSpeechResponse response = TextToSpeechResponse.builder()
+            .phrase(input)
+            .word(request.getWord())
+            .audioUrl(result.getAudioUrl())
+            .audioFormat(result.getAudioFormat())
+            .durationSeconds(result.getDurationSeconds())
+            .voice(result.getVoice())
+            .language(result.getLanguageCode())
+            .provider(result.getProvider())
+            .processingTimeMs(result.getProcessingTimeMs())
+            .success(result.getSuccess())
+            .createdAt(java.time.LocalDateTime.now())
+            .build();
+
+        return ResponseEntity.ok(response);
+    }
     
     /**
      * POST /api/ai/speaking/tts/word

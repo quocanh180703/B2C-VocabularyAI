@@ -99,6 +99,17 @@ public class CefrWordService {
     }
 
     /**
+     * Get all CEFR words without level filter (paginated)
+     */
+    @Cacheable(key = "'cefr-words:all:page:' + #page + ':size:' + #size", cacheNames = "cefr-words")
+    public Page<CefrWordResponse> getAllWords(int page, int size) {
+        log.debug("Getting all CEFR words, page: {}, size: {}", page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("lemma").ascending());
+        Page<CefrWord> words = cefrWordRepository.findAll(pageable);
+        return words.map(CefrWordResponse::fromEntityMinimal);
+    }
+
+    /**
      * Search words by lemma or definition
      * 
      * CACHED: 1 hour TTL

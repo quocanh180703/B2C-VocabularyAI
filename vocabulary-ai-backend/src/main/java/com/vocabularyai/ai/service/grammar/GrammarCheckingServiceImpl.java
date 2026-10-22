@@ -309,8 +309,9 @@ public class GrammarCheckingServiceImpl implements GrammarCheckingService {
      */
     private GrammarCheckResponse parseGrammarCheckResponse(String originalText, String aiResponse, Boolean includeSuggestions) {
         try {
-            // Try to parse as JSON
-            Map<String, Object> parsed = objectMapper.readValue(aiResponse, Map.class);
+            // Try to parse as JSON (stripping markdown code blocks if present)
+            String cleaned = cleanJson(aiResponse);
+            Map<String, Object> parsed = objectMapper.readValue(cleaned, Map.class);
             
             String correctedText = (String) parsed.getOrDefault("correctedText", originalText);
             
@@ -450,5 +451,23 @@ public class GrammarCheckingServiceImpl implements GrammarCheckingService {
         }
         
         return responses;
+    }
+
+    private String cleanJson(String raw) {
+        if (raw == null || raw.trim().isEmpty()) return "{}";
+        try {
+            return com.vocabularyai.ai.util.JsonResponseExtractor.extractJsonString(raw);
+        } catch (Exception e) {
+            String trimmed = raw.trim();
+            if (trimmed.startsWith("```json")) {
+                trimmed = trimmed.substring(7);
+            } else if (trimmed.startsWith("```")) {
+                trimmed = trimmed.substring(3);
+            }
+            if (trimmed.endsWith("```")) {
+                trimmed = trimmed.substring(0, trimmed.length() - 3);
+            }
+            return trimmed.trim();
+        }
     }
 }

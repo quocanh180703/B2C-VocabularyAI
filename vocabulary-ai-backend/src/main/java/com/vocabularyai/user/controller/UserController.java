@@ -12,9 +12,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import com.vocabularyai.common.exception.BadRequestException;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * User Controller
@@ -64,6 +67,48 @@ public class UserController {
         UserResponse userResponse = userService.updateUserProfile(userId, request);
         return ResponseEntity.ok(
             ApiResponse.success("User profile updated successfully", userResponse)
+        );
+    }
+    
+    /**
+     * Upload current user avatar to Cloudinary
+     */
+    @PostMapping(value = "/me/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("isAuthenticated()")
+    @Operation(
+        summary = "Upload user avatar",
+        description = "Upload an avatar image to Cloudinary and update user profile"
+    )
+    public ResponseEntity<ApiResponse<UserResponse>> uploadAvatar(
+            @RequestParam(value = "avatar", required = false) MultipartFile avatar,
+            @RequestParam(value = "file", required = false) MultipartFile file) {
+        log.info("Uploading avatar for current user");
+        MultipartFile uploadFile = avatar != null ? avatar : file;
+        if (uploadFile == null || uploadFile.isEmpty()) {
+            throw new BadRequestException("Vui lòng chọn tệp ảnh để tải lên.");
+        }
+        Long userId = userService.getCurrentUserId();
+        UserResponse userResponse = userService.uploadAvatar(userId, uploadFile);
+        return ResponseEntity.ok(
+            ApiResponse.success("Ảnh đại diện đã được cập nhật thành công!", userResponse)
+        );
+    }
+    
+    /**
+     * Delete user avatar and revert to default
+     */
+    @DeleteMapping("/me/avatar")
+    @PreAuthorize("isAuthenticated()")
+    @Operation(
+        summary = "Delete user avatar",
+        description = "Delete user avatar and reset to default"
+    )
+    public ResponseEntity<ApiResponse<UserResponse>> deleteAvatar() {
+        log.info("Deleting avatar for current user");
+        Long userId = userService.getCurrentUserId();
+        UserResponse userResponse = userService.deleteAvatar(userId);
+        return ResponseEntity.ok(
+            ApiResponse.success("Đã xóa ảnh đại diện thành công!", userResponse)
         );
     }
     

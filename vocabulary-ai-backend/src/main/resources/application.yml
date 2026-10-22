@@ -45,6 +45,15 @@ spring:
     open-in-view: false
   
   # ============================================================
+  # 3.5 Servlet Multipart Configuration
+  # ============================================================
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 15MB
+  
+  # ============================================================
   # 4. Flyway Database Migration
   # ============================================================
   flyway:
@@ -182,27 +191,41 @@ cloudinary:
   url: ${CLOUDINARY_URL:cloudinary://347852754341328:ysYZFQwFWNvSR8WgrOyVMcHc8Zk@dzb6rfaxt}
 
 # ============================================================
-# 11.5 Gemini AI Configuration
+# 11.5 Gemini Fallback Alias Configuration
 # ============================================================
 gemini:
-  api-key: ${GEMINI_API_KEY:your_gemini_api_key}
-  model: ${GEMINI_MODEL:gemini-1.5-flash}
+  api-key: ${AI_CHAT_API_KEY:sk-4858c9d3176689b889b6a9bc54d391d32502deebc79970b4e4dfb98833e3c68b}
+  model: ${AI_CHAT_MODEL:thanhnhan9023/grok-4.6}
 
 # ============================================================
-# 11.6 Speech-to-Text Configuration (Groq Whisper / OpenAI)
+# 11.6 Speech-to-Text Configuration (Vilao AI Whisper / Groq / OpenAI)
 # ============================================================
 whisper:
-  url: ${WHISPER_URL:https://api.groq.com/openai/v1/audio/transcriptions}
-  api-key: ${GROQ_API_KEY:${OPENAI_API_KEY:your_groq_api_key}}
-  model: ${WHISPER_MODEL:whisper-large-v3}
+  url: ${WHISPER_URL:https://api.vilao.ai/v1/audio/transcriptions}
+  api-key: ${WHISPER_API_KEY:${VILAO_API_KEY:${GROQ_API_KEY:${OPENAI_API_KEY:sk-d580db74021198d80fb8937c563d259f07aec2bece742b46be7980f22443a266}}}}
+  model: ${WHISPER_MODEL:tsa/groq/whisper-large-v3}
   language: ${WHISPER_LANGUAGE:en}
   timeout-seconds: 30
   max-retries: 3
 
 # ============================================================
-# 11.7 AI Rate Limiting Configuration
+# 11.6.1 Text-to-Speech Configuration (xah.io / OpenAI-compatible TTS)
+# ============================================================
+tts:
+  url: ${TTS_URL:https://api.xah.io/v1/audio/speech}
+  api-key: ${TTS_API_KEY:sk-4858c9d3176689b889b6a9bc54d391d32502deebc79970b4e4dfb98833e3c68b}
+  model: ${TTS_MODEL:namth/grok-voice-latest}
+  voice: ${TTS_VOICE:alloy}
+  timeout-seconds: 30
+
+# ============================================================
+# 11.7 AI Core & Rate Limiting Configuration (Grok 4.6 / xah.io)
 # ============================================================
 ai:
+  chat:
+    url: ${AI_CHAT_URL:https://api.xah.io/v1/chat/completions}
+    api-key: ${AI_CHAT_API_KEY:sk-4858c9d3176689b889b6a9bc54d391d32502deebc79970b4e4dfb98833e3c68b}
+    model: ${AI_CHAT_MODEL:thanhnhan9023/grok-4.6}
   rate-limit:
     daily-tokens: 1000000  # 1M tokens per day
     daily-requests: 1000   # 1000 requests per day
@@ -519,6 +542,10 @@ speaking:
   speech-to-text:
     provider: whisper              # Use OpenAI Whisper for speech-to-text
     language-code: en-US           # Default language code
+  text-to-speech:
+    provider: xah                  # High-quality speech generation via xah.io
+    language-code: en-US
+    voice-name: alloy
   pronunciation:
     provider: disabled              # Tắt tạm thời tính năng phát âm nếu chưa cấu hình provider
 

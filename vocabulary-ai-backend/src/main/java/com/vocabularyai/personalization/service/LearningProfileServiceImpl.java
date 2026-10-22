@@ -134,15 +134,19 @@ public class LearningProfileServiceImpl implements LearningProfileService {
     private LearningProfileDto buildLearningProfile(User user) {
         log.debug("Building learning profile for user {}", user.getId());
         
-        // Get learning progress (vocabulary + grammar)
-        var learningStats = getLearningProgressStats(user.getId());
+        int totalLearningDays = getTotalLearningDays(user.getId());
+
+        // Get learning progress (vocabulary + grammar) with volume & maturity weights
+        var learningStats = getLearningProgressStats(user.getId(), totalLearningDays);
         
         // Get speaking progress
-        var speakingStats = getSpeakingStats(user.getId());
+        var speakingStats = getSpeakingStats(user.getId(), totalLearningDays);
         
         // Calculate overall metrics
         Double overallScore = calculateOverallScore(learningStats, speakingStats);
-        String currentLevel = estimateLevelFromScore(overallScore);
+        int totalAttemptedWords = learningStats.get("vocabulary") != null && learningStats.get("vocabulary").getTotalActivities() != null
+            ? learningStats.get("vocabulary").getTotalActivities() : 0;
+        String currentLevel = estimateLevelFromScore(overallScore, totalAttemptedWords, totalLearningDays);
         
         // Get trends
         TrendData trend7Days = calculateTrend(user.getId(), 7);
@@ -176,7 +180,7 @@ public class LearningProfileServiceImpl implements LearningProfileService {
             .trend30Days(trend30Days)
             .recentActivities(recentActivities)
             .lastActivityAt(getLastActivityTime(user.getId()))
-            .totalLearningDays(getTotalLearningDays(user.getId()))
+            .totalLearningDays(totalLearningDays)
             .currentStreak(currentStreak)
             .longestStreak(longestStreak)
             .achievements(achievements)
@@ -190,62 +194,91 @@ public class LearningProfileServiceImpl implements LearningProfileService {
     }
     
     /**
-     * Get vocabulary and grammar statistics from LearningProgress
+     * Get vocabulary and grammar statistics from LearningProgress.
+     * Uses Method 1: Volume & Data Maturity Weighted Score to prevent brand-new accounts from scoring high CEFR levels.
      */
-    private Map<String, PerformanceMetric> getLearningProgressStats(Long userId) {
+    private Map<String, PerformanceMetric> getLearningProgressStats(Long userId, int totalLearningDays) {
         log.debug("Getting learning progress stats for user {}", userId);
         
         Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
         var allProgress = learningProgressRepository.findByUserId(userId, pageable);
-        
-        // Split into vocabulary and grammar based on word category (simplified)
-        // For now, treat all learning progress as vocabulary
         List<LearningProgress> progressList = allProgress.getContent();
         
-        // Only evaluate accuracy on items that user has actually attempted (reviewCount > 0 or attempts > 0)
         List<LearningProgress> attemptedProgress = progressList.stream()
             .filter(lp -> (lp.getCorrectCount() + lp.getWrongCount()) > 0)
             .collect(Collectors.toList());
 
-        double accuracy;
+        double rawAccuracy;
         if (!attemptedProgress.isEmpty()) {
-            accuracy = attemptedProgress.stream()
+            rawAccuracy = attemptedProgress.stream()
                 .mapToDouble(LearningProgress::getAccuracy)
                 .average()
                 .orElse(0.0);
         } else if (!progressList.isEmpty()) {
-            // Words added to list but not reviewed yet
-            accuracy = 50.0;
+            rawAccuracy = 50.0;
         } else {
-            accuracy = 0.0;
+            rawAccuracy = 0.0;
         }
         
-        long masteredCount = progressList.stream()
-            .filter(lp -> lp.getStatus() == LearningProgress.LearningStatus.MASTERED)
-            .count();
+        int attemptedCount = attemptedProgress.size();
+        int totalActivities = (int) progressList.stream()
+            .mapToLong(lp -> lp.getReviewCount())
+            .sum();
+        
+        // Volume Factor: scales up gradually with the number of unique words practiced
+        double volumeFactor;
+        if (attemptedCount < 15) {
+            volumeFactor = 0.35;
+        } else if (attemptedCount < 50) {
+            volumeFactor = 0.50;
+        } else if (attemptedCount < 150) {
+            volumeFactor = 0.65;
+        } else if (attemptedCount < 350) {
+            volumeFactor = 0.80;
+        } else if (attemptedCount < 800) {
+            volumeFactor = 0.90;
+        } else {
+            volumeFactor = 1.00;
+        }
+
+        // Maturity Factor: rewards consistency across days (retention verification)
+        double maturityFactor;
+        if (totalLearningDays <= 1) {
+            maturityFactor = 0.75;
+        } else if (totalLearningDays < 5) {
+            maturityFactor = 0.85;
+        } else if (totalLearningDays < 14) {
+            maturityFactor = 0.95;
+        } else {
+            maturityFactor = 1.00;
+        }
+
+        double weightedVocabScore = Math.min(100.0, Math.max(0.0, rawAccuracy * volumeFactor * maturityFactor));
+        String vocabLevel = estimateLevelFromScore(weightedVocabScore, attemptedCount, totalLearningDays);
         
         PerformanceMetric vocabularyMetric = PerformanceMetric.builder()
-            .score(accuracy)
+            .score(weightedVocabScore)
             .bestScore(attemptedProgress.stream()
                 .mapToDouble(LearningProgress::getAccuracy)
                 .max()
-                .orElse(accuracy))
-            .averageScore(accuracy)
-            .totalActivities((int) progressList.stream()
-                .mapToLong(lp -> lp.getReviewCount())
-                .sum())
-            .level(estimateLevelFromScore(accuracy))
-            .progressInLevel(calculateProgressInLevel(accuracy))
+                .orElse(rawAccuracy))
+            .averageScore(weightedVocabScore)
+            .totalActivities(totalActivities)
+            .level(vocabLevel)
+            .progressInLevel(calculateProgressInLevel(weightedVocabScore))
             .recommendedFocus(getVocabularyFocus(progressList))
             .build();
         
+        double weightedGrammarScore = Math.min(100.0, Math.max(0.0, weightedVocabScore * 0.9));
+        String grammarLevel = estimateLevelFromScore(weightedGrammarScore, attemptedCount, totalLearningDays);
+        
         PerformanceMetric grammarMetric = PerformanceMetric.builder()
-            .score(accuracy * 0.9) // Grammar slightly lower
-            .bestScore(accuracy)
-            .averageScore(accuracy * 0.9)
+            .score(weightedGrammarScore)
+            .bestScore(rawAccuracy * 0.9)
+            .averageScore(weightedGrammarScore)
             .totalActivities(progressList.size())
-            .level(estimateLevelFromScore(accuracy * 0.9))
-            .progressInLevel(calculateProgressInLevel(accuracy * 0.9))
+            .level(grammarLevel)
+            .progressInLevel(calculateProgressInLevel(weightedGrammarScore))
             .recommendedFocus("Focus on verb tenses")
             .build();
         
@@ -254,26 +287,50 @@ public class LearningProfileServiceImpl implements LearningProfileService {
         result.put("grammar", grammarMetric);
         return result;
     }
+
+    private Map<String, PerformanceMetric> getLearningProgressStats(Long userId) {
+        return getLearningProgressStats(userId, getTotalLearningDays(userId));
+    }
     
     /**
-     * Get speaking statistics from SpeakingProgressService
+     * Get speaking statistics with volume weighting
      */
-    private PerformanceMetric getSpeakingStats(Long userId) {
+    private PerformanceMetric getSpeakingStats(Long userId, int totalLearningDays) {
         log.debug("Getting speaking stats for user {}", userId);
         
         try {
             var speakingProgress = speakingProgressService.getSpeakingProgress(userId);
             
-            Double avgScore = speakingProgress.getAverageScores().getOverallScore();
-            Double bestScore = speakingProgress.getBestScores().getOverallScore();
+            Double avgScore = speakingProgress.getAverageScores() != null 
+                ? speakingProgress.getAverageScores().getOverallScore() : null;
+            Double bestScore = speakingProgress.getBestScores() != null 
+                ? speakingProgress.getBestScores().getOverallScore() : null;
+            int totalAttempts = (speakingProgress.getStatistics() != null && speakingProgress.getStatistics().getTotalAttempts() != null)
+                ? speakingProgress.getStatistics().getTotalAttempts().intValue() : 0;
+            
+            if (totalAttempts == 0 || avgScore == null) {
+                return PerformanceMetric.builder()
+                    .score(0.0)
+                    .bestScore(0.0)
+                    .averageScore(0.0)
+                    .totalActivities(0)
+                    .level("A1")
+                    .progressInLevel(0.0)
+                    .recommendedFocus("Start speaking practice")
+                    .build();
+            }
+
+            double speakingVolumeFactor = totalAttempts < 5 ? 0.50 : (totalAttempts < 15 ? 0.75 : 1.00);
+            double weightedSpeakingScore = Math.min(100.0, Math.max(0.0, avgScore * speakingVolumeFactor));
+            String speakingLevel = estimateLevelFromScore(weightedSpeakingScore, totalAttempts, totalLearningDays);
             
             return PerformanceMetric.builder()
-                .score(avgScore)
-                .bestScore(bestScore)
-                .averageScore(avgScore)
-                .totalActivities(speakingProgress.getStatistics().getTotalAttempts().intValue())
-                .level(estimateLevelFromScore(avgScore))
-                .progressInLevel(calculateProgressInLevel(avgScore))
+                .score(weightedSpeakingScore)
+                .bestScore(bestScore != null ? bestScore : weightedSpeakingScore)
+                .averageScore(weightedSpeakingScore)
+                .totalActivities(totalAttempts)
+                .level(speakingLevel)
+                .progressInLevel(calculateProgressInLevel(weightedSpeakingScore))
                 .recommendedFocus("Practice daily conversations")
                 .build();
         } catch (Exception e) {
@@ -288,6 +345,10 @@ public class LearningProfileServiceImpl implements LearningProfileService {
                 .recommendedFocus("Start speaking practice")
                 .build();
         }
+    }
+
+    private PerformanceMetric getSpeakingStats(Long userId) {
+        return getSpeakingStats(userId, getTotalLearningDays(userId));
     }
     
     /**
@@ -578,20 +639,35 @@ public class LearningProfileServiceImpl implements LearningProfileService {
     /**
      * Get total learning days
      */
+    /**
+     * Get total learning days across speaking sessions and vocabulary/quiz history
+     */
     private Integer getTotalLearningDays(Long userId) {
         Set<java.time.LocalDate> learningDates = new HashSet<>();
         
         LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(365);
         LocalDateTime now = LocalDateTime.now();
         
-        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
-        var sessionsPage = speakingSessionRepository.findByUserIdAndCreatedAtBetween(
-            userId, thirtyDaysAgo, now, pageable
-        );
-        
-        sessionsPage.getContent().forEach(session -> {
-            learningDates.add(session.getCreatedAt().toLocalDate());
-        });
+        Pageable pageable = PageRequest.of(0, 500);
+        try {
+            var sessionsPage = speakingSessionRepository.findByUserIdAndCreatedAtBetween(
+                userId, thirtyDaysAgo, now, pageable
+            );
+            sessionsPage.getContent().forEach(session -> {
+                if (session.getCreatedAt() != null) {
+                    learningDates.add(session.getCreatedAt().toLocalDate());
+                }
+            });
+        } catch (Exception ignored) {}
+
+        try {
+            var historyPage = learningHistoryRepository.findByDateRange(userId, thirtyDaysAgo, now, pageable);
+            historyPage.getContent().forEach(h -> {
+                if (h.getCreatedAt() != null) {
+                    learningDates.add(h.getCreatedAt().toLocalDate());
+                }
+            });
+        } catch (Exception ignored) {}
         
         return learningDates.size();
     }
@@ -618,15 +694,43 @@ public class LearningProfileServiceImpl implements LearningProfileService {
     }
     
     /**
-     * Estimate level from score
+     * Estimate CEFR level from score with hard ceiling constraints on small sample sizes.
+     * Prevents brand new users (e.g. 1 day of learning, < 15 words) from prematurely reaching B2/C1/C2.
      */
-    private String estimateLevelFromScore(Double score) {
-        if (score == null || score < 20) return "A1";
-        if (score < 35) return "A2";
-        if (score < 50) return "B1";
-        if (score < 65) return "B2";
-        if (score < 80) return "C1";
+    private String estimateLevelFromScore(Double score, int attemptedItems, int learningDays) {
+        if (score == null || score <= 0) return "A1";
+
+        // Hard ceiling guards based on volume and data maturity:
+        // Case 1: Under 15 items OR <= 1 day of learning -> max level is A2
+        if (attemptedItems < 15 || learningDays <= 1) {
+            if (score < 25) return "A1";
+            return "A2";
+        }
+        // Case 2: Under 50 items OR < 4 days of learning -> max level is B1
+        if (attemptedItems < 50 || learningDays < 4) {
+            if (score < 25) return "A1";
+            if (score < 45) return "A2";
+            return "B1";
+        }
+        // Case 3: Under 150 items OR < 10 days of learning -> max level is B2
+        if (attemptedItems < 150 || learningDays < 10) {
+            if (score < 25) return "A1";
+            if (score < 45) return "A2";
+            if (score < 60) return "B1";
+            return "B2";
+        }
+
+        // Fully matured profile:
+        if (score < 25) return "A1";
+        if (score < 45) return "A2";
+        if (score < 60) return "B1";
+        if (score < 75) return "B2";
+        if (score < 90) return "C1";
         return "C2";
+    }
+
+    private String estimateLevelFromScore(Double score) {
+        return estimateLevelFromScore(score, 100, 10);
     }
     
     /**

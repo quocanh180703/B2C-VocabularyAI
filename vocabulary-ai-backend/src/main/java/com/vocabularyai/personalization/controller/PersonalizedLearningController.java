@@ -421,9 +421,14 @@ public class PersonalizedLearningController {
         description = "Service error (Gemini API unavailable or parsing failed)"
     )
     public ResponseEntity<WeaknessStrengthResponse> analyzeWeaknessesAndStrengths(
-        @AuthenticationPrincipal User user
+        @AuthenticationPrincipal User user,
+        @RequestParam(required = false, defaultValue = "false") boolean refresh
     ) {
-        log.info("GET /api/ai/personalized/analysis - userId: {}", user.getId());
+        log.info("GET /api/ai/personalized/analysis - userId: {}, refresh: {}", user.getId(), refresh);
+        
+        if (refresh) {
+            weaknessStrengthService.invalidateCache(user.getId());
+        }
         
         try {
             var analysis = weaknessStrengthService.analyzeWeaknessesAndStrengths(user.getId());
@@ -1590,9 +1595,10 @@ public class PersonalizedLearningController {
         log.info("GET /api/ai/personalized/progress-analysis/prediction - userId: {}", user.getId());
         
         try {
-            var completionDate = progressAnalysisService.getEstimatedCompletionDate(user.getId());
-            var onTimeProbability = progressAnalysisService.getOnTimeCompletionProbability(user.getId());
-            var daysAheadOrBehind = progressAnalysisService.getDaysAheadOrBehind(user.getId());
+            var analysis = progressAnalysisService.analyzeProgress(user.getId());
+            var completionDate = analysis != null ? analysis.getEstimatedCompletionDate() : null;
+            var onTimeProbability = analysis != null ? analysis.getOnTimeCompletionProbability() : null;
+            var daysAheadOrBehind = analysis != null ? analysis.getDaysAheadOrBehind() : null;
             
             java.util.Map<String, Object> response = new java.util.HashMap<>();
             response.put("estimatedCompletionDate", completionDate != null ? completionDate : LocalDateTime.now().plusDays(28));

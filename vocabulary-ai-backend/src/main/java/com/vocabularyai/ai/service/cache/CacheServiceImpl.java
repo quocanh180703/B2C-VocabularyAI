@@ -56,17 +56,35 @@ public class CacheServiceImpl implements CacheService {
     private static final String RATE_LIMIT_TOKENS_PREFIX = "ai:ratelimit:tokens:";
     private static final String RATE_LIMIT_REQUESTS_PREFIX = "ai:ratelimit:requests:";
     
+    // ==================== Resilient L1 In-Memory Cache ====================
+    private static class CacheEntry {
+        final String json;
+        final long expiresAt;
+        CacheEntry(String json, long ttlSeconds) {
+            this.json = json;
+            this.expiresAt = System.currentTimeMillis() + (ttlSeconds * 1000);
+        }
+        boolean isExpired() {
+            return System.currentTimeMillis() > expiresAt;
+        }
+    }
+    private final java.util.Map<String, CacheEntry> localMemoryCache = new java.util.concurrent.ConcurrentHashMap<>();
+
     // ==================== Generic Cache Operations ====================
     
     @Override
     public void set(String key, Object value, long ttlSeconds) {
         try {
             String json = objectMapper.writeValueAsString(value);
-            redisTemplate.opsForValue().set(key, json, ttlSeconds, TimeUnit.SECONDS);
+            localMemoryCache.put(key, new CacheEntry(json, ttlSeconds));
+            try {
+                redisTemplate.opsForValue().set(key, json, ttlSeconds, TimeUnit.SECONDS);
+            } catch (Exception re) {
+                log.debug("Redis unavailable, preserved in local memory cache for key: {}", key);
+            }
             log.debug("Cached key: {} with TTL: {} seconds", key, ttlSeconds);
         } catch (Exception e) {
             log.warn("Failed to cache key: {}, error: {}", key, e.getMessage());
-            // Fail-open: continue without cache instead of throwing exception
         }
     }
     
@@ -77,6 +95,23 @@ public class CacheServiceImpl implements CacheService {
     
     @Override
     public <T> Optional<T> get(String key, Class<T> type) {
+        // 1. Check resilient local in-memory cache first
+        CacheEntry entry = localMemoryCache.get(key);
+        if (entry != null) {
+            if (!entry.isExpired()) {
+                try {
+                    T val = objectMapper.readValue(entry.json, type);
+                    log.debug("Memory cache hit for key: {}", key);
+                    return Optional.of(val);
+                } catch (Exception ignored) {
+                    localMemoryCache.remove(key);
+                }
+            } else {
+                localMemoryCache.remove(key);
+            }
+        }
+
+        // 2. Check Redis
         try {
             String json = redisTemplate.opsForValue().get(key);
             if (json == null) {
@@ -85,40 +120,38 @@ public class CacheServiceImpl implements CacheService {
             }
             
             T value = objectMapper.readValue(json, type);
-            log.debug("Cache hit for key: {}", key);
+            localMemoryCache.put(key, new CacheEntry(json, 300));
+            log.debug("Redis cache hit for key: {}", key);
             return Optional.of(value);
         } catch (Exception e) {
-            log.warn("Failed to deserialize cache key: {}, error: {}", key, e.getMessage());
-            // Delete corrupted cache entry
-            try {
-                redisTemplate.delete(key);
-            } catch (Exception ex) {
-                log.warn("Failed to delete corrupted cache key: {}", key);
-            }
+            log.debug("Redis lookup failed for key: {}: {}", key, e.getMessage());
             return Optional.empty();
         }
     }
     
     @Override
     public void delete(String key) {
+        localMemoryCache.remove(key);
         try {
             Boolean deleted = redisTemplate.delete(key);
             log.debug("Deleted cache key: {} (existed: {})", key, deleted);
         } catch (Exception e) {
-            log.warn("Failed to delete cache key: {}, error: {}", key, e.getMessage());
+            log.debug("Redis delete failed for key {}: {}", key, e.getMessage());
         }
     }
     
     @Override
     public void deletePattern(String pattern) {
         try {
+            String regex = pattern.replace("*", ".*");
+            localMemoryCache.keySet().removeIf(k -> k.matches(regex));
             Set<String> keys = redisTemplate.keys(pattern);
             if (keys != null && !keys.isEmpty()) {
                 Long deletedCount = redisTemplate.delete(keys);
                 log.debug("Deleted {} keys matching pattern: {}", deletedCount, pattern);
             }
         } catch (Exception e) {
-            log.warn("Failed to delete keys matching pattern: {}, error: {}", pattern, e.getMessage());
+            log.debug("Redis deletePattern failed for {}: {}", pattern, e.getMessage());
         }
     }
     
