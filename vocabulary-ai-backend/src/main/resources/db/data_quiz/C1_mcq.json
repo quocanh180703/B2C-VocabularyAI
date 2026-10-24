@@ -1,0 +1,3270 @@
+[
+  {
+    "id": 1,
+    "title": "Widening our horizons",
+    "level": "C1",
+    "timeLimit": 540,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [9]:\n\nNew research shows that getting away, and it doesn’t even [1] where we’re going, is an essential prerequisite for problem solving. The reason is that with problems that feel ‘close’ – [2] of whether this closeness is physical, temporal or even emotional – our thoughts are constricted and bound by a more limited set of associations, and as a [3] our imagination is inhibited. When we escape from familiar surroundings, the mind is [4] of a sudden made aware of the original ideas we are [5] the habit of suppressing, and we start thinking about any number of obscure possibilities that would never have occurred to us at home. \n\nBut this is by [6] means the only psychological advantage of travel. Researchers found that students who had lived abroad for some time were a [7] deal more likely to be [8] of solving complex puzzles quickly. Seasoned travellers are, to some [9] , more willing to realise that there are different, but nevertheless equally valid, ways of interpreting the world.",
+    "passage": "New research shows that getting away, and it doesn’t even _ where we’re going, is an essential prerequisite for problem solving. The reason is that with problems that feel ‘close’ – _ of whether this closeness is physical, temporal or even emotional – our thoughts are constricted and bound by a more limited set of associations, and as a _ our imagination is inhibited. When we escape from familiar surroundings, the mind is _ of a sudden made aware of the original ideas we are _ the habit of suppressing, and we start thinking about any number of obscure possibilities that would never have occurred to us at home. \n\nBut this is by _ means the only psychological advantage of travel. Researchers found that students who had lived abroad for some time were a _ deal more likely to be _ of solving complex puzzles quickly. Seasoned travellers are, to some _ , more willing to realise that there are different, but nevertheless equally valid, ways of interpreting the world.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] New research shows that getting away, and it doesn’t even _____ where we’re going, is an essential prerequisite for problem solving.",
+        "options": [
+          "issue",
+          "problem",
+          "trouble",
+          "matter"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "matter"
+        ],
+        "explanation": "Đáp án 'matter' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] The reason is that with problems that feel ‘close’ – _____ of whether this closeness is physical, temporal or even emotional – our thoughts are constricted and bound by a more limited set of associations, and as a result our imagination is inhibited.",
+        "options": [
+          "regardless",
+          "despite",
+          "careless",
+          "in"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "regardless",
+          "irrespective"
+        ],
+        "explanation": "Đáp án 'regardless' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] The reason is that with problems that feel ‘close’ – regardless of whether this closeness is physical, temporal or even emotional – our thoughts are constricted and bound by a more limited set of associations, and as a _____ our imagination is inhibited.",
+        "options": [
+          "reason",
+          "result",
+          "effect",
+          "in"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "result",
+          "consequence"
+        ],
+        "explanation": "Đáp án 'result' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] When we escape from familiar surroundings, the mind is _____ of a sudden made aware of the original ideas we are in the habit of suppressing, and we start thinking about any number of obscure possibilities that would never have occurred to us at home.",
+        "options": [
+          "every",
+          "both",
+          "each",
+          "all"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "all"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'all' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] When we escape from familiar surroundings, the mind is all of a sudden made aware of the original ideas we are _____ the habit of suppressing, and we start thinking about any number of obscure possibilities that would never have occurred to us at home.",
+        "options": [
+          "to",
+          "on",
+          "at",
+          "in"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] But this is by _____ means the only psychological advantage of travel.",
+        "options": [
+          "No",
+          "A",
+          "An",
+          "The"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "No"
+        ],
+        "explanation": "Đáp án 'No' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] Researchers found that students who had lived abroad for some time were a _____ deal more likely to be capable of solving complex puzzles quickly.",
+        "options": [
+          "nice",
+          "well",
+          "fine",
+          "good"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "good",
+          "great"
+        ],
+        "explanation": "Đáp án 'good' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] Researchers found that students who had lived abroad for some time were a good deal more likely to be _____ of solving complex puzzles quickly.",
+        "options": [
+          "fitted",
+          "able",
+          "competent",
+          "capable"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "capable"
+        ],
+        "explanation": "Đáp án 'capable' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] Seasoned travellers are, to some _____ , more willing to realise that there are different, but nevertheless equally valid, ways of interpreting the world.",
+        "options": [
+          "in",
+          "measure",
+          "limit",
+          "extent"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "extent",
+          "degree"
+        ],
+        "explanation": "Đáp án 'extent' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Handwriting",
+    "level": "C1",
+    "timeLimit": 540,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [9]:\n\nIt is often pointed [1] just how rare it is for people to communicate by putting pen to paper. Many of us have friends [2] handwriting is unfamiliar to us because we have never seen it.  This is [3] to say that we should forgo all the advantages of electronic communication, but what it has led to is that some British schools no [4] teach handwriting, on the grounds that all children now have access to computers. But can this be justified? [5] all, nobody thinks that learning to ride a bike means losing the pleasure of running. \n\nOne intriguing aspect of handwriting is what, [6] anything, it tells you about a person.  It has been suggested that it can reveal various personal qualities, and even someone’s health and intelligence. While some feel this is [7] too far, it is also true that because every individual has a distinctive style, handwriting is, in [8] probability, expressing something about them. However, studying handwriting is [9] near being accepted as a proper science.",
+    "passage": "It is often pointed _ just how rare it is for people to communicate by putting pen to paper. Many of us have friends _ handwriting is unfamiliar to us because we have never seen it.  This is _ to say that we should forgo all the advantages of electronic communication, but what it has led to is that some British schools no _ teach handwriting, on the grounds that all children now have access to computers. But can this be justified? _ all, nobody thinks that learning to ride a bike means losing the pleasure of running. \n\nOne intriguing aspect of handwriting is what, _ anything, it tells you about a person.  It has been suggested that it can reveal various personal qualities, and even someone’s health and intelligence. While some feel this is _ too far, it is also true that because every individual has a distinctive style, handwriting is, in _ probability, expressing something about them. However, studying handwriting is _ near being accepted as a proper science.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] It is often pointed _____ just how rare it is for people to communicate by putting pen to paper.",
+        "options": [
+          "out",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "out"
+        ],
+        "explanation": "Đáp án 'out' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Many of us have friends _____ handwriting is unfamiliar to us because we have never seen it.",
+        "options": [
+          "which",
+          "who",
+          "whom",
+          "whose"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "whose"
+        ],
+        "explanation": "Đại từ quan hệ 'whose' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] This is _____ to say that we should forgo all the advantages of electronic communication, but what it has led to is that some British schools no longer teach handwriting, on the grounds that all children now have access to computers.",
+        "options": [
+          "never",
+          "no",
+          "not",
+          "none"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "not"
+        ],
+        "explanation": "Đáp án 'not' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] This is not to say that we should forgo all the advantages of electronic communication, but what it has led to is that some British schools no _____ teach handwriting, on the grounds that all children now have access to computers.",
+        "options": [
+          "further",
+          "more",
+          "longer",
+          "farther"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "longer"
+        ],
+        "explanation": "Đáp án 'longer' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] _____ all, nobody thinks that learning to ride a bike means losing the pleasure of running.",
+        "options": [
+          "For",
+          "Since",
+          "After",
+          "During"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "After"
+        ],
+        "explanation": "Đáp án 'After' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] One intriguing aspect of handwriting is what, _____ anything, it tells you about a person.",
+        "options": [
+          "if",
+          "whether",
+          "unless",
+          "provided"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "if"
+        ],
+        "explanation": "Sử dụng liên từ 'if' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] While some feel this is _____ too far, it is also true that because every individual has a distinctive style, handwriting is, in all probability, expressing something about them.",
+        "options": [
+          "going",
+          "coming",
+          "heading",
+          "moving"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "going"
+        ],
+        "explanation": "Đáp án 'going' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] While some feel this is going too far, it is also true that because every individual has a distinctive style, handwriting is, in _____ probability, expressing something about them.",
+        "options": [
+          "every",
+          "both",
+          "each",
+          "all"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "all"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'all' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] However, studying handwriting is _____ near being accepted as a proper science.",
+        "options": [
+          "nowhere",
+          "somewhere",
+          "anywhere",
+          "everywhere"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "nowhere"
+        ],
+        "explanation": "Đáp án 'nowhere' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Life’s dilemmas",
+    "level": "C1",
+    "timeLimit": 540,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [9]:\n\nImagine this situation: a colleague who hates her job [1] the announcement she’s leaving to travel the world. Do you congratulate her, or tell her that running away is not the answer – she should [2] put and deal with her issues?  While there’s no shortage of guidance available recommending we achieve our goals by changing our situation, an equal amount champions trying to change ourselves instead. It’s not always possible to have what we want [3] we want it, so sometimes we should [4] up to the situation and learn to make the [5] of things. On the other hand, sometimes the right thing to do is to [6] steps to change the situation. How do we know [7] to focus our energies on that or on changing ourselves? Most important is a bit of self-examination; is the dissatisfaction really rooted [8] the situation, or could being in a better frame of mind help us to cope? Above all, as is so [9] the case, the self-knowledge is the key to our dilemmas.",
+    "passage": "Imagine this situation: a colleague who hates her job _ the announcement she’s leaving to travel the world. Do you congratulate her, or tell her that running away is not the answer – she should _ put and deal with her issues?  While there’s no shortage of guidance available recommending we achieve our goals by changing our situation, an equal amount champions trying to change ourselves instead. It’s not always possible to have what we want _ we want it, so sometimes we should _ up to the situation and learn to make the _ of things. On the other hand, sometimes the right thing to do is to _ steps to change the situation. How do we know _ to focus our energies on that or on changing ourselves? Most important is a bit of self-examination; is the dissatisfaction really rooted _ the situation, or could being in a better frame of mind help us to cope? Above all, as is so _ the case, the self-knowledge is the key to our dilemmas.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Imagine this situation: a colleague who hates her job _____ the announcement she’s leaving to travel the world.",
+        "options": [
+          "takes",
+          "does",
+          "makes",
+          "gives"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "makes"
+        ],
+        "explanation": "Đáp án 'makes' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Do you congratulate her, or tell her that running away is not the answer – she should _____ put and deal with her issues?",
+        "options": [
+          "remain",
+          "leave",
+          "stay",
+          "wait"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "stay"
+        ],
+        "explanation": "Đáp án 'stay' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] It’s not always possible to have what we want _____ we want it, so sometimes we should face up to the situation and learn to make the best of things.",
+        "options": [
+          "during",
+          "since",
+          "for",
+          "when"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "when",
+          "whenever"
+        ],
+        "explanation": "Đại từ quan hệ 'when' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] It’s not always possible to have what we want when we want it, so sometimes we should _____ up to the situation and learn to make the best of things.",
+        "options": [
+          "face",
+          "meet",
+          "confront",
+          "encounter"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "face"
+        ],
+        "explanation": "Đáp án 'face' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] It’s not always possible to have what we want when we want it, so sometimes we should face up to the situation and learn to make the _____ of things.",
+        "options": [
+          "better",
+          "best",
+          "good",
+          "in"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "best",
+          "most"
+        ],
+        "explanation": "Đáp án 'best' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] On the other hand, sometimes the right thing to do is to _____ steps to change the situation.",
+        "options": [
+          "have",
+          "make",
+          "take",
+          "get"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "take"
+        ],
+        "explanation": "Đáp án 'take' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] How do we know _____ to focus our energies on that or on changing ourselves?",
+        "options": [
+          "unless",
+          "if",
+          "whether",
+          "provided"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "whether"
+        ],
+        "explanation": "Sử dụng liên từ 'whether' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] Most important is a bit of self-examination; is the dissatisfaction really rooted _____ the situation, or could being in a better frame of mind help us to cope?",
+        "options": [
+          "at",
+          "on",
+          "in",
+          "to"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] Above all, as is so _____ the case, the self-knowledge is the key to our dilemmas.",
+        "options": [
+          "sometimes",
+          "always",
+          "often",
+          "rarely"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "often"
+        ],
+        "explanation": "Đáp án 'often' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Driverless cars",
+    "level": "C1",
+    "timeLimit": 540,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [9]:\n\nDriverless cars would of course, do [1] with the stress of driving, allowing their occupants to read, browse the internet or take a nap, and they would also eliminate accidents caused by human error.\n\nThe benefits would go [2] comfort and safety, however, since they would also revolutionise transport and urban planning. Traffic lights and road signs would no [3] be needed. Different autonomous vehicles on the road would be able to coordinate their movements, and travel [4] close formation, so that traffic would be kept flowing without interruption, [5] journeys quicker and road use more efficient. On the one hand, this might mean that cities got bigger, as a [6] of commuting times being reduced; on the [7] , they could become denser, with houses in the space previously dedicated to roads.\n\nIt may all sound [8] science fiction, but much of the technology needed to turn ordinary vehicles into self-driving ones already exists. Almost [9] car makers are developing systems which will in effect turn cars into autonomous robots.",
+    "passage": "Driverless cars would of course, do _ with the stress of driving, allowing their occupants to read, browse the internet or take a nap, and they would also eliminate accidents caused by human error.\n\nThe benefits would go _ comfort and safety, however, since they would also revolutionise transport and urban planning. Traffic lights and road signs would no _ be needed. Different autonomous vehicles on the road would be able to coordinate their movements, and travel _ close formation, so that traffic would be kept flowing without interruption, _ journeys quicker and road use more efficient. On the one hand, this might mean that cities got bigger, as a _ of commuting times being reduced; on the _ , they could become denser, with houses in the space previously dedicated to roads.\n\nIt may all sound _ science fiction, but much of the technology needed to turn ordinary vehicles into self-driving ones already exists. Almost _ car makers are developing systems which will in effect turn cars into autonomous robots.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Driverless cars would of course, do _____ with the stress of driving, allowing their occupants to read, browse the internet or take a nap, and they would also eliminate accidents caused by human error.",
+        "options": [
+          "back",
+          "away",
+          "out",
+          "off"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "away"
+        ],
+        "explanation": "Đáp án 'away' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] The benefits would go _____ comfort and safety, however, since they would also revolutionise transport and urban planning.",
+        "options": [
+          "beyond",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "beyond"
+        ],
+        "explanation": "Đáp án 'beyond' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] Traffic lights and road signs would no _____ be needed.",
+        "options": [
+          "more",
+          "longer",
+          "further",
+          "farther"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "longer"
+        ],
+        "explanation": "Đáp án 'longer' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] Different autonomous vehicles on the road would be able to coordinate their movements, and travel _____ close formation, so that traffic would be kept flowing without interruption, making journeys quicker and road use more efficient.",
+        "options": [
+          "at",
+          "on",
+          "in",
+          "to"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Different autonomous vehicles on the road would be able to coordinate their movements, and travel in close formation, so that traffic would be kept flowing without interruption, _____ journeys quicker and road use more efficient.",
+        "options": [
+          "giving",
+          "doing",
+          "taking",
+          "making"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "making"
+        ],
+        "explanation": "Đáp án 'making' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] On the one hand, this might mean that cities got bigger, as a _____ of commuting times being reduced; on the other , they could become denser, with houses in the space previously dedicated to roads.",
+        "options": [
+          "result",
+          "reason",
+          "effect",
+          "in"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "result",
+          "consequence"
+        ],
+        "explanation": "Đáp án 'result' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] On the one hand, this might mean that cities got bigger, as a result of commuting times being reduced; on the _____ , they could become denser, with houses in the space previously dedicated to roads.",
+        "options": [
+          "other",
+          "another",
+          "others",
+          "the other"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "other"
+        ],
+        "explanation": "Đáp án 'other' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] It may all sound _____ science fiction, but much of the technology needed to turn ordinary vehicles into self-driving ones already exists.",
+        "options": [
+          "like",
+          "than",
+          "as",
+          "so"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "like"
+        ],
+        "explanation": "Đáp án 'like' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] Almost _____ car makers are developing systems which will in effect turn cars into autonomous robots.",
+        "options": [
+          "all",
+          "both",
+          "each",
+          "every"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "all"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'all' phù hợp với danh từ đếm được/không đếm được theo sau."
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Paper is here to stay",
+    "level": "C1",
+    "timeLimit": 540,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [9]:\n\nMany experts argue that, [1] of recent technological changes, paper will remain by [2] the most ubiquitous, useful and easily recyclable medium of communication. Indeed, paper is still what most modern forms of communication seek to imitate. After all, even a document on a computer screen resembles a sheet of fresh white paper!\n\nAlmost everything has, at one time or [3] , been made from paper. Strange [4] it may seem, in the nineteenth century paper was used to make wheels on trains, and in the same period, just about every household item could be made from cheap paper. It was also the means by [5] we shaped our identity and [6] question enhanced our lives, thanks to diaries, scrapbooks, photographs and other mementoes. It made us memorable but also, in a [7] of seconds, erasable and dispensable.\n\nFor some, however, there is simply [8] denying that paper is now an anachronism. This seems mistaken, [9] that consumption of paper is still increasing, not decreasing, and that environmentally-friendly alternatives to current production methods are being adopted.",
+    "passage": "Many experts argue that, _ of recent technological changes, paper will remain by _ the most ubiquitous, useful and easily recyclable medium of communication. Indeed, paper is still what most modern forms of communication seek to imitate. After all, even a document on a computer screen resembles a sheet of fresh white paper!\n\nAlmost everything has, at one time or _ , been made from paper. Strange _ it may seem, in the nineteenth century paper was used to make wheels on trains, and in the same period, just about every household item could be made from cheap paper. It was also the means by _ we shaped our identity and _ question enhanced our lives, thanks to diaries, scrapbooks, photographs and other mementoes. It made us memorable but also, in a _ of seconds, erasable and dispensable.\n\nFor some, however, there is simply _ denying that paper is now an anachronism. This seems mistaken, _ that consumption of paper is still increasing, not decreasing, and that environmentally-friendly alternatives to current production methods are being adopted.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Many experts argue that, _____ of recent technological changes, paper will remain by far the most ubiquitous, useful and easily recyclable medium of communication.",
+        "options": [
+          "careless",
+          "irrespective",
+          "despite",
+          "regardless"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "regardless"
+        ],
+        "explanation": "Đáp án 'regardless' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Many experts argue that, regardless of recent technological changes, paper will remain by _____ the most ubiquitous, useful and easily recyclable medium of communication.",
+        "options": [
+          "near",
+          "far",
+          "away",
+          "distant"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "far"
+        ],
+        "explanation": "Đáp án 'far' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] Almost everything has, at one time or _____ , been made from paper.",
+        "options": [
+          "others",
+          "other",
+          "another",
+          "each other"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "another"
+        ],
+        "explanation": "Đáp án 'another' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] Strange _____ it may seem, in the nineteenth century paper was used to make wheels on trains, and in the same period, just about every household item could be made from cheap paper.",
+        "options": [
+          "since",
+          "because",
+          "as",
+          "for"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "as",
+          "though"
+        ],
+        "explanation": "Sử dụng liên từ 'as' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] It was also the means by _____ we shaped our identity and without question enhanced our lives, thanks to diaries, scrapbooks, photographs and other mementoes.",
+        "options": [
+          "whom",
+          "who",
+          "which",
+          "whose"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "which"
+        ],
+        "explanation": "Đại từ quan hệ 'which' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] It was also the means by which we shaped our identity and _____ question enhanced our lives, thanks to diaries, scrapbooks, photographs and other mementoes.",
+        "options": [
+          "in",
+          "without",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "without"
+        ],
+        "explanation": "Đáp án 'without' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] It made us memorable but also, in a _____ of seconds, erasable and dispensable.",
+        "options": [
+          "problem",
+          "matter",
+          "trouble",
+          "issue"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "matter"
+        ],
+        "explanation": "Đáp án 'matter' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] For some, however, there is simply _____ denying that paper is now an anachronism.",
+        "options": [
+          "an",
+          "a",
+          "no",
+          "the"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "no"
+        ],
+        "explanation": "Đáp án 'no' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] This seems mistaken, _____ that consumption of paper is still increasing, not decreasing, and that environmentally-friendly alternatives to current production methods are being adopted.",
+        "options": [
+          "assuming",
+          "provided",
+          "given",
+          "in"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "given",
+          "considering",
+          "seeing"
+        ],
+        "explanation": "Đáp án 'given' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Translation",
+    "level": "C1",
+    "timeLimit": 540,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [9]:\n\nIn today’s globalised world, the role the translator plays is, [1] a doubt, crucial.  Each and [2] time translators set to work they have a heavy responsibility to communicate as accurately as possible.  A poor translation might merely cause amusement, but at [3] , the consequences could sometimes be extremely serious.\n\nThere are a great many problems encountered in the translation process, some deriving [4]  the grammatical differences between languages and others caused by idioms, not to mention highly specific cultural references that some argue, with good [5] perhaps, cannot be successfully translated.\n\nIt [6] without saying that translators should have a well-developed sensitivity to their mother tongue and the second language they work with.  But whereas once they needed little [7] than exceptional linguistic skills, translators nowadays may require specialist knowledge of areas such as medicine, law or technology.\n\nOne factor they consider is how the translation sounds.  Here, they may make [8] of strategies such as reading their translation aloud, thereby ensuring that words are not put in a sentence if, [9] individually accurate and appropriate, together they sound harsh or unpleasant.",
+    "passage": "In today’s globalised world, the role the translator plays is, _ a doubt, crucial.  Each and _ time translators set to work they have a heavy responsibility to communicate as accurately as possible.  A poor translation might merely cause amusement, but at _ , the consequences could sometimes be extremely serious.\n\nThere are a great many problems encountered in the translation process, some deriving _  the grammatical differences between languages and others caused by idioms, not to mention highly specific cultural references that some argue, with good _ perhaps, cannot be successfully translated.\n\nIt _ without saying that translators should have a well-developed sensitivity to their mother tongue and the second language they work with.  But whereas once they needed little _ than exceptional linguistic skills, translators nowadays may require specialist knowledge of areas such as medicine, law or technology.\n\nOne factor they consider is how the translation sounds.  Here, they may make _ of strategies such as reading their translation aloud, thereby ensuring that words are not put in a sentence if, _ individually accurate and appropriate, together they sound harsh or unpleasant.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] In today’s globalised world, the role the translator plays is, _____ a doubt, crucial.",
+        "options": [
+          "without",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "without"
+        ],
+        "explanation": "Đáp án 'without' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Each and _____ time translators set to work they have a heavy responsibility to communicate as accurately as possible.",
+        "options": [
+          "each",
+          "all",
+          "both",
+          "every"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "every"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'every' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] A poor translation might merely cause amusement, but at _____ , the consequences could sometimes be extremely serious.",
+        "options": [
+          "worst",
+          "worse",
+          "bad",
+          "least"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "worst"
+        ],
+        "explanation": "Đáp án 'worst' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] There are a great many problems encountered in the translation process, some deriving _____ the grammatical differences between languages and others caused by idioms, not to mention highly specific cultural references that some argue, with good reason perhaps, cannot be successfully translated.",
+        "options": [
+          "from",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "from"
+        ],
+        "explanation": "Sử dụng giới từ 'from' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] There are a great many problems encountered in the translation process, some deriving from the grammatical differences between languages and others caused by idioms, not to mention highly specific cultural references that some argue, with good _____ perhaps, cannot be successfully translated.",
+        "options": [
+          "in",
+          "purpose",
+          "motive",
+          "reason"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "reason",
+          "cause"
+        ],
+        "explanation": "Đáp án 'reason' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] It _____ without saying that translators should have a well-developed sensitivity to their mother tongue and the second language they work with.",
+        "options": [
+          "moves",
+          "comes",
+          "goes",
+          "runs"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "goes"
+        ],
+        "explanation": "Đáp án 'goes' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] But whereas once they needed little _____ than exceptional linguistic skills, translators nowadays may require specialist knowledge of areas such as medicine, law or technology.",
+        "options": [
+          "other",
+          "another",
+          "others",
+          "the other"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "other",
+          "more"
+        ],
+        "explanation": "Đáp án 'other' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] Here, they may make _____ of strategies such as reading their translation aloud, thereby ensuring that words are not put in a sentence if, while individually accurate and appropriate, together they sound harsh or unpleasant.",
+        "options": [
+          "apply",
+          "make",
+          "take",
+          "use"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "use"
+        ],
+        "explanation": "Đáp án 'use' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] Here, they may make use of strategies such as reading their translation aloud, thereby ensuring that words are not put in a sentence if, _____ individually accurate and appropriate, together they sound harsh or unpleasant.",
+        "options": [
+          "for",
+          "since",
+          "while",
+          "during"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "while"
+        ],
+        "explanation": "Sử dụng liên từ 'while' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "The joy of shops",
+    "level": "C1",
+    "timeLimit": 540,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [9]:\n\nOne of my favourite columnists has joined the ranks of those [1] think it’s only a [2] of time before shops die [3] altogether and we acquire everything online. [4] all due respect, I say he is wrong since he doesn’t seem to realise that real shopping is [5] partly about acquiring things. You can – at [6] some people can – have a highly satisfactory afternoon shopping [7] buying a thing. This is in no way amazing; fishing, after [8] , doesn’t depend on bringing home supper. The keenest fisherman I know invariably puts the fish back in the water.\n\nIn a similar way, evening classes may or may not achieve their original objective – better command of a foreign language perhaps – [9] they provide companionship and a pleasant evening out. The process of acquiring something is very often more important than the thing acquired, and so it is with shopping.",
+    "passage": "One of my favourite columnists has joined the ranks of those _ think it’s only a _ of time before shops die _ altogether and we acquire everything online. _ all due respect, I say he is wrong since he doesn’t seem to realise that real shopping is _ partly about acquiring things. You can – at _ some people can – have a highly satisfactory afternoon shopping _ buying a thing. This is in no way amazing; fishing, after _ , doesn’t depend on bringing home supper. The keenest fisherman I know invariably puts the fish back in the water.\n\nIn a similar way, evening classes may or may not achieve their original objective – better command of a foreign language perhaps – _ they provide companionship and a pleasant evening out. The process of acquiring something is very often more important than the thing acquired, and so it is with shopping.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] One of my favourite columnists has joined the ranks of those _____ think it’s only a matter of time before shops die out altogether and we acquire everything online.",
+        "options": [
+          "who",
+          "whom",
+          "whose",
+          "which"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "who"
+        ],
+        "explanation": "Đại từ quan hệ 'who' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] One of my favourite columnists has joined the ranks of those who think it’s only a _____ of time before shops die out altogether and we acquire everything online.",
+        "options": [
+          "matter",
+          "problem",
+          "trouble",
+          "issue"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "matter",
+          "question"
+        ],
+        "explanation": "Đáp án 'matter' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] One of my favourite columnists has joined the ranks of those who think it’s only a matter of time before shops die _____ altogether and we acquire everything online.",
+        "options": [
+          "on",
+          "in",
+          "out",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "out"
+        ],
+        "explanation": "Đáp án 'out' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] _____ all due respect, I say he is wrong since he doesn’t seem to realise that real shopping is only partly about acquiring things.",
+        "options": [
+          "With",
+          "In",
+          "On",
+          "At"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "With"
+        ],
+        "explanation": "Sử dụng giới từ 'With' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] With all due respect, I say he is wrong since he doesn’t seem to realise that real shopping is _____ partly about acquiring things.",
+        "options": [
+          "just",
+          "only",
+          "merely",
+          "alone"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "only"
+        ],
+        "explanation": "Đáp án 'only' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] You can – at _____ some people can – have a highly satisfactory afternoon shopping without buying a thing.",
+        "options": [
+          "more",
+          "much",
+          "many",
+          "least"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "least"
+        ],
+        "explanation": "'least' là lượng từ phù hợp với sắc thái định lượng hoặc cấu trúc so sánh trong câu."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] You can – at least some people can – have a highly satisfactory afternoon shopping _____ buying a thing.",
+        "options": [
+          "on",
+          "in",
+          "without",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "without",
+          "not"
+        ],
+        "explanation": "Đáp án 'without' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] This is in no way amazing; fishing, after _____ , doesn’t depend on bringing home supper.",
+        "options": [
+          "every",
+          "both",
+          "each",
+          "all"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "all"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'all' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] In a similar way, evening classes may or may not achieve their original objective – better command of a foreign language perhaps – _____ they provide companionship and a pleasant evening out.",
+        "options": [
+          "but",
+          "although",
+          "though",
+          "even though"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "but"
+        ],
+        "explanation": "Đáp án 'but' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "Is nothing impossible?",
+    "level": "C1",
+    "timeLimit": 540,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [9]:\n\nIt is certainly the case that believers in ‘nothing is impossible’ base their blind optimism [1] a kernel of truth. Strictly [2] , as logicians are keen to remind us,  only [3] which involves a logical contradiction is impossible.  So two plus two cannot equal five, [4] can there ever be any truly square circles.  However, the limits that most of us have in [5] when we worry about our lives are rarely logical.\n\nFor as [6] as something remains logically possible, some people can’t help [7] wonder if their dream might become reality. This is exacerbated by the fact that our culture encourages people to [8] big and believe that ‘impossibility’ is nothing more than the creation of a negative mind.\n\nIt is far simpler, though, to concentrate on levels of difficulty and chances of success.  If the former are too high and the latter too low, there’s hardly any point in adding ‘but it isn’t impossible, [9] enough desire or support’.",
+    "passage": "It is certainly the case that believers in ‘nothing is impossible’ base their blind optimism _ a kernel of truth. Strictly _ , as logicians are keen to remind us,  only _ which involves a logical contradiction is impossible.  So two plus two cannot equal five, _ can there ever be any truly square circles.  However, the limits that most of us have in _ when we worry about our lives are rarely logical.\n\nFor as _ as something remains logically possible, some people can’t help _ wonder if their dream might become reality. This is exacerbated by the fact that our culture encourages people to _ big and believe that ‘impossibility’ is nothing more than the creation of a negative mind.\n\nIt is far simpler, though, to concentrate on levels of difficulty and chances of success.  If the former are too high and the latter too low, there’s hardly any point in adding ‘but it isn’t impossible, _ enough desire or support’.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] It is certainly the case that believers in ‘nothing is impossible’ base their blind optimism _____ a kernel of truth.",
+        "options": [
+          "to",
+          "in",
+          "at",
+          "on"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "on"
+        ],
+        "explanation": "Sử dụng giới từ 'on' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Strictly _____ , as logicians are keen to remind us, only that which involves a logical contradiction is impossible.",
+        "options": [
+          "saying",
+          "talking",
+          "speaking",
+          "telling"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "speaking"
+        ],
+        "explanation": "Đáp án 'speaking' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] Strictly speaking , as logicians are keen to remind us, only _____ which involves a logical contradiction is impossible.",
+        "options": [
+          "those",
+          "this",
+          "these",
+          "that"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "that",
+          "something"
+        ],
+        "explanation": "Đại từ quan hệ 'that' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] So two plus two cannot equal five, _____ can there ever be any truly square circles.",
+        "options": [
+          "or",
+          "and",
+          "but",
+          "nor"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "nor",
+          "neither"
+        ],
+        "explanation": "Đáp án 'nor' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] However, the limits that most of us have in _____ when we worry about our lives are rarely logical.",
+        "options": [
+          "head",
+          "mind",
+          "heart",
+          "memory"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "mind"
+        ],
+        "explanation": "Đáp án 'mind' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] For as _____ as something remains logically possible, some people can’t help but wonder if their dream might become reality.",
+        "options": [
+          "wide",
+          "far",
+          "long",
+          "deep"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "long"
+        ],
+        "explanation": "Đáp án 'long' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] For as long as something remains logically possible, some people can’t help _____ wonder if their dream might become reality.",
+        "options": [
+          "though",
+          "although",
+          "but",
+          "even though"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "but"
+        ],
+        "explanation": "Đáp án 'but' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] This is exacerbated by the fact that our culture encourages people to _____ big and believe that ‘impossibility’ is nothing more than the creation of a negative mind.",
+        "options": [
+          "believe",
+          "think",
+          "consider",
+          "know"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "think"
+        ],
+        "explanation": "Đáp án 'think' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] If the former are too high and the latter too low, there’s hardly any point in adding ‘but it isn’t impossible, _____ enough desire or support’.",
+        "options": [
+          "considering",
+          "provided",
+          "given",
+          "assuming"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "given",
+          "with"
+        ],
+        "explanation": "Đáp án 'given' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "title": "Mission to Mars",
+    "level": "C1",
+    "timeLimit": 540,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [9]:\n\nWanted: a middle-aged, married couple [1] a 501-day round trip to Mars.  Applicants must be physically and emotionally robust.\n\nThis will be the profile of the very first Martian astronauts if multi-millionaire Dennis Tito’s plans to launch a capsule on 5 January 2018 actually [2] to fruition.  The capsule will take the crew to about 160km above Mars.  The spacecraft will use the gravity of Mars to allow it to return to Earth without burning any more fuel, for fuel efficiency is a priority – the 2018 deadline has been fixed [3] the next launch window when Mars and Earth align again isn’t [4] 2031.\n\nIt’s a [5] order, but the race is on to develop systems involving totally new technologies. [6] that these can be put in place soon enough, the spacecraft might just [7] it.  But even if it [8] leaves Earth, the efforts to achieve these ambitious goals will not be in [9] , as they will lead to valuable advances for future missions.",
+    "passage": "Wanted: a middle-aged, married couple _ a 501-day round trip to Mars.  Applicants must be physically and emotionally robust.\n\nThis will be the profile of the very first Martian astronauts if multi-millionaire Dennis Tito’s plans to launch a capsule on 5 January 2018 actually _ to fruition.  The capsule will take the crew to about 160km above Mars.  The spacecraft will use the gravity of Mars to allow it to return to Earth without burning any more fuel, for fuel efficiency is a priority – the 2018 deadline has been fixed _ the next launch window when Mars and Earth align again isn’t _ 2031.\n\nIt’s a _ order, but the race is on to develop systems involving totally new technologies. _ that these can be put in place soon enough, the spacecraft might just _ it.  But even if it _ leaves Earth, the efforts to achieve these ambitious goals will not be in _ , as they will lead to valuable advances for future missions.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Wanted: a middle-aged, married couple _____ a 501-day round trip to Mars.",
+        "options": [
+          "for",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "for"
+        ],
+        "explanation": "Sử dụng giới từ 'for' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] This will be the profile of the very first Martian astronauts if multi-millionaire Dennis Tito’s plans to launch a capsule on 5 January 2018 actually _____ to fruition.",
+        "options": [
+          "arrive",
+          "go",
+          "come",
+          "reach"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "come"
+        ],
+        "explanation": "Đáp án 'come' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] The spacecraft will use the gravity of Mars to allow it to return to Earth without burning any more fuel, for fuel efficiency is a priority – the 2018 deadline has been fixed _____ the next launch window when Mars and Earth align again isn’t until 2031.",
+        "options": [
+          "so",
+          "for",
+          "because",
+          "in"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "because",
+          "since",
+          "as"
+        ],
+        "explanation": "Sử dụng liên từ 'because' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] The spacecraft will use the gravity of Mars to allow it to return to Earth without burning any more fuel, for fuel efficiency is a priority – the 2018 deadline has been fixed because the next launch window when Mars and Earth align again isn’t _____ 2031.",
+        "options": [
+          "since",
+          "until",
+          "for",
+          "during"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "until"
+        ],
+        "explanation": "Đáp án 'until' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] It’s a _____ order, but the race is on to develop systems involving totally new technologies.",
+        "options": [
+          "high",
+          "tall",
+          "long",
+          "big"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "tall"
+        ],
+        "explanation": "Đáp án 'tall' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] _____ that these can be put in place soon enough, the spacecraft might just make it.",
+        "options": [
+          "Unless",
+          "If",
+          "Whether",
+          "Supposing"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "Supposing",
+          "Providing",
+          "Assuming",
+          "Provided",
+          "Given"
+        ],
+        "explanation": "Đáp án 'Supposing' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] Supposing that these can be put in place soon enough, the spacecraft might just _____ it.",
+        "options": [
+          "in",
+          "take",
+          "have",
+          "make"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "make",
+          "do",
+          "accomplish"
+        ],
+        "explanation": "Đáp án 'make' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] But even if it _____ leaves Earth, the efforts to achieve these ambitious goals will not be in vain , as they will lead to valuable advances for future missions.",
+        "options": [
+          "hardly",
+          "never",
+          "scarcely",
+          "barely"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "never"
+        ],
+        "explanation": "Đáp án 'never' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] But even if it never leaves Earth, the efforts to achieve these ambitious goals will not be in _____ , as they will lead to valuable advances for future missions.",
+        "options": [
+          "waste",
+          "vain",
+          "loss",
+          "pointless"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "vain"
+        ],
+        "explanation": "Đáp án 'vain' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Stradivarius",
+    "level": "C1",
+    "timeLimit": 540,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [9]:\n\nMusicians agree there’s simply [1] like a Stradivarius violin. The renowned Italian craftsman made beautiful instruments which, almost [2] fail, fetch very high prices at auctions today. Around six hundred of his violins survive and are, [3] sharp contrast to those of Niccolo Amati, relatively common, much to the surprise of [4]  who is not an expert in this field. This is to some [5] due to the fact that Stradivarius continued working well into [6] nineties. Whereas the value of an Amati violin resides mainly in its rarity, the reasons why a Stradivarius is highly sought after are different. \n\nSo what makes a Stradivarius special?  It wasn’t the materials he used as they were, by [7] large, the same as those available to contemporaries. It is more to [8] with the quality of the sound it produces. By all accounts, Stradivarius had an ideal sound in mind, and trying to achieve it made him experiment with the internal design. During his ‘golden period’ it seemed that he [9] do no wrong – every adjustment  consistently met with success.",
+    "passage": "Musicians agree there’s simply _ like a Stradivarius violin. The renowned Italian craftsman made beautiful instruments which, almost _ fail, fetch very high prices at auctions today. Around six hundred of his violins survive and are, _ sharp contrast to those of Niccolo Amati, relatively common, much to the surprise of _  who is not an expert in this field. This is to some _ due to the fact that Stradivarius continued working well into _ nineties. Whereas the value of an Amati violin resides mainly in its rarity, the reasons why a Stradivarius is highly sought after are different. \n\nSo what makes a Stradivarius special?  It wasn’t the materials he used as they were, by _ large, the same as those available to contemporaries. It is more to _ with the quality of the sound it produces. By all accounts, Stradivarius had an ideal sound in mind, and trying to achieve it made him experiment with the internal design. During his ‘golden period’ it seemed that he _ do no wrong – every adjustment  consistently met with success.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Musicians agree there’s simply _____ like a Stradivarius violin.",
+        "options": [
+          "nothing",
+          "something",
+          "anything",
+          "everything"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "nothing"
+        ],
+        "explanation": "Đáp án 'nothing' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] The renowned Italian craftsman made beautiful instruments which, almost _____ fail, fetch very high prices at auctions today.",
+        "options": [
+          "in",
+          "without",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "without"
+        ],
+        "explanation": "Đáp án 'without' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] Around six hundred of his violins survive and are, _____ sharp contrast to those of Niccolo Amati, relatively common, much to the surprise of anyone who is not an expert in this field.",
+        "options": [
+          "on",
+          "in",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] Around six hundred of his violins survive and are, in sharp contrast to those of Niccolo Amati, relatively common, much to the surprise of _____ who is not an expert in this field.",
+        "options": [
+          "everyone",
+          "someone",
+          "anyone",
+          "no one"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "anyone"
+        ],
+        "explanation": "Đáp án 'anyone' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] This is to some _____ due to the fact that Stradivarius continued working well into his nineties.",
+        "options": [
+          "in",
+          "measure",
+          "limit",
+          "extent"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "extent",
+          "degree"
+        ],
+        "explanation": "Đáp án 'extent' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] This is to some extent due to the fact that Stradivarius continued working well into _____ nineties.",
+        "options": [
+          "my",
+          "his",
+          "your",
+          "her"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "his"
+        ],
+        "explanation": "Đại từ 'his' giữ đúng vai trò ngữ pháp (tân ngữ/sở hữu/phản thân) trong câu."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] It wasn’t the materials he used as they were, by _____ large, the same as those available to contemporaries.",
+        "options": [
+          "or",
+          "but",
+          "and",
+          "so"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "and"
+        ],
+        "explanation": "Đáp án 'and' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] It is more to _____ with the quality of the sound it produces.",
+        "options": [
+          "did",
+          "does",
+          "do",
+          "doing"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "do"
+        ],
+        "explanation": "Đáp án 'do' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] During his ‘golden period’ it seemed that he _____ do no wrong – every adjustment consistently met with success.",
+        "options": [
+          "will",
+          "can",
+          "could",
+          "would"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "could"
+        ],
+        "explanation": "Đáp án 'could' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Acoustic Levitation",
+    "level": "C1",
+    "timeLimit": 540,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [9]:\n\nFloating coffee beans, dancing water droplets – you’d be forgiven [1] thinking you were seeing things on finding [2] faced with these phenomena. But now scientists have discovered how to manipulate objects by using high-frequency sound waves, which allow them to resist the force of gravity. This has opened up the possibility of carrying [3] delicate  experiments and even creating new materials.\n\nAcoustic levitation was first developed in the 1980s, but [4] now, scientists could only hold an object in place or rotate it [5] the spot. Now researchers are able to move objects from place to place, and handle several at [6] .\n\nThe technique could be used to move hazardous chemicals, but there are also far [7] exciting possibilities. Super-cooled liquid metals, which start freezing as [8] as they’re put in a container, could be levitated and would then remain [9] liquids, and could be combined to form entirely new materials. In theory the technique could even be used to levitate animals or people – although this is not possible at present.",
+    "passage": "Floating coffee beans, dancing water droplets – you’d be forgiven _ thinking you were seeing things on finding _ faced with these phenomena. But now scientists have discovered how to manipulate objects by using high-frequency sound waves, which allow them to resist the force of gravity. This has opened up the possibility of carrying _ delicate  experiments and even creating new materials.\n\nAcoustic levitation was first developed in the 1980s, but _ now, scientists could only hold an object in place or rotate it _ the spot. Now researchers are able to move objects from place to place, and handle several at _ .\n\nThe technique could be used to move hazardous chemicals, but there are also far _ exciting possibilities. Super-cooled liquid metals, which start freezing as _ as they’re put in a container, could be levitated and would then remain _ liquids, and could be combined to form entirely new materials. In theory the technique could even be used to levitate animals or people – although this is not possible at present.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Floating coffee beans, dancing water droplets – you’d be forgiven _____ thinking you were seeing things on finding yourself faced with these phenomena.",
+        "options": [
+          "for",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "for"
+        ],
+        "explanation": "Sử dụng giới từ 'for' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Floating coffee beans, dancing water droplets – you’d be forgiven for thinking you were seeing things on finding _____ faced with these phenomena.",
+        "options": [
+          "himself",
+          "myself",
+          "yourself",
+          "herself"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "yourself"
+        ],
+        "explanation": "Đáp án 'yourself' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] This has opened up the possibility of carrying _____ delicate experiments and even creating new materials.",
+        "options": [
+          "on",
+          "in",
+          "out",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "out"
+        ],
+        "explanation": "Đáp án 'out' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] Acoustic levitation was first developed in the 1980s, but _____ now, scientists could only hold an object in place or rotate it on the spot.",
+        "options": [
+          "since",
+          "until",
+          "for",
+          "during"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "until",
+          "before"
+        ],
+        "explanation": "Đáp án 'until' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Acoustic levitation was first developed in the 1980s, but until now, scientists could only hold an object in place or rotate it _____ the spot.",
+        "options": [
+          "to",
+          "in",
+          "at",
+          "on"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "on"
+        ],
+        "explanation": "Sử dụng giới từ 'on' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] Now researchers are able to move objects from place to place, and handle several at _____ .",
+        "options": [
+          "one",
+          "twice",
+          "once",
+          "ever"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "once"
+        ],
+        "explanation": "Đáp án 'once' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] The technique could be used to move hazardous chemicals, but there are also far _____ exciting possibilities.",
+        "options": [
+          "most",
+          "much",
+          "many",
+          "more"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "more"
+        ],
+        "explanation": "'more' là lượng từ phù hợp với sắc thái định lượng hoặc cấu trúc so sánh trong câu."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] Super-cooled liquid metals, which start freezing as _____ as they’re put in a container, could be levitated and would then remain as liquids, and could be combined to form entirely new materials.",
+        "options": [
+          "soon",
+          "early",
+          "fast",
+          "quickly"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "soon"
+        ],
+        "explanation": "Đáp án 'soon' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] Super-cooled liquid metals, which start freezing as soon as they’re put in a container, could be levitated and would then remain _____ liquids, and could be combined to form entirely new materials.",
+        "options": [
+          "for",
+          "because",
+          "since",
+          "as"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "as"
+        ],
+        "explanation": "Sử dụng liên từ 'as' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "title": "The quest for extra-terrestrial life",
+    "level": "C1",
+    "timeLimit": 540,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [9]:\n\nThe search for extra-terrestrial intelligence has, [1] yet, found not a whisper. But [2] to recent technological developments, we may now be [3] the verge of being able to search for life beyond our solar system. However, given the vast distances between the Earth and even the nearest stars, the discovery of alien life is unlikely to lead to very [4] of a dialogue since there would be a huge time delay between each message.\n\nIf we do make contact with alien life at [5] point, it may reveal itself accidentally through distinctive chemical blends in the atmospheres of other planets which cannot have been produced by purely geological processes.\n\nWe have often imagined alien life as being [6] our own image; or if [7] entirely human, then at least bearing some resemblance to a terrestrial life form. Our preoccupation with the search for water is no [8] than a reflection of the fact that life on Earth cannot exist without it. But why should alien life be at [9] like us?",
+    "passage": "The search for extra-terrestrial intelligence has, _ yet, found not a whisper. But _ to recent technological developments, we may now be _ the verge of being able to search for life beyond our solar system. However, given the vast distances between the Earth and even the nearest stars, the discovery of alien life is unlikely to lead to very _ of a dialogue since there would be a huge time delay between each message.\n\nIf we do make contact with alien life at _ point, it may reveal itself accidentally through distinctive chemical blends in the atmospheres of other planets which cannot have been produced by purely geological processes.\n\nWe have often imagined alien life as being _ our own image; or if _ entirely human, then at least bearing some resemblance to a terrestrial life form. Our preoccupation with the search for water is no _ than a reflection of the fact that life on Earth cannot exist without it. But why should alien life be at _ like us?",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] The search for extra-terrestrial intelligence has, _____ yet, found not a whisper.",
+        "options": [
+          "for",
+          "because",
+          "since",
+          "as"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "as"
+        ],
+        "explanation": "Sử dụng liên từ 'as' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] But _____ to recent technological developments, we may now be on the verge of being able to search for life beyond our solar system.",
+        "options": [
+          "thanks",
+          "regards",
+          "in",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "thanks",
+          "due",
+          "owing",
+          "according"
+        ],
+        "explanation": "Đáp án 'thanks' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] But thanks to recent technological developments, we may now be _____ the verge of being able to search for life beyond our solar system.",
+        "options": [
+          "in",
+          "on",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "on"
+        ],
+        "explanation": "Sử dụng giới từ 'on' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] However, given the vast distances between the Earth and even the nearest stars, the discovery of alien life is unlikely to lead to very _____ of a dialogue since there would be a huge time delay between each message.",
+        "options": [
+          "much",
+          "many",
+          "more",
+          "most"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "much"
+        ],
+        "explanation": "'much' là lượng từ phù hợp với sắc thái định lượng hoặc cấu trúc so sánh trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] If we do make contact with alien life at _____ point, it may reveal itself accidentally through distinctive chemical blends in the atmospheres of other planets which cannot have been produced by purely geological processes.",
+        "options": [
+          "a",
+          "some",
+          "an",
+          "the"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "some",
+          "any"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'some' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] We have often imagined alien life as being _____ our own image; or if not entirely human, then at least bearing some resemblance to a terrestrial life form.",
+        "options": [
+          "in",
+          "on",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] We have often imagined alien life as being in our own image; or if _____ entirely human, then at least bearing some resemblance to a terrestrial life form.",
+        "options": [
+          "never",
+          "no",
+          "not",
+          "none"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "not"
+        ],
+        "explanation": "Đáp án 'not' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] Our preoccupation with the search for water is no _____ than a reflection of the fact that life on Earth cannot exist without it.",
+        "options": [
+          "more",
+          "much",
+          "many",
+          "most"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "more"
+        ],
+        "explanation": "'more' là lượng từ phù hợp với sắc thái định lượng hoặc cấu trúc so sánh trong câu."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] But why should alien life be at _____ like us?",
+        "options": [
+          "all",
+          "both",
+          "each",
+          "every"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "all"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'all' phù hợp với danh từ đếm được/không đếm được theo sau."
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "title": "Video Games and Life",
+    "level": "C1",
+    "timeLimit": 600,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [10]:\n\nVideo games are often perceived as being nothing [1] real life. [2] closer examination, however, they often prove to bear a remarkable resemblance to some features of everyday life. For example, almost [3] exception they reward hard work. [4] when you have repeated the same activity many times do you progress to the next level. This is a useful, [5] somewhat mechanical, way of thinking about life: decide on a goal and keep working hard [6] it is achieved.\n\nIt is a metaphor that is [7] from perfect, however. In video games everyone starts out equal whereas it [8] without saying that in life we aren’t all born with the same skills and opportunities.\n\nCritics should also applaud the fact that on the [9] games tend to emphasise personal responsibility. Playing a game over and over allows players to consider the many possible consequences of their decisions. But [10] as we may wish life sometimes gave us the opportunity to do this, the reality is we don’t get many second chances.",
+    "passage": "Video games are often perceived as being nothing _ real life. _ closer examination, however, they often prove to bear a remarkable resemblance to some features of everyday life. For example, almost _ exception they reward hard work. _ when you have repeated the same activity many times do you progress to the next level. This is a useful, _ somewhat mechanical, way of thinking about life: decide on a goal and keep working hard _ it is achieved.\n\nIt is a metaphor that is _ from perfect, however. In video games everyone starts out equal whereas it _ without saying that in life we aren’t all born with the same skills and opportunities.\n\nCritics should also applaud the fact that on the _ games tend to emphasise personal responsibility. Playing a game over and over allows players to consider the many possible consequences of their decisions. But _ as we may wish life sometimes gave us the opportunity to do this, the reality is we don’t get many second chances.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Video games are often perceived as being nothing _____ real life.",
+        "options": [
+          "than",
+          "like",
+          "as",
+          "so"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "like"
+        ],
+        "explanation": "Đáp án 'like' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] _____ closer examination, however, they often prove to bear a remarkable resemblance to some features of everyday life.",
+        "options": [
+          "On",
+          "In",
+          "At",
+          "To"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "On"
+        ],
+        "explanation": "Sử dụng giới từ 'On' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] For example, almost _____ exception they reward hard work.",
+        "options": [
+          "on",
+          "in",
+          "without",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "without"
+        ],
+        "explanation": "Đáp án 'without' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] _____ when you have repeated the same activity many times do you progress to the next level.",
+        "options": [
+          "Only",
+          "Just",
+          "Merely",
+          "Alone"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "Only"
+        ],
+        "explanation": "Đáp án 'Only' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] This is a useful, _____ somewhat mechanical, way of thinking about life: decide on a goal and keep working hard until it is achieved.",
+        "options": [
+          "provided",
+          "whether",
+          "unless",
+          "if"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "if",
+          "though",
+          "although",
+          "but"
+        ],
+        "explanation": "Sử dụng liên từ 'if' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] This is a useful, if somewhat mechanical, way of thinking about life: decide on a goal and keep working hard _____ it is achieved.",
+        "options": [
+          "during",
+          "since",
+          "for",
+          "until"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "until",
+          "till"
+        ],
+        "explanation": "Đáp án 'until' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] It is a metaphor that is _____ from perfect, however.",
+        "options": [
+          "away",
+          "near",
+          "far",
+          "distant"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "far"
+        ],
+        "explanation": "Đáp án 'far' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] In video games everyone starts out equal whereas it _____ without saying that in life we aren’t all born with the same skills and opportunities.",
+        "options": [
+          "goes",
+          "comes",
+          "moves",
+          "runs"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "goes"
+        ],
+        "explanation": "Đáp án 'goes' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] Critics should also applaud the fact that on the _____ games tend to emphasise personal responsibility.",
+        "options": [
+          "both",
+          "all",
+          "whole",
+          "each"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "whole"
+        ],
+        "explanation": "Đáp án 'whole' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 10,
+        "content": "[10] But _____ as we may wish life sometimes gave us the opportunity to do this, the reality is we don’t get many second chances.",
+        "options": [
+          "more",
+          "many",
+          "much",
+          "most"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "much"
+        ],
+        "explanation": "'much' là lượng từ phù hợp với sắc thái định lượng hoặc cấu trúc so sánh trong câu."
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "title": "Will your mobile cause burnout?",
+    "level": "C1",
+    "timeLimit": 540,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [9]:\n\nAre smartphones really bad for us? Clear evidence is difficult to come [1] , but new studies are beginning to provide answers.\n\n[2] companies hand out smartphones to employees, there is an implicit agreement that those staff are [3] call at all times. One study concluded that this pressure makes it difficult, or even impossible, for them to maintain a satisfactory balance between their work and personal life. Another study found that [4] more often US workers checked work emails on smartphones in the late evening [5] office hours the higher their stress levels were. At the [6] time, however, the workers who did this most often rated their lives better than those who did not do so at all. [7] more stressed-out, the emailers saw their behaviour as evidence of professional success.\n\nA researcher at Coventry University surveyed remote e-workers at 11 UK companies. Some reported finding the technology helpful, while others suffered [8] having to be constantly available, particularly those frequent fliers [9] colleagues tended to contact them at all hours from different time zones.",
+    "passage": "Are smartphones really bad for us? Clear evidence is difficult to come _ , but new studies are beginning to provide answers.\n\n_ companies hand out smartphones to employees, there is an implicit agreement that those staff are _ call at all times. One study concluded that this pressure makes it difficult, or even impossible, for them to maintain a satisfactory balance between their work and personal life. Another study found that _ more often US workers checked work emails on smartphones in the late evening _ office hours the higher their stress levels were. At the _ time, however, the workers who did this most often rated their lives better than those who did not do so at all. _ more stressed-out, the emailers saw their behaviour as evidence of professional success.\n\nA researcher at Coventry University surveyed remote e-workers at 11 UK companies. Some reported finding the technology helpful, while others suffered _ having to be constantly available, particularly those frequent fliers _ colleagues tended to contact them at all hours from different time zones.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Clear evidence is difficult to come _____ , but new studies are beginning to provide answers.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "by"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "by"
+        ],
+        "explanation": "Sử dụng giới từ 'by' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] _____ companies hand out smartphones to employees, there is an implicit agreement that those staff are on call at all times.",
+        "options": [
+          "For",
+          "Since",
+          "When",
+          "During"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "When",
+          "If",
+          "Whenever",
+          "Where"
+        ],
+        "explanation": "Đại từ quan hệ 'When' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] When companies hand out smartphones to employees, there is an implicit agreement that those staff are _____ call at all times.",
+        "options": [
+          "in",
+          "on",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "on"
+        ],
+        "explanation": "Sử dụng giới từ 'on' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] Another study found that _____ more often US workers checked work emails on smartphones in the late evening outside office hours the higher their stress levels were.",
+        "options": [
+          "some",
+          "a",
+          "an",
+          "the"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "the"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'the' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Another study found that the more often US workers checked work emails on smartphones in the late evening _____ office hours the higher their stress levels were.",
+        "options": [
+          "outside",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "outside",
+          "after"
+        ],
+        "explanation": "Đáp án 'outside' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] At the _____ time, however, the workers who did this most often rated their lives better than those who did not do so at all.",
+        "options": [
+          "like",
+          "similar",
+          "same",
+          "alike"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "same"
+        ],
+        "explanation": "Đáp án 'same' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] _____ more stressed-out, the emailers saw their behaviour as evidence of professional success.",
+        "options": [
+          "Even though",
+          "Though",
+          "Whereas",
+          "However"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "Though",
+          "Although",
+          "While",
+          "Whilst"
+        ],
+        "explanation": "Sử dụng liên từ 'Though' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] Some reported finding the technology helpful, while others suffered _____ having to be constantly available, particularly those frequent fliers whose colleagues tended to contact them at all hours from different time zones.",
+        "options": [
+          "from",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "from"
+        ],
+        "explanation": "Sử dụng giới từ 'from' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] Some reported finding the technology helpful, while others suffered from having to be constantly available, particularly those frequent fliers _____ colleagues tended to contact them at all hours from different time zones.",
+        "options": [
+          "whom",
+          "who",
+          "whose",
+          "which"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "whose"
+        ],
+        "explanation": "Đại từ quan hệ 'whose' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "title": "Japanese workers sleep on the job",
+    "level": "C1",
+    "timeLimit": 660,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [11]:\n\nMost of us are familiar with the scenario of a productive morning rewarded by a decent lunch, and then [1] it gets to about 3 pm the urge to snatch forty winks.\n\nIt’s a daily struggle known to office workers the world [2] , but Japan’s legions of salaried workers have more reason than most to [3] in to this desire. According to a survey of sleeping habits worldwide, they sleep, on average, for as [4] as six hours 22 minutes on work nights – less than workers in [5] other country. Perhaps this explains [6] more and more Japanese companies are encouraging workers to sleep [7] the job. One firm, for example, allows its employees to take 20-minute power naps at their desks or curled [8] on a sofa in the staff lounge. Introduced two years ago, the scheme has proved [9] hit and work performance has dramatically improved [10] it started.\n\nJapan’s new tolerance in this area comes after the issue of new government guidelines on sleep, one of [11] recommendations is for a nap of 30 minutes in the afternoon for all workers.",
+    "passage": "Most of us are familiar with the scenario of a productive morning rewarded by a decent lunch, and then _ it gets to about 3 pm the urge to snatch forty winks.\n\nIt’s a daily struggle known to office workers the world _ , but Japan’s legions of salaried workers have more reason than most to _ in to this desire. According to a survey of sleeping habits worldwide, they sleep, on average, for as _ as six hours 22 minutes on work nights – less than workers in _ other country. Perhaps this explains _ more and more Japanese companies are encouraging workers to sleep _ the job. One firm, for example, allows its employees to take 20-minute power naps at their desks or curled _ on a sofa in the staff lounge. Introduced two years ago, the scheme has proved _ hit and work performance has dramatically improved _ it started.\n\nJapan’s new tolerance in this area comes after the issue of new government guidelines on sleep, one of _ recommendations is for a nap of 30 minutes in the afternoon for all workers.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Most of us are familiar with the scenario of a productive morning rewarded by a decent lunch, and then _____ it gets to about 3 pm the urge to snatch forty winks.",
+        "options": [
+          "since",
+          "when",
+          "for",
+          "during"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "when"
+        ],
+        "explanation": "Đại từ quan hệ 'when' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] It’s a daily struggle known to office workers the world _____ , but Japan’s legions of salaried workers have more reason than most to give in to this desire.",
+        "options": [
+          "on",
+          "in",
+          "over",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "over"
+        ],
+        "explanation": "Sử dụng giới từ 'over' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] It’s a daily struggle known to office workers the world over , but Japan’s legions of salaried workers have more reason than most to _____ in to this desire.",
+        "options": [
+          "provide",
+          "bring",
+          "offer",
+          "give"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "give"
+        ],
+        "explanation": "Đáp án 'give' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] According to a survey of sleeping habits worldwide, they sleep, on average, for as _____ as six hours 22 minutes on work nights – less than workers in any other country.",
+        "options": [
+          "many",
+          "much",
+          "little",
+          "more"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "little"
+        ],
+        "explanation": "'little' là lượng từ phù hợp với sắc thái định lượng hoặc cấu trúc so sánh trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] According to a survey of sleeping habits worldwide, they sleep, on average, for as little as six hours 22 minutes on work nights – less than workers in _____ other country.",
+        "options": [
+          "any",
+          "a",
+          "an",
+          "the"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "any",
+          "every"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'any' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] Perhaps this explains _____ more and more Japanese companies are encouraging workers to sleep on the job.",
+        "options": [
+          "who",
+          "why",
+          "whom",
+          "whose"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "why"
+        ],
+        "explanation": "Đại từ quan hệ 'why' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] Perhaps this explains why more and more Japanese companies are encouraging workers to sleep _____ the job.",
+        "options": [
+          "in",
+          "on",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "on"
+        ],
+        "explanation": "Sử dụng giới từ 'on' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] One firm, for example, allows its employees to take 20-minute power naps at their desks or curled _____ on a sofa in the staff lounge.",
+        "options": [
+          "on",
+          "in",
+          "up",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "up"
+        ],
+        "explanation": "Đáp án 'up' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] Introduced two years ago, the scheme has proved _____ hit and work performance has dramatically improved since it started.",
+        "options": [
+          "the",
+          "an",
+          "a",
+          "some"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "a"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'a' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 10,
+        "content": "[10] Introduced two years ago, the scheme has proved a hit and work performance has dramatically improved _____ it started.",
+        "options": [
+          "until",
+          "for",
+          "during",
+          "since"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "since"
+        ],
+        "explanation": "Sử dụng liên từ 'since' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 11,
+        "content": "[11] Japan’s new tolerance in this area comes after the issue of new government guidelines on sleep, one of _____ recommendations is for a nap of 30 minutes in the afternoon for all workers.",
+        "options": [
+          "whose",
+          "who",
+          "whom",
+          "which"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "whose"
+        ],
+        "explanation": "Đại từ quan hệ 'whose' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "title": "Taking a break",
+    "level": "C1",
+    "timeLimit": 540,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [9]:\n\nIn the [1] of research which clearly demonstrates that sleep helps consolidate memory, it would seem likely that taking a break from studying should, [2] and large, have a similar effect. If you have just tried to memorise a set of facts – and this could be [3] from a list of vocabulary to historical dates – then taking a break should help you to retain this information. \n\nA change of focus can also help consolidate memory, but only as [4] as it activates different parts of the brain from [5] that were previously being used. So if you have just done some hard mental work, going off to practise your tennis should [6] the trick. [7] said that, a little lie-down might seem more tempting, and may be even more productive. When it [8] to learning, we still don’t know the relative benefits of physical exercise as opposed to having a nap. Unfortunately, today’s digital world encourages us to work [9] the clock and it is therefore no wonder people are often unwilling to take a break.",
+    "passage": "In the _ of research which clearly demonstrates that sleep helps consolidate memory, it would seem likely that taking a break from studying should, _ and large, have a similar effect. If you have just tried to memorise a set of facts – and this could be _ from a list of vocabulary to historical dates – then taking a break should help you to retain this information. \n\nA change of focus can also help consolidate memory, but only as _ as it activates different parts of the brain from _ that were previously being used. So if you have just done some hard mental work, going off to practise your tennis should _ the trick. _ said that, a little lie-down might seem more tempting, and may be even more productive. When it _ to learning, we still don’t know the relative benefits of physical exercise as opposed to having a nap. Unfortunately, today’s digital world encourages us to work _ the clock and it is therefore no wonder people are often unwilling to take a break.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] In the _____ of research which clearly demonstrates that sleep helps consolidate memory, it would seem likely that taking a break from studying should, by and large, have a similar effect.",
+        "options": [
+          "person",
+          "body",
+          "one",
+          "head"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "body"
+        ],
+        "explanation": "Đáp án 'body' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] In the body of research which clearly demonstrates that sleep helps consolidate memory, it would seem likely that taking a break from studying should, _____ and large, have a similar effect.",
+        "options": [
+          "by",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "by"
+        ],
+        "explanation": "Sử dụng giới từ 'by' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] If you have just tried to memorise a set of facts – and this could be _____ from a list of vocabulary to historical dates – then taking a break should help you to retain this information.",
+        "options": [
+          "nothing",
+          "something",
+          "everything",
+          "anything"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "anything"
+        ],
+        "explanation": "Đáp án 'anything' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] A change of focus can also help consolidate memory, but only as _____ as it activates different parts of the brain from those that were previously being used.",
+        "options": [
+          "long",
+          "far",
+          "wide",
+          "deep"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "long"
+        ],
+        "explanation": "Đáp án 'long' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] A change of focus can also help consolidate memory, but only as long as it activates different parts of the brain from _____ that were previously being used.",
+        "options": [
+          "that",
+          "this",
+          "those",
+          "these"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "those",
+          "others"
+        ],
+        "explanation": "Đáp án 'those' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] So if you have just done some hard mental work, going off to practise your tennis should _____ the trick.",
+        "options": [
+          "do",
+          "does",
+          "did",
+          "doing"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "do"
+        ],
+        "explanation": "Đáp án 'do' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] _____ said that, a little lie-down might seem more tempting, and may be even more productive.",
+        "options": [
+          "Have",
+          "Having",
+          "Has",
+          "Had"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "Having"
+        ],
+        "explanation": "Đáp án 'Having' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] When it _____ to learning, we still don’t know the relative benefits of physical exercise as opposed to having a nap.",
+        "options": [
+          "goes",
+          "comes",
+          "arrives",
+          "reaches"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "comes"
+        ],
+        "explanation": "Đáp án 'comes' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] Unfortunately, today’s digital world encourages us to work _____ the clock and it is therefore no wonder people are often unwilling to take a break.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "around"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "around",
+          "round",
+          "against"
+        ],
+        "explanation": "Đáp án 'around' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "title": "Commotion in the ocean",
+    "level": "C1",
+    "timeLimit": 540,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [9]:\n\nMarine animals have recently been found stranded on beaches [1] Hawaii to the Canary Islands, in locations where noisy industrial activity was [2] place nearby. Some scientists have [3] forward the idea that human-made noise may upset and confuse marine life. And it’s not just mammals that are [4] risk; even fish might be affected by discordant sounds they are simply not used to.\n\nMany human-made sounds are low frequency and within the hearing range of most aquatic animals. What’s [5] , low-pitched sound can travel over considerable distances underwater, which is [6] many of these animals favour it for communication. But this means that noisy industrial activity can disorientate them and change their behaviour. \n\nThe problem is determining what, if [7] , we can do about this. It is [8] from easy to establish which sounds underwater creatures can hear, and even, in some [9] , whether they can hear at all. However, there is no question that the more we discover, the more harmoniously we can coexist with marine life.",
+    "passage": "Marine animals have recently been found stranded on beaches _ Hawaii to the Canary Islands, in locations where noisy industrial activity was _ place nearby. Some scientists have _ forward the idea that human-made noise may upset and confuse marine life. And it’s not just mammals that are _ risk; even fish might be affected by discordant sounds they are simply not used to.\n\nMany human-made sounds are low frequency and within the hearing range of most aquatic animals. What’s _ , low-pitched sound can travel over considerable distances underwater, which is _ many of these animals favour it for communication. But this means that noisy industrial activity can disorientate them and change their behaviour. \n\nThe problem is determining what, if _ , we can do about this. It is _ from easy to establish which sounds underwater creatures can hear, and even, in some _ , whether they can hear at all. However, there is no question that the more we discover, the more harmoniously we can coexist with marine life.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Marine animals have recently been found stranded on beaches _____ Hawaii to the Canary Islands, in locations where noisy industrial activity was taking place nearby.",
+        "options": [
+          "in",
+          "from",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "from"
+        ],
+        "explanation": "Sử dụng giới từ 'from' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Marine animals have recently been found stranded on beaches from Hawaii to the Canary Islands, in locations where noisy industrial activity was _____ place nearby.",
+        "options": [
+          "taking",
+          "making",
+          "having",
+          "getting"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "taking"
+        ],
+        "explanation": "Đáp án 'taking' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] Some scientists have _____ forward the idea that human-made noise may upset and confuse marine life.",
+        "options": [
+          "place",
+          "set",
+          "put",
+          "lay"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "put"
+        ],
+        "explanation": "Đáp án 'put' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] And it’s not just mammals that are _____ risk; even fish might be affected by discordant sounds they are simply not used to.",
+        "options": [
+          "on",
+          "in",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] What’s _____ , low-pitched sound can travel over considerable distances underwater, which is why many of these animals favour it for communication.",
+        "options": [
+          "much",
+          "more",
+          "many",
+          "most"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "more"
+        ],
+        "explanation": "'more' là lượng từ phù hợp với sắc thái định lượng hoặc cấu trúc so sánh trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] What’s more , low-pitched sound can travel over considerable distances underwater, which is _____ many of these animals favour it for communication.",
+        "options": [
+          "who",
+          "why",
+          "whom",
+          "whose"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "why"
+        ],
+        "explanation": "Đại từ quan hệ 'why' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] The problem is determining what, if _____ , we can do about this.",
+        "options": [
+          "nothing",
+          "something",
+          "everything",
+          "anything"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "anything"
+        ],
+        "explanation": "Đáp án 'anything' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] It is _____ from easy to establish which sounds underwater creatures can hear, and even, in some cases , whether they can hear at all.",
+        "options": [
+          "distant",
+          "near",
+          "away",
+          "far"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "far"
+        ],
+        "explanation": "Đáp án 'far' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] It is far from easy to establish which sounds underwater creatures can hear, and even, in some _____ , whether they can hear at all.",
+        "options": [
+          "points",
+          "times",
+          "cases",
+          "events"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "cases"
+        ],
+        "explanation": "Đáp án 'cases' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "title": "Computer games come real",
+    "level": "C1",
+    "timeLimit": 660,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [11]:\n\nPeople are talking about a new craze which involves being locked in a room. Room escape games are immersive real-life experiences [1] players are voluntarily locked in a room filled with cryptic puzzles that [2] to be solved in order to effect an escape. [3] the games first appeared around the turn of the century, their popularity has snowballed over the past few years. \n\nI recently visited the room which was the original venue for the game, now just [4] of hundreds opening in cities all over the world. The founder of the enterprise explained [5] accounts for the game’s success – once I’d managed to escape, [6] is. He told me that he put its popularity [7] to the fact that it’s more fun to try games in real life than online.\n\nNew venues continue to open throughout Europe, with tourists clamouring to give them a try. [8] they will ever [9] to be viewed with the same regard [10] a city’s more traditional attractions or not, they seem to provide a welcome alternative for the [11] being.",
+    "passage": "People are talking about a new craze which involves being locked in a room. Room escape games are immersive real-life experiences _ players are voluntarily locked in a room filled with cryptic puzzles that _ to be solved in order to effect an escape. _ the games first appeared around the turn of the century, their popularity has snowballed over the past few years. \n\nI recently visited the room which was the original venue for the game, now just _ of hundreds opening in cities all over the world. The founder of the enterprise explained _ accounts for the game’s success – once I’d managed to escape, _ is. He told me that he put its popularity _ to the fact that it’s more fun to try games in real life than online.\n\nNew venues continue to open throughout Europe, with tourists clamouring to give them a try. _ they will ever _ to be viewed with the same regard _ a city’s more traditional attractions or not, they seem to provide a welcome alternative for the _ being.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Room escape games are immersive real-life experiences _____ players are voluntarily locked in a room filled with cryptic puzzles that have to be solved in order to effect an escape.",
+        "options": [
+          "whom",
+          "who",
+          "where",
+          "whose"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "where"
+        ],
+        "explanation": "Đại từ quan hệ 'where' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Room escape games are immersive real-life experiences where players are voluntarily locked in a room filled with cryptic puzzles that _____ to be solved in order to effect an escape.",
+        "options": [
+          "had",
+          "has",
+          "have",
+          "having"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "have",
+          "need"
+        ],
+        "explanation": "Đáp án 'have' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] _____ the games first appeared around the turn of the century, their popularity has snowballed over the past few years.",
+        "options": [
+          "However",
+          "Even though",
+          "Whereas",
+          "Although"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "Although",
+          "Though",
+          "While",
+          "Whilst"
+        ],
+        "explanation": "Sử dụng liên từ 'Although' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] I recently visited the room which was the original venue for the game, now just _____ of hundreds opening in cities all over the world.",
+        "options": [
+          "the",
+          "a",
+          "an",
+          "one"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "one"
+        ],
+        "explanation": "Đáp án 'one' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] The founder of the enterprise explained _____ accounts for the game’s success – once I’d managed to escape, that is.",
+        "options": [
+          "who",
+          "what",
+          "whom",
+          "whose"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "what"
+        ],
+        "explanation": "Đáp án 'what' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] The founder of the enterprise explained what accounts for the game’s success – once I’d managed to escape, _____ is.",
+        "options": [
+          "these",
+          "this",
+          "that",
+          "those"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "that"
+        ],
+        "explanation": "Đại từ quan hệ 'that' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] He told me that he put its popularity _____ to the fact that it’s more fun to try games in real life than online.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "down"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "down"
+        ],
+        "explanation": "Đáp án 'down' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] _____ they will ever come to be viewed with the same regard as a city’s more traditional attractions or not, they seem to provide a welcome alternative for the time being.",
+        "options": [
+          "Provided",
+          "If",
+          "Unless",
+          "Whether"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "Whether"
+        ],
+        "explanation": "Sử dụng liên từ 'Whether' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] Whether they will ever _____ to be viewed with the same regard as a city’s more traditional attractions or not, they seem to provide a welcome alternative for the time being.",
+        "options": [
+          "go",
+          "come",
+          "arrive",
+          "reach"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "come"
+        ],
+        "explanation": "Đáp án 'come' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 10,
+        "content": "[10] Whether they will ever come to be viewed with the same regard _____ a city’s more traditional attractions or not, they seem to provide a welcome alternative for the time being.",
+        "options": [
+          "as",
+          "because",
+          "since",
+          "for"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "as"
+        ],
+        "explanation": "Sử dụng liên từ 'as' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 11,
+        "content": "[11] Whether they will ever come to be viewed with the same regard as a city’s more traditional attractions or not, they seem to provide a welcome alternative for the _____ being.",
+        "options": [
+          "while",
+          "moment",
+          "period",
+          "time"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "time"
+        ],
+        "explanation": "Đáp án 'time' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "title": "How to boost your memory",
+    "level": "C1",
+    "timeLimit": 660,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [11]:\n\nA cup or [1] of coffee could boost the brain’s ability to store long-term memories, or [2] researchers in the US claim. They found that people who had been given a shot of caffeine after looking at a series of pictures were better [3] to distinguish the pictures from similar images in later tests. In the experiment, 44 volunteers who had been deprived [4] coffee for at least 24 hours were shown a rapid sequence of pictures. [5] the end of the task, each volunteer was randomly assigned a caffeine pill [6] a placebo. The experiment was repeated, and the volunteers were asked [7] the pictures were the same as, similar to or different from [8] seen previously. The researcher who led the study said both groups scored equally, [9] when it came to spotting similar images. Here the caffeine group scored around 10% higher. He admits it is unclear how caffeine might help in the storage of memories, [10] is sufficiently convinced of its benefits to [11] on drinking coffee himself.",
+    "passage": "A cup or _ of coffee could boost the brain’s ability to store long-term memories, or _ researchers in the US claim. They found that people who had been given a shot of caffeine after looking at a series of pictures were better _ to distinguish the pictures from similar images in later tests. In the experiment, 44 volunteers who had been deprived _ coffee for at least 24 hours were shown a rapid sequence of pictures. _ the end of the task, each volunteer was randomly assigned a caffeine pill _ a placebo. The experiment was repeated, and the volunteers were asked _ the pictures were the same as, similar to or different from _ seen previously. The researcher who led the study said both groups scored equally, _ when it came to spotting similar images. Here the caffeine group scored around 10% higher. He admits it is unclear how caffeine might help in the storage of memories, _ is sufficiently convinced of its benefits to _ on drinking coffee himself.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] A cup or _____ of coffee could boost the brain’s ability to store long-term memories, or so researchers in the US claim.",
+        "options": [
+          "two",
+          "both",
+          "pair",
+          "double"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "two"
+        ],
+        "explanation": "Đáp án 'two' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] A cup or two of coffee could boost the brain’s ability to store long-term memories, or _____ researchers in the US claim.",
+        "options": [
+          "so",
+          "because",
+          "since",
+          "as"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "so"
+        ],
+        "explanation": "Sử dụng liên từ 'so' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] They found that people who had been given a shot of caffeine after looking at a series of pictures were better _____ to distinguish the pictures from similar images in later tests.",
+        "options": [
+          "likely",
+          "capable",
+          "possible",
+          "able"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "able"
+        ],
+        "explanation": "Đáp án 'able' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] In the experiment, 44 volunteers who had been deprived _____ coffee for at least 24 hours were shown a rapid sequence of pictures.",
+        "options": [
+          "on",
+          "in",
+          "of",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "of"
+        ],
+        "explanation": "Sử dụng giới từ 'of' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] _____ the end of the task, each volunteer was randomly assigned a caffeine pill or a placebo.",
+        "options": [
+          "To",
+          "In",
+          "On",
+          "At"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "At"
+        ],
+        "explanation": "Sử dụng giới từ 'At' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] At the end of the task, each volunteer was randomly assigned a caffeine pill _____ a placebo.",
+        "options": [
+          "or",
+          "and",
+          "but",
+          "so"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "or"
+        ],
+        "explanation": "Đáp án 'or' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] The experiment was repeated, and the volunteers were asked _____ the pictures were the same as, similar to or different from those seen previously.",
+        "options": [
+          "provided",
+          "unless",
+          "whether",
+          "providing"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "whether",
+          "if"
+        ],
+        "explanation": "Sử dụng liên từ 'whether' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] The experiment was repeated, and the volunteers were asked whether the pictures were the same as, similar to or different from _____ seen previously.",
+        "options": [
+          "this",
+          "those",
+          "that",
+          "these"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "those"
+        ],
+        "explanation": "Đáp án 'those' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] The researcher who led the study said both groups scored equally, _____ when it came to spotting similar images.",
+        "options": [
+          "without",
+          "besides",
+          "apart",
+          "except"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "except"
+        ],
+        "explanation": "Đáp án 'except' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 10,
+        "content": "[10] He admits it is unclear how caffeine might help in the storage of memories, _____ is sufficiently convinced of its benefits to carry on drinking coffee himself.",
+        "options": [
+          "although",
+          "but",
+          "though",
+          "even though"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "but"
+        ],
+        "explanation": "Đáp án 'but' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 11,
+        "content": "[11] He admits it is unclear how caffeine might help in the storage of memories, but is sufficiently convinced of its benefits to _____ on drinking coffee himself.",
+        "options": [
+          "carry",
+          "bring",
+          "take",
+          "hold"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "carry",
+          "keep"
+        ],
+        "explanation": "Đáp án 'carry' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "title": "Writing detective fiction",
+    "level": "C1",
+    "timeLimit": 660,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [11]:\n\nI think I knew I would be a novelist almost as [1] as I was able to read, but for a variety of reasons, the chief one [2] the need to find a safe career, I was a late starter. [3] I did begin my first novel, I decided to try detective fiction, since it was my foremost recreational reading. [4] the time I didn’t foresee a writing future for [5] as a crime novelist, and [6], as I continued with the genre, I became increasingly intrigued by [7] possibilities.\n\nThe technical problems of a detective story are fascinating; firstly, how to balance setting, characterisation and plot so that they contribute to the whole. Then there is the creation of the detective, [8] amateur or professional, who must remain a credible human being [9] representing an agent of human justice. Perhaps the greatest problem of [10] lies in the exploration of the complexities of the murderer’s mind [11] revealing his or her identity until the final chapter.",
+    "passage": "I think I knew I would be a novelist almost as _ as I was able to read, but for a variety of reasons, the chief one _ the need to find a safe career, I was a late starter. _ I did begin my first novel, I decided to try detective fiction, since it was my foremost recreational reading. _ the time I didn’t foresee a writing future for _ as a crime novelist, and _, as I continued with the genre, I became increasingly intrigued by _ possibilities.\n\nThe technical problems of a detective story are fascinating; firstly, how to balance setting, characterisation and plot so that they contribute to the whole. Then there is the creation of the detective, _ amateur or professional, who must remain a credible human being _ representing an agent of human justice. Perhaps the greatest problem of _ lies in the exploration of the complexities of the murderer’s mind _ revealing his or her identity until the final chapter.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I think I knew I would be a novelist almost as _____ as I was able to read, but for a variety of reasons, the chief one being the need to find a safe career, I was a late starter.",
+        "options": [
+          "early",
+          "soon",
+          "fast",
+          "quickly"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "soon"
+        ],
+        "explanation": "Đáp án 'soon' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] I think I knew I would be a novelist almost as soon as I was able to read, but for a variety of reasons, the chief one _____ the need to find a safe career, I was a late starter.",
+        "options": [
+          "are",
+          "am",
+          "is",
+          "being"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "being"
+        ],
+        "explanation": "Đáp án 'being' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] _____ I did begin my first novel, I decided to try detective fiction, since it was my foremost recreational reading.",
+        "options": [
+          "During",
+          "Since",
+          "For",
+          "When"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "When"
+        ],
+        "explanation": "Đại từ quan hệ 'When' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] _____ the time I didn’t foresee a writing future for myself as a crime novelist, and yet, as I continued with the genre, I became increasingly intrigued by its possibilities.",
+        "options": [
+          "On",
+          "In",
+          "At",
+          "To"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "At"
+        ],
+        "explanation": "Sử dụng giới từ 'At' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] At the time I didn’t foresee a writing future for _____ as a crime novelist, and yet, as I continued with the genre, I became increasingly intrigued by its possibilities.",
+        "options": [
+          "herself",
+          "yourself",
+          "himself",
+          "myself"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "myself"
+        ],
+        "explanation": "Đại từ 'myself' giữ đúng vai trò ngữ pháp (tân ngữ/sở hữu/phản thân) trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] At the time I didn’t foresee a writing future for myself as a crime novelist, and _____, as I continued with the genre, I became increasingly intrigued by its possibilities.",
+        "options": [
+          "although",
+          "yet",
+          "though",
+          "even though"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "yet"
+        ],
+        "explanation": "Đáp án 'yet' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] At the time I didn’t foresee a writing future for myself as a crime novelist, and yet, as I continued with the genre, I became increasingly intrigued by _____ possibilities.",
+        "options": [
+          "your",
+          "my",
+          "its",
+          "his"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "its",
+          "the"
+        ],
+        "explanation": "Đáp án 'its' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] Then there is the creation of the detective, _____ amateur or professional, who must remain a credible human being while representing an agent of human justice.",
+        "options": [
+          "provided",
+          "if",
+          "unless",
+          "whether"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "whether",
+          "either"
+        ],
+        "explanation": "Sử dụng liên từ 'whether' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] Then there is the creation of the detective, whether amateur or professional, who must remain a credible human being _____ representing an agent of human justice.",
+        "options": [
+          "for",
+          "since",
+          "while",
+          "during"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "while",
+          "whilst"
+        ],
+        "explanation": "Sử dụng liên từ 'while' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 10,
+        "content": "[10] Perhaps the greatest problem of _____ lies in the exploration of the complexities of the murderer’s mind without revealing his or her identity until the final chapter.",
+        "options": [
+          "both",
+          "all",
+          "each",
+          "every"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "all"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'all' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 11,
+        "content": "[11] Perhaps the greatest problem of all lies in the exploration of the complexities of the murderer’s mind _____ revealing his or her identity until the final chapter.",
+        "options": [
+          "on",
+          "in",
+          "without",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "without"
+        ],
+        "explanation": "Đáp án 'without' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "title": "How intelligent are dogs?",
+    "level": "C1",
+    "timeLimit": 660,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [11]:\n\nFaced with a puzzle to solve for a reward, dogs give up, apparently [1] a loss, and turn to humans for help, which is quite [2] their wild cousins, wolves. So are dogs just servile creatures [3] dependence on humans has made them less intelligent than wolves? \n\nThe answer is by no [4] straightforward. Researchers presented wolves and dogs with a box containing a snack, which could be opened with a certain [5] of persistence. Most wolves managed to open the box, but only one [6] twenty dogs succeeded. Whereas the wolves spent all of their time engaged with the task, those dogs who attempted it spent almost [7] at all. By and [8] , the dogs declined even to attempt the task, and only tried [9] encouraged by a human.\n\nSome scientists believe the domestication of dogs has conditioned them to seek direction from a human, [10] of how clever they actually are. Other experts warn that, [11] the behavioural variability among dogs, it is unwise to generalise.",
+    "passage": "Faced with a puzzle to solve for a reward, dogs give up, apparently _ a loss, and turn to humans for help, which is quite _ their wild cousins, wolves. So are dogs just servile creatures _ dependence on humans has made them less intelligent than wolves? \n\nThe answer is by no _ straightforward. Researchers presented wolves and dogs with a box containing a snack, which could be opened with a certain _ of persistence. Most wolves managed to open the box, but only one _ twenty dogs succeeded. Whereas the wolves spent all of their time engaged with the task, those dogs who attempted it spent almost _ at all. By and _ , the dogs declined even to attempt the task, and only tried _ encouraged by a human.\n\nSome scientists believe the domestication of dogs has conditioned them to seek direction from a human, _ of how clever they actually are. Other experts warn that, _ the behavioural variability among dogs, it is unwise to generalise.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Faced with a puzzle to solve for a reward, dogs give up, apparently _____ a loss, and turn to humans for help, which is quite unlike their wild cousins, wolves.",
+        "options": [
+          "to",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Faced with a puzzle to solve for a reward, dogs give up, apparently at a loss, and turn to humans for help, which is quite _____ their wild cousins, wolves.",
+        "options": [
+          "unlike",
+          "different",
+          "opposite",
+          "dislike"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "unlike"
+        ],
+        "explanation": "Đáp án 'unlike' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] So are dogs just servile creatures _____ dependence on humans has made them less intelligent than wolves?",
+        "options": [
+          "whose",
+          "who",
+          "whom",
+          "which"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "whose"
+        ],
+        "explanation": "Đại từ quan hệ 'whose' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] The answer is by no _____ straightforward.",
+        "options": [
+          "way",
+          "means",
+          "manner",
+          "method"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "means"
+        ],
+        "explanation": "Đáp án 'means' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Researchers presented wolves and dogs with a box containing a snack, which could be opened with a certain _____ of persistence.",
+        "options": [
+          "deal",
+          "number",
+          "quantity",
+          "amount"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "amount",
+          "degree"
+        ],
+        "explanation": "Đáp án 'amount' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] Most wolves managed to open the box, but only one _____ twenty dogs succeeded.",
+        "options": [
+          "in",
+          "on",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] Whereas the wolves spent all of their time engaged with the task, those dogs who attempted it spent almost _____ at all.",
+        "options": [
+          "each",
+          "all",
+          "both",
+          "none"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "none"
+        ],
+        "explanation": "Đáp án 'none' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] By and _____ , the dogs declined even to attempt the task, and only tried when encouraged by a human.",
+        "options": [
+          "great",
+          "large",
+          "big",
+          "huge"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "large"
+        ],
+        "explanation": "Đáp án 'large' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] By and large , the dogs declined even to attempt the task, and only tried _____ encouraged by a human.",
+        "options": [
+          "since",
+          "when",
+          "for",
+          "during"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "when",
+          "if"
+        ],
+        "explanation": "Đại từ quan hệ 'when' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 10,
+        "content": "[10] Some scientists believe the domestication of dogs has conditioned them to seek direction from a human, _____ of how clever they actually are.",
+        "options": [
+          "regardless",
+          "irrespective",
+          "despite",
+          "careless"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "regardless"
+        ],
+        "explanation": "Đáp án 'regardless' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 11,
+        "content": "[11] Other experts warn that, _____ the behavioural variability among dogs, it is unwise to generalise.",
+        "options": [
+          "given",
+          "provided",
+          "assuming",
+          "in"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "given",
+          "considering"
+        ],
+        "explanation": "Đáp án 'given' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  }
+]

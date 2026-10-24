@@ -56,4 +56,48 @@ public interface EmailService {
      * @throws RuntimeException if email sending fails
      */
     void sendPaymentSuccessEmail(PaymentEmailData paymentData);
+
+    void sendReviewDueEmail(
+            String toEmail,
+            String recipientName,
+            int wordsDueCount,
+            java.util.List<com.vocabularyai.notification.dto.OverdueWordDto> overdueWords,
+            int currentStreak,
+            String actionUrl,
+            String unsubscribeUrl
+    );
+
+    void sendStreakSaveEmail(
+            String toEmail,
+            String recipientName,
+            int streakDays,
+            com.vocabularyai.notification.dto.OverdueWordDto suggestedWord,
+            String actionUrl,
+            String unsubscribeUrl
+    );
+
+    void sendRenewal3DaysEmail(
+            String toEmail,
+            String recipientName,
+            String packageName,
+            String expireDateStr,
+            String renewPriceStr,
+            String actionUrl
+    );
+
+    void sendRenewalDueEmail(
+            String toEmail,
+            String recipientName,
+            String packageName,
+            String expireDateStr,
+            String actionUrl
+    );
+
+    void sendRenewalExpiredEmail(
+            String toEmail,
+            String recipientName,
+            String packageName,
+            String expireDateStr,
+            String actionUrl
+    );
 }

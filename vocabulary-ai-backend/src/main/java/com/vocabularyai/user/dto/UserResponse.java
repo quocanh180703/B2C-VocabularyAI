@@ -29,6 +29,7 @@ public class UserResponse {
     private String avatarUrl;
     private String role;
     private String status;
+    private Boolean emailRemindersEnabled;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     
@@ -47,6 +48,7 @@ public class UserResponse {
             .avatarUrl(user.getAvatarUrl())
             .role(user.getRole().name())
             .status(user.getStatus().name())
+            .emailRemindersEnabled(user.getEmailRemindersEnabled())
             .createdAt(user.getCreatedAt())
             .updatedAt(user.getUpdatedAt())
             .build();

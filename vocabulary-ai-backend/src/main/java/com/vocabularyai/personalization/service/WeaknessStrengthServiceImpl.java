@@ -119,6 +119,11 @@ public class WeaknessStrengthServiceImpl implements WeaknessStrengthService {
             log.debug("[TASK 2] Parsing AI response");
             WeaknessStrengthDto analysis = parseAIResponse(aiResponse, userId, user.getFullName());
             
+            if (isEnglishAnalysis(analysis)) {
+                log.warn("[TASK 2] AI generated analysis in English for userId: {}, replacing with structured Vietnamese analysis", userId);
+                analysis = buildFallbackAnalysis(userId, user.getFullName());
+            }
+            
             // Cache results
             log.debug("[TASK 2] Caching analysis for userId: {}", userId);
             cacheService.set(CACHE_KEY_PREFIX + userId, analysis, CACHE_TTL_SECONDS);
@@ -307,7 +312,21 @@ public class WeaknessStrengthServiceImpl implements WeaknessStrengthService {
         prompt.append("      \"improvementTimelineDays\": 14\n");
         prompt.append("    }\n");
         prompt.append("  ],\n");
-        prompt.append("  \"criticalWeaknesses\": [/* 2 lỗ hổng nghiêm trọng nhất (severity là CRITICAL hoặc HIGH) với các mô tả bằng Tiếng Việt */],\n");
+        prompt.append("  \"criticalWeaknesses\": [\n");
+        prompt.append("    {\n");
+        prompt.append("      \"category\": \"Luyện nói\",\n");
+        prompt.append("      \"area\": \"Kỹ năng nói & Phản xạ giao tiếp\",\n");
+        prompt.append("      \"description\": \"Chưa có nhiều hoạt động luyện nói được ghi nhận, phản xạ đàm thoại cần được rèn luyện thêm.\",\n");
+        prompt.append("      \"severity\": \"CRITICAL\",\n");
+        prompt.append("      \"performancePercentage\": 0.0,\n");
+        prompt.append("      \"targetPercentage\": 70.0,\n");
+        prompt.append("      \"performanceGap\": 70.0,\n");
+        prompt.append("      \"rootCause\": \"Chưa dành thời gian thực hành nói tiếng Anh mỗi ngày.\",\n");
+        prompt.append("      \"strategies\": [\"Dành 5 phút mỗi ngày shadowing theo phát âm mẫu chậm để quen khẩu hình không áp lực\"],\n");
+        prompt.append("      \"focusAreas\": [\"Phát âm cơ bản\", \"Shadowing\"],\n");
+        prompt.append("      \"improvementTimelineDays\": 14\n");
+        prompt.append("    }\n");
+        prompt.append("  ],\n");
         prompt.append("  \"weaknessCount\": 2,\n");
         prompt.append("  \"strengths\": [\n");
         prompt.append("    {\n");
@@ -320,7 +339,17 @@ public class WeaknessStrengthServiceImpl implements WeaknessStrengthService {
         prompt.append("      \"relatedAreas\": [\"Lặp lại ngắt quãng\", \"Nhận diện từ vựng\"]\n");
         prompt.append("    }\n");
         prompt.append("  ],\n");
-        prompt.append("  \"outstandingStrengths\": [/* các điểm mạnh vượt trội với mô tả bằng Tiếng Việt */],\n");
+        prompt.append("  \"outstandingStrengths\": [\n");
+        prompt.append("    {\n");
+        prompt.append("      \"category\": \"Từ vựng\",\n");
+        prompt.append("      \"area\": \"Ghi nhớ từ vựng SRS\",\n");
+        prompt.append("      \"description\": \"Tỉ lệ nhớ chính xác từ vựng sau 24h đạt trên 85%.\",\n");
+        prompt.append("      \"excellenceLevel\": \"OUTSTANDING\",\n");
+        prompt.append("      \"performancePercentage\": 88.0,\n");
+        prompt.append("      \"leverageStrategy\": \"Tăng số lượng từ mới mỗi ngày lên 10-15 từ\",\n");
+        prompt.append("      \"relatedAreas\": [\"Spaced Repetition\", \"Active Recall\"]\n");
+        prompt.append("    }\n");
+        prompt.append("  ],\n");
         prompt.append("  \"strengthCount\": 2,\n");
         prompt.append("  \"priorityActions\": [\n");
         prompt.append("    {\n");

@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.Map;
 
 /**
  * User Controller
@@ -67,6 +68,27 @@ public class UserController {
         UserResponse userResponse = userService.updateUserProfile(userId, request);
         return ResponseEntity.ok(
             ApiResponse.success("User profile updated successfully", userResponse)
+        );
+    }
+    
+    /**
+     * Update user preferences (e.g. email reminders)
+     */
+    @PatchMapping("/me/preferences")
+    @PreAuthorize("isAuthenticated()")
+    @Operation(
+        summary = "Update user preferences",
+        description = "Update user preferences such as email reminders enabled/disabled"
+    )
+    public ResponseEntity<ApiResponse<UserResponse>> updatePreferences(@RequestBody Map<String, Object> preferences) {
+        log.info("Updating preferences for current user: {}", preferences);
+        Long userId = userService.getCurrentUserId();
+        Boolean enabled = preferences.containsKey("emailRemindersEnabled")
+                ? Boolean.valueOf(String.valueOf(preferences.get("emailRemindersEnabled")))
+                : null;
+        UserResponse userResponse = userService.updatePreferences(userId, enabled);
+        return ResponseEntity.ok(
+            ApiResponse.success("Tùy chọn thông báo đã được cập nhật thành công!", userResponse)
         );
     }
     

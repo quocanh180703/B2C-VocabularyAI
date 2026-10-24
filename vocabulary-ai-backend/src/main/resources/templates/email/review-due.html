@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhắc ôn từ vựng đến hạn</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #f8fafc; }
+        .container { max-width: 580px; margin: 20px auto; background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); overflow: hidden; border: 1px solid #e2e8f0; }
+        .header { background: linear-gradient(135deg, #1565C0 0%, #0d47a1 100%); color: #ffffff; padding: 32px 24px; text-align: center; }
+        .header h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+        .header p { font-size: 14px; opacity: 0.9; }
+        .content { padding: 32px 28px; }
+        .greeting { font-size: 16px; margin-bottom: 20px; }
+        .count-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 24px; }
+        .count-number { font-size: 40px; font-weight: 800; color: #16a34a; line-height: 1; margin-bottom: 6px; }
+        .count-label { font-size: 14px; font-weight: 600; color: #15803d; }
+        .word-list { margin-bottom: 24px; border-radius: 10px; border: 1px solid #e2e8f0; overflow: hidden; }
+        .word-item { padding: 12px 16px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; }
+        .word-item:last-child { border-bottom: none; }
+        .word-text { font-weight: 700; font-size: 15px; color: #0f172a; }
+        .word-meaning { font-size: 13px; color: #64748b; margin-top: 2px; }
+        .word-badge { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: #fee2e2; color: #dc2626; }
+        .streak-pill { display: inline-flex; align-items: center; gap: 6px; background: #fff7ed; border: 1px solid #ffedd5; padding: 6px 14px; border-radius: 999px; font-size: 13.5px; font-weight: 700; color: #c2410c; margin-bottom: 24px; }
+        .btn-center { text-align: center; margin: 28px 0 20px; }
+        .btn { display: inline-block; background: #1565C0; color: #ffffff !important; text-decoration: none; font-size: 15px; font-weight: 700; padding: 14px 36px; border-radius: 999px; box-shadow: 0 4px 14px rgba(21, 101, 192, 0.35); }
+        .footer { background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 20px 24px; text-align: center; font-size: 12px; color: #94a3b8; }
+        .footer a { color: #64748b; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Vi đang chờ bạn ôn bài hôm nay ✨</h1>
+            <p>Hệ thống lặp lại ngắt quãng (SRS) đã tối ưu lịch ôn cho bạn</p>
+        </div>
+        <div class="content">
+            <div class="greeting">
+                Xin chào <strong th:text="${recipientName}">Học viên</strong>,
+            </div>
+            <p style="margin-bottom: 18px; color: #475569;">
+                Não bộ ghi nhớ tốt nhất khi bạn ôn từ đúng thời điểm sắp quên. Hôm nay bạn có một số từ vựng đã đến lịch cần củng cố:
+            </p>
+
+            <div class="count-card">
+                <div class="count-number" th:text="${wordsDueCount}">8</div>
+                <div class="count-label">từ vựng đang chờ bạn ôn tập hôm nay</div>
+            </div>
+
+            <!-- Overdue words preview -->
+            <div th:if="${overdueWords != null and !overdueWords.isEmpty()}" style="margin-bottom: 16px;">
+                <div style="font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 8px;">CÁC TỪ TRỄ LỊCH NHẤT:</div>
+                <div class="word-list">
+                    <div class="word-item" th:each="w : ${overdueWords}">
+                        <div>
+                            <div class="word-text">
+                                <span th:text="${w.word}">resilient</span>
+                                <span th:if="${w.level != null}" style="font-size: 11px; color: #1565C0; font-weight: 800; margin-left: 4px;" th:text="'(' + ${w.level} + ')'">(B2)</span>
+                            </div>
+                            <div class="word-meaning" th:text="${w.meaning}">kiên cường, nhanh phục hồi</div>
+                        </div>
+                        <div class="word-badge" th:if="${w.overdueDays > 0}" th:text="'Trễ ' + ${w.overdueDays} + ' ngày'">Trễ 3 ngày</div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${currentStreak > 0}" style="text-align: center;">
+                <span class="streak-pill">
+                    🔥 Chuỗi học tập hiện tại: <span th:text="${currentStreak} + ' ngày liên tục'">5 ngày liên tục</span>
+                </span>
+            </div>
+
+            <div class="btn-center">
+                <a th:href="${actionUrl}" class="btn">Ôn tập ngay bây giờ →</a>
+            </div>
+
+            <p style="font-size: 13px; color: #64748b; text-align: center;">
+                Chỉ mất khoảng 3–5 phút để hoàn thành phiên ôn tập này!
+            </p>
+        </div>
+
+        <div class="footer">
+            <p style="margin-bottom: 8px;">© 2026 VocabularyAI · Học từ vựng thông minh cùng AI</p>
+            <p>
+                Nếu bạn không muốn nhận email nhắc ôn bài, bạn có thể 
+                <a th:href="${unsubscribeUrl}">Tắt email nhắc học tại đây</a>.
+            </p>
+            <p style="margin-top: 6px;">Hỗ trợ: <a href="mailto:hotro@vocabularyai.com">hotro@vocabularyai.com</a></p>
+        </div>
+    </div>
+</body>
+</html>

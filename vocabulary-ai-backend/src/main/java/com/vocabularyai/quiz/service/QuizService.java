@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -42,9 +43,19 @@ public class QuizService {
     public Page<QuizResponse> getPublishedQuizzes(Pageable pageable) {
         log.info("Getting published quizzes");
         Page<Quiz> quizzes = quizRepository.findByStatus(Quiz.QuizStatus.PUBLISHED, pageable);
+        Map<Long, Integer> countMap = questionRepository.countQuestionsGroupByQuizId().stream()
+            .collect(Collectors.toMap(
+                row -> (Long) row[0],
+                row -> ((Number) row[1]).intValue(),
+                (existing, replacement) -> existing
+            ));
         return new PageImpl<>(
             quizzes.getContent().stream()
-                .map(QuizResponse::fromEntity)
+                .map(q -> {
+                    QuizResponse resp = QuizResponse.fromEntity(q);
+                    resp.setQuestionCount(countMap.getOrDefault(q.getId(), 5));
+                    return resp;
+                })
                 .collect(Collectors.toList()),
             pageable,
             quizzes.getTotalElements()
@@ -59,7 +70,9 @@ public class QuizService {
         log.info("Getting quiz with id: {}", quizId);
         Quiz quiz = quizRepository.findById(quizId)
             .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
-        return QuizResponse.fromEntity(quiz);
+        QuizResponse resp = QuizResponse.fromEntity(quiz);
+        resp.setQuestionCount((int) questionRepository.countByQuizId(quizId));
+        return resp;
     }
     
     /**
@@ -69,9 +82,19 @@ public class QuizService {
     public Page<QuizResponse> getAllQuizzes(Pageable pageable) {
         log.info("Getting all quizzes (Admin)");
         Page<Quiz> quizzes = quizRepository.findAll(pageable);
+        Map<Long, Integer> countMap = questionRepository.countQuestionsGroupByQuizId().stream()
+            .collect(Collectors.toMap(
+                row -> (Long) row[0],
+                row -> ((Number) row[1]).intValue(),
+                (existing, replacement) -> existing
+            ));
         return new PageImpl<>(
             quizzes.getContent().stream()
-                .map(QuizResponse::fromEntity)
+                .map(q -> {
+                    QuizResponse resp = QuizResponse.fromEntity(q);
+                    resp.setQuestionCount(countMap.getOrDefault(q.getId(), 5));
+                    return resp;
+                })
                 .collect(Collectors.toList()),
             pageable,
             quizzes.getTotalElements()

@@ -48,6 +48,7 @@ public class HintController {
     
     private final LearningHintService hintService;
     private final UserService userService;
+    private final com.vocabularyai.payment.service.FeatureUsageService featureUsageService;
     
     // ==================== Single Progress Hint ====================
     
@@ -124,16 +125,22 @@ public class HintController {
             request.getLearningProgressId(), request.getAttemptCount());
         
         User user = userService.getCurrentUser();
-        HintResponse response = hintService.generateHint(
-            request.getLearningProgressId(),
-            request.getAttemptCount(),
-            user.getId()
-        );
-        
-        return ResponseEntity.ok(ApiResponse.success(
-            "Hint generated successfully",
-            response
-        ));
+        featureUsageService.checkAndConsumeQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.WORD_EXPLAIN);
+        try {
+            HintResponse response = hintService.generateHint(
+                request.getLearningProgressId(),
+                request.getAttemptCount(),
+                user.getId()
+            );
+            
+            return ResponseEntity.ok(ApiResponse.success(
+                "Hint generated successfully",
+                response
+            ));
+        } catch (Exception e) {
+            featureUsageService.rollbackQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.WORD_EXPLAIN);
+            throw e;
+        }
     }
     
     // ==================== Batch Hints Generation ====================
@@ -204,16 +211,22 @@ public class HintController {
         }
         
         User user = userService.getCurrentUser();
-        List<HintResponse> response = hintService.generateHintsBatch(
-            request.getProgressIds(),
-            request.getAttemptCounts(),
-            user.getId()
-        );
-        
-        return ResponseEntity.ok(ApiResponse.success(
-            "Hints generated successfully",
-            response
-        ));
+        featureUsageService.checkAndConsumeQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.WORD_EXPLAIN);
+        try {
+            List<HintResponse> response = hintService.generateHintsBatch(
+                request.getProgressIds(),
+                request.getAttemptCounts(),
+                user.getId()
+            );
+            
+            return ResponseEntity.ok(ApiResponse.success(
+                "Hints generated successfully",
+                response
+            ));
+        } catch (Exception e) {
+            featureUsageService.rollbackQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.WORD_EXPLAIN);
+            throw e;
+        }
     }
     
     // ==================== Cache Management (Admin) ====================

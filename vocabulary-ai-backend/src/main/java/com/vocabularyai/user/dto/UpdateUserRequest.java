@@ -27,4 +27,6 @@ public class UpdateUserRequest {
     private String fullName;
     
     private String avatarUrl;
+    
+    private Boolean emailRemindersEnabled;
 }

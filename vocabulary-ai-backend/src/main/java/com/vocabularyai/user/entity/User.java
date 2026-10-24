@@ -59,6 +59,10 @@ public class User implements UserDetails {
     @Builder.Default
     private UserStatus status = UserStatus.ACTIVE;
     
+    @Column(name = "email_reminders_enabled", nullable = false)
+    @Builder.Default
+    private Boolean emailRemindersEnabled = true;
+    
     @Column(name = "created_at", nullable = false, updatable = false)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();

@@ -181,8 +181,6 @@ public class QuizController {
      * Get quiz attempt with answers (authenticated)
      */
     @GetMapping("/attempts/{attemptId}")
-    @PreAuthorize("isAuthenticated()")
-    @SecurityRequirement(name = "bearerAuth")
     @Operation(
         summary = "Get quiz attempt details",
         description = "Get quiz attempt with all answers and explanations"
@@ -190,9 +188,14 @@ public class QuizController {
     public ResponseEntity<ApiResponse<QuizAttemptWithAnswersResponse>> getQuizAttemptDetails(
             @PathVariable Long attemptId,
             @org.springframework.security.core.annotation.AuthenticationPrincipal com.vocabularyai.user.entity.User user) {
-        log.info("Getting quiz attempt details: {} for user: {}", attemptId, user.getId());
+        log.info("Getting quiz attempt details: {}", attemptId);
         
-        QuizAttemptWithAnswersResponse response = quizService.getQuizAttemptWithAnswers(attemptId, user.getId());
+        QuizAttemptWithAnswersResponse response;
+        if (user != null) {
+            response = quizService.getQuizAttemptWithAnswers(attemptId, user.getId());
+        } else {
+            response = quizService.getQuizAttemptWithAnswers(attemptId);
+        }
         
         return ResponseEntity.ok(
             ApiResponse.success("Quiz attempt retrieved successfully", response)

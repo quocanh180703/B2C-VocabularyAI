@@ -58,6 +58,7 @@ public class ChatController {
     
     private final ChatService chatService;
     private final UserService userService;
+    private final com.vocabularyai.payment.service.FeatureUsageService featureUsageService;
     
     // ==================== Conversation Management ====================
     
@@ -244,9 +245,14 @@ public class ChatController {
             conversationId, request.getContent().length());
         
         User user = userService.getCurrentUser();
-        MessageResponse response = chatService.sendMessage(conversationId, user.getId(), request);
-        
-        return ResponseEntity.ok(ApiResponse.success("Message sent successfully", response));
+        featureUsageService.checkAndConsumeQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.AI_CHAT);
+        try {
+            MessageResponse response = chatService.sendMessage(conversationId, user.getId(), request);
+            return ResponseEntity.ok(ApiResponse.success("Message sent successfully", response));
+        } catch (Exception e) {
+            featureUsageService.rollbackQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.AI_CHAT);
+            throw e;
+        }
     }
     
     // ==================== Conversation Metadata ====================

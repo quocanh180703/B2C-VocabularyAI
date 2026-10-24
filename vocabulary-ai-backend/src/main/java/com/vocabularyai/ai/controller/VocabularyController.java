@@ -40,6 +40,7 @@ public class VocabularyController {
     
     private final VocabularyExplanationService vocabularyService;
     private final UserService userService;
+    private final com.vocabularyai.payment.service.FeatureUsageService featureUsageService;
     
     // ==================== Single Word Explanation ====================
     
@@ -88,16 +89,22 @@ public class VocabularyController {
         log.info("Explaining word: {}, context: {}", request.getWordId(), request.getContext());
         
         User user = userService.getCurrentUser();
-        ExplanationResponse response = vocabularyService.explainWord(
-            request.getWordId(),
-            request.getContext(),
-            user.getId()
-        );
-        
-        return ResponseEntity.ok(ApiResponse.success(
-            "Word explanation retrieved successfully",
-            response
-        ));
+        featureUsageService.checkAndConsumeQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.WORD_EXPLAIN);
+        try {
+            ExplanationResponse response = vocabularyService.explainWord(
+                request.getWordId(),
+                request.getContext(),
+                user.getId()
+            );
+            
+            return ResponseEntity.ok(ApiResponse.success(
+                "Word explanation retrieved successfully",
+                response
+            ));
+        } catch (Exception e) {
+            featureUsageService.rollbackQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.WORD_EXPLAIN);
+            throw e;
+        }
     }
     
     // ==================== Batch Words Explanation ====================
@@ -146,15 +153,21 @@ public class VocabularyController {
         log.info("Explaining batch of {} words", request.getWordIds().size());
         
         User user = userService.getCurrentUser();
-        List<ExplanationResponse> response = vocabularyService.explainWords(
-            request.getWordIds(),
-            user.getId()
-        );
-        
-        return ResponseEntity.ok(ApiResponse.success(
-            "Words explained successfully",
-            response
-        ));
+        featureUsageService.checkAndConsumeQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.WORD_EXPLAIN);
+        try {
+            List<ExplanationResponse> response = vocabularyService.explainWords(
+                request.getWordIds(),
+                user.getId()
+            );
+            
+            return ResponseEntity.ok(ApiResponse.success(
+                "Words explained successfully",
+                response
+            ));
+        } catch (Exception e) {
+            featureUsageService.rollbackQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.WORD_EXPLAIN);
+            throw e;
+        }
     }
     
     // ==================== Cache Management (Admin) ====================

@@ -242,4 +242,124 @@ public class EmailServiceImpl implements EmailService {
             throw new RuntimeException("Unexpected error while sending payment success email: " + e.getMessage());
         }
     }
+
+    private void sendHtmlEmail(String toEmail, String subject, String templateName, Context context) {
+        log.info("Sending {} email to: {}", templateName, toEmail);
+        try {
+            context.setVariable("appName", appName);
+            String htmlBody = templateEngine.process(templateName, context);
+            
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            
+            helper.setFrom(fromEmail);
+            helper.setTo(toEmail);
+            helper.setSubject(subject);
+            helper.setText(htmlBody, true);
+            
+            mailSender.send(mimeMessage);
+            log.info("{} email sent successfully to: {}", templateName, toEmail);
+        } catch (Exception e) {
+            log.error("Failed to send {} email to: {}", templateName, toEmail, e);
+            throw new RuntimeException("Failed to send " + templateName + " email: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void sendReviewDueEmail(
+            String toEmail,
+            String recipientName,
+            int wordsDueCount,
+            java.util.List<com.vocabularyai.notification.dto.OverdueWordDto> overdueWords,
+            int currentStreak,
+            String actionUrl,
+            String unsubscribeUrl
+    ) {
+        Context context = new Context();
+        context.setVariable("recipientName", recipientName != null ? recipientName : "Học viên");
+        context.setVariable("wordsDueCount", wordsDueCount);
+        context.setVariable("overdueWords", overdueWords);
+        context.setVariable("currentStreak", currentStreak);
+        context.setVariable("actionUrl", actionUrl);
+        context.setVariable("unsubscribeUrl", unsubscribeUrl);
+        
+        String subject = "Bạn có " + wordsDueCount + " từ đến hạn ôn hôm nay — Vi chờ bạn";
+        sendHtmlEmail(toEmail, subject, "email/review-due", context);
+    }
+
+    @Override
+    public void sendStreakSaveEmail(
+            String toEmail,
+            String recipientName,
+            int streakDays,
+            com.vocabularyai.notification.dto.OverdueWordDto suggestedWord,
+            String actionUrl,
+            String unsubscribeUrl
+    ) {
+        Context context = new Context();
+        context.setVariable("recipientName", recipientName != null ? recipientName : "Học viên");
+        context.setVariable("streakDays", streakDays);
+        context.setVariable("suggestedWord", suggestedWord);
+        context.setVariable("actionUrl", actionUrl);
+        context.setVariable("unsubscribeUrl", unsubscribeUrl);
+        
+        String subject = "Đừng để đứt chuỗi " + streakDays + " ngày học của bạn!";
+        sendHtmlEmail(toEmail, subject, "email/streak-save", context);
+    }
+
+    @Override
+    public void sendRenewal3DaysEmail(
+            String toEmail,
+            String recipientName,
+            String packageName,
+            String expireDateStr,
+            String renewPriceStr,
+            String actionUrl
+    ) {
+        Context context = new Context();
+        context.setVariable("recipientName", recipientName != null ? recipientName : "Học viên");
+        context.setVariable("packageName", packageName);
+        context.setVariable("expireDateStr", expireDateStr);
+        context.setVariable("renewPriceStr", renewPriceStr);
+        context.setVariable("actionUrl", actionUrl);
+        
+        String subject = "Gói Premium của bạn hết hạn sau 3 ngày";
+        sendHtmlEmail(toEmail, subject, "email/renewal-3d", context);
+    }
+
+    @Override
+    public void sendRenewalDueEmail(
+            String toEmail,
+            String recipientName,
+            String packageName,
+            String expireDateStr,
+            String actionUrl
+    ) {
+        Context context = new Context();
+        context.setVariable("recipientName", recipientName != null ? recipientName : "Học viên");
+        context.setVariable("packageName", packageName);
+        context.setVariable("expireDateStr", expireDateStr);
+        context.setVariable("actionUrl", actionUrl);
+        
+        String subject = "Hôm nay gói Premium của bạn hết hạn";
+        sendHtmlEmail(toEmail, subject, "email/renewal-due", context);
+    }
+
+    @Override
+    public void sendRenewalExpiredEmail(
+            String toEmail,
+            String recipientName,
+            String packageName,
+            String expireDateStr,
+            String actionUrl
+    ) {
+        Context context = new Context();
+        context.setVariable("recipientName", recipientName != null ? recipientName : "Học viên");
+        context.setVariable("packageName", packageName);
+        context.setVariable("expireDateStr", expireDateStr);
+        context.setVariable("actionUrl", actionUrl);
+        
+        String subject = "Dữ liệu học của bạn vẫn còn nguyên — quay lại khi bạn sẵn sàng";
+        sendHtmlEmail(toEmail, subject, "email/renewal-expired", context);
+    }
 }

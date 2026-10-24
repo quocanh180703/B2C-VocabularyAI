@@ -13,7 +13,7 @@ public class PaginationUtils {
     
     private static final int DEFAULT_PAGE = 0;
     private static final int DEFAULT_SIZE = 20;
-    private static final int MAX_SIZE = 100;
+    private static final int MAX_SIZE = 1000;
     
     /**
      * Create Pageable with default sort

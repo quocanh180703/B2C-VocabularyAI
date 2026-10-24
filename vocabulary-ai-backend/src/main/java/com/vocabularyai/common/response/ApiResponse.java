@@ -34,6 +34,7 @@ import java.time.LocalDateTime;
 public class ApiResponse<T> {
     
     private boolean success;
+    private String code;
     private String message;
     private T data;
     private Object errors;
@@ -81,6 +82,19 @@ public class ApiResponse<T> {
         return ApiResponse.<T>builder()
             .success(false)
             .message(message)
+            .timestamp(LocalDateTime.now())
+            .build();
+    }
+
+    /**
+     * Create error response with specific error code and data (e.g. for QUOTA_EXCEEDED, UPGRADE_REQUIRED)
+     */
+    public static <T> ApiResponse<T> errorWithCode(String code, String message, T data) {
+        return ApiResponse.<T>builder()
+            .success(false)
+            .code(code)
+            .message(message)
+            .data(data)
             .timestamp(LocalDateTime.now())
             .build();
     }

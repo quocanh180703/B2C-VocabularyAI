@@ -43,6 +43,24 @@ import java.util.List;
 public class CefrWordController {
 
     private final CefrWordService cefrWordService;
+    private final com.vocabularyai.payment.service.FeatureUsageService featureUsageService;
+    private final com.vocabularyai.user.service.UserService userService;
+
+    private Long getCurrentUserIdSafely() {
+        try {
+            org.springframework.security.core.Authentication auth = 
+                org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
+                return null;
+            }
+            if (auth.getPrincipal() instanceof com.vocabularyai.user.entity.User u) {
+                return u.getId();
+            }
+            return userService.getCurrentUserId();
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
 
     /**
      * GET /api/cefr-words
@@ -70,6 +88,13 @@ public class CefrWordController {
         log.info("GET /cefr-words - level: {}, page: {}, size: {}", level, page, size);
 
         if (level != null) {
+            Long userId = getCurrentUserIdSafely();
+            if (!featureUsageService.canAccessCefrLevel(userId, level.name())) {
+                throw new com.vocabularyai.common.exception.UpgradeRequiredException(
+                    "CEFR_B1_C1",
+                    "Cấp độ từ vựng " + level + " chỉ dành cho tài khoản Premium. Vui lòng nâng cấp để mở khóa toàn bộ kho từ vựng."
+                );
+            }
             Page<CefrWordResponse> words = cefrWordService.getWordsByLevel(level, page, size);
             return ResponseEntity.ok(words);
         }
@@ -102,6 +127,16 @@ public class CefrWordController {
             return ResponseEntity.notFound().build();
         }
 
+        if (word.getCefrLevel() != null) {
+            Long userId = getCurrentUserIdSafely();
+            if (!featureUsageService.canAccessWord(userId, id, word.getCefrLevel().name())) {
+                throw new com.vocabularyai.common.exception.UpgradeRequiredException(
+                    "CEFR_B1_C1",
+                    "Từ vựng cấp độ " + word.getCefrLevel() + " dành riêng cho tài khoản Premium. Nâng cấp để mở khóa toàn bộ từ vựng."
+                );
+            }
+        }
+
         return ResponseEntity.ok(word);
     }
 
@@ -127,6 +162,16 @@ public class CefrWordController {
         if (word == null) {
             log.warn("CEFR word not found: {}", lemma);
             return ResponseEntity.notFound().build();
+        }
+
+        if (word.getCefrLevel() != null) {
+            Long userId = getCurrentUserIdSafely();
+            if (!featureUsageService.canAccessWord(userId, lemma, word.getCefrLevel().name())) {
+                throw new com.vocabularyai.common.exception.UpgradeRequiredException(
+                    "CEFR_B1_C1",
+                    "Từ vựng cấp độ " + word.getCefrLevel() + " dành riêng cho tài khoản Premium. Nâng cấp để mở khóa toàn bộ từ vựng."
+                );
+            }
         }
 
         return ResponseEntity.ok(word);
@@ -160,6 +205,16 @@ public class CefrWordController {
             @RequestParam(defaultValue = "20") int size
     ) {
         log.info("GET /cefr-words/search - query: {}, level: {}, page: {}, size: {}", query, level, page, size);
+
+        if (level != null) {
+            Long userId = getCurrentUserIdSafely();
+            if (!featureUsageService.canAccessCefrLevel(userId, level.name())) {
+                throw new com.vocabularyai.common.exception.UpgradeRequiredException(
+                    "CEFR_B1_C1",
+                    "Cấp độ từ vựng " + level + " chỉ dành cho tài khoản Premium. Vui lòng nâng cấp để mở khóa toàn bộ kho từ vựng."
+                );
+            }
+        }
 
         CefrWordSearchRequest request = CefrWordSearchRequest.builder()
                 .query(query)

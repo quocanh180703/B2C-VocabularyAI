@@ -101,9 +101,27 @@ public class UserService {
             user.setAvatarUrl(request.getAvatarUrl());
         }
         
+        if (request.getEmailRemindersEnabled() != null) {
+            user.setEmailRemindersEnabled(request.getEmailRemindersEnabled());
+        }
+        
         User updatedUser = userRepository.save(user);
         log.info("User profile updated successfully for userId: {}", userId);
         
+        return UserResponse.fromEntity(updatedUser);
+    }
+    
+    /**
+     * Update user preferences (e.g., email reminders toggle)
+     */
+    @Transactional
+    public UserResponse updatePreferences(Long userId, Boolean emailRemindersEnabled) {
+        log.info("Updating preferences for userId: {}, emailRemindersEnabled: {}", userId, emailRemindersEnabled);
+        User user = getUserById(userId);
+        if (emailRemindersEnabled != null) {
+            user.setEmailRemindersEnabled(emailRemindersEnabled);
+        }
+        User updatedUser = userRepository.save(user);
         return UserResponse.fromEntity(updatedUser);
     }
     

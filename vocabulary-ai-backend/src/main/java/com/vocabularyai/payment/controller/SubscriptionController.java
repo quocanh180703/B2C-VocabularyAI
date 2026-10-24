@@ -28,19 +28,35 @@ import java.util.Map;
  * 
  * Endpoints:
  * - GET /api/subscriptions/status - Get user's subscription status
+ * - GET /api/subscriptions/usage - Get user's daily feature quota usage
  * - POST /api/subscriptions/cancel - Cancel active subscription
  */
 @RestController
-@RequestMapping({"/subscriptions", "/api/subscriptions"})
+@RequestMapping({"/subscriptions", "/api/subscriptions", "/subscription", "/api/subscription"})
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Subscriptions", description = "User subscription management endpoints")
 public class SubscriptionController {
 
     private final PaymentService paymentService;
+    private final com.vocabularyai.payment.service.FeatureUsageService featureUsageService;
     private final JwtProvider jwtProvider;
     private final JwtProperties jwtProperties;
     private final UserRepository userRepository;
+
+    @GetMapping("/usage")
+    @PreAuthorize("isAuthenticated()")
+    @Operation(
+        summary = "Get daily feature usage & quota status",
+        description = "Get remaining and used quotas for AI features today",
+        security = @SecurityRequirement(name = "Bearer Authentication")
+    )
+    public ResponseEntity<ApiResponse<com.vocabularyai.payment.dto.SubscriptionUsageResponse>> getDailyUsage() {
+        Long userId = extractUserIdFromJwt();
+        log.info("Getting daily feature usage for userId: {}", userId);
+        var usage = featureUsageService.getUsage(userId);
+        return ResponseEntity.ok(ApiResponse.success("Daily usage retrieved successfully", usage));
+    }
 
     @GetMapping("/status")
     @PreAuthorize("isAuthenticated()")

@@ -114,7 +114,10 @@ public class SecurityConfig {
                     "/payments/webhook",
                     "/api/payments/webhook",
                     "/ai/speaking/tts/stream",
-                    "/api/ai/speaking/tts/stream"
+                    "/api/ai/speaking/tts/stream",
+                    "/notifications/**",
+                    "/api/notifications/**",
+                    "/api/v1/notifications/**"
                 ).permitAll()
                 // Allow viewing published quizzes without requiring login
                 .requestMatchers(HttpMethod.GET, "/quizzes", "/quizzes/**").permitAll()
