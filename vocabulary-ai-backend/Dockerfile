@@ -15,20 +15,16 @@
 # ============================================================
 # Stage 1: Build Stage
 # ============================================================
-FROM maven:3.9.2-eclipse-temurin-21 AS builder
+FROM maven:3.9.9-eclipse-temurin-21 AS builder
 
 WORKDIR /build
 
-# Copy pom.xml and download dependencies
-# This layer is cached if pom.xml hasn't changed
+# Copy pom.xml and source code
 COPY pom.xml .
-RUN mvn dependency:go-offline -B
-
-# Copy source code
 COPY src ./src
 
 # Build application
-RUN mvn clean package -DskipTests=true -q
+RUN mvn clean package -DskipTests=true -B
 
 # ============================================================
 # Stage 2: Runtime Stage
