@@ -43,6 +43,7 @@ public class GrammarController {
     
     private final GrammarCheckingService grammarService;
     private final UserService userService;
+    private final com.vocabularyai.payment.service.FeatureUsageService featureUsageService;
     
     // ==================== Single Text Grammar Check ====================
     
@@ -110,17 +111,23 @@ public class GrammarController {
             request.getText().length(), request.getLanguage());
         
         User user = userService.getCurrentUser();
-        GrammarCheckResponse response = grammarService.checkGrammar(
-            request.getText(),
-            request.getLanguage(),
-            request.getIncludeSuggestions(),
-            user.getId()
-        );
-        
-        return ResponseEntity.ok(ApiResponse.success(
-            "Grammar check completed",
-            response
-        ));
+        featureUsageService.checkAndConsumeQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.GRAMMAR);
+        try {
+            GrammarCheckResponse response = grammarService.checkGrammar(
+                request.getText(),
+                request.getLanguage(),
+                request.getIncludeSuggestions(),
+                user.getId()
+            );
+            
+            return ResponseEntity.ok(ApiResponse.success(
+                "Grammar check completed",
+                response
+            ));
+        } catch (Exception e) {
+            featureUsageService.rollbackQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.GRAMMAR);
+            throw e;
+        }
     }
     
     // ==================== Batch Text Grammar Check ====================
@@ -186,15 +193,21 @@ public class GrammarController {
         }
         
         User user = userService.getCurrentUser();
-        List<GrammarCheckResponse> response = grammarService.checkGrammarBatch(
-            request.getTexts(),
-            user.getId()
-        );
-        
-        return ResponseEntity.ok(ApiResponse.success(
-            "Grammar checks completed",
-            response
-        ));
+        featureUsageService.checkAndConsumeQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.GRAMMAR);
+        try {
+            List<GrammarCheckResponse> response = grammarService.checkGrammarBatch(
+                request.getTexts(),
+                user.getId()
+            );
+            
+            return ResponseEntity.ok(ApiResponse.success(
+                "Grammar checks completed",
+                response
+            ));
+        } catch (Exception e) {
+            featureUsageService.rollbackQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.GRAMMAR);
+            throw e;
+        }
     }
     
     // ==================== Cache Management (Admin) ====================

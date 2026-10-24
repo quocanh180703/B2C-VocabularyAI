@@ -16,6 +16,7 @@ public interface WeaknessStrengthMapper {
     /**
      * Map WeaknessStrengthDto to API response
      */
+    @Mapping(target = "data", source = "dto")
     @Mapping(target = "statusCode", constant = "200")
     @Mapping(target = "message", constant = "Analysis completed successfully")
     @Mapping(target = "timestamp", expression = "java(System.currentTimeMillis())")

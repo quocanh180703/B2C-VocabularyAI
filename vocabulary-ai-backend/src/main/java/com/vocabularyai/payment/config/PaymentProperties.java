@@ -37,8 +37,9 @@ public class PaymentProperties {
     public static class PayOS {
         private String apiKey;
         private String clientId;
+        private String checksumKey;
         private boolean sandbox = true;
-        private String baseUrl;
+        private String baseUrl = "https://api-merchant.payos.vn";
     }
     
     /**

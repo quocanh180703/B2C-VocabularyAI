@@ -25,13 +25,17 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/words")
-@RequiredArgsConstructor
 @Tag(name = "Favorite Words", description = "Favorite words management endpoints")
 @SecurityRequirement(name = "bearerAuth")
 public class FavoriteWordController {
     
     private final FavoriteWordService favoriteWordService;
     private final UserService userService;
+
+    public FavoriteWordController(FavoriteWordService favoriteWordService, UserService userService) {
+        this.favoriteWordService = favoriteWordService;
+        this.userService = userService;
+    }
     
     /**
      * Add word to favorites
@@ -43,7 +47,7 @@ public class FavoriteWordController {
         description = "Add a vocabulary word to current user's favorites"
     )
     public ResponseEntity<ApiResponse<FavoriteWordResponse>> addToFavorites(
-            @PathVariable Long wordId) {
+            @PathVariable String wordId) {
         log.info("Adding word {} to favorites", wordId);
         
         var currentUser = userService.getCurrentUser();
@@ -64,7 +68,7 @@ public class FavoriteWordController {
         description = "Remove a vocabulary word from current user's favorites"
     )
     public ResponseEntity<ApiResponse<?>> removeFromFavorites(
-            @PathVariable Long wordId) {
+            @PathVariable String wordId) {
         log.info("Removing word {} from favorites", wordId);
         
         Long userId = userService.getCurrentUserId();

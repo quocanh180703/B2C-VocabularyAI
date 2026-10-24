@@ -1,0 +1,2718 @@
+[
+  {
+    "id": 1,
+    "title": "A Thank-You Email to a Host",
+    "level": "A1",
+    "timeLimit": 660,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [11]:\n\nDear Melissa\n\nHow are things [1] London?  I had a great time staying with you.  Thank you for looking after [2] .  You are [3] great cook and your family were really kind to me.  And my English is much better now [4] it was before.  \n\nMy flight home was fine – there were [5] delays at all.  It’s good to be back, but I miss you all very [6] !\n\n[7] you remember my friend Jenny?  I think she came [8] visit me at your house once [9] twice.  Well, she took some great photos [10] us on our last day at the language school.  I’m sending you one with this email.  I hope you like \n\n[11] .\n\nRosario",
+    "passage": "Dear Melissa\n\nHow are things _ London?  I had a great time staying with you.  Thank you for looking after _ .  You are _ great cook and your family were really kind to me.  And my English is much better now _ it was before.  \n\nMy flight home was fine – there were _ delays at all.  It’s good to be back, but I miss you all very _ !\n\n_ you remember my friend Jenny?  I think she came _ visit me at your house once _ twice.  Well, she took some great photos _ us on our last day at the language school.  I’m sending you one with this email.  I hope you like \n\n_ .\n\nRosario",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Dear Melissa How are things _____ London?",
+        "options": [
+          "to",
+          "on",
+          "at",
+          "in"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Thank you for looking after _____ .",
+        "options": [
+          "me",
+          "you",
+          "him",
+          "her"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "me"
+        ],
+        "explanation": "Đại từ 'me' giữ đúng vai trò ngữ pháp (tân ngữ/sở hữu/phản thân) trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] You are _____ great cook and your family were really kind to me.",
+        "options": [
+          "a",
+          "an",
+          "the",
+          "some"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "a"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'a' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] And my English is much better now _____ it was before.",
+        "options": [
+          "than",
+          "as",
+          "like",
+          "so"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "than"
+        ],
+        "explanation": "Đáp án 'than' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] My flight home was fine – there were _____ delays at all.",
+        "options": [
+          "the",
+          "a",
+          "an",
+          "no"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "no"
+        ],
+        "explanation": "Đáp án 'no' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] It’s good to be back, but I miss you all very _____ !",
+        "options": [
+          "more",
+          "many",
+          "much",
+          "most"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "much"
+        ],
+        "explanation": "'much' là lượng từ phù hợp với sắc thái định lượng hoặc cấu trúc so sánh trong câu."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] _____ you remember my friend Jenny?",
+        "options": [
+          "Does",
+          "Do",
+          "Did",
+          "Doing"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "Do"
+        ],
+        "explanation": "Đáp án 'Do' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] I think she came _____ visit me at your house once or twice.",
+        "options": [
+          "on",
+          "in",
+          "to",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] I think she came to visit me at your house once _____ twice.",
+        "options": [
+          "so",
+          "and",
+          "but",
+          "or"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "or"
+        ],
+        "explanation": "Đáp án 'or' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 10,
+        "content": "[10] Well, she took some great photos _____ us on our last day at the language school.",
+        "options": [
+          "of",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "of"
+        ],
+        "explanation": "Sử dụng giới từ 'of' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 11,
+        "content": "[11] I hope you like _____ .",
+        "options": [
+          "I",
+          "it",
+          "you",
+          "he"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "it"
+        ],
+        "explanation": "Đáp án 'it' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "A Letter to Aunt Fabienne",
+    "level": "A1",
+    "timeLimit": 720,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [12]:\n\nDear Aunt Fabienne,\n\nMum asked [1] to let you know that I arrived home okay. I enjoyed travelling back [2] the train, and I was surprised that [3] only took me three hours to get home. Thank you very [4] for looking after me [5] I was in France. \n\nI’m going back to school [6] week. My French is a lot better [7] it was before, so I hope my marks will improve!\n\nI [8] like to keep practising French and I’m looking [9] a pen friend. I thought of your friend’s son Elian. We could email each [10] once a week. Let me know [11] you think.\n\nI hope [12] see you soon. \n\nDaniel",
+    "passage": "Dear Aunt Fabienne,\n\nMum asked _ to let you know that I arrived home okay. I enjoyed travelling back _ the train, and I was surprised that _ only took me three hours to get home. Thank you very _ for looking after me _ I was in France. \n\nI’m going back to school _ week. My French is a lot better _ it was before, so I hope my marks will improve!\n\nI _ like to keep practising French and I’m looking _ a pen friend. I thought of your friend’s son Elian. We could email each _ once a week. Let me know _ you think.\n\nI hope _ see you soon. \n\nDaniel",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Dear Aunt Fabienne, Mum asked _____ to let you know that I arrived home okay.",
+        "options": [
+          "her",
+          "you",
+          "him",
+          "me"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "me"
+        ],
+        "explanation": "Đại từ 'me' giữ đúng vai trò ngữ pháp (tân ngữ/sở hữu/phản thân) trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] I enjoyed travelling back _____ the train, and I was surprised that it only took me three hours to get home.",
+        "options": [
+          "on",
+          "in",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "on"
+        ],
+        "explanation": "Sử dụng giới từ 'on' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] I enjoyed travelling back on the train, and I was surprised that _____ only took me three hours to get home.",
+        "options": [
+          "I",
+          "it",
+          "you",
+          "he"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "it"
+        ],
+        "explanation": "Đáp án 'it' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] Thank you very _____ for looking after me when I was in France.",
+        "options": [
+          "much",
+          "many",
+          "more",
+          "most"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "much"
+        ],
+        "explanation": "'much' là lượng từ phù hợp với sắc thái định lượng hoặc cấu trúc so sánh trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Thank you very much for looking after me _____ I was in France.",
+        "options": [
+          "since",
+          "when",
+          "for",
+          "during"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "when",
+          "while"
+        ],
+        "explanation": "Đại từ quan hệ 'when' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] I’m going back to school _____ week.",
+        "options": [
+          "close",
+          "near",
+          "next",
+          "adjacent"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "next",
+          "this"
+        ],
+        "explanation": "Đáp án 'next' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] My French is a lot better _____ it was before, so I hope my marks will improve!",
+        "options": [
+          "so",
+          "as",
+          "like",
+          "than"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "than"
+        ],
+        "explanation": "Đáp án 'than' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] I _____ like to keep practising French and I’m looking for a pen friend.",
+        "options": [
+          "can",
+          "would",
+          "could",
+          "will"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "would",
+          "'d"
+        ],
+        "explanation": "Đáp án 'would' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] I would like to keep practising French and I’m looking _____ a pen friend.",
+        "options": [
+          "for",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "for"
+        ],
+        "explanation": "Sử dụng giới từ 'for' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 10,
+        "content": "[10] We could email each _____ once a week.",
+        "options": [
+          "the other",
+          "another",
+          "others",
+          "other"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "other"
+        ],
+        "explanation": "Đáp án 'other' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 11,
+        "content": "[11] Let me know _____ you think.",
+        "options": [
+          "whose",
+          "who",
+          "whom",
+          "what"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "what"
+        ],
+        "explanation": "Đáp án 'what' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 12,
+        "content": "[12] I hope _____ see you soon.",
+        "options": [
+          "on",
+          "in",
+          "to",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "to",
+          "I'll",
+          "we'll"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "An Invitation to a Birthday Party",
+    "level": "A1",
+    "timeLimit": 660,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [11]:\n\nHi Marta,\n\nI hope [1] are well.  I was trying [2] call you yesterday but you didn’t answer.  Is your phone broken, [3] have you lost it again? \n\nAnyway, I wanted to ask [4] you can come to my birthday party next Saturday.  My birthday was actually two weeks [5] , but I couldn’t have the party then [6] lots of people were [7] holiday.  \n\nI’ve invited [8] few people from our swimming club, as well as my friends from school.  [9] you think your brother [10] free that day?  Please invite [11] to come too.  The party’s at my house and starts at 8p.m.  \n\nParveen",
+    "passage": "Hi Marta,\n\nI hope _ are well.  I was trying _ call you yesterday but you didn’t answer.  Is your phone broken, _ have you lost it again? \n\nAnyway, I wanted to ask _ you can come to my birthday party next Saturday.  My birthday was actually two weeks _ , but I couldn’t have the party then _ lots of people were _ holiday.  \n\nI’ve invited _ few people from our swimming club, as well as my friends from school.  _ you think your brother _ free that day?  Please invite _ to come too.  The party’s at my house and starts at 8p.m.  \n\nParveen",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Hi Marta, I hope _____ are well.",
+        "options": [
+          "you",
+          "I",
+          "he",
+          "she"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "you"
+        ],
+        "explanation": "Đáp án 'you' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] I was trying _____ call you yesterday but you didn’t answer.",
+        "options": [
+          "to",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] Is your phone broken, _____ have you lost it again?",
+        "options": [
+          "and",
+          "or",
+          "but",
+          "so"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "or"
+        ],
+        "explanation": "Đáp án 'or' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] Anyway, I wanted to ask _____ you can come to my birthday party next Saturday.",
+        "options": [
+          "provided",
+          "unless",
+          "if",
+          "providing"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "if",
+          "whether"
+        ],
+        "explanation": "Sử dụng liên từ 'if' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] My birthday was actually two weeks _____ , but I couldn’t have the party then because lots of people were on holiday.",
+        "options": [
+          "ago",
+          "before",
+          "past",
+          "since"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "ago"
+        ],
+        "explanation": "Đáp án 'ago' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] My birthday was actually two weeks ago , but I couldn’t have the party then _____ lots of people were on holiday.",
+        "options": [
+          "since",
+          "because",
+          "for",
+          "so"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "because",
+          "as"
+        ],
+        "explanation": "Sử dụng liên từ 'because' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] My birthday was actually two weeks ago , but I couldn’t have the party then because lots of people were _____ holiday.",
+        "options": [
+          "in",
+          "on",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "on"
+        ],
+        "explanation": "Sử dụng giới từ 'on' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] I’ve invited _____ few people from our swimming club, as well as my friends from school.",
+        "options": [
+          "an",
+          "a",
+          "the",
+          "some"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "a"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'a' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] _____ you think your brother is free that day?",
+        "options": [
+          "Doing",
+          "Does",
+          "Did",
+          "Do"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "Do"
+        ],
+        "explanation": "Đáp án 'Do' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 10,
+        "content": "[10] Do you think your brother _____ free that day?",
+        "options": [
+          "is",
+          "am",
+          "are",
+          "was"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "is"
+        ],
+        "explanation": "Đáp án 'is' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 11,
+        "content": "[11] Please invite _____ to come too.",
+        "options": [
+          "you",
+          "me",
+          "him",
+          "her"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "him"
+        ],
+        "explanation": "Đại từ 'him' giữ đúng vai trò ngữ pháp (tân ngữ/sở hữu/phản thân) trong câu."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Inviting Friends to a Barbecue",
+    "level": "A1",
+    "timeLimit": 660,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [11]:\n\nHi Marcia, \n\nDo you remember I wanted [1] invite you, Sasha and John to my new house?  Well, [2] about next Saturday evening?  We [3] a beautiful garden with lots [4] trees.  We may have a barbeque outside [5] it doesn’t rain.  My mother is [6] really good cook and I [7] going to help her make the food.  \n\nAfterwards, [8] don’t we watch a film?  [9] you bring a DVD with you as I haven’t got many here?  \n\nJohn’s coming [10] bike and Sasha is getting a lift [11] her father.  I hope you’ll be able to come too.  \n\nLet me know soon!\n\nConny",
+    "passage": "Hi Marcia, \n\nDo you remember I wanted _ invite you, Sasha and John to my new house?  Well, _ about next Saturday evening?  We _ a beautiful garden with lots _ trees.  We may have a barbeque outside _ it doesn’t rain.  My mother is _ really good cook and I _ going to help her make the food.  \n\nAfterwards, _ don’t we watch a film?  _ you bring a DVD with you as I haven’t got many here?  \n\nJohn’s coming _ bike and Sasha is getting a lift _ her father.  I hope you’ll be able to come too.  \n\nLet me know soon!\n\nConny",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Hi Marcia, Do you remember I wanted _____ invite you, Sasha and John to my new house?",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Well, _____ about next Saturday evening?",
+        "options": [
+          "whom",
+          "who",
+          "what",
+          "whose"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "what",
+          "how"
+        ],
+        "explanation": "Đáp án 'what' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] We _____ a beautiful garden with lots of trees.",
+        "options": [
+          "having",
+          "has",
+          "had",
+          "have"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "have"
+        ],
+        "explanation": "Đáp án 'have' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] We have a beautiful garden with lots _____ trees.",
+        "options": [
+          "on",
+          "in",
+          "of",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "of"
+        ],
+        "explanation": "Sử dụng giới từ 'of' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] We may have a barbeque outside _____ it doesn’t rain.",
+        "options": [
+          "provided",
+          "whether",
+          "unless",
+          "if"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "if"
+        ],
+        "explanation": "Sử dụng liên từ 'if' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] My mother is _____ really good cook and I am going to help her make the food.",
+        "options": [
+          "some",
+          "an",
+          "the",
+          "a"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "a"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'a' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] My mother is a really good cook and I _____ going to help her make the food.",
+        "options": [
+          "is",
+          "am",
+          "are",
+          "was"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "am",
+          "'m"
+        ],
+        "explanation": "Đáp án 'am' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] Afterwards, _____ don’t we watch a film?",
+        "options": [
+          "whose",
+          "who",
+          "whom",
+          "why"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "why"
+        ],
+        "explanation": "Đại từ quan hệ 'why' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] _____ you bring a DVD with you as I haven’t got many here?",
+        "options": [
+          "Can",
+          "Will",
+          "Would",
+          "Shall"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "Can",
+          "Could"
+        ],
+        "explanation": "Đáp án 'Can' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 10,
+        "content": "[10] John’s coming _____ bike and Sasha is getting a lift from her father.",
+        "options": [
+          "by",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "by"
+        ],
+        "explanation": "Sử dụng giới từ 'by' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 11,
+        "content": "[11] John’s coming by bike and Sasha is getting a lift _____ her father.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "from"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "from",
+          "with"
+        ],
+        "explanation": "Sử dụng giới từ 'from' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Asking for a Summer Job",
+    "level": "A1",
+    "timeLimit": 720,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [12]:\n\nHow [1] you?  I’m writing to you [2] I need your help.\n\nI’m starting a business course at college [3] term.  The teacher has asked us to do some office work during [4] summer.  Your Dad’s [5] manager, isn’t he?  Can you ask him [6] I can work with him?  I only need to work [7] a few weeks, and he will [8] have to pay me anything.\n\nAlso, can I stay [9] you while I’m working?  Mum says it’s much [10] far to go by bike [11] day.  Tell your mum that I can make [12] own meals, so she won’t have to cook for me.\n\nThanks.",
+    "passage": "How _ you?  I’m writing to you _ I need your help.\n\nI’m starting a business course at college _ term.  The teacher has asked us to do some office work during _ summer.  Your Dad’s _ manager, isn’t he?  Can you ask him _ I can work with him?  I only need to work _ a few weeks, and he will _ have to pay me anything.\n\nAlso, can I stay _ you while I’m working?  Mum says it’s much _ far to go by bike _ day.  Tell your mum that I can make _ own meals, so she won’t have to cook for me.\n\nThanks.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] How _____ you?",
+        "options": [
+          "are",
+          "am",
+          "is",
+          "was"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "are"
+        ],
+        "explanation": "Đáp án 'are' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] I’m writing to you _____ I need your help.",
+        "options": [
+          "for",
+          "because",
+          "so",
+          "in"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "because",
+          "as",
+          "since"
+        ],
+        "explanation": "Sử dụng liên từ 'because' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] I’m starting a business course at college _____ term.",
+        "options": [
+          "those",
+          "that",
+          "these",
+          "this"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "this",
+          "next"
+        ],
+        "explanation": "Đáp án 'this' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] The teacher has asked us to do some office work during _____ summer.",
+        "options": [
+          "some",
+          "a",
+          "an",
+          "the"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "the"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'the' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Your Dad’s _____ manager, isn’t he?",
+        "options": [
+          "the",
+          "an",
+          "a",
+          "some"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "a"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'a' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] Can you ask him _____ I can work with him?",
+        "options": [
+          "if",
+          "whether",
+          "unless",
+          "provided"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "if"
+        ],
+        "explanation": "Sử dụng liên từ 'if' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] I only need to work _____ a few weeks, and he will not have to pay me anything.",
+        "options": [
+          "on",
+          "in",
+          "for",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "for"
+        ],
+        "explanation": "Sử dụng giới từ 'for' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] I only need to work for a few weeks, and he will _____ have to pay me anything.",
+        "options": [
+          "none",
+          "no",
+          "never",
+          "not"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "not"
+        ],
+        "explanation": "Đáp án 'not' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] Also, can I stay _____ you while I’m working?",
+        "options": [
+          "in",
+          "with",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "with"
+        ],
+        "explanation": "Sử dụng giới từ 'with' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 10,
+        "content": "[10] Mum says it’s much _____ far to go by bike each day.",
+        "options": [
+          "very",
+          "too",
+          "so",
+          "such"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "too"
+        ],
+        "explanation": "Đáp án 'too' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 11,
+        "content": "[11] Mum says it’s much too far to go by bike _____ day.",
+        "options": [
+          "either",
+          "all",
+          "both",
+          "each"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "each",
+          "every"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'each' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 12,
+        "content": "[12] Tell your mum that I can make _____ own meals, so she won’t have to cook for me.",
+        "options": [
+          "his",
+          "your",
+          "my",
+          "her"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "my"
+        ],
+        "explanation": "Đại từ 'my' giữ đúng vai trò ngữ pháp (tân ngữ/sở hữu/phản thân) trong câu."
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Introducing My Study Abroad Blog",
+    "level": "A1",
+    "timeLimit": 660,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [11]:\n\nWelcome [1] my blog! My name’s Lauren and I’m 22 years old. I come from\n\nIllinois in the USA, but [2] the moment I’m studying in Florence, in Italy.\n\nI’m living [3] a friend of mine from university. Our apartment [4] in the centre of town, so we don’t [5] to use the buses – we can walk everywhere.  I have classes most days, but in [6] afternoon, I explore the city or [7] swimming. When [8] is sunny I visit the Boboli Gardens. [9] are beautiful views of Florence from here.\n\nI [10] you enjoy my blog. [11]  you have any questions, please leave me a message.",
+    "passage": "Welcome _ my blog! My name’s Lauren and I’m 22 years old. I come from\n\nIllinois in the USA, but _ the moment I’m studying in Florence, in Italy.\n\nI’m living _ a friend of mine from university. Our apartment _ in the centre of town, so we don’t _ to use the buses – we can walk everywhere.  I have classes most days, but in _ afternoon, I explore the city or _ swimming. When _ is sunny I visit the Boboli Gardens. _ are beautiful views of Florence from here.\n\nI _ you enjoy my blog. _  you have any questions, please leave me a message.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Welcome _____ my blog!",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] I come from Illinois in the USA, but _____ the moment I’m studying in Florence, in Italy.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] I’m living _____ a friend of mine from university.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "with"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "with"
+        ],
+        "explanation": "Sử dụng giới từ 'with' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] Our apartment _____ in the centre of town, so we don’t have to use the buses – we can walk everywhere.",
+        "options": [
+          "are",
+          "am",
+          "is",
+          "was"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "is"
+        ],
+        "explanation": "Đáp án 'is' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Our apartment is in the centre of town, so we don’t _____ to use the buses – we can walk everywhere.",
+        "options": [
+          "has",
+          "have",
+          "had",
+          "having"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "have",
+          "need"
+        ],
+        "explanation": "Đáp án 'have' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] I have classes most days, but in _____ afternoon, I explore the city or go swimming.",
+        "options": [
+          "a",
+          "the",
+          "an",
+          "some"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "the"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'the' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] I have classes most days, but in the afternoon, I explore the city or _____ swimming.",
+        "options": [
+          "come",
+          "go",
+          "leave",
+          "move"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "go"
+        ],
+        "explanation": "Đáp án 'go' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] When _____ is sunny I visit the Boboli Gardens.",
+        "options": [
+          "you",
+          "I",
+          "it",
+          "he"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "it"
+        ],
+        "explanation": "Đáp án 'it' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 9,
+        "content": "[9] _____ are beautiful views of Florence from here.",
+        "options": [
+          "Here",
+          "It",
+          "There",
+          "They"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "There"
+        ],
+        "explanation": "Đáp án 'There' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 10,
+        "content": "[10] I _____ you enjoy my blog.",
+        "options": [
+          "expect",
+          "wish",
+          "hope",
+          "want"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "hope"
+        ],
+        "explanation": "Đáp án 'hope' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 11,
+        "content": "[11] _____ you have any questions, please leave me a message.",
+        "options": [
+          "Whether",
+          "If",
+          "Unless",
+          "Provided"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "If"
+        ],
+        "explanation": "Sử dụng liên từ 'If' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "My Daily Routine",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nHello! My name is Anna and I am twelve years old. I [1] up at seven o'clock every morning. I have breakfast [2] my family. Then I go to school [3] bus. My classes finish [4] three o'clock. In the evening, I do my homework and [5] TV with my brother.",
+    "passage": "Hello! My name is Anna and I am twelve years old. I _ up at seven o'clock every morning. I have breakfast _ my family. Then I go to school _ bus. My classes finish _ three o'clock. In the evening, I do my homework and _ TV with my brother.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I _____ up at seven o'clock every morning.",
+        "options": [
+          "get",
+          "take",
+          "have",
+          "receive"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "get"
+        ],
+        "explanation": "Đáp án 'get' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] I have breakfast _____ my family.",
+        "options": [
+          "on",
+          "in",
+          "with",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "with"
+        ],
+        "explanation": "Sử dụng giới từ 'with' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] Then I go to school _____ bus.",
+        "options": [
+          "in",
+          "by",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "by"
+        ],
+        "explanation": "Sử dụng giới từ 'by' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] My classes finish _____ three o'clock.",
+        "options": [
+          "on",
+          "in",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] In the evening, I do my homework and _____ TV with my brother.",
+        "options": [
+          "see",
+          "look",
+          "watch",
+          "view"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "watch"
+        ],
+        "explanation": "Đáp án 'watch' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "A Visit to the Zoo",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nLast Sunday, my family went to the zoo. We arrived [1] ten o'clock in the morning. There were many animals, [2] lions, monkeys and elephants. My little sister was very happy [3] she loves animals. We had lunch [4] a small cafe. We went home [5] the afternoon.",
+    "passage": "Last Sunday, my family went to the zoo. We arrived _ ten o'clock in the morning. There were many animals, _ lions, monkeys and elephants. My little sister was very happy _ she loves animals. We had lunch _ a small cafe. We went home _ the afternoon.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] We arrived _____ ten o'clock in the morning.",
+        "options": [
+          "to",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] There were many animals, _____ lions, monkeys and elephants.",
+        "options": [
+          "as",
+          "than",
+          "like",
+          "so"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "like"
+        ],
+        "explanation": "Đáp án 'like' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] My little sister was very happy _____ she loves animals.",
+        "options": [
+          "as",
+          "since",
+          "because",
+          "for"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "because"
+        ],
+        "explanation": "Sử dụng liên từ 'because' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] We had lunch _____ a small cafe.",
+        "options": [
+          "to",
+          "on",
+          "at",
+          "for"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "at",
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] We went home _____ the afternoon.",
+        "options": [
+          "to",
+          "on",
+          "at",
+          "in"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "title": "My Best Friend",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nMy best friend is called Tom. We are in the same class [1] school. He lives near my house, so we often walk to school [2] together. Tom is good [3] football, but I prefer basketball. At weekends, we sometimes play games [4] his house. I am happy [5] have such a good friend.",
+    "passage": "My best friend is called Tom. We are in the same class _ school. He lives near my house, so we often walk to school _ together. Tom is good _ football, but I prefer basketball. At weekends, we sometimes play games _ his house. I am happy _ have such a good friend.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] We are in the same class _____ school.",
+        "options": [
+          "to",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] He lives near my house, so we often walk to school _____ together.",
+        "options": [
+          "apart",
+          "alone",
+          "together",
+          "each other"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "together"
+        ],
+        "explanation": "Đáp án 'together' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] Tom is good _____ football, but I prefer basketball.",
+        "options": [
+          "in",
+          "at",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] At weekends, we sometimes play games _____ his house.",
+        "options": [
+          "on",
+          "in",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] I am happy _____ have such a good friend.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "title": "A Day at the Beach",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nYesterday, we went to the beach [1] car. The weather was sunny, and the sea was beautiful. My brother and I swam [2] the sea for an hour. Then we sat [3] the sand and ate some sandwiches. We stayed there [4] the afternoon and came home [5] six o'clock.",
+    "passage": "Yesterday, we went to the beach _ car. The weather was sunny, and the sea was beautiful. My brother and I swam _ the sea for an hour. Then we sat _ the sand and ate some sandwiches. We stayed there _ the afternoon and came home _ six o'clock.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Yesterday, we went to the beach _____ car.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "by"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "by"
+        ],
+        "explanation": "Sử dụng giới từ 'by' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] My brother and I swam _____ the sea for an hour.",
+        "options": [
+          "in",
+          "on",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] Then we sat _____ the sand and ate some sandwiches.",
+        "options": [
+          "in",
+          "on",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "on"
+        ],
+        "explanation": "Sử dụng giới từ 'on' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] We stayed there _____ the afternoon and came home at six o'clock.",
+        "options": [
+          "at",
+          "on",
+          "in",
+          "to"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] We stayed there in the afternoon and came home _____ six o'clock.",
+        "options": [
+          "to",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Shopping for Clothes",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nOn Saturday, my mother took me shopping. I needed [1] new T-shirt for school. We went to a shop [2] the town centre. There were many colours, [3] I chose a blue one. It was not expensive, so my mother [4] it for me. I was very pleased [5] my new T-shirt.",
+    "passage": "On Saturday, my mother took me shopping. I needed _ new T-shirt for school. We went to a shop _ the town centre. There were many colours, _ I chose a blue one. It was not expensive, so my mother _ it for me. I was very pleased _ my new T-shirt.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I needed _____ new T-shirt for school.",
+        "options": [
+          "the",
+          "an",
+          "a",
+          "some"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "a"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'a' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] We went to a shop _____ the town centre.",
+        "options": [
+          "in",
+          "on",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] There were many colours, _____ I chose a blue one.",
+        "options": [
+          "though",
+          "although",
+          "but",
+          "even though"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "but"
+        ],
+        "explanation": "Đáp án 'but' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] It was not expensive, so my mother _____ it for me.",
+        "options": [
+          "paid",
+          "brought",
+          "bought",
+          "got"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "bought"
+        ],
+        "explanation": "Đáp án 'bought' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] I was very pleased _____ my new T-shirt.",
+        "options": [
+          "in",
+          "with",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "with"
+        ],
+        "explanation": "Sử dụng giới từ 'with' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "title": "My Favourite Food",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nMy favourite food is pizza. I usually eat it [1] Friday evening with my family. My father makes the pizza [2] home. He puts cheese, tomatoes and vegetables [3] it. I like helping him [4] we cook together. After dinner, we sometimes have fruit [5] dessert.",
+    "passage": "My favourite food is pizza. I usually eat it _ Friday evening with my family. My father makes the pizza _ home. He puts cheese, tomatoes and vegetables _ it. I like helping him _ we cook together. After dinner, we sometimes have fruit _ dessert.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I usually eat it _____ Friday evening with my family.",
+        "options": [
+          "to",
+          "in",
+          "at",
+          "on"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "on"
+        ],
+        "explanation": "Sử dụng giới từ 'on' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] My father makes the pizza _____ home.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] He puts cheese, tomatoes and vegetables _____ it.",
+        "options": [
+          "in",
+          "on",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "on"
+        ],
+        "explanation": "Sử dụng giới từ 'on' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] I like helping him _____ we cook together.",
+        "options": [
+          "when",
+          "since",
+          "for",
+          "during"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "when"
+        ],
+        "explanation": "Đại từ quan hệ 'when' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] After dinner, we sometimes have fruit _____ dessert.",
+        "options": [
+          "for",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "for"
+        ],
+        "explanation": "Sử dụng giới từ 'for' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "title": "A New Student in Class",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nWe have a new student in our class. Her name is Lucy and she comes [1] Australia. She speaks English very well and is [2] good at drawing. Yesterday, I sat [3] to her during lunch. We talked [4] our favourite books. I hope we [5] good friends.",
+    "passage": "We have a new student in our class. Her name is Lucy and she comes _ Australia. She speaks English very well and is _ good at drawing. Yesterday, I sat _ to her during lunch. We talked _ our favourite books. I hope we _ good friends.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Her name is Lucy and she comes _____ Australia.",
+        "options": [
+          "in",
+          "from",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "from"
+        ],
+        "explanation": "Sử dụng giới từ 'from' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] She speaks English very well and is _____ good at drawing.",
+        "options": [
+          "too",
+          "as well",
+          "also",
+          "either"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "also"
+        ],
+        "explanation": "Đáp án 'also' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] Yesterday, I sat _____ to her during lunch.",
+        "options": [
+          "adjacent",
+          "near",
+          "close",
+          "next"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "next"
+        ],
+        "explanation": "Đáp án 'next' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] We talked _____ our favourite books.",
+        "options": [
+          "in",
+          "about",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "about"
+        ],
+        "explanation": "Sử dụng giới từ 'about' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] I hope we _____ good friends.",
+        "options": [
+          "grow",
+          "turn",
+          "get",
+          "become"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "become",
+          "will become"
+        ],
+        "explanation": "Đáp án 'become' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "title": "An Email About My Holiday",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nHi Ben, \n\nHow are you? I am [1] holiday with my family in Spain. The weather is warm, and we go swimming every day. Yesterday, we visited a museum [2] the morning. In the afternoon, we walked [3] the beach and took some photos. I am having a great time [4] I miss my friends at home. See you [5] week!\n\nSam",
+    "passage": "Hi Ben, \n\nHow are you? I am _ holiday with my family in Spain. The weather is warm, and we go swimming every day. Yesterday, we visited a museum _ the morning. In the afternoon, we walked _ the beach and took some photos. I am having a great time _ I miss my friends at home. See you _ week!\n\nSam",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I am _____ holiday with my family in Spain.",
+        "options": [
+          "to",
+          "in",
+          "at",
+          "on"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "on"
+        ],
+        "explanation": "Sử dụng giới từ 'on' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Yesterday, we visited a museum _____ the morning.",
+        "options": [
+          "in",
+          "on",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] In the afternoon, we walked _____ the beach and took some photos.",
+        "options": [
+          "along",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "along"
+        ],
+        "explanation": "Đáp án 'along' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] I am having a great time _____ I miss my friends at home.",
+        "options": [
+          "even though",
+          "although",
+          "though",
+          "but"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "but"
+        ],
+        "explanation": "Đáp án 'but' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] See you _____ week!",
+        "options": [
+          "near",
+          "next",
+          "close",
+          "adjacent"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "next"
+        ],
+        "explanation": "Đáp án 'next' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "title": "Getting to School",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nI live quite far from my school, so I usually travel [1] bus. My bus leaves [2] my house at half past seven. I arrive at school [3] eight o'clock. My first lesson starts [4] fifteen minutes later. I like going to school because I can learn new things and talk [5] my friends.",
+    "passage": "I live quite far from my school, so I usually travel _ bus. My bus leaves _ my house at half past seven. I arrive at school _ eight o'clock. My first lesson starts _ fifteen minutes later. I like going to school because I can learn new things and talk _ my friends.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I live quite far from my school, so I usually travel _____ bus.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "by"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "by"
+        ],
+        "explanation": "Sử dụng giới từ 'by' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] My bus leaves _____ my house at half past seven.",
+        "options": [
+          "on",
+          "in",
+          "near",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "near"
+        ],
+        "explanation": "Đáp án 'near' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] I arrive at school _____ eight o'clock.",
+        "options": [
+          "in",
+          "at",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] My first lesson starts _____ fifteen minutes later.",
+        "options": [
+          "in",
+          "about",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "about"
+        ],
+        "explanation": "Sử dụng giới từ 'about' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] I like going to school because I can learn new things and talk _____ my friends.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "to",
+          "with"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "title": "A Birthday Present for Mum",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nTomorrow is my mother's birthday. My sister and I want to buy a present [1] her. We went to the shops [2] school yesterday. We found a lovely bag [3] a small shop. It was just [4] the money we had. We hope she will be happy [5] it.",
+    "passage": "Tomorrow is my mother's birthday. My sister and I want to buy a present _ her. We went to the shops _ school yesterday. We found a lovely bag _ a small shop. It was just _ the money we had. We hope she will be happy _ it.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] My sister and I want to buy a present _____ her.",
+        "options": [
+          "for",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "for"
+        ],
+        "explanation": "Sử dụng giới từ 'for' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] We went to the shops _____ school yesterday.",
+        "options": [
+          "during",
+          "since",
+          "for",
+          "after"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "after"
+        ],
+        "explanation": "Đáp án 'after' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] We found a lovely bag _____ a small shop.",
+        "options": [
+          "on",
+          "in",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] It was just _____ the money we had.",
+        "options": [
+          "on",
+          "in",
+          "within",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "within"
+        ],
+        "explanation": "Đáp án 'within' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] We hope she will be happy _____ it.",
+        "options": [
+          "in",
+          "with",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "with"
+        ],
+        "explanation": "Sử dụng giới từ 'with' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "title": "Learning to Ride a Bike",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nWhen I was six, my father taught me [1] ride a bike. At first, I was afraid [2] falling off. He held the bike [3] I learned to balance. After a few days, I could ride [4] myself. Now I often ride my bike [5] the park with my friends.",
+    "passage": "When I was six, my father taught me _ ride a bike. At first, I was afraid _ falling off. He held the bike _ I learned to balance. After a few days, I could ride _ myself. Now I often ride my bike _ the park with my friends.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] When I was six, my father taught me _____ ride a bike.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] At first, I was afraid _____ falling off.",
+        "options": [
+          "of",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "of"
+        ],
+        "explanation": "Sử dụng giới từ 'of' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] He held the bike _____ I learned to balance.",
+        "options": [
+          "until",
+          "since",
+          "for",
+          "during"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "until"
+        ],
+        "explanation": "Đáp án 'until' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] After a few days, I could ride _____ myself.",
+        "options": [
+          "on",
+          "in",
+          "by",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "by"
+        ],
+        "explanation": "Sử dụng giới từ 'by' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Now I often ride my bike _____ the park with my friends.",
+        "options": [
+          "to",
+          "on",
+          "at",
+          "in"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "in",
+          "around"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "title": "Helping at Home",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nEvery Saturday, I help my parents [1] the house. I usually clean my bedroom and put my clothes [2] the wardrobe. My brother washes the dishes [3] lunch. We all work together, so the jobs do not take [4] long. After that, we can relax [5] the garden.",
+    "passage": "Every Saturday, I help my parents _ the house. I usually clean my bedroom and put my clothes _ the wardrobe. My brother washes the dishes _ lunch. We all work together, so the jobs do not take _ long. After that, we can relax _ the garden.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Every Saturday, I help my parents _____ the house.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "around"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "around"
+        ],
+        "explanation": "Đáp án 'around' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] I usually clean my bedroom and put my clothes _____ the wardrobe.",
+        "options": [
+          "in",
+          "on",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] My brother washes the dishes _____ lunch.",
+        "options": [
+          "after",
+          "since",
+          "for",
+          "during"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "after"
+        ],
+        "explanation": "Đáp án 'after' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] We all work together, so the jobs do not take _____ long.",
+        "options": [
+          "such",
+          "very",
+          "so",
+          "too"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "too"
+        ],
+        "explanation": "Đáp án 'too' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] After that, we can relax _____ the garden.",
+        "options": [
+          "to",
+          "on",
+          "at",
+          "in"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "title": "A Visit to Grandma",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nMy grandmother lives in a small village [1] the countryside. We visit her [2] month. She always makes a delicious cake [3] us. After lunch, she tells us stories [4] her childhood. Before we leave, she gives [5] some fruit to take home.",
+    "passage": "My grandmother lives in a small village _ the countryside. We visit her _ month. She always makes a delicious cake _ us. After lunch, she tells us stories _ her childhood. Before we leave, she gives _ some fruit to take home.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] My grandmother lives in a small village _____ the countryside.",
+        "options": [
+          "to",
+          "on",
+          "at",
+          "in"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] We visit her _____ month.",
+        "options": [
+          "each",
+          "all",
+          "both",
+          "every"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "every"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'every' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] She always makes a delicious cake _____ us.",
+        "options": [
+          "on",
+          "in",
+          "for",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "for"
+        ],
+        "explanation": "Sử dụng giới từ 'for' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] After lunch, she tells us stories _____ her childhood.",
+        "options": [
+          "in",
+          "about",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "about"
+        ],
+        "explanation": "Sử dụng giới từ 'about' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Before we leave, she gives _____ some fruit to take home.",
+        "options": [
+          "him",
+          "me",
+          "you",
+          "us"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "us"
+        ],
+        "explanation": "Đại từ 'us' giữ đúng vai trò ngữ pháp (tân ngữ/sở hữu/phản thân) trong câu."
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "title": "My First English Lesson",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nI started learning English [1] I was eight years old. My teacher was very kind and helped us [2] new words. We often sang songs [3] played games in class. I practised English [4] home with my sister. Now I can understand simple stories [5] English.",
+    "passage": "I started learning English _ I was eight years old. My teacher was very kind and helped us _ new words. We often sang songs _ played games in class. I practised English _ home with my sister. Now I can understand simple stories _ English.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I started learning English _____ I was eight years old.",
+        "options": [
+          "since",
+          "when",
+          "for",
+          "during"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "when"
+        ],
+        "explanation": "Đại từ quan hệ 'when' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] My teacher was very kind and helped us _____ new words.",
+        "options": [
+          "teach",
+          "study",
+          "know",
+          "learn"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "learn"
+        ],
+        "explanation": "Đáp án 'learn' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] We often sang songs _____ played games in class.",
+        "options": [
+          "or",
+          "but",
+          "and",
+          "so"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "and"
+        ],
+        "explanation": "Đáp án 'and' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] I practised English _____ home with my sister.",
+        "options": [
+          "on",
+          "in",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Now I can understand simple stories _____ English.",
+        "options": [
+          "to",
+          "on",
+          "at",
+          "in"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "title": "A Rainy Day",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nIt was raining when I woke up yesterday. I could not play football [1] my friends outside. Instead, I stayed [2] home and read a book. My younger sister played [3] her toys in the living room. In the afternoon, we made some cakes [4] our mother. The rain stopped [5] dinner.",
+    "passage": "It was raining when I woke up yesterday. I could not play football _ my friends outside. Instead, I stayed _ home and read a book. My younger sister played _ her toys in the living room. In the afternoon, we made some cakes _ our mother. The rain stopped _ dinner.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I could not play football _____ my friends outside.",
+        "options": [
+          "in",
+          "with",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "with"
+        ],
+        "explanation": "Sử dụng giới từ 'with' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Instead, I stayed _____ home and read a book.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] My younger sister played _____ her toys in the living room.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "with"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "with"
+        ],
+        "explanation": "Sử dụng giới từ 'with' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] In the afternoon, we made some cakes _____ our mother.",
+        "options": [
+          "with",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "with"
+        ],
+        "explanation": "Sử dụng giới từ 'with' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] The rain stopped _____ dinner.",
+        "options": [
+          "during",
+          "since",
+          "for",
+          "before"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "before"
+        ],
+        "explanation": "Đáp án 'before' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "title": "My Favourite Sport",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nMy favourite sport is swimming. I go to the swimming pool [1] my best friend twice a week. We usually arrive [2] five o'clock and swim for an hour. Swimming is good [3] our health. After swimming, we are often hungry, so we buy something [4] eat. I want [5] become a better swimmer.",
+    "passage": "My favourite sport is swimming. I go to the swimming pool _ my best friend twice a week. We usually arrive _ five o'clock and swim for an hour. Swimming is good _ our health. After swimming, we are often hungry, so we buy something _ eat. I want _ become a better swimmer.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I go to the swimming pool _____ my best friend twice a week.",
+        "options": [
+          "in",
+          "with",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "with"
+        ],
+        "explanation": "Sử dụng giới từ 'with' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] We usually arrive _____ five o'clock and swim for an hour.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] Swimming is good _____ our health.",
+        "options": [
+          "on",
+          "in",
+          "for",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "for"
+        ],
+        "explanation": "Sử dụng giới từ 'for' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] After swimming, we are often hungry, so we buy something _____ eat.",
+        "options": [
+          "on",
+          "in",
+          "to",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] I want _____ become a better swimmer.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "title": "Buying Food at the Market",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nMy father went to the market this morning to buy some food. He bought a kilo [1] apples and two bottles [2] milk. He also bought some bread [3] breakfast. The market was very busy, [4] he found everything he needed. He came home [5] nine o'clock.",
+    "passage": "My father went to the market this morning to buy some food. He bought a kilo _ apples and two bottles _ milk. He also bought some bread _ breakfast. The market was very busy, _ he found everything he needed. He came home _ nine o'clock.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] He bought a kilo _____ apples and two bottles of milk.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "of"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "of"
+        ],
+        "explanation": "Sử dụng giới từ 'of' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] He bought a kilo of apples and two bottles _____ milk.",
+        "options": [
+          "of",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "of"
+        ],
+        "explanation": "Sử dụng giới từ 'of' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] He also bought some bread _____ breakfast.",
+        "options": [
+          "on",
+          "in",
+          "for",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "for"
+        ],
+        "explanation": "Sử dụng giới từ 'for' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] The market was very busy, _____ he found everything he needed.",
+        "options": [
+          "even though",
+          "although",
+          "though",
+          "but"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "but"
+        ],
+        "explanation": "Đáp án 'but' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] He came home _____ nine o'clock.",
+        "options": [
+          "to",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "title": "Planning a Weekend Trip",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nMy friends and I are planning a trip [1] the mountains this weekend. We want to leave [2] Saturday morning and return on Sunday. We will travel [3] train because it is comfortable. We need to take warm clothes [4] the weather may be cold. I hope we have a good time [5] together.",
+    "passage": "My friends and I are planning a trip _ the mountains this weekend. We want to leave _ Saturday morning and return on Sunday. We will travel _ train because it is comfortable. We need to take warm clothes _ the weather may be cold. I hope we have a good time _ together.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] My friends and I are planning a trip _____ the mountains this weekend.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] We want to leave _____ Saturday morning and return on Sunday.",
+        "options": [
+          "on",
+          "in",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "on"
+        ],
+        "explanation": "Sử dụng giới từ 'on' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] We will travel _____ train because it is comfortable.",
+        "options": [
+          "in",
+          "by",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "by"
+        ],
+        "explanation": "Sử dụng giới từ 'by' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] We need to take warm clothes _____ the weather may be cold.",
+        "options": [
+          "so",
+          "since",
+          "for",
+          "because"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "because",
+          "as"
+        ],
+        "explanation": "Sử dụng liên từ 'because' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] I hope we have a good time _____ together.",
+        "options": [
+          "here",
+          "it",
+          "there",
+          "they"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "there"
+        ],
+        "explanation": "Đáp án 'there' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "title": "Writing to a New Pen Friend",
+    "level": "A1",
+    "timeLimit": 300,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [5]:\n\nDear Alex, \n\nMy name is Peter, and I live [1] a small town in England. I am thirteen years old and I go [2] school near my house. I enjoy playing football, and I am also interested [3] music. I would like to know more [4] your country and your hobbies. Please write [5] me soon!\n\nPeter",
+    "passage": "Dear Alex, \n\nMy name is Peter, and I live _ a small town in England. I am thirteen years old and I go _ school near my house. I enjoy playing football, and I am also interested _ music. I would like to know more _ your country and your hobbies. Please write _ me soon!\n\nPeter",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Dear Alex, My name is Peter, and I live _____ a small town in England.",
+        "options": [
+          "to",
+          "on",
+          "at",
+          "in"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] I am thirteen years old and I go _____ school near my house.",
+        "options": [
+          "to",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] I enjoy playing football, and I am also interested _____ music.",
+        "options": [
+          "on",
+          "in",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] I would like to know more _____ your country and your hobbies.",
+        "options": [
+          "in",
+          "about",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "about"
+        ],
+        "explanation": "Sử dụng giới từ 'about' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Please write _____ me soon!",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  }
+]

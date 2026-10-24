@@ -1,6 +1,6 @@
-package com.vocabularyai.ai.service.auth;
+package com.vocabularyai.auth.service;
 
-import com.vocabularyai.ai.entity.PasswordResetToken;
+import com.vocabularyai.auth.entity.PasswordResetToken;
 import com.vocabularyai.user.entity.User;
 import java.util.Optional;
 

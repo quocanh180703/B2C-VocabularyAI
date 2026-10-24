@@ -1,4 +1,4 @@
-package com.vocabularyai.ai.dto.request;
+package com.vocabularyai.auth.dto.request;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -20,11 +20,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class VerifyOtpRegisterRequest {
-    
+
     @NotBlank(message = "Email không được để trống")
     @Email(message = "Email không hợp lệ")
     private String email;
-    
+
     @NotBlank(message = "Mã OTP không được để trống")
     @Size(min = 6, max = 6, message = "Mã OTP phải đúng 6 chữ số")
     @Pattern(regexp = "^\\d{6}$", message = "Mã OTP phải là 6 chữ số")

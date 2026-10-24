@@ -1,0 +1,9 @@
+# Logs
+*.log
+*.log.*
+logs/
+vocabulary-ai-backend/logs/
+vocabulary-ai-backend/target/
+
+# Local Frontend repo
+FE-Vocabulary-AI/

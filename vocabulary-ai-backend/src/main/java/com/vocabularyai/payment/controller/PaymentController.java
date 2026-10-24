@@ -3,6 +3,7 @@ package com.vocabularyai.payment.controller;
 import com.vocabularyai.auth.config.JwtProperties;
 import com.vocabularyai.auth.security.JwtProvider;
 import com.vocabularyai.common.response.ApiResponse;
+import com.vocabularyai.payment.dto.CancelSubscriptionRequest;
 import com.vocabularyai.payment.dto.payos.PayOSCreatePaymentLinkResponse;
 import com.vocabularyai.payment.dto.payos.PayOSWebhookRequest;
 import com.vocabularyai.payment.exception.DuplicatePaymentException;
@@ -23,6 +24,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import com.vocabularyai.user.entity.User;
+import com.vocabularyai.user.repository.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -41,7 +45,7 @@ import java.util.Map;
  * - Webhook endpoint: No JWT required, validated via HMAC-SHA256 signature
  */
 @RestController
-@RequestMapping("/api/payments")
+@RequestMapping({"/payments", "/api/payments"})
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Payments", description = "Payment and subscription endpoints")
@@ -50,6 +54,7 @@ public class PaymentController {
     private final PaymentService paymentService;
     private final JwtProvider jwtProvider;
     private final JwtProperties jwtProperties;
+    private final UserRepository userRepository;
     
     /**
      * Initiate a payment for a subscription package
@@ -576,10 +581,10 @@ public class PaymentController {
     }
     
     /**
-     * Extract user ID from JWT token
+     * Extract user ID from authenticated security context
      * 
-     * @return User ID from JWT
-     * @throws IllegalStateException if no authentication found
+     * @return User ID from security context
+     * @throws IllegalStateException if no authentication found or user ID cannot be determined
      */
     private Long extractUserIdFromJwt() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -588,30 +593,43 @@ public class PaymentController {
             throw new IllegalStateException("User not authenticated");
         }
         
-        // Principal is the JWT token string
         Object principal = auth.getPrincipal();
         
-        if (principal instanceof String) {
-            String token = (String) principal;
-            Long userId = jwtProvider.getUserId(token, jwtProperties.getAccessToken().getSecret());
-            
-            if (userId == null) {
-                throw new IllegalStateException("User ID not found in JWT");
+        // 1. Direct User entity set by JwtAuthenticationFilter
+        if (principal instanceof User user && user.getId() != null) {
+            return user.getId();
+        }
+        
+        // 2. Spring Security UserDetails
+        if (principal instanceof UserDetails userDetails) {
+            return userRepository.findByUsername(userDetails.getUsername())
+                .map(User::getId)
+                .orElseThrow(() -> new IllegalStateException("User not found: " + userDetails.getUsername()));
+        }
+        
+        // 3. String principal (either raw JWT token string or username)
+        if (principal instanceof String str) {
+            try {
+                Long userId = jwtProvider.getUserId(str, jwtProperties.getAccessToken().getSecret());
+                if (userId != null) {
+                    return userId;
+                }
+            } catch (Exception ignored) {
+                // Not a JWT token string, attempt username lookup
             }
             
-            return userId;
+            return userRepository.findByUsername(str)
+                .map(User::getId)
+                .orElseThrow(() -> new IllegalStateException("User not found: " + str));
+        }
+        
+        // 4. Fallback to auth.getName()
+        if (auth.getName() != null && !auth.getName().isBlank()) {
+            return userRepository.findByUsername(auth.getName())
+                .map(User::getId)
+                .orElseThrow(() -> new IllegalStateException("User not found: " + auth.getName()));
         }
         
         throw new IllegalStateException("Cannot extract user ID from authentication");
     }
-}
-
-/**
- * DTO for cancel subscription request
- */
-@lombok.Data
-@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
-class CancelSubscriptionRequest {
-    private Long subscriptionId;
 }

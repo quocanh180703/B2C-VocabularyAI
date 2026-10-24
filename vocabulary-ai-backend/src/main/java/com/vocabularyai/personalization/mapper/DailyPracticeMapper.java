@@ -14,6 +14,7 @@ public interface DailyPracticeMapper {
     /**
      * Ánh xạ DailyPracticeDto sang API response
      */
+    @Mapping(target = "data", source = "dto")
     @Mapping(target = "statusCode", constant = "200")
     @Mapping(target = "message", constant = "Hoạt động hôm nay được tạo thành công")
     @Mapping(target = "timestamp", expression = "java(System.currentTimeMillis())")

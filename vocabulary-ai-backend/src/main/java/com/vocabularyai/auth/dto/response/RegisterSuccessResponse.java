@@ -1,4 +1,4 @@
-package com.vocabularyai.ai.dto.response;
+package com.vocabularyai.auth.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,32 +25,32 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class RegisterSuccessResponse {
-    
+
     /**
      * Thông báo xác nhận đăng ký thành công
      */
     private String message;
-    
+
     /**
      * Email của tài khoản vừa tạo
      */
     private String email;
-    
+
     /**
      * Username của tài khoản vừa tạo
      */
     private String username;
-    
+
     /**
      * Tên đầy đủ của tài khoản vừa tạo
      */
     private String fullName;
-    
+
     /**
      * Trạng thái tài khoản (luôn là "ACTIVE")
      */
     private String status;
-    
+
     /**
      * Thông báo chỉ dẫn người dùng
      */

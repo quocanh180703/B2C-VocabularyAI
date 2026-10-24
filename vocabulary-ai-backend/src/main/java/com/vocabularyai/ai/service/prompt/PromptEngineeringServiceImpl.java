@@ -44,12 +44,15 @@ public class PromptEngineeringServiceImpl implements PromptEngineeringService {
         
         // Add conversation type context
         String typeContext = switch (conversationType) {
-            case VOCABULARY -> "Focus: Help with English vocabulary learning. Explain words clearly with examples.";
-            case GRAMMAR -> "Focus: Help with grammar and writing corrections. Be detailed in explanations.";
+            case VOCABULARY -> "Focus: Help with English vocabulary learning. Explain words clearly and concisely with practical examples.";
+            case GRAMMAR -> "Focus: Help with grammar and writing corrections. Be clear, direct, and concise in explanations.";
             case LEARNING -> "Focus: Support learning progress review. Reference what the user has learned.";
             default -> "Focus: General English conversation and learning support.";
         };
         prompt.append("Current conversation focus: ").append(typeContext).append("\n\n");
+        prompt.append("CRITICAL INSTRUCTIONS FOR ASSISTANT:\n");
+        prompt.append("1. LANGUAGE MATCHING: Always respond in the EXACT SAME LANGUAGE as the user's latest message (Vietnamese if the user writes in Vietnamese, English if the user writes in English). If user asks for translation/comparison, provide both clearly.\n");
+        prompt.append("2. CONCISE & CLEAN: Keep your answer clean, well-spaced, and straight to the point without filler greetings or bloated walls of text. Use clean Markdown (bullet points, bold key terms).\n\n");
         
         // Add message history
         if (!history.isEmpty()) {
@@ -332,11 +335,22 @@ public class PromptEngineeringServiceImpl implements PromptEngineeringService {
         prompt.append(sanitizeInput(transcript));
         prompt.append("\n---\n\n");
         
-        prompt.append("Provide detailed feedback with:\n");
-        prompt.append("- CORRECTIONS: [List grammar/vocabulary errors with fixes]\n");
-        prompt.append("- SUGGESTIONS: [Ideas for improvement]\n");
-        prompt.append("- STRENGTHS: [What was done well]\n");
-        prompt.append("- NEXT STEPS: [Practice recommendations]\n");
+        prompt.append("Analyze thoroughly for all grammar, tense, vocabulary, and phrasing errors. Return ONLY a valid JSON object matching the required schema (no markdown, no extra explanation):\n");
+        prompt.append("{\n");
+        prompt.append("  \"feedback\": \"Tổng quan nhận xét bằng tiếng Việt...\",\n");
+        prompt.append("  \"corrections\": [\n");
+        prompt.append("    {\n");
+        prompt.append("      \"original\": \"exact wrong phrase\",\n");
+        prompt.append("      \"corrected\": \"corrected natural English sentence\",\n");
+        prompt.append("      \"errorType\": \"Tense / Grammar / Vocabulary / Preposition\",\n");
+        prompt.append("      \"explanation\": \"Giải thích chi tiết tại sao sai và cách dùng đúng bằng tiếng Việt\",\n");
+        prompt.append("      \"alternatives\": [\"cách diễn đạt khác\"]\n");
+        prompt.append("    }\n");
+        prompt.append("  ],\n");
+        prompt.append("  \"strengths\": [\"điểm làm tốt (nếu có)\"],\n");
+        prompt.append("  \"weaknesses\": [\"điểm yếu cụ thể cần khắc phục\"],\n");
+        prompt.append("  \"suggestions\": [\"gợi ý luyện tập để tiến bộ\"]\n");
+        prompt.append("}");
         
         log.debug("Built speaking feedback prompt for topic: {}, level: {}", topic, level);
         

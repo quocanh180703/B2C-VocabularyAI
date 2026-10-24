@@ -1,5 +1,6 @@
 package com.vocabularyai.personalization.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WeaknessStrengthDto {
     
     /**
@@ -146,6 +148,7 @@ public class WeaknessStrengthDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class WeaknessItem {
         
         /**
@@ -222,6 +225,7 @@ public class WeaknessStrengthDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class StrengthItem {
         
         /**
@@ -274,6 +278,7 @@ public class WeaknessStrengthDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class PriorityAction {
         
         /**

@@ -1,5 +1,6 @@
 package com.vocabularyai.payment.dto.payos;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,35 +9,13 @@ import lombok.NoArgsConstructor;
 
 /**
  * Response DTO from PayOS when creating a payment link
- * 
- * PayOS API Response format:
- * {
- *   "code": "00",
- *   "desc": "success",
- *   "data": {
- *     "accountNumber": "string",
- *     "accountName": "string",
- *     "acqId": "string",
- *     "amount": 1000,
- *     "amountPaid": 0,
- *     "amountRemaining": 1000,
- *     "transactionDateTime": "2023-01-01T00:00:00Z",
- *     "expireAt": "2023-01-01T00:15:00Z",
- *     "referenceCode": "string",
- *     "transactionCode": "string",
- *     "qrCode": "string",
- *     "checkoutUrl": "https://checkout.payos.vn/...",
- *     "emiAmount": 0,
- *     "emiDescription": "string",
- *     "emiIteration": 0
- *   }
- * }
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PayOSCreatePaymentLinkResponse {
     
     /**
@@ -58,14 +37,26 @@ public class PayOSCreatePaymentLinkResponse {
     private PayOSPaymentLinkData data;
     
     /**
+     * Signature from PayOS
+     */
+    private String signature;
+    
+    /**
      * Nested DTO for payment link data
      */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    @JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class PayOSPaymentLinkData {
+        
+        private String bin;
+        private String currency;
+        private String paymentLinkId;
+        private String status;
+        private Long orderCode;
         
         /**
          * Virtual account number for bank transfer

@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -25,17 +27,25 @@ public interface LearningProgressRepository extends JpaRepository<LearningProgre
     /**
      * Get all learning progress for user with pagination
      */
-    Page<LearningProgress> findByUserId(Long userId, Pageable pageable);
+    @Query(value = "SELECT lp FROM LearningProgress lp JOIN FETCH lp.word WHERE lp.user.id = :userId",
+           countQuery = "SELECT COUNT(lp) FROM LearningProgress lp WHERE lp.user.id = :userId")
+    Page<LearningProgress> findByUserId(@Param("userId") Long userId, Pageable pageable);
     
     /**
      * Get learning progress by status
      */
-    Page<LearningProgress> findByUserIdAndStatus(Long userId, LearningProgress.LearningStatus status, Pageable pageable);
+    @Query(value = "SELECT lp FROM LearningProgress lp JOIN FETCH lp.word WHERE lp.user.id = :userId AND lp.status = :status",
+           countQuery = "SELECT COUNT(lp) FROM LearningProgress lp WHERE lp.user.id = :userId AND lp.status = :status")
+    Page<LearningProgress> findByUserIdAndStatus(@Param("userId") Long userId, @Param("status") LearningProgress.LearningStatus status, Pageable pageable);
     
     /**
      * Get words that need review (next_review_at is past current time)
      */
-    @Query("SELECT lp FROM LearningProgress lp WHERE " +
+    @Query(value = "SELECT lp FROM LearningProgress lp JOIN FETCH lp.word WHERE " +
+           "lp.user.id = :userId AND " +
+           "lp.nextReviewAt IS NOT NULL AND " +
+           "lp.nextReviewAt <= :now",
+           countQuery = "SELECT COUNT(lp) FROM LearningProgress lp WHERE " +
            "lp.user.id = :userId AND " +
            "lp.nextReviewAt IS NOT NULL AND " +
            "lp.nextReviewAt <= :now")
@@ -50,4 +60,67 @@ public interface LearningProgressRepository extends JpaRepository<LearningProgre
      * Get total words learned by user
      */
     long countByUserId(Long userId);
+
+    /**
+     * Find candidate user IDs for REVIEW_DUE email:
+     * - User has reminders enabled and is active
+     * - User has at least 1 word needing review (next_review_at <= now)
+     * - User has NOT studied today (no learning_history, quiz_attempts, speaking_sessions today)
+     * - User has NOT received REVIEW_DUE today
+     */
+    @Query(value = "SELECT DISTINCT lp.user_id " +
+           "FROM learning_progress lp " +
+           "JOIN users u ON lp.user_id = u.id " +
+           "WHERE u.email_reminders_enabled = true " +
+           "  AND u.status = 'ACTIVE' " +
+           "  AND lp.next_review_at IS NOT NULL " +
+           "  AND lp.next_review_at <= :now " +
+           "  AND NOT EXISTS (" +
+           "      SELECT 1 FROM learning_history lh WHERE lh.user_id = u.id AND lh.created_at >= :todayStart" +
+           "  ) " +
+           "  AND NOT EXISTS (" +
+           "      SELECT 1 FROM quiz_attempts qa WHERE qa.user_id = u.id AND qa.created_at >= :todayStart" +
+           "  ) " +
+           "  AND NOT EXISTS (" +
+           "      SELECT 1 FROM speaking_sessions ss WHERE ss.user_id = u.id AND ss.created_at >= :todayStart" +
+           "  ) " +
+           "  AND NOT EXISTS (" +
+           "      SELECT 1 FROM email_reminder_log erl " +
+           "      WHERE erl.user_id = u.id AND erl.type = 'REVIEW_DUE' AND erl.sent_date = :todayDate AND erl.status = 'SENT'" +
+           "  )",
+           nativeQuery = true)
+    List<Long> findCandidateUserIdsForReviewDue(
+            @Param("now") LocalDateTime now,
+            @Param("todayStart") LocalDateTime todayStart,
+            @Param("todayDate") LocalDate todayDate
+    );
+
+    /**
+     * Find candidate user IDs for STREAK_SAVE email:
+     * - User has reminders enabled and is active
+     * - User has NOT studied today
+     * - User has NOT received STREAK_SAVE today
+     */
+    @Query(value = "SELECT DISTINCT u.id " +
+           "FROM users u " +
+           "WHERE u.email_reminders_enabled = true " +
+           "  AND u.status = 'ACTIVE' " +
+           "  AND NOT EXISTS (" +
+           "      SELECT 1 FROM learning_history lh WHERE lh.user_id = u.id AND lh.created_at >= :todayStart" +
+           "  ) " +
+           "  AND NOT EXISTS (" +
+           "      SELECT 1 FROM quiz_attempts qa WHERE qa.user_id = u.id AND qa.created_at >= :todayStart" +
+           "  ) " +
+           "  AND NOT EXISTS (" +
+           "      SELECT 1 FROM speaking_sessions ss WHERE ss.user_id = u.id AND ss.created_at >= :todayStart" +
+           "  ) " +
+           "  AND NOT EXISTS (" +
+           "      SELECT 1 FROM email_reminder_log erl " +
+           "      WHERE erl.user_id = u.id AND erl.type = 'STREAK_SAVE' AND erl.sent_date = :todayDate AND erl.status = 'SENT'" +
+           "  )",
+           nativeQuery = true)
+    List<Long> findCandidateUserIdsForStreakSave(
+            @Param("todayStart") LocalDateTime todayStart,
+            @Param("todayDate") LocalDate todayDate
+    );
 }

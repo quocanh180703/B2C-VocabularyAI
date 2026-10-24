@@ -41,17 +41,25 @@ public enum PartOfSpeech {
      * @return PartOfSpeech or OTHER if not found
      */
     public static PartOfSpeech fromString(String pos) {
-        if (pos == null || pos.isEmpty()) {
+        if (pos == null || pos.trim().isEmpty()) {
             return OTHER;
         }
 
-        String normalized = pos.toLowerCase().trim();
+        String normalized = pos.trim().toLowerCase();
 
         for (PartOfSpeech p : PartOfSpeech.values()) {
-            if (p.code.equalsIgnoreCase(normalized)) {
+            if (p.code.equalsIgnoreCase(normalized) || p.name().equalsIgnoreCase(normalized)) {
                 return p;
             }
         }
+
+        if (normalized.contains("adj")) return ADJECTIVE;
+        if (normalized.contains("adv")) return ADVERB;
+        if (normalized.contains("verb")) return VERB;
+        if (normalized.contains("noun")) return NOUN;
+        if (normalized.contains("prep")) return PREPOSITION;
+        if (normalized.contains("conj")) return CONJUNCTION;
+        if (normalized.contains("pron")) return PRONOUN;
 
         return OTHER;
     }

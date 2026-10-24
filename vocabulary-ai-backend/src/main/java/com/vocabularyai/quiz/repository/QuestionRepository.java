@@ -21,4 +21,15 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
      * Count questions in quiz
      */
     long countByQuizId(Long quizId);
+
+    /**
+     * Count questions grouped by quiz ID
+     */
+    @org.springframework.data.jpa.repository.Query("SELECT q.quiz.id, count(q) FROM Question q GROUP BY q.quiz.id")
+    List<Object[]> countQuestionsGroupByQuizId();
+
+    /**
+     * Delete questions by quiz ID
+     */
+    void deleteByQuizId(Long quizId);
 }

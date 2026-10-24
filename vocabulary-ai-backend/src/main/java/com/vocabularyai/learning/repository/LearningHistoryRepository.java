@@ -19,7 +19,9 @@ public interface LearningHistoryRepository extends JpaRepository<LearningHistory
     /**
      * Get learning history for user with pagination
      */
-    Page<LearningHistory> findByUserId(Long userId, Pageable pageable);
+    @Query(value = "SELECT lh FROM LearningHistory lh JOIN FETCH lh.word WHERE lh.user.id = :userId",
+           countQuery = "SELECT COUNT(lh) FROM LearningHistory lh WHERE lh.user.id = :userId")
+    Page<LearningHistory> findByUserId(@Param("userId") Long userId, Pageable pageable);
     
     /**
      * Get learning history by activity type
@@ -68,4 +70,28 @@ public interface LearningHistoryRepository extends JpaRepository<LearningHistory
            "COALESCE(SUM(CASE WHEN lh.isCorrect IS NOT NULL THEN 1 ELSE 0 END), 1) " +
            "FROM LearningHistory lh WHERE lh.user.id = :userId")
     double getAccuracyRate(@Param("userId") Long userId);
+
+    /**
+     * Get distinct activity dates for user across vocabulary, quizzes, and speaking
+     */
+    @Query(value = "SELECT DISTINCT DATE(created_at) as act_date FROM (" +
+           "  SELECT created_at FROM learning_history WHERE user_id = :userId " +
+           "  UNION ALL " +
+           "  SELECT created_at FROM quiz_attempts WHERE user_id = :userId " +
+           "  UNION ALL " +
+           "  SELECT created_at FROM speaking_sessions WHERE user_id = :userId" +
+           ") combined ORDER BY act_date DESC", nativeQuery = true)
+    java.util.List<java.sql.Date> findActivityDatesByUserId(@Param("userId") Long userId);
+
+    /**
+     * Count activities for user today
+     */
+    @Query(value = "SELECT COUNT(*) FROM (" +
+           "  SELECT id FROM learning_history WHERE user_id = :userId AND created_at >= :startOfDay " +
+           "  UNION ALL " +
+           "  SELECT id FROM quiz_attempts WHERE user_id = :userId AND created_at >= :startOfDay " +
+           "  UNION ALL " +
+           "  SELECT id FROM speaking_sessions WHERE user_id = :userId AND created_at >= :startOfDay" +
+           ") combined", nativeQuery = true)
+    long countTodayActivities(@Param("userId") Long userId, @Param("startOfDay") LocalDateTime startOfDay);
 }

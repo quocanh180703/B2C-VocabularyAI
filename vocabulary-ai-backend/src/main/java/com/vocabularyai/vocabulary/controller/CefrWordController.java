@@ -18,29 +18,49 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * CefrWordController
  * 
  * REST API for CEFR vocabulary words
  * 
- * Endpoints:
- * - GET /api/cefr-words - List all words (paginated, filterable)
- * - GET /api/cefr-words/{id} - Get word by ID
- * - GET /api/cefr-words/lemma/{lemma} - Get word by lemma
- * - GET /api/cefr-words/search - Search words
- * - GET /api/cefr-words/random - Get random word
- * - GET /api/cefr-words/statistics - Get word statistics
+ * Endpoints (context-path /api is added by Spring):
+ * - GET /cefr-words - List all words (paginated, filterable)
+ * - GET /cefr-words/{id} - Get word by ID
+ * - GET /cefr-words/lemma/{lemma} - Get word by lemma
+ * - GET /cefr-words/search - Search words
+ * - GET /cefr-words/random - Get random word
+ * - GET /cefr-words/statistics - Get word statistics
  * 
  * Authentication: Not required for these endpoints (public)
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/cefr-words")
+@RequestMapping("/cefr-words")
 @RequiredArgsConstructor
 @Tag(name = "CEFR Words", description = "CEFR vocabulary word management and search")
 public class CefrWordController {
 
     private final CefrWordService cefrWordService;
+    private final com.vocabularyai.payment.service.FeatureUsageService featureUsageService;
+    private final com.vocabularyai.user.service.UserService userService;
+
+    private Long getCurrentUserIdSafely() {
+        try {
+            org.springframework.security.core.Authentication auth = 
+                org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
+                return null;
+            }
+            if (auth.getPrincipal() instanceof com.vocabularyai.user.entity.User u) {
+                return u.getId();
+            }
+            return userService.getCurrentUserId();
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
 
     /**
      * GET /api/cefr-words
@@ -68,12 +88,19 @@ public class CefrWordController {
         log.info("GET /cefr-words - level: {}, page: {}, size: {}", level, page, size);
 
         if (level != null) {
+            Long userId = getCurrentUserIdSafely();
+            if (!featureUsageService.canAccessCefrLevel(userId, level.name())) {
+                throw new com.vocabularyai.common.exception.UpgradeRequiredException(
+                    "CEFR_B1_C1",
+                    "Cấp độ từ vựng " + level + " chỉ dành cho tài khoản Premium. Vui lòng nâng cấp để mở khóa toàn bộ kho từ vựng."
+                );
+            }
             Page<CefrWordResponse> words = cefrWordService.getWordsByLevel(level, page, size);
             return ResponseEntity.ok(words);
         }
 
-        // Return empty page for now (implement full list if needed)
-        return ResponseEntity.ok(Page.empty());
+        Page<CefrWordResponse> words = cefrWordService.getAllWords(page, size);
+        return ResponseEntity.ok(words);
     }
 
     /**
@@ -98,6 +125,16 @@ public class CefrWordController {
         if (word == null) {
             log.warn("CEFR word not found: {}", id);
             return ResponseEntity.notFound().build();
+        }
+
+        if (word.getCefrLevel() != null) {
+            Long userId = getCurrentUserIdSafely();
+            if (!featureUsageService.canAccessWord(userId, id, word.getCefrLevel().name())) {
+                throw new com.vocabularyai.common.exception.UpgradeRequiredException(
+                    "CEFR_B1_C1",
+                    "Từ vựng cấp độ " + word.getCefrLevel() + " dành riêng cho tài khoản Premium. Nâng cấp để mở khóa toàn bộ từ vựng."
+                );
+            }
         }
 
         return ResponseEntity.ok(word);
@@ -125,6 +162,16 @@ public class CefrWordController {
         if (word == null) {
             log.warn("CEFR word not found: {}", lemma);
             return ResponseEntity.notFound().build();
+        }
+
+        if (word.getCefrLevel() != null) {
+            Long userId = getCurrentUserIdSafely();
+            if (!featureUsageService.canAccessWord(userId, lemma, word.getCefrLevel().name())) {
+                throw new com.vocabularyai.common.exception.UpgradeRequiredException(
+                    "CEFR_B1_C1",
+                    "Từ vựng cấp độ " + word.getCefrLevel() + " dành riêng cho tài khoản Premium. Nâng cấp để mở khóa toàn bộ từ vựng."
+                );
+            }
         }
 
         return ResponseEntity.ok(word);
@@ -158,6 +205,16 @@ public class CefrWordController {
             @RequestParam(defaultValue = "20") int size
     ) {
         log.info("GET /cefr-words/search - query: {}, level: {}, page: {}, size: {}", query, level, page, size);
+
+        if (level != null) {
+            Long userId = getCurrentUserIdSafely();
+            if (!featureUsageService.canAccessCefrLevel(userId, level.name())) {
+                throw new com.vocabularyai.common.exception.UpgradeRequiredException(
+                    "CEFR_B1_C1",
+                    "Cấp độ từ vựng " + level + " chỉ dành cho tài khoản Premium. Vui lòng nâng cấp để mở khóa toàn bộ kho từ vựng."
+                );
+            }
+        }
 
         CefrWordSearchRequest request = CefrWordSearchRequest.builder()
                 .query(query)
@@ -224,6 +281,30 @@ public class CefrWordController {
         }
 
         return ResponseEntity.ok(word);
+    }
+
+    /**
+     * GET /api/cefr-words/random-batch
+     * 
+     * Get batch of random words at specific CEFR level (for flashcards)
+     * 
+     * @param level CEFR level (optional)
+     * @param limit Batch size (default 25)
+     * @return List of random CEFR words
+     */
+    @GetMapping("/random-batch")
+    @Operation(summary = "Get random CEFR words batch", description = "Retrieve random words at specific CEFR level (for flashcards)")
+    @ApiResponse(responseCode = "200", description = "Random CEFR words found")
+    public ResponseEntity<List<CefrWordResponse>> getRandomWordsBatch(
+            @Parameter(description = "CEFR level", example = "B1")
+            @RequestParam(required = false) CEFRLevel level,
+
+            @Parameter(description = "Batch size", example = "25")
+            @RequestParam(defaultValue = "25") int limit
+    ) {
+        log.info("GET /cefr-words/random-batch - level: {}, limit: {}", level, limit);
+        List<CefrWordResponse> words = cefrWordService.getRandomWords(level, limit);
+        return ResponseEntity.ok(words);
     }
 
     /**

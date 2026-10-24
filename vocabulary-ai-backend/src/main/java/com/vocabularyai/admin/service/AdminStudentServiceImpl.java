@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -79,7 +80,8 @@ public class AdminStudentServiceImpl implements AdminStudentService {
         log.info("Searching students with term: {}", searchTerm);
         
         try {
-            Page<?> searchResult = studentRepository.searchStudents(searchTerm, pageable);
+            Pageable unsorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+            Page<?> searchResult = studentRepository.searchStudents(searchTerm, unsorted);
             
             List<StudentListResponse> students = searchResult.getContent().stream()
                 .map(item -> mapToStudentListResponse(item))
@@ -137,7 +139,7 @@ public class AdminStudentServiceImpl implements AdminStudentService {
                 .email((String) studentData.get("email"))
                 .fullName((String) studentData.get("fullName"))
                 .avatarUrl((String) studentData.get("avatarUrl"))
-                .status((String) studentData.get("status"))
+                .status(studentData.get("status") != null ? studentData.get("status").toString() : null)
                 .createdAt((LocalDateTime) studentData.get("createdAt"))
                 .updatedAt((LocalDateTime) studentData.get("updatedAt"))
                 .totalSessions(((Number) studentData.get("totalSessions")).longValue())
@@ -183,7 +185,7 @@ public class AdminStudentServiceImpl implements AdminStudentService {
             for (Object item : statusCounts) {
                 @SuppressWarnings("unchecked")
                 Map<String, Object> data = (Map<String, Object>) item;
-                String status = (String) data.get("status");
+                String status = data.get("status") != null ? data.get("status").toString() : "";
                 long count = ((Number) data.get("count")).longValue();
                 
                 switch (status) {
@@ -248,7 +250,7 @@ public class AdminStudentServiceImpl implements AdminStudentService {
             .username((String) data.get("username"))
             .email((String) data.get("email"))
             .fullName((String) data.get("fullName"))
-            .status((String) data.get("status"))
+            .status(data.get("status") != null ? data.get("status").toString() : null)
             .hasActiveSubscription((Boolean) data.getOrDefault("hasActiveSubscription", false))
             .totalSessions(((Number) data.getOrDefault("totalSessions", 0)).longValue())
             .createdAt((LocalDateTime) data.get("createdAt"))

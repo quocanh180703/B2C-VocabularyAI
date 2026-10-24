@@ -48,4 +48,9 @@ public class SpeakingAttemptResponse {
      */
     @JsonProperty("feedback")
     private SpeakingFeedbackResponse feedback;
+
+    @JsonProperty("overallScore")
+    public Double getOverallScore() {
+        return feedback != null ? feedback.getOverallScore() : null;
+    }
 }

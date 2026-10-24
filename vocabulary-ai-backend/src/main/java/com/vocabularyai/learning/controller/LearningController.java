@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/learning")
-@RequiredArgsConstructor
 @Tag(name = "Learning", description = "Learning progress and history management endpoints")
 @SecurityRequirement(name = "bearerAuth")
 @PreAuthorize("isAuthenticated()")
@@ -37,6 +36,11 @@ public class LearningController {
     
     private final LearningService learningService;
     private final UserService userService;
+
+    public LearningController(LearningService learningService, UserService userService) {
+        this.learningService = learningService;
+        this.userService = userService;
+    }
     
     /**
      * Start learning a word
@@ -47,7 +51,7 @@ public class LearningController {
         description = "Begin learning a new vocabulary word"
     )
     public ResponseEntity<ApiResponse<LearningProgressResponse>> startLearningWord(
-            @PathVariable Long wordId) {
+            @PathVariable String wordId) {
         log.info("Starting to learn word: {}", wordId);
         
         User user = userService.getCurrentUser();

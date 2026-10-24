@@ -65,6 +65,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class SpeakingPracticeController {
     
     private final SpeakingPracticeService speakingPracticeService;
+    private final com.vocabularyai.payment.service.FeatureUsageService featureUsageService;
     
     /**
      * POST /api/ai/speaking/attempts
@@ -145,9 +146,9 @@ public class SpeakingPracticeController {
         log.info("Submit speaking attempt - sessionId: {}, userId: {}, audioFile: {}", 
                  sessionId, user.getId(), audioFile.getOriginalFilename());
         
+        Long userId = user.getId();
+        featureUsageService.checkAndConsumeQuota(userId, com.vocabularyai.payment.entity.FeatureType.SPEAKING);
         try {
-            Long userId = user.getId();
-            
             SpeakingPracticeResponse response = speakingPracticeService.submitSpeakingPractice(
                 sessionId, 
                 userId, 
@@ -160,11 +161,13 @@ public class SpeakingPracticeController {
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
             
         } catch (IllegalArgumentException e) {
+            featureUsageService.rollbackQuota(userId, com.vocabularyai.payment.entity.FeatureType.SPEAKING);
             log.warn("Validation error - sessionId: {}, userId: {}, message: {}", 
                      sessionId, user.getId(), e.getMessage());
             throw e;
             
         } catch (Exception e) {
+            featureUsageService.rollbackQuota(userId, com.vocabularyai.payment.entity.FeatureType.SPEAKING);
             log.error("Error submitting speaking attempt - sessionId: {}, userId: {}, error: {}", 
                       sessionId, user.getId(), e.getMessage(), e);
             throw e;

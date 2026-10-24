@@ -1,6 +1,6 @@
-package com.vocabularyai.ai.service.auth;
+package com.vocabularyai.auth.service;
 
-import com.vocabularyai.ai.entity.OtpVerification;
+import com.vocabularyai.auth.entity.OtpVerification;
 import java.util.Optional;
 
 /**

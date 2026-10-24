@@ -28,9 +28,9 @@ import java.time.LocalDateTime;
         @Index(name = "idx_order_code", columnList = "order_code")
     }
 )
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 @Builder
 public class PaymentOrder {
     
@@ -110,6 +110,23 @@ public class PaymentOrder {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
     
+    public PaymentOrder() {
+    }
+
+    public PaymentOrder(Long id, Long userId, Long packageId, String orderCode, BigDecimal amount, String status, String paymentUrl, LocalDateTime expiredAt, LocalDateTime paidAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.userId = userId;
+        this.packageId = packageId;
+        this.orderCode = orderCode;
+        this.amount = amount;
+        this.status = status;
+        this.paymentUrl = paymentUrl;
+        this.expiredAt = expiredAt;
+        this.paidAt = paidAt;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     /**
      * JPA lifecycle callback - set createdAt before persist
      */

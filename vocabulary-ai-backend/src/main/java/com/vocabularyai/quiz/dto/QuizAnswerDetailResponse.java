@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * Quiz Answer Detail Response DTO
  */
@@ -19,6 +21,7 @@ public class QuizAnswerDetailResponse {
     
     private Long questionId;
     private String content;
+    private List<String> options;
     private Integer selectedAnswer;
     private Integer correctAnswer;
     private Boolean isCorrect;
@@ -31,6 +34,7 @@ public class QuizAnswerDetailResponse {
         return QuizAnswerDetailResponse.builder()
             .questionId(answer.getQuestion().getId())
             .content(answer.getQuestion().getContent())
+            .options(answer.getQuestion().getOptionsList())
             .selectedAnswer(answer.getAnswer())
             .correctAnswer(answer.getQuestion().getCorrectAnswer())
             .isCorrect(answer.getCorrect())

@@ -1,5 +1,7 @@
 package com.vocabularyai.admin.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UpdateVocabularyRequest {
     
     /**
@@ -23,6 +26,7 @@ public class UpdateVocabularyRequest {
     /**
      * Meaning/translation (optional for update)
      */
+    @JsonAlias({"meaning", "vietnameseMeaning"})
     private String meaning;
     
     /**
@@ -37,6 +41,7 @@ public class UpdateVocabularyRequest {
      */
     @Pattern(regexp = "A1|A2|B1|B2|C1|C2", 
              message = "CEFR level must be A1, A2, B1, B2, C1, or C2")
+    @JsonAlias({"level", "cefr"})
     private String level;
     
     /**

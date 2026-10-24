@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gói Premium sắp hết hạn</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; line-height: 1.6; color: #1e293b; background-color: #f8fafc; }
+        .container { max-width: 580px; margin: 20px auto; background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); overflow: hidden; border: 1px solid #e2e8f0; }
+        .header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #ffffff; padding: 32px 24px; text-align: center; }
+        .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: #f8fafc; }
+        .header p { font-size: 14px; color: #94a3b8; }
+        .content { padding: 32px 28px; }
+        .greeting { font-size: 16px; margin-bottom: 18px; }
+        .info-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+        .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #e2e8f0; font-size: 14px; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #64748b; }
+        .info-value { font-weight: 700; color: #0f172a; }
+        .highlight-value { color: #d97706; font-size: 16px; }
+        .benefits-box { background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 16px; margin-bottom: 24px; }
+        .benefits-title { font-size: 13.5px; font-weight: 700; color: #92400e; margin-bottom: 8px; }
+        .benefit-item { font-size: 13px; color: #78350f; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+        .btn-center { text-align: center; margin: 28px 0 20px; }
+        .btn { display: inline-block; background: #f59e0b; color: #0f172a !important; text-decoration: none; font-size: 15px; font-weight: 800; padding: 14px 36px; border-radius: 999px; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35); }
+        .footer { background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 20px 24px; text-align: center; font-size: 12px; color: #94a3b8; }
+        .footer a { color: #64748b; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💎 Thông báo gia hạn gói Premium</h1>
+            <p>Duy trì không gián đoạn lộ trình học tiếng Anh AI của bạn</p>
+        </div>
+        <div class="content">
+            <div class="greeting">
+                Xin chào <strong th:text="${recipientName}">Học viên</strong>,
+            </div>
+            <p style="margin-bottom: 18px; color: #475569;">
+                Gói tài khoản Premium của bạn sẽ hết hạn sau <strong>3 ngày nữa</strong>. Hãy gia hạn ngay hôm nay để không bị gián đoạn trải nghiệm học tập và giữ nguyên các đặc quyền AI không giới hạn:
+            </p>
+
+            <div class="info-card">
+                <div class="info-row">
+                    <span class="info-label">Gói dịch vụ:</span>
+                    <span class="info-value" th:text="${packageName}">Gói Theo Tháng — Premium</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Ngày hết hạn:</span>
+                    <span class="info-value" th:text="${expireDateStr}">27/10/2026</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Giá gia hạn:</span>
+                    <span class="info-value highlight-value" th:text="${renewPriceStr}">99.000đ / tháng</span>
+                </div>
+            </div>
+
+            <div class="benefits-box">
+                <div class="benefits-title">✨ Quyền lợi tiếp tục được bảo toàn khi gia hạn:</div>
+                <div class="benefit-item">✓ Không giới hạn Chat với Gia sư AI Vi</div>
+                <div class="benefit-item">✓ Luyện nói và chấm điểm phát âm 5 tiêu chí không giới hạn</div>
+                <div class="benefit-item">✓ Mở khóa toàn bộ 5.000+ từ vựng Oxford chuẩn CEFR A1–C1</div>
+                <div class="benefit-item">✓ Lộ trình học cá nhân hóa theo điểm yếu</div>
+            </div>
+
+            <div class="btn-center">
+                <a th:href="${actionUrl}" class="btn">Gia hạn gói ngay bây giờ →</a>
+            </div>
+
+            <p style="font-size: 13px; color: #64748b; text-align: center;">
+                Thanh toán an toàn, bảo mật và tức thì qua cổng PayOS.
+            </p>
+        </div>
+
+        <div class="footer">
+            <p style="margin-bottom: 6px;">© 2026 VocabularyAI · Đây là thông báo dịch vụ về gói tài khoản của bạn.</p>
+            <p>Hỗ trợ: <a href="mailto:hotro@vocabularyai.com">hotro@vocabularyai.com</a></p>
+        </div>
+    </div>
+</body>
+</html>

@@ -175,6 +175,45 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .header("Retry-After", String.valueOf(ex.getRetryAfterSeconds()))
                 .body(response);
     }
+
+    /**
+     * Handle QuotaExceededException -> 429
+     */
+    @ExceptionHandler(QuotaExceededException.class)
+    public ResponseEntity<ApiResponse<?>> handleQuotaExceededException(
+            QuotaExceededException ex, WebRequest request) {
+        log.warn("Daily feature quota exceeded: feature={}, used={}, limit={}",
+                ex.getFeature(), ex.getUsed(), ex.getLimit());
+
+        ApiResponse<?> response = ApiResponse.errorWithCode(
+                "QUOTA_EXCEEDED",
+                ex.getMessage(),
+                ex.getData()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.TOO_MANY_REQUESTS)
+                .body(response);
+    }
+
+    /**
+     * Handle UpgradeRequiredException -> 429
+     */
+    @ExceptionHandler(UpgradeRequiredException.class)
+    public ResponseEntity<ApiResponse<?>> handleUpgradeRequiredException(
+            UpgradeRequiredException ex, WebRequest request) {
+        log.warn("Premium upgrade required for feature: {}", ex.getFeature());
+
+        ApiResponse<?> response = ApiResponse.errorWithCode(
+                "UPGRADE_REQUIRED",
+                ex.getMessage(),
+                ex.getData()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.TOO_MANY_REQUESTS)
+                .body(response);
+    }
     
     /**
      * Handle ExternalServiceException -> 503

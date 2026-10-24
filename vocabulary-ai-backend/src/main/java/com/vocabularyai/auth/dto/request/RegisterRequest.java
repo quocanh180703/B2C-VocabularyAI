@@ -1,4 +1,4 @@
-package com.vocabularyai.auth.dto;
+package com.vocabularyai.auth.dto.request;
 
 import com.vocabularyai.common.validation.ValidationConstants;
 import com.vocabularyai.common.validation.ValidPassword;
@@ -21,32 +21,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterRequest {
-    
+
     @NotBlank(message = ValidationConstants.USERNAME_NOT_BLANK)
-    @Size(
-        min = 3,
-        max = 100,
-        message = ValidationConstants.USERNAME_SIZE
-    )
-    @Pattern(
-        regexp = ValidationConstants.USERNAME_REGEX,
-        message = ValidationConstants.USERNAME_PATTERN
-    )
+    @Size(min = 3, max = 100, message = ValidationConstants.USERNAME_SIZE)
+    @Pattern(regexp = ValidationConstants.USERNAME_REGEX, message = ValidationConstants.USERNAME_PATTERN)
     private String username;
-    
+
     @NotBlank(message = ValidationConstants.EMAIL_NOT_BLANK)
     @Email(message = ValidationConstants.EMAIL_INVALID)
     private String email;
-    
+
     @NotBlank(message = ValidationConstants.PASSWORD_NOT_BLANK)
     @ValidPassword
     private String password;
-    
+
     @NotBlank(message = "Full name is required")
-    @Size(
-        min = 2,
-        max = 150,
-        message = ValidationConstants.FULL_NAME_SIZE
-    )
+    @Size(min = 2, max = 150, message = ValidationConstants.FULL_NAME_SIZE)
     private String fullName;
 }

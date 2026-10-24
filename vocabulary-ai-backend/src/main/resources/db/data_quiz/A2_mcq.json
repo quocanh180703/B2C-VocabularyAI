@@ -1,0 +1,2493 @@
+[
+  {
+    "id": 1,
+    "title": "A trip to the theatre",
+    "level": "A2",
+    "timeLimit": 480,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [8]:\n\nWe had a class day out today. We went on a theatre trip [1] see Shakespeare’s play Hamlet. A friend of mine, [2] has always been really into Shakespeare, had already told me the story. Basically, Hamlet discovers a terrible secret about his family, but he can’t decide [3] to do about it. I won’t say any more about the story, in [4] you decide to go and see it as well. I’d hate to spoil it [5] you! The only thing I didn’t like about the play was [6] fact that it lasted four hours. For me, that was far [7] long, and the seats were quite uncomfortable. Afterwards, my mum asked me [8] I’d go and see another Shakespeare play. I said yes, probably, but I’d take a cushion next time!",
+    "passage": "We had a class day out today. We went on a theatre trip _ see Shakespeare’s play Hamlet. A friend of mine, _ has always been really into Shakespeare, had already told me the story. Basically, Hamlet discovers a terrible secret about his family, but he can’t decide _ to do about it. I won’t say any more about the story, in _ you decide to go and see it as well. I’d hate to spoil it _ you! The only thing I didn’t like about the play was _ fact that it lasted four hours. For me, that was far _ long, and the seats were quite uncomfortable. Afterwards, my mum asked me _ I’d go and see another Shakespeare play. I said yes, probably, but I’d take a cushion next time!",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] We went on a theatre trip _____ see Shakespeare’s play Hamlet.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] A friend of mine, _____ has always been really into Shakespeare, had already told me the story.",
+        "options": [
+          "whom",
+          "who",
+          "whose",
+          "which"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "who"
+        ],
+        "explanation": "Đại từ quan hệ 'who' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] Basically, Hamlet discovers a terrible secret about his family, but he can’t decide _____ to do about it.",
+        "options": [
+          "whose",
+          "who",
+          "whom",
+          "what"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "what"
+        ],
+        "explanation": "Đáp án 'what' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] I won’t say any more about the story, in _____ you decide to go and see it as well.",
+        "options": [
+          "case",
+          "event",
+          "fact",
+          "time"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "case"
+        ],
+        "explanation": "Đáp án 'case' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] I’d hate to spoil it _____ you!",
+        "options": [
+          "for",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "for"
+        ],
+        "explanation": "Sử dụng giới từ 'for' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] The only thing I didn’t like about the play was _____ fact that it lasted four hours.",
+        "options": [
+          "a",
+          "the",
+          "an",
+          "some"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "the"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'the' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] For me, that was far _____ long, and the seats were quite uncomfortable.",
+        "options": [
+          "so",
+          "very",
+          "too",
+          "such"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "too"
+        ],
+        "explanation": "Đáp án 'too' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] Afterwards, my mum asked me _____ I’d go and see another Shakespeare play.",
+        "options": [
+          "provided",
+          "unless",
+          "if",
+          "providing"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "if",
+          "whether"
+        ],
+        "explanation": "Sử dụng liên từ 'if' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "School Jazz Band",
+    "level": "A2",
+    "timeLimit": 360,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [6]:\n\nDo you play a jazz instrument – maybe the trumpet, guitar or drums? Do you want to have some musical fun with other students in the school [1] have similar interests to yours? If you do, come and join us on Tuesdays after school in the music room. At the moment, there are eight of us playing quite a wide range of instruments. We’re having such [2] great time and Mr Jones is an amazing jazz teacher, but we need more people, especially electric guitarists!\n\nWe’re hoping [3] perform in the end-of-term show and Mr Jones said he’ll deal [4] all the technical arrangements and the sound system, which is great! \n\nEither come and ask me [5] more details during one of the lunch breaks, [6] just turn up on the day. But don’t forget to bring your instrument! See you there!\n\nSam (from the School Jazz Band)",
+    "passage": "Do you play a jazz instrument – maybe the trumpet, guitar or drums? Do you want to have some musical fun with other students in the school _ have similar interests to yours? If you do, come and join us on Tuesdays after school in the music room. At the moment, there are eight of us playing quite a wide range of instruments. We’re having such _ great time and Mr Jones is an amazing jazz teacher, but we need more people, especially electric guitarists!\n\nWe’re hoping _ perform in the end-of-term show and Mr Jones said he’ll deal _ all the technical arrangements and the sound system, which is great! \n\nEither come and ask me _ more details during one of the lunch breaks, _ just turn up on the day. But don’t forget to bring your instrument! See you there!\n\nSam (from the School Jazz Band)",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Do you want to have some musical fun with other students in the school _____ have similar interests to yours?",
+        "options": [
+          "who",
+          "whom",
+          "whose",
+          "which"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "who",
+          "that"
+        ],
+        "explanation": "Đại từ quan hệ 'who' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] We’re having such _____ great time and Mr Jones is an amazing jazz teacher, but we need more people, especially electric guitarists!",
+        "options": [
+          "some",
+          "an",
+          "the",
+          "a"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "a"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'a' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] We’re hoping _____ perform in the end-of-term show and Mr Jones said he’ll deal with all the technical arrangements and the sound system, which is great!",
+        "options": [
+          "in",
+          "to",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] We’re hoping to perform in the end-of-term show and Mr Jones said he’ll deal _____ all the technical arrangements and the sound system, which is great!",
+        "options": [
+          "with",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "with"
+        ],
+        "explanation": "Sử dụng giới từ 'with' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Either come and ask me _____ more details during one of the lunch breaks, or just turn up on the day.",
+        "options": [
+          "for",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "for"
+        ],
+        "explanation": "Sử dụng giới từ 'for' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] Either come and ask me for more details during one of the lunch breaks, _____ just turn up on the day.",
+        "options": [
+          "or",
+          "and",
+          "but",
+          "so"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "or"
+        ],
+        "explanation": "Đáp án 'or' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "A wildlife boat tour",
+    "level": "A2",
+    "timeLimit": 360,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [6]:\n\nWhen I was on holiday with my parents, we went on a wildlife tour. The trip involved sailing round some islands off the coast, not too far [1] our hotel. Some other guests had been on the tour, and recommended it to my parents, who immediately decided we should go.\n\nIn the morning our guide, Jake, picked us [2] in his boat and off we went. Jake knew lots about the wildlife on the islands and we saw everything we were hoping to, apart from one bird, called a harrier, which didn’t appear. But that didn’t matter [3] we saw many other amazing birds.\n\nMy parents especially liked the fact that [4] were very few people on the tour. Jake had time to answer all our questions, so we felt we learnt [5] than we’d expected. And we agreed this wildlife experience was [6] of the best we’d ever had.",
+    "passage": "When I was on holiday with my parents, we went on a wildlife tour. The trip involved sailing round some islands off the coast, not too far _ our hotel. Some other guests had been on the tour, and recommended it to my parents, who immediately decided we should go.\n\nIn the morning our guide, Jake, picked us _ in his boat and off we went. Jake knew lots about the wildlife on the islands and we saw everything we were hoping to, apart from one bird, called a harrier, which didn’t appear. But that didn’t matter _ we saw many other amazing birds.\n\nMy parents especially liked the fact that _ were very few people on the tour. Jake had time to answer all our questions, so we felt we learnt _ than we’d expected. And we agreed this wildlife experience was _ of the best we’d ever had.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] The trip involved sailing round some islands off the coast, not too far _____ our hotel.",
+        "options": [
+          "in",
+          "from",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "from"
+        ],
+        "explanation": "Sử dụng giới từ 'from' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] In the morning our guide, Jake, picked us _____ in his boat and off we went.",
+        "options": [
+          "up",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "up"
+        ],
+        "explanation": "Đáp án 'up' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] But that didn’t matter _____ we saw many other amazing birds.",
+        "options": [
+          "so",
+          "for",
+          "because",
+          "in"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "because",
+          "as",
+          "since"
+        ],
+        "explanation": "Sử dụng liên từ 'because' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] My parents especially liked the fact that _____ were very few people on the tour.",
+        "options": [
+          "it",
+          "there",
+          "here",
+          "they"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "there"
+        ],
+        "explanation": "Đáp án 'there' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Jake had time to answer all our questions, so we felt we learnt _____ than we’d expected.",
+        "options": [
+          "much",
+          "more",
+          "many",
+          "most"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "more"
+        ],
+        "explanation": "'more' là lượng từ phù hợp với sắc thái định lượng hoặc cấu trúc so sánh trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] And we agreed this wildlife experience was _____ of the best we’d ever had.",
+        "options": [
+          "a",
+          "one",
+          "an",
+          "the"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "one"
+        ],
+        "explanation": "Đáp án 'one' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "My city",
+    "level": "A2",
+    "timeLimit": 360,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [6]:\n\nby Harry Salter\n\nDo you live in a nice place? I do! The city [1] I live is called Bristol, and it’s in the south west of England. It’s not very big, but there are loads of things for teenagers to do here.\n\n[2] you’re interested in television, you should go to the Bristol TV and Radio Studios. On the tour of the studios, you can have a go at presenting and appear [3] your own radio drama.\n\nOr if you’re into sport, why [4] try canoeing? The best place is a very pretty local section of the Kennet and Avon canal. It connects Bristol to London and it [5] built in the early 18th century, so you can experience some local history at the same time.\n\nThese are just two [6] the many things you can do here. It really is a great place.",
+    "passage": "by Harry Salter\n\nDo you live in a nice place? I do! The city _ I live is called Bristol, and it’s in the south west of England. It’s not very big, but there are loads of things for teenagers to do here.\n\n_ you’re interested in television, you should go to the Bristol TV and Radio Studios. On the tour of the studios, you can have a go at presenting and appear _ your own radio drama.\n\nOr if you’re into sport, why _ try canoeing? The best place is a very pretty local section of the Kennet and Avon canal. It connects Bristol to London and it _ built in the early 18th century, so you can experience some local history at the same time.\n\nThese are just two _ the many things you can do here. It really is a great place.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] The city _____ I live is called Bristol, and it’s in the south west of England.",
+        "options": [
+          "whom",
+          "who",
+          "where",
+          "whose"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "where"
+        ],
+        "explanation": "Đại từ quan hệ 'where' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] _____ you’re interested in television, you should go to the Bristol TV and Radio Studios.",
+        "options": [
+          "If",
+          "Whether",
+          "Unless",
+          "Provided"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "If"
+        ],
+        "explanation": "Sử dụng liên từ 'If' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] On the tour of the studios, you can have a go at presenting and appear _____ your own radio drama.",
+        "options": [
+          "on",
+          "in",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "in"
+        ],
+        "explanation": "Sử dụng giới từ 'in' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] Or if you’re into sport, why _____ try canoeing?",
+        "options": [
+          "none",
+          "no",
+          "never",
+          "not"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "not"
+        ],
+        "explanation": "Đáp án 'not' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] It connects Bristol to London and it _____ built in the early 18th century, so you can experience some local history at the same time.",
+        "options": [
+          "was",
+          "am",
+          "is",
+          "are"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "was"
+        ],
+        "explanation": "Đáp án 'was' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] These are just two _____ the many things you can do here.",
+        "options": [
+          "of",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "of"
+        ],
+        "explanation": "Sử dụng giới từ 'of' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Review of Amazing",
+    "level": "A2",
+    "timeLimit": 480,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [8]:\n\nBy Gina Thomann\n\nA new play called Amazing is now on at the Town Theatre, and it’s really worth seeing. The action takes [1] in a school, and the play starts by showing a group of students at the school inventing an extraordinary machine. They then use this machine to travel backwards through time in order [2] learn about history and other school subjects. [3] example, they see exactly what happened when important medicines [4] discovered.\n\n[5] the story is extremely interesting, some of the acting is not so good. None [6] the actors are very well-known, and I think the play would be a bit better [7] it had more experienced people in the main roles.\n\nDespite [8] , I would definitely recommend you to go and see it because of the fantastic story, and the rather surprising ending.",
+    "passage": "By Gina Thomann\n\nA new play called Amazing is now on at the Town Theatre, and it’s really worth seeing. The action takes _ in a school, and the play starts by showing a group of students at the school inventing an extraordinary machine. They then use this machine to travel backwards through time in order _ learn about history and other school subjects. _ example, they see exactly what happened when important medicines _ discovered.\n\n_ the story is extremely interesting, some of the acting is not so good. None _ the actors are very well-known, and I think the play would be a bit better _ it had more experienced people in the main roles.\n\nDespite _ , I would definitely recommend you to go and see it because of the fantastic story, and the rather surprising ending.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] The action takes _____ in a school, and the play starts by showing a group of students at the school inventing an extraordinary machine.",
+        "options": [
+          "room",
+          "part",
+          "place",
+          "space"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "place"
+        ],
+        "explanation": "Đáp án 'place' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] They then use this machine to travel backwards through time in order _____ learn about history and other school subjects.",
+        "options": [
+          "to",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] _____ example, they see exactly what happened when important medicines were discovered.",
+        "options": [
+          "On",
+          "In",
+          "For",
+          "At"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "For"
+        ],
+        "explanation": "Sử dụng giới từ 'For' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] For example, they see exactly what happened when important medicines _____ discovered.",
+        "options": [
+          "were",
+          "am",
+          "is",
+          "are"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "were"
+        ],
+        "explanation": "Đáp án 'were' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] _____ the story is extremely interesting, some of the acting is not so good.",
+        "options": [
+          "Even though",
+          "Although",
+          "Whilst",
+          "Whereas"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "Although",
+          "Though",
+          "While"
+        ],
+        "explanation": "Sử dụng liên từ 'Although' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] None _____ the actors are very well-known, and I think the play would be a bit better if it had more experienced people in the main roles.",
+        "options": [
+          "of",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "of"
+        ],
+        "explanation": "Sử dụng giới từ 'of' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] None of the actors are very well-known, and I think the play would be a bit better _____ it had more experienced people in the main roles.",
+        "options": [
+          "whether",
+          "if",
+          "unless",
+          "provided"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "if"
+        ],
+        "explanation": "Sử dụng liên từ 'if' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] Despite _____ , I would definitely recommend you to go and see it because of the fantastic story, and the rather surprising ending.",
+        "options": [
+          "this",
+          "these",
+          "those",
+          "in"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "this",
+          "that",
+          "everything"
+        ],
+        "explanation": "Đáp án 'this' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Match report: National Schools Tournament",
+    "level": "A2",
+    "timeLimit": 480,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [8]:\n\nBy William Jacobs, football captain\n\nLast Saturday, our school football team took part in the National Schools Tournament. It was a long day – we got to school very early as the bus [1] would take us to the tournament had to leave by 7 a.m. [2] an hour’s drive we arrived at the City Stadium, where the competition was taking [3] . Playing in such [4] famous stadium was an experience we will never forget. \n\nWe played against some [5] the top teams from around the country, and we came first! This was amazing, because the other teams were much stronger this year [6] they were last year. \n\nWe were given our prize, a beautiful silver cup, and then we went on a tour around the stadium. We all agreed that it [7] been an incredible day, and we hope to [8] able to return next year!",
+    "passage": "By William Jacobs, football captain\n\nLast Saturday, our school football team took part in the National Schools Tournament. It was a long day – we got to school very early as the bus _ would take us to the tournament had to leave by 7 a.m. _ an hour’s drive we arrived at the City Stadium, where the competition was taking _ . Playing in such _ famous stadium was an experience we will never forget. \n\nWe played against some _ the top teams from around the country, and we came first! This was amazing, because the other teams were much stronger this year _ they were last year. \n\nWe were given our prize, a beautiful silver cup, and then we went on a tour around the stadium. We all agreed that it _ been an incredible day, and we hope to _ able to return next year!",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] It was a long day – we got to school very early as the bus _____ would take us to the tournament had to leave by 7 a.m. After an hour’s drive we arrived at the City Stadium, where the competition was taking place .",
+        "options": [
+          "whom",
+          "who",
+          "which",
+          "whose"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "which",
+          "that"
+        ],
+        "explanation": "Đại từ quan hệ 'which' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] It was a long day – we got to school very early as the bus which would take us to the tournament had to leave by 7 a.m. _____ an hour’s drive we arrived at the City Stadium, where the competition was taking place .",
+        "options": [
+          "During",
+          "Since",
+          "For",
+          "After"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "After"
+        ],
+        "explanation": "Đáp án 'After' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] It was a long day – we got to school very early as the bus which would take us to the tournament had to leave by 7 a.m. After an hour’s drive we arrived at the City Stadium, where the competition was taking _____ .",
+        "options": [
+          "place",
+          "part",
+          "room",
+          "space"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "place"
+        ],
+        "explanation": "Đáp án 'place' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] Playing in such _____ famous stadium was an experience we will never forget.",
+        "options": [
+          "an",
+          "a",
+          "the",
+          "some"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "a"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'a' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] We played against some _____ the top teams from around the country, and we came first!",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "of"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "of"
+        ],
+        "explanation": "Sử dụng giới từ 'of' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] This was amazing, because the other teams were much stronger this year _____ they were last year.",
+        "options": [
+          "like",
+          "as",
+          "than",
+          "so"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "than"
+        ],
+        "explanation": "Đáp án 'than' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] We all agreed that it _____ been an incredible day, and we hope to be able to return next year!",
+        "options": [
+          "has",
+          "have",
+          "had",
+          "having"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "had"
+        ],
+        "explanation": "Đáp án 'had' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] We all agreed that it had been an incredible day, and we hope to _____ able to return next year!",
+        "options": [
+          "is",
+          "am",
+          "be",
+          "are"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "be"
+        ],
+        "explanation": "Đáp án 'be' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Book review",
+    "level": "A2",
+    "timeLimit": 480,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [8]:\n\nI’ve just finished reading Sara Tyler’s latest book, Gold River. I think that it’s even better [1] her last book. If you’re looking [2] an interesting book to read, then this [3] the perfect choice.\n\nThe main characters are described in a lot of detail, and I really cared about [4] happened to them. If you’re one of the thousands of people who have enjoyed other books [5] Sara Tyler, you’ll already know that some of her novels were made into films [6] few years ago. I wouldn’t be surprised if this happens to Gold River too. Although this book has new characters, [7] is set in the same place [8] her other stories, so you might recognise some of the locations. Go and read it – I promise you won’t regret it!",
+    "passage": "I’ve just finished reading Sara Tyler’s latest book, Gold River. I think that it’s even better _ her last book. If you’re looking _ an interesting book to read, then this _ the perfect choice.\n\nThe main characters are described in a lot of detail, and I really cared about _ happened to them. If you’re one of the thousands of people who have enjoyed other books _ Sara Tyler, you’ll already know that some of her novels were made into films _ few years ago. I wouldn’t be surprised if this happens to Gold River too. Although this book has new characters, _ is set in the same place _ her other stories, so you might recognise some of the locations. Go and read it – I promise you won’t regret it!",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I think that it’s even better _____ her last book.",
+        "options": [
+          "as",
+          "than",
+          "like",
+          "so"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "than"
+        ],
+        "explanation": "Đáp án 'than' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] If you’re looking _____ an interesting book to read, then this is the perfect choice.",
+        "options": [
+          "in",
+          "for",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "for"
+        ],
+        "explanation": "Sử dụng giới từ 'for' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] If you’re looking for an interesting book to read, then this _____ the perfect choice.",
+        "options": [
+          "am",
+          "is",
+          "are",
+          "was"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "is"
+        ],
+        "explanation": "Đáp án 'is' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] The main characters are described in a lot of detail, and I really cared about _____ happened to them.",
+        "options": [
+          "what",
+          "who",
+          "whom",
+          "whose"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "what"
+        ],
+        "explanation": "Đáp án 'what' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] If you’re one of the thousands of people who have enjoyed other books _____ Sara Tyler, you’ll already know that some of her novels were made into films a few years ago.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "by"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "by"
+        ],
+        "explanation": "Sử dụng giới từ 'by' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] If you’re one of the thousands of people who have enjoyed other books by Sara Tyler, you’ll already know that some of her novels were made into films _____ few years ago.",
+        "options": [
+          "some",
+          "an",
+          "the",
+          "a"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "a"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'a' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] Although this book has new characters, _____ is set in the same place as her other stories, so you might recognise some of the locations.",
+        "options": [
+          "I",
+          "it",
+          "you",
+          "he"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "it"
+        ],
+        "explanation": "Đáp án 'it' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] Although this book has new characters, it is set in the same place _____ her other stories, so you might recognise some of the locations.",
+        "options": [
+          "since",
+          "because",
+          "as",
+          "for"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "as"
+        ],
+        "explanation": "Sử dụng liên từ 'as' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "Science fiction film",
+    "level": "A2",
+    "timeLimit": 480,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [8]:\n\nHi Sam,\n\nHave you seen the new science fiction film Rocket? I was really interested in seeing it because it was based [1] the book called Spacemen, which is [2] of my favourite novels. To be honest, I always find [3] difficult when something that I’ve read and enjoyed is turned into a film, because it’s never exactly the same [4] I imagined! But [5] time I really wasn’t disappointed – the acting was great, and the main characters were very similar to how the author described them in the novel.\n\n[6] you haven’t seen it yet, why don’t you come round to my house and watch it online [7] me? I know you love science fiction, so it would be great to hear [8] you think of the film!\n\nI’m looking forward to seeing you then! \n\nCarys",
+    "passage": "Hi Sam,\n\nHave you seen the new science fiction film Rocket? I was really interested in seeing it because it was based _ the book called Spacemen, which is _ of my favourite novels. To be honest, I always find _ difficult when something that I’ve read and enjoyed is turned into a film, because it’s never exactly the same _ I imagined! But _ time I really wasn’t disappointed – the acting was great, and the main characters were very similar to how the author described them in the novel.\n\n_ you haven’t seen it yet, why don’t you come round to my house and watch it online _ me? I know you love science fiction, so it would be great to hear _ you think of the film!\n\nI’m looking forward to seeing you then! \n\nCarys",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I was really interested in seeing it because it was based _____ the book called Spacemen, which is one of my favourite novels.",
+        "options": [
+          "to",
+          "in",
+          "at",
+          "on"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "on"
+        ],
+        "explanation": "Sử dụng giới từ 'on' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] I was really interested in seeing it because it was based on the book called Spacemen, which is _____ of my favourite novels.",
+        "options": [
+          "a",
+          "one",
+          "an",
+          "the"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "one"
+        ],
+        "explanation": "Đáp án 'one' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] To be honest, I always find _____ difficult when something that I’ve read and enjoyed is turned into a film, because it’s never exactly the same as I imagined!",
+        "options": [
+          "I",
+          "it",
+          "you",
+          "he"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "it"
+        ],
+        "explanation": "Đáp án 'it' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] To be honest, I always find it difficult when something that I’ve read and enjoyed is turned into a film, because it’s never exactly the same _____ I imagined!",
+        "options": [
+          "since",
+          "because",
+          "as",
+          "for"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "as"
+        ],
+        "explanation": "Sử dụng liên từ 'as' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] But _____ time I really wasn’t disappointed – the acting was great, and the main characters were very similar to how the author described them in the novel.",
+        "options": [
+          "that",
+          "this",
+          "these",
+          "those"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "this"
+        ],
+        "explanation": "Đáp án 'this' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] _____ you haven’t seen it yet, why don’t you come round to my house and watch it online with me?",
+        "options": [
+          "If",
+          "Whether",
+          "Unless",
+          "Provided"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "If"
+        ],
+        "explanation": "Sử dụng liên từ 'If' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] If you haven’t seen it yet, why don’t you come round to my house and watch it online _____ me?",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "with"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "with"
+        ],
+        "explanation": "Sử dụng giới từ 'with' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] I know you love science fiction, so it would be great to hear _____ you think of the film!",
+        "options": [
+          "what",
+          "who",
+          "whom",
+          "whose"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "what"
+        ],
+        "explanation": "Đáp án 'what' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "title": "My hobby",
+    "level": "A2",
+    "timeLimit": 480,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [8]:\n\nBy Jenny Winter\n\nI love playing the guitar. I started playing a [1] weeks ago, and my teacher is really good. Even though I [2] only had six lessons so far, I can already play some tunes! I was quite surprised really, because I also play the violin, which is much harder.\n\nI have an electric guitar. [3] best thing about playing this instrument is being able to use headphones when I practise, which I do for [4] least thirty minutes every day. Wearing the headphones means that [5] is really easy to concentrate.\n\nMy teacher asked me [6] enter a competition for new players next month, so I [7] working hard for that right now. I’d be really happy [8] I won!",
+    "passage": "By Jenny Winter\n\nI love playing the guitar. I started playing a _ weeks ago, and my teacher is really good. Even though I _ only had six lessons so far, I can already play some tunes! I was quite surprised really, because I also play the violin, which is much harder.\n\nI have an electric guitar. _ best thing about playing this instrument is being able to use headphones when I practise, which I do for _ least thirty minutes every day. Wearing the headphones means that _ is really easy to concentrate.\n\nMy teacher asked me _ enter a competition for new players next month, so I _ working hard for that right now. I’d be really happy _ I won!",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I started playing a _____ weeks ago, and my teacher is really good.",
+        "options": [
+          "few",
+          "much",
+          "many",
+          "more"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "few"
+        ],
+        "explanation": "'few' là lượng từ phù hợp với sắc thái định lượng hoặc cấu trúc so sánh trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Even though I _____ only had six lessons so far, I can already play some tunes!",
+        "options": [
+          "had",
+          "has",
+          "have",
+          "having"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "have",
+          "'ve"
+        ],
+        "explanation": "Đáp án 'have' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] _____ best thing about playing this instrument is being able to use headphones when I practise, which I do for at least thirty minutes every day.",
+        "options": [
+          "An",
+          "A",
+          "The",
+          "Some"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "The"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'The' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] The best thing about playing this instrument is being able to use headphones when I practise, which I do for _____ least thirty minutes every day.",
+        "options": [
+          "on",
+          "in",
+          "at",
+          "to"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Wearing the headphones means that _____ is really easy to concentrate.",
+        "options": [
+          "he",
+          "I",
+          "you",
+          "it"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "it"
+        ],
+        "explanation": "Đáp án 'it' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] My teacher asked me _____ enter a competition for new players next month, so I am working hard for that right now.",
+        "options": [
+          "to",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] My teacher asked me to enter a competition for new players next month, so I _____ working hard for that right now.",
+        "options": [
+          "is",
+          "am",
+          "are",
+          "was"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "am",
+          "'m"
+        ],
+        "explanation": "Đáp án 'am' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] I’d be really happy _____ I won!",
+        "options": [
+          "unless",
+          "whether",
+          "if",
+          "provided"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "if"
+        ],
+        "explanation": "Sử dụng liên từ 'if' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Learning to ski",
+    "level": "A2",
+    "timeLimit": 480,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [8]:\n\nI’ll always remember skiing for the first time. Until I went on a trip to Queenstown, New Zealand, I [1] never seen snow!\n\nOn the first day, I signed [2] for a skiing lesson for complete beginners. During the lesson I only learnt some basic techniques, but I still thought I was good enough to go skiing all by [3] !\n\nLuckily, I managed [4] reach the peak without falling off the ski lift. Then I had to ski down the mountain, even [5] I didn’t know how to stop or turn very well. As [6] as I pointed my skis towards the track I began gaining speed. [7] few minutes later, I started shouting at skiers to move out of my way! \n\nNot surprisingly, I crashed into a tree. I didn’t get hurt, but I lost my sunglasses. I didn’t go near skis for a very long time [8] that!",
+    "passage": "I’ll always remember skiing for the first time. Until I went on a trip to Queenstown, New Zealand, I _ never seen snow!\n\nOn the first day, I signed _ for a skiing lesson for complete beginners. During the lesson I only learnt some basic techniques, but I still thought I was good enough to go skiing all by _ !\n\nLuckily, I managed _ reach the peak without falling off the ski lift. Then I had to ski down the mountain, even _ I didn’t know how to stop or turn very well. As _ as I pointed my skis towards the track I began gaining speed. _ few minutes later, I started shouting at skiers to move out of my way! \n\nNot surprisingly, I crashed into a tree. I didn’t get hurt, but I lost my sunglasses. I didn’t go near skis for a very long time _ that!",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Until I went on a trip to Queenstown, New Zealand, I _____ never seen snow!",
+        "options": [
+          "had",
+          "have",
+          "has",
+          "having"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "had",
+          "'d"
+        ],
+        "explanation": "Đáp án 'had' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] On the first day, I signed _____ for a skiing lesson for complete beginners.",
+        "options": [
+          "up",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "up"
+        ],
+        "explanation": "Đáp án 'up' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] During the lesson I only learnt some basic techniques, but I still thought I was good enough to go skiing all by _____ !",
+        "options": [
+          "yourself",
+          "myself",
+          "himself",
+          "herself"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "myself"
+        ],
+        "explanation": "Đại từ 'myself' giữ đúng vai trò ngữ pháp (tân ngữ/sở hữu/phản thân) trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] Luckily, I managed _____ reach the peak without falling off the ski lift.",
+        "options": [
+          "on",
+          "in",
+          "to",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Then I had to ski down the mountain, even _____ I didn’t know how to stop or turn very well.",
+        "options": [
+          "while",
+          "although",
+          "even though",
+          "though"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "though"
+        ],
+        "explanation": "Sử dụng liên từ 'though' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] As _____ as I pointed my skis towards the track I began gaining speed.",
+        "options": [
+          "fast",
+          "early",
+          "soon",
+          "quickly"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "soon"
+        ],
+        "explanation": "Đáp án 'soon' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] _____ few minutes later, I started shouting at skiers to move out of my way!",
+        "options": [
+          "A",
+          "An",
+          "The",
+          "Some"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "A"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'A' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] I didn’t go near skis for a very long time _____ that!",
+        "options": [
+          "since",
+          "after",
+          "for",
+          "during"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "after"
+        ],
+        "explanation": "Đáp án 'after' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Moving house",
+    "level": "A2",
+    "timeLimit": 360,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [6]:\n\nHi Alex,\n\nHow are you? This week’s been a very busy one for me – I finally moved house! [1] wasn’t until I started to pack a few days ago that I realised how much stuff I had. I really think moving house is one of the [2] stressful things I’ve ever done! I was sad to leave my old house – after [3] , I’d lived there my whole life so I have lots of good memories. \n\nAnyway, I’m looking [4] to being in this new house. It’s not as big as the old one, but [5] least it’s got a great garden. I’m planning to have a small party on Saturday night. Are you free then? Why don’t you come along [6] you are? I hope you can make it. Let me know.\n\nAll the best,\n\nSam",
+    "passage": "Hi Alex,\n\nHow are you? This week’s been a very busy one for me – I finally moved house! _ wasn’t until I started to pack a few days ago that I realised how much stuff I had. I really think moving house is one of the _ stressful things I’ve ever done! I was sad to leave my old house – after _ , I’d lived there my whole life so I have lots of good memories. \n\nAnyway, I’m looking _ to being in this new house. It’s not as big as the old one, but _ least it’s got a great garden. I’m planning to have a small party on Saturday night. Are you free then? Why don’t you come along _ you are? I hope you can make it. Let me know.\n\nAll the best,\n\nSam",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] _____ wasn’t until I started to pack a few days ago that I realised how much stuff I had.",
+        "options": [
+          "He",
+          "I",
+          "You",
+          "It"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "It"
+        ],
+        "explanation": "Đáp án 'It' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] I really think moving house is one of the _____ stressful things I’ve ever done!",
+        "options": [
+          "many",
+          "much",
+          "most",
+          "more"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "most"
+        ],
+        "explanation": "'most' là lượng từ phù hợp với sắc thái định lượng hoặc cấu trúc so sánh trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] I was sad to leave my old house – after _____ , I’d lived there my whole life so I have lots of good memories.",
+        "options": [
+          "each",
+          "both",
+          "all",
+          "every"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "all"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'all' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] Anyway, I’m looking _____ to being in this new house.",
+        "options": [
+          "forth",
+          "ahead",
+          "onward",
+          "forward"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "forward"
+        ],
+        "explanation": "Đáp án 'forward' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] It’s not as big as the old one, but _____ least it’s got a great garden.",
+        "options": [
+          "to",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] Why don’t you come along _____ you are?",
+        "options": [
+          "if",
+          "whether",
+          "unless",
+          "provided"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "if"
+        ],
+        "explanation": "Sử dụng liên từ 'if' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "title": "The Westway Cinema",
+    "level": "A2",
+    "timeLimit": 360,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [6]:\n\nThe new Westway Cinema is finally open! I went last night with my brother, and we both agreed it’s much better than the old one [1] to be. Although the ticket prices are higher, the extra cost is worth paying.\n\nThe new owners [2] now taken out all the old seats and put in brand new ones that are really comfortable. There’s also new air conditioning. This is fantastic because in the past it was sometimes [3] hot that it was difficult to concentrate on the film!\n\nThere are also special offers available. For example, [4] you buy two tickets, you can choose something for free – either a snack or a drink. I’m sure this [5] be popular, as you can’t bring [6] own food into the cinema. \n\nI’d really recommend going to the Westway Cinema – it’s a great night out.",
+    "passage": "The new Westway Cinema is finally open! I went last night with my brother, and we both agreed it’s much better than the old one _ to be. Although the ticket prices are higher, the extra cost is worth paying.\n\nThe new owners _ now taken out all the old seats and put in brand new ones that are really comfortable. There’s also new air conditioning. This is fantastic because in the past it was sometimes _ hot that it was difficult to concentrate on the film!\n\nThere are also special offers available. For example, _ you buy two tickets, you can choose something for free – either a snack or a drink. I’m sure this _ be popular, as you can’t bring _ own food into the cinema. \n\nI’d really recommend going to the Westway Cinema – it’s a great night out.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I went last night with my brother, and we both agreed it’s much better than the old one _____ to be.",
+        "options": [
+          "accustomed",
+          "used",
+          "familiar",
+          "known"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "used"
+        ],
+        "explanation": "Đáp án 'used' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] The new owners _____ now taken out all the old seats and put in brand new ones that are really comfortable.",
+        "options": [
+          "had",
+          "has",
+          "have",
+          "having"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "have"
+        ],
+        "explanation": "Đáp án 'have' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] This is fantastic because in the past it was sometimes _____ hot that it was difficult to concentrate on the film!",
+        "options": [
+          "because",
+          "so",
+          "since",
+          "as"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "so"
+        ],
+        "explanation": "Sử dụng liên từ 'so' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] For example, _____ you buy two tickets, you can choose something for free – either a snack or a drink.",
+        "options": [
+          "unless",
+          "whether",
+          "if",
+          "providing"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "if",
+          "when",
+          "whenever",
+          "provided"
+        ],
+        "explanation": "Sử dụng liên từ 'if' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] I’m sure this _____ be popular, as you can’t bring your own food into the cinema.",
+        "options": [
+          "can",
+          "will",
+          "could",
+          "would"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "will"
+        ],
+        "explanation": "Đáp án 'will' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] I’m sure this will be popular, as you can’t bring _____ own food into the cinema.",
+        "options": [
+          "his",
+          "my",
+          "your",
+          "her"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "your"
+        ],
+        "explanation": "Đại từ 'your' giữ đúng vai trò ngữ pháp (tân ngữ/sở hữu/phản thân) trong câu."
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "title": "",
+    "level": "A2",
+    "timeLimit": 480,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [8]:\n\nFrom: Harry \n\nTo: Oliver\n\nSubject: Piano lessons \n\nHi Oliver,\n\nGuess what? I’ve finally started piano lessons, like you! As you know, it’s something I’ve wanted to do ever [1] I was young. Anyway, a couple of months ago I saw someone playing the piano on TV – he was brilliant. And when I found out he’d only started playing quite recently, that encouraged [2] to start lessons. \n\nI’ve got a really good teacher, and I go to her house [3] lessons twice a week. She’s very patient. [4] time I make a mistake, she explains what I did wrong. Also, I couldn’t read music when I started, so it’s been hard to learn to read the notes on the page at the [5] time as deciding which piano keys to use! But [6] I finally play something that other people recognise, it really makes me happy. Maybe [7]  day, I’ll become an even better piano player [8] you!",
+    "passage": "From: Harry \n\nTo: Oliver\n\nSubject: Piano lessons \n\nHi Oliver,\n\nGuess what? I’ve finally started piano lessons, like you! As you know, it’s something I’ve wanted to do ever _ I was young. Anyway, a couple of months ago I saw someone playing the piano on TV – he was brilliant. And when I found out he’d only started playing quite recently, that encouraged _ to start lessons. \n\nI’ve got a really good teacher, and I go to her house _ lessons twice a week. She’s very patient. _ time I make a mistake, she explains what I did wrong. Also, I couldn’t read music when I started, so it’s been hard to learn to read the notes on the page at the _ time as deciding which piano keys to use! But _ I finally play something that other people recognise, it really makes me happy. Maybe _  day, I’ll become an even better piano player _ you!",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] As you know, it’s something I’ve wanted to do ever _____ I was young.",
+        "options": [
+          "during",
+          "for",
+          "since",
+          "until"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "since"
+        ],
+        "explanation": "Sử dụng liên từ 'since' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] And when I found out he’d only started playing quite recently, that encouraged _____ to start lessons.",
+        "options": [
+          "me",
+          "you",
+          "him",
+          "her"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "me"
+        ],
+        "explanation": "Đại từ 'me' giữ đúng vai trò ngữ pháp (tân ngữ/sở hữu/phản thân) trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] I’ve got a really good teacher, and I go to her house _____ lessons twice a week.",
+        "options": [
+          "on",
+          "in",
+          "for",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "for"
+        ],
+        "explanation": "Sử dụng giới từ 'for' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] _____ time I make a mistake, she explains what I did wrong.",
+        "options": [
+          "All",
+          "Every",
+          "Both",
+          "Either"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "Every",
+          "Each"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'Every' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Also, I couldn’t read music when I started, so it’s been hard to learn to read the notes on the page at the _____ time as deciding which piano keys to use!",
+        "options": [
+          "similar",
+          "same",
+          "like",
+          "alike"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "same"
+        ],
+        "explanation": "Đáp án 'same' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] But _____ I finally play something that other people recognise, it really makes me happy.",
+        "options": [
+          "for",
+          "since",
+          "when",
+          "during"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "when",
+          "whenever",
+          "if"
+        ],
+        "explanation": "Đại từ quan hệ 'when' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] Maybe _____ day, I’ll become an even better piano player than you!",
+        "options": [
+          "an",
+          "a",
+          "one",
+          "the"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "one",
+          "some"
+        ],
+        "explanation": "Đáp án 'one' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] Maybe one day, I’ll become an even better piano player _____ you!",
+        "options": [
+          "than",
+          "as",
+          "like",
+          "so"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "than"
+        ],
+        "explanation": "Đáp án 'than' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "title": "My travel blog",
+    "level": "A2",
+    "timeLimit": 360,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [6]:\n\nThis summer, I travelled to Copenhagen, the capital of Denmark, on my own. I am only 20 and to [1] honest, I was nervous about exploring a new city alone. I decided to go on a free walking tour the first day I was there. I hoped the tour would help me to become more familiar [2] the city. \n\nUnfortunately, the weather wasn’t great, but the tour was still absolutely fantastic! Magnus, our tour guide, knew all about the city’s history. We also learnt loads [3] interesting facts about Danish culture. At the end of the tour, he gave [4] all suggestions for the best places [5] eat and visit.\n\nApart from learning so much, I actually had a lot more fun on the walking tour [6] I’d expected. It was an excellent way to experience the city, and learn about its culture and history.",
+    "passage": "This summer, I travelled to Copenhagen, the capital of Denmark, on my own. I am only 20 and to _ honest, I was nervous about exploring a new city alone. I decided to go on a free walking tour the first day I was there. I hoped the tour would help me to become more familiar _ the city. \n\nUnfortunately, the weather wasn’t great, but the tour was still absolutely fantastic! Magnus, our tour guide, knew all about the city’s history. We also learnt loads _ interesting facts about Danish culture. At the end of the tour, he gave _ all suggestions for the best places _ eat and visit.\n\nApart from learning so much, I actually had a lot more fun on the walking tour _ I’d expected. It was an excellent way to experience the city, and learn about its culture and history.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I am only 20 and to _____ honest, I was nervous about exploring a new city alone.",
+        "options": [
+          "are",
+          "am",
+          "is",
+          "be"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "be"
+        ],
+        "explanation": "Đáp án 'be' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] I hoped the tour would help me to become more familiar _____ the city.",
+        "options": [
+          "on",
+          "in",
+          "with",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "with"
+        ],
+        "explanation": "Sử dụng giới từ 'with' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] We also learnt loads _____ interesting facts about Danish culture.",
+        "options": [
+          "in",
+          "of",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "of"
+        ],
+        "explanation": "Sử dụng giới từ 'of' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] At the end of the tour, he gave _____ all suggestions for the best places to eat and visit.",
+        "options": [
+          "you",
+          "me",
+          "us",
+          "him"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "us"
+        ],
+        "explanation": "Đại từ 'us' giữ đúng vai trò ngữ pháp (tân ngữ/sở hữu/phản thân) trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] At the end of the tour, he gave us all suggestions for the best places _____ eat and visit.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] Apart from learning so much, I actually had a lot more fun on the walking tour _____ I’d expected.",
+        "options": [
+          "like",
+          "as",
+          "than",
+          "so"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "than"
+        ],
+        "explanation": "Đáp án 'than' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "title": "Starting at college",
+    "level": "A2",
+    "timeLimit": 360,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [6]:\n\nHi, my name’s Emma. Welcome to the college! I’ve been studying here for a year now. Starting at college isn’t easy, but I’m sure you’ll soon feel at home. When I first started studying here last year, I was [1] nervous that I couldn’t even ask anyone for help. I got lost five times on my first day!\n\nRemember that [2] student at the college has been new at one time, and understands how you feel. So [3] you’re not sure where to go, just ask – we’re all happy to help!\n\nYou probably don’t know many people here. To make some friends, [4] not spend break times with some of your new classmates in the café? Or how [5] joining one of the many clubs we have at the college? [6] are lots to choose from.\n\nGood luck on your new course!",
+    "passage": "Hi, my name’s Emma. Welcome to the college! I’ve been studying here for a year now. Starting at college isn’t easy, but I’m sure you’ll soon feel at home. When I first started studying here last year, I was _ nervous that I couldn’t even ask anyone for help. I got lost five times on my first day!\n\nRemember that _ student at the college has been new at one time, and understands how you feel. So _ you’re not sure where to go, just ask – we’re all happy to help!\n\nYou probably don’t know many people here. To make some friends, _ not spend break times with some of your new classmates in the café? Or how _ joining one of the many clubs we have at the college? _ are lots to choose from.\n\nGood luck on your new course!",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] When I first started studying here last year, I was _____ nervous that I couldn’t even ask anyone for help.",
+        "options": [
+          "as",
+          "because",
+          "since",
+          "so"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "so"
+        ],
+        "explanation": "Sử dụng liên từ 'so' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Remember that _____ student at the college has been new at one time, and understands how you feel.",
+        "options": [
+          "either",
+          "all",
+          "both",
+          "every"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "every",
+          "each"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'every' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] So _____ you’re not sure where to go, just ask – we’re all happy to help!",
+        "options": [
+          "whether",
+          "if",
+          "unless",
+          "provided"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "if",
+          "when",
+          "whenever"
+        ],
+        "explanation": "Sử dụng liên từ 'if' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] To make some friends, _____ not spend break times with some of your new classmates in the café?",
+        "options": [
+          "whose",
+          "who",
+          "whom",
+          "why"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "why"
+        ],
+        "explanation": "Đại từ quan hệ 'why' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Or how _____ joining one of the many clubs we have at the college?",
+        "options": [
+          "on",
+          "in",
+          "about",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "about"
+        ],
+        "explanation": "Sử dụng giới từ 'about' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] _____ are lots to choose from.",
+        "options": [
+          "They",
+          "It",
+          "Here",
+          "There"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "There"
+        ],
+        "explanation": "Đáp án 'There' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "title": "Letter to a restaurant",
+    "level": "A2",
+    "timeLimit": 480,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [8]:\n\nDear Mrs Cutter,\n\nI am writing to complain about a recent visit I made to your restaurant. I went there last Tuesday with my parents, [1] were celebrating their wedding anniversary. We have [2] to your restaurant many times before and always enjoyed it. [3] time, however, there was a problem with the service. \n\nYour restaurant was not very busy on Tuesday evening. In spite [4] that, it took a long time for anyone to come and take our order. We then had to wait for at [5] an hour before the food arrived. As we [6] already arranged to meet some family friends after our meal, we were late meeting them in [7] end because of the slow service at your restaurant.\n\nI suggest that you discuss the issue [8] your staff to prevent it happening again.\n\nYours sincerely,\n\nPeter Hamilton",
+    "passage": "Dear Mrs Cutter,\n\nI am writing to complain about a recent visit I made to your restaurant. I went there last Tuesday with my parents, _ were celebrating their wedding anniversary. We have _ to your restaurant many times before and always enjoyed it. _ time, however, there was a problem with the service. \n\nYour restaurant was not very busy on Tuesday evening. In spite _ that, it took a long time for anyone to come and take our order. We then had to wait for at _ an hour before the food arrived. As we _ already arranged to meet some family friends after our meal, we were late meeting them in _ end because of the slow service at your restaurant.\n\nI suggest that you discuss the issue _ your staff to prevent it happening again.\n\nYours sincerely,\n\nPeter Hamilton",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I went there last Tuesday with my parents, _____ were celebrating their wedding anniversary.",
+        "options": [
+          "who",
+          "whom",
+          "whose",
+          "which"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "who"
+        ],
+        "explanation": "Đại từ quan hệ 'who' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] We have _____ to your restaurant many times before and always enjoyed it.",
+        "options": [
+          "is",
+          "am",
+          "been",
+          "are"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "been"
+        ],
+        "explanation": "Đáp án 'been' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] _____ time, however, there was a problem with the service.",
+        "options": [
+          "Those",
+          "That",
+          "These",
+          "This"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "This"
+        ],
+        "explanation": "Đáp án 'This' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] In spite _____ that, it took a long time for anyone to come and take our order.",
+        "options": [
+          "on",
+          "in",
+          "of",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "of"
+        ],
+        "explanation": "Sử dụng giới từ 'of' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] We then had to wait for at _____ an hour before the food arrived.",
+        "options": [
+          "many",
+          "much",
+          "least",
+          "more"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "least"
+        ],
+        "explanation": "'least' là lượng từ phù hợp với sắc thái định lượng hoặc cấu trúc so sánh trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] As we _____ already arranged to meet some family friends after our meal, we were late meeting them in the end because of the slow service at your restaurant.",
+        "options": [
+          "have",
+          "had",
+          "has",
+          "having"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "had"
+        ],
+        "explanation": "Đáp án 'had' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] As we had already arranged to meet some family friends after our meal, we were late meeting them in _____ end because of the slow service at your restaurant.",
+        "options": [
+          "an",
+          "a",
+          "the",
+          "some"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "the"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'the' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] I suggest that you discuss the issue _____ your staff to prevent it happening again.",
+        "options": [
+          "with",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "with"
+        ],
+        "explanation": "Sử dụng giới từ 'with' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "title": "Becoming more active",
+    "level": "A2",
+    "timeLimit": 480,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [8]:\n\nLast year, I decided that I wasn’t active enough. I was spending too long sitting in [1] of a screen every day and I wasn’t getting as [2] exercise as I needed. So I decided that I would feel a lot better [3] I actually started doing some kind [4] sport. But to be honest, I’m not really into team games. [5] I needed was an outdoor hobby that I could do on my own. Then a friend said I should have a go at mountain-biking, and [6] first time I tried it, I absolutely loved it. There’s a beautiful forest about 5 kilometres [7] my home which is really popular with mountain-bikers. These days, I usually go there twice [8] week. Mountain-biking is a great way to stay fit, and it’s great fun, too!",
+    "passage": "Last year, I decided that I wasn’t active enough. I was spending too long sitting in _ of a screen every day and I wasn’t getting as _ exercise as I needed. So I decided that I would feel a lot better _ I actually started doing some kind _ sport. But to be honest, I’m not really into team games. _ I needed was an outdoor hobby that I could do on my own. Then a friend said I should have a go at mountain-biking, and _ first time I tried it, I absolutely loved it. There’s a beautiful forest about 5 kilometres _ my home which is really popular with mountain-bikers. These days, I usually go there twice _ week. Mountain-biking is a great way to stay fit, and it’s great fun, too!",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] I was spending too long sitting in _____ of a screen every day and I wasn’t getting as much exercise as I needed.",
+        "options": [
+          "face",
+          "ahead",
+          "front",
+          "forward"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "front"
+        ],
+        "explanation": "Đáp án 'front' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] I was spending too long sitting in front of a screen every day and I wasn’t getting as _____ exercise as I needed.",
+        "options": [
+          "more",
+          "many",
+          "much",
+          "most"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "much"
+        ],
+        "explanation": "'much' là lượng từ phù hợp với sắc thái định lượng hoặc cấu trúc so sánh trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] So I decided that I would feel a lot better _____ I actually started doing some kind of sport.",
+        "options": [
+          "whether",
+          "if",
+          "unless",
+          "provided"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "if",
+          "when"
+        ],
+        "explanation": "Sử dụng liên từ 'if' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] So I decided that I would feel a lot better if I actually started doing some kind _____ sport.",
+        "options": [
+          "on",
+          "in",
+          "of",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "of"
+        ],
+        "explanation": "Sử dụng giới từ 'of' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] _____ I needed was an outdoor hobby that I could do on my own.",
+        "options": [
+          "Who",
+          "What",
+          "Whom",
+          "Whose"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "What",
+          "All"
+        ],
+        "explanation": "Đáp án 'What' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] Then a friend said I should have a go at mountain-biking, and _____ first time I tried it, I absolutely loved it.",
+        "options": [
+          "a",
+          "the",
+          "an",
+          "some"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "the"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'the' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] There’s a beautiful forest about 5 kilometres _____ my home which is really popular with mountain-bikers.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "from"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "from"
+        ],
+        "explanation": "Sử dụng giới từ 'from' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] These days, I usually go there twice _____ week.",
+        "options": [
+          "an",
+          "a",
+          "the",
+          "some"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "a"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'a' phù hợp với danh từ đếm được/không đếm được theo sau."
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "title": "College careers fair",
+    "level": "A2",
+    "timeLimit": 480,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [8]:\n\nLast week, I went with forty students on my college course to attend a careers fair in the capital city. During the coach journey most of [1] either slept or listened to music, and four hours later we arrived [2] the careers fair. [3] the early departure and long journey it was definitely worth going, as we all found the fair really exciting and interesting. [4] were around sixty education and job stalls, and so much careers information available. I am keen [5] learning as much as possible about business and hope to open [6] own health food company one day, so I also went to a short talk about how [7] start up a business. I returned to college with several brochures [8] are full of facts and helpful advice. If any students are thinking of going to next year’s fair, I would definitely recommend it!",
+    "passage": "Last week, I went with forty students on my college course to attend a careers fair in the capital city. During the coach journey most of _ either slept or listened to music, and four hours later we arrived _ the careers fair. _ the early departure and long journey it was definitely worth going, as we all found the fair really exciting and interesting. _ were around sixty education and job stalls, and so much careers information available. I am keen _ learning as much as possible about business and hope to open _ own health food company one day, so I also went to a short talk about how _ start up a business. I returned to college with several brochures _ are full of facts and helpful advice. If any students are thinking of going to next year’s fair, I would definitely recommend it!",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] During the coach journey most of _____ either slept or listened to music, and four hours later we arrived at the careers fair.",
+        "options": [
+          "him",
+          "me",
+          "you",
+          "us"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "us",
+          "them"
+        ],
+        "explanation": "Đại từ 'us' giữ đúng vai trò ngữ pháp (tân ngữ/sở hữu/phản thân) trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] During the coach journey most of us either slept or listened to music, and four hours later we arrived _____ the careers fair.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "at"
+        ],
+        "explanation": "Sử dụng giới từ 'at' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] _____ the early departure and long journey it was definitely worth going, as we all found the fair really exciting and interesting.",
+        "options": [
+          "Though",
+          "Although",
+          "Despite",
+          "Even though"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "Despite"
+        ],
+        "explanation": "Sử dụng liên từ 'Despite' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] _____ were around sixty education and job stalls, and so much careers information available.",
+        "options": [
+          "It",
+          "There",
+          "Here",
+          "They"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "There"
+        ],
+        "explanation": "Đáp án 'There' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] I am keen _____ learning as much as possible about business and hope to open my own health food company one day, so I also went to a short talk about how to start up a business.",
+        "options": [
+          "to",
+          "in",
+          "at",
+          "on"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "on"
+        ],
+        "explanation": "Sử dụng giới từ 'on' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] I am keen on learning as much as possible about business and hope to open _____ own health food company one day, so I also went to a short talk about how to start up a business.",
+        "options": [
+          "my",
+          "your",
+          "his",
+          "her"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "my"
+        ],
+        "explanation": "Đại từ 'my' giữ đúng vai trò ngữ pháp (tân ngữ/sở hữu/phản thân) trong câu."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] I am keen on learning as much as possible about business and hope to open my own health food company one day, so I also went to a short talk about how _____ start up a business.",
+        "options": [
+          "in",
+          "to",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] I returned to college with several brochures _____ are full of facts and helpful advice.",
+        "options": [
+          "who",
+          "which",
+          "whom",
+          "whose"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "which",
+          "that"
+        ],
+        "explanation": "Đại từ quan hệ 'which' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "title": "Spanish conversation club",
+    "level": "A2",
+    "timeLimit": 360,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [6]:\n\nWe’re a group of people aged 16-25 who meet every week for two hours of chat in Spanish. You don’t have to be able to speak much Spanish: we welcome beginners, too. We talk about anything [1] may interest people, from food people enjoy [2] literature and politics. \n\nWe meet between 4.30 [3] 6.30 p.m. every Tuesday, in a large, comfortable room in the Central Library. The sessions are free, but we do ask people to pay £1 a session for coffee or juice. Staff from the School of Tourism at the University set [4] the group three years ago, but it’s now organised [5] volunteers. The number of members [6] grown a lot during this time. As well as allowing people to practise their Spanish, the club brings people from different backgrounds together in order to enjoy each other’s company.",
+    "passage": "We’re a group of people aged 16-25 who meet every week for two hours of chat in Spanish. You don’t have to be able to speak much Spanish: we welcome beginners, too. We talk about anything _ may interest people, from food people enjoy _ literature and politics. \n\nWe meet between 4.30 _ 6.30 p.m. every Tuesday, in a large, comfortable room in the Central Library. The sessions are free, but we do ask people to pay £1 a session for coffee or juice. Staff from the School of Tourism at the University set _ the group three years ago, but it’s now organised _ volunteers. The number of members _ grown a lot during this time. As well as allowing people to practise their Spanish, the club brings people from different backgrounds together in order to enjoy each other’s company.",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] We talk about anything _____ may interest people, from food people enjoy to literature and politics.",
+        "options": [
+          "whom",
+          "who",
+          "which",
+          "whose"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "which",
+          "that"
+        ],
+        "explanation": "Đại từ quan hệ 'which' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] We talk about anything which may interest people, from food people enjoy _____ literature and politics.",
+        "options": [
+          "to",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] We meet between 4.30 _____ 6.30 p.m. every Tuesday, in a large, comfortable room in the Central Library.",
+        "options": [
+          "or",
+          "but",
+          "and",
+          "so"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "and"
+        ],
+        "explanation": "Đáp án 'and' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] Staff from the School of Tourism at the University set _____ the group three years ago, but it’s now organised by volunteers.",
+        "options": [
+          "on",
+          "in",
+          "up",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "up"
+        ],
+        "explanation": "Đáp án 'up' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Staff from the School of Tourism at the University set up the group three years ago, but it’s now organised _____ volunteers.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "by"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "by"
+        ],
+        "explanation": "Sử dụng giới từ 'by' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] The number of members _____ grown a lot during this time.",
+        "options": [
+          "have",
+          "has",
+          "had",
+          "having"
+        ],
+        "correctAnswer": 1,
+        "answers": [
+          "has"
+        ],
+        "explanation": "Đáp án 'has' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "title": "A rainy day",
+    "level": "A2",
+    "timeLimit": 360,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [6]:\n\nOne summer’s day, my family decided to visit a waterfall in the countryside near our town. As we walked across the fields towards the waterfall, we [1] see it in the distance. It was quite [2] long way, but we got there after about an hour. We sat down near the pool at the bottom of the waterfall to enjoy the picnic that we [3] taken with us. Then we noticed some black clouds in the sky, and some large drops [4] rain fell on us, so we quickly started to collect our things together. Soon the rain began [5] fall heavily. Carrying our bags, we ran as fast as we could, and when we reached the town, we went into the first café we saw. In [6] of our wet clothes, we soon felt better after a delicious drink of hot chocolate!",
+    "passage": "One summer’s day, my family decided to visit a waterfall in the countryside near our town. As we walked across the fields towards the waterfall, we _ see it in the distance. It was quite _ long way, but we got there after about an hour. We sat down near the pool at the bottom of the waterfall to enjoy the picnic that we _ taken with us. Then we noticed some black clouds in the sky, and some large drops _ rain fell on us, so we quickly started to collect our things together. Soon the rain began _ fall heavily. Carrying our bags, we ran as fast as we could, and when we reached the town, we went into the first café we saw. In _ of our wet clothes, we soon felt better after a delicious drink of hot chocolate!",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] As we walked across the fields towards the waterfall, we _____ see it in the distance.",
+        "options": [
+          "will",
+          "can",
+          "could",
+          "would"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "could"
+        ],
+        "explanation": "Đáp án 'could' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] It was quite _____ long way, but we got there after about an hour.",
+        "options": [
+          "some",
+          "an",
+          "the",
+          "a"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "a"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'a' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] We sat down near the pool at the bottom of the waterfall to enjoy the picnic that we _____ taken with us.",
+        "options": [
+          "has",
+          "have",
+          "had",
+          "having"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "had",
+          "'d"
+        ],
+        "explanation": "Đáp án 'had' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] Then we noticed some black clouds in the sky, and some large drops _____ rain fell on us, so we quickly started to collect our things together.",
+        "options": [
+          "on",
+          "in",
+          "of",
+          "at"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "of"
+        ],
+        "explanation": "Sử dụng giới từ 'of' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Soon the rain began _____ fall heavily.",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] In _____ of our wet clothes, we soon felt better after a delicious drink of hot chocolate!",
+        "options": [
+          "view",
+          "despite",
+          "stead",
+          "spite"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "spite"
+        ],
+        "explanation": "Đáp án 'spite' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "title": "How to hold a fun party",
+    "level": "A2",
+    "timeLimit": 480,
+    "description": "Read the following text and choose the correct answer for each gap [1] - [8]:\n\nAre you thinking about holding a party? Then you need [1] make sure it’s lots of fun! Invite plenty [2] people and include a few surprises. For example, if you’re serving food, try ordering ten pizzas [3] are the same flavour but come from different restaurants in your area. Then have a ‘taste test’ and vote on [4] best one. Or [5] about playing games? You could have a video games tournament and offer prizes for the winners. You could also have a singing competition and ask [6] guest to sing a song.\n\nIf your party includes a meal around a table, for each new course, ask your guests to sit next to someone different, in [7] to talk to as many different people [8] possible. Finally, play fun music: your guests might even get up and dance!",
+    "passage": "Are you thinking about holding a party? Then you need _ make sure it’s lots of fun! Invite plenty _ people and include a few surprises. For example, if you’re serving food, try ordering ten pizzas _ are the same flavour but come from different restaurants in your area. Then have a ‘taste test’ and vote on _ best one. Or _ about playing games? You could have a video games tournament and offer prizes for the winners. You could also have a singing competition and ask _ guest to sing a song.\n\nIf your party includes a meal around a table, for each new course, ask your guests to sit next to someone different, in _ to talk to as many different people _ possible. Finally, play fun music: your guests might even get up and dance!",
+    "questions": [
+      {
+        "gapNumber": 1,
+        "content": "[1] Then you need _____ make sure it’s lots of fun!",
+        "options": [
+          "at",
+          "in",
+          "on",
+          "to"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "to"
+        ],
+        "explanation": "Sử dụng giới từ 'to' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 2,
+        "content": "[2] Invite plenty _____ people and include a few surprises.",
+        "options": [
+          "of",
+          "in",
+          "on",
+          "at"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "of"
+        ],
+        "explanation": "Sử dụng giới từ 'of' là chính xác nhất theo quy tắc ngữ pháp hoặc ngữ cảnh/cụm từ đi kèm trong câu."
+      },
+      {
+        "gapNumber": 3,
+        "content": "[3] For example, if you’re serving food, try ordering ten pizzas _____ are the same flavour but come from different restaurants in your area.",
+        "options": [
+          "those",
+          "this",
+          "these",
+          "that"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "that",
+          "which"
+        ],
+        "explanation": "Đại từ quan hệ 'that' được dùng để liên kết mệnh đề và thay thế cho danh từ đứng trước."
+      },
+      {
+        "gapNumber": 4,
+        "content": "[4] Then have a ‘taste test’ and vote on _____ best one.",
+        "options": [
+          "some",
+          "a",
+          "an",
+          "the"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "the"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'the' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 5,
+        "content": "[5] Or _____ about playing games?",
+        "options": [
+          "how",
+          "which",
+          "where",
+          "in"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "how",
+          "what"
+        ],
+        "explanation": "Đáp án 'how' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 6,
+        "content": "[6] You could also have a singing competition and ask _____ guest to sing a song.",
+        "options": [
+          "either",
+          "all",
+          "both",
+          "every"
+        ],
+        "correctAnswer": 3,
+        "answers": [
+          "every",
+          "each"
+        ],
+        "explanation": "Dùng từ xác định/mạo từ 'every' phù hợp với danh từ đếm được/không đếm được theo sau."
+      },
+      {
+        "gapNumber": 7,
+        "content": "[7] If your party includes a meal around a table, for each new course, ask your guests to sit next to someone different, in _____ to talk to as many different people as possible.",
+        "options": [
+          "order",
+          "view",
+          "case",
+          "aim"
+        ],
+        "correctAnswer": 0,
+        "answers": [
+          "order"
+        ],
+        "explanation": "Đáp án 'order' là từ phù hợp nhất về mặt ngữ pháp và kết hợp từ (collocation) trong ngữ cảnh này."
+      },
+      {
+        "gapNumber": 8,
+        "content": "[8] If your party includes a meal around a table, for each new course, ask your guests to sit next to someone different, in order to talk to as many different people _____ possible.",
+        "options": [
+          "since",
+          "because",
+          "as",
+          "for"
+        ],
+        "correctAnswer": 2,
+        "answers": [
+          "as"
+        ],
+        "explanation": "Sử dụng liên từ 'as' phù hợp với cấu trúc ngữ pháp và ý nghĩa kết nối giữa hai mệnh đề."
+      }
+    ]
+  }
+]

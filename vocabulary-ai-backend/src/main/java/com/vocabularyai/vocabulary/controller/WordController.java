@@ -25,12 +25,37 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/words")
-@RequiredArgsConstructor
+@RequestMapping({"/words", "/api/words"})
 @Tag(name = "User Words", description = "User vocabulary word management")
 public class WordController {
 
     private final WordService wordService;
+    private final com.vocabularyai.payment.service.FeatureUsageService featureUsageService;
+    private final com.vocabularyai.user.service.UserService userService;
+
+    public WordController(WordService wordService,
+                          com.vocabularyai.payment.service.FeatureUsageService featureUsageService,
+                          com.vocabularyai.user.service.UserService userService) {
+        this.wordService = wordService;
+        this.featureUsageService = featureUsageService;
+        this.userService = userService;
+    }
+
+    private Long getCurrentUserIdSafely() {
+        try {
+            org.springframework.security.core.Authentication auth = 
+                org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
+                return null;
+            }
+            if (auth.getPrincipal() instanceof com.vocabularyai.user.entity.User u) {
+                return u.getId();
+            }
+            return userService.getCurrentUserId();
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
 
     /**
      * GET /api/words/{id}
@@ -51,6 +76,16 @@ public class WordController {
         if (word == null) {
             log.warn("User word not found: {}", id);
             return ResponseEntity.notFound().build();
+        }
+
+        if (word.getLevel() != null) {
+            Long userId = getCurrentUserIdSafely();
+            if (!featureUsageService.canAccessWord(userId, String.valueOf(id), word.getLevel())) {
+                throw new com.vocabularyai.common.exception.UpgradeRequiredException(
+                    "CEFR_B1_C1",
+                    "Từ vựng cấp độ " + word.getLevel() + " dành riêng cho tài khoản Premium. Nâng cấp để mở khóa toàn bộ từ vựng."
+                );
+            }
         }
 
         return ResponseEntity.ok(word);

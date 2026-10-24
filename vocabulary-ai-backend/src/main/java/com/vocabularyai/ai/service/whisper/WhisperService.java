@@ -37,11 +37,13 @@ public class WhisperService {
     @Value("${whisper.api-key:}")
     private String apiKey;
     
-    @Value("${whisper.model:whisper-1}")
+    @Value("${whisper.model:tsa/groq/whisper-large-v3}")
     private String model;
     
-    private static final String WHISPER_API_URL = "https://api.openai.com/v1/audio/transcriptions";
-    private static final int MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB - OpenAI limit
+    @Value("${whisper.url:https://api.vilao.ai/v1/audio/transcriptions}")
+    private String apiUrl;
+    
+    private static final int MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB limit
     
     /**
      * Transcribe audio file to text using OpenAI Whisper
@@ -68,7 +70,18 @@ public class WhisperService {
             headers.setContentType(MediaType.MULTIPART_FORM_DATA);
             
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-            body.add("file", audioFile.getResource());
+            
+            // Ensure filename is preserved when uploading
+            String filename = audioFile.getOriginalFilename() != null && !audioFile.getOriginalFilename().isEmpty()
+                ? audioFile.getOriginalFilename()
+                : "audio.mp3";
+            org.springframework.core.io.ByteArrayResource fileResource = new org.springframework.core.io.ByteArrayResource(audioFile.getBytes()) {
+                @Override
+                public String getFilename() {
+                    return filename;
+                }
+            };
+            body.add("file", fileResource);
             body.add("model", model);
             
             if (language != null && !language.isEmpty()) {
@@ -79,9 +92,9 @@ public class WhisperService {
                 new HttpEntity<>(body, headers);
             
             // Call API
-            log.debug("📤 Calling Whisper API: {}", WHISPER_API_URL);
+            log.debug("📤 Calling Whisper API: {}", apiUrl);
             ResponseEntity<String> response = restTemplate.postForEntity(
-                WHISPER_API_URL,
+                apiUrl,
                 request,
                 String.class
             );
@@ -98,6 +111,9 @@ public class WhisperService {
             log.info("✅ Transcription successful: {} characters", transcript.length());
             return transcript;
             
+        } catch (org.springframework.web.client.HttpStatusCodeException e) {
+            log.error("❌ Whisper API HTTP error - status: {}, body: {}", e.getStatusCode(), e.getResponseBodyAsString());
+            throw new RuntimeException("Lỗi từ dịch vụ nhận diện giọng nói: " + e.getStatusCode() + " - " + e.getResponseBodyAsString(), e);
         } catch (Exception e) {
             log.error("❌ Transcription failed:", e);
             throw new RuntimeException("Failed to transcribe audio: " + e.getMessage(), e);
@@ -144,9 +160,9 @@ public class WhisperService {
                 new HttpEntity<>(body, headers);
             
             // Call API
-            log.debug("📤 Calling Whisper API: {}", WHISPER_API_URL);
+            log.debug("📤 Calling Whisper API: {}", apiUrl);
             ResponseEntity<String> response = restTemplate.postForEntity(
-                WHISPER_API_URL,
+                apiUrl,
                 request,
                 String.class
             );
@@ -163,6 +179,9 @@ public class WhisperService {
             log.info("✅ Transcription successful: {} characters", transcript.length());
             return transcript;
             
+        } catch (org.springframework.web.client.HttpStatusCodeException e) {
+            log.error("❌ Whisper API HTTP error from path - status: {}, body: {}", e.getStatusCode(), e.getResponseBodyAsString());
+            throw new RuntimeException("Lỗi từ dịch vụ nhận diện giọng nói: " + e.getStatusCode() + " - " + e.getResponseBodyAsString(), e);
         } catch (Exception e) {
             log.error("❌ Transcription failed:", e);
             throw new RuntimeException("Failed to transcribe audio: " + e.getMessage(), e);

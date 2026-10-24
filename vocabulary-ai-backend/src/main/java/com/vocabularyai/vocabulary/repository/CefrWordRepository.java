@@ -74,7 +74,19 @@ public interface CefrWordRepository extends JpaRepository<CefrWord, String> {
      */
     @Query("SELECT w FROM CefrWord w WHERE " +
            "LOWER(w.lemma) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
-           "LOWER(w.definition) LIKE LOWER(CONCAT('%', :query, '%'))")
+           "LOWER(w.definition) LIKE LOWER(CONCAT('%', :query, '%')) " +
+           "ORDER BY CASE " +
+           "WHEN LOWER(w.lemma) = LOWER(:query) THEN 0 " +
+           "WHEN LOWER(w.lemma) LIKE LOWER(CONCAT(:query, '%')) THEN 1 " +
+           "ELSE 2 END, " +
+           "CASE " +
+           "WHEN w.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.A1 THEN 1 " +
+           "WHEN w.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.A2 THEN 2 " +
+           "WHEN w.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.B1 THEN 3 " +
+           "WHEN w.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.B2 THEN 4 " +
+           "WHEN w.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.C1 THEN 5 " +
+           "ELSE 6 END, " +
+           "LENGTH(w.lemma) ASC, w.lemma ASC")
     Page<CefrWord> searchByLemmaOrDefinition(@Param("query") String query, Pageable pageable);
 
     /**
@@ -85,7 +97,15 @@ public interface CefrWordRepository extends JpaRepository<CefrWord, String> {
      * @return Page of matching words
      */
     @Query("SELECT w FROM CefrWord w WHERE LOWER(w.lemma) LIKE LOWER(CONCAT(:prefix, '%')) " +
-           "ORDER BY w.lemma ASC")
+           "ORDER BY CASE WHEN LOWER(w.lemma) = LOWER(:prefix) THEN 0 ELSE 1 END, " +
+           "CASE " +
+           "WHEN w.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.A1 THEN 1 " +
+           "WHEN w.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.A2 THEN 2 " +
+           "WHEN w.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.B1 THEN 3 " +
+           "WHEN w.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.B2 THEN 4 " +
+           "WHEN w.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.C1 THEN 5 " +
+           "ELSE 6 END, " +
+           "LENGTH(w.lemma) ASC, w.lemma ASC")
     Page<CefrWord> searchByLemmaPrefix(@Param("prefix") String prefix, Pageable pageable);
 
     /**
@@ -128,4 +148,41 @@ public interface CefrWordRepository extends JpaRepository<CefrWord, String> {
     @Query(value = "SELECT * FROM cefr_words WHERE cefr_level = :level ORDER BY RAND() LIMIT 1",
            nativeQuery = true)
     Optional<CefrWord> findRandomByLevel(@Param("level") String level);
+
+    /**
+     * Find random words at specific level (or all levels if level is null/empty)
+     *
+     * @param level CEFR level (optional)
+     * @param limit Number of words to return
+     * @return List of random CefrWord entities
+     */
+    @Query(value = "SELECT * FROM cefr_words WHERE (:level IS NULL OR :level = '' OR cefr_level = :level) ORDER BY RAND() LIMIT :limit",
+           nativeQuery = true)
+    List<CefrWord> findRandomWordsByLevel(@Param("level") String level, @Param("limit") int limit);
+
+    // ==================== AI Vocabulary Studio Audit & Enrichment Queries ====================
+
+    @Query("SELECT COUNT(w) FROM CefrWord w WHERE w.vietnameseMeaning IS NULL OR TRIM(w.vietnameseMeaning) = ''")
+    long countWordsMissingMeaning();
+
+    @Query("SELECT COUNT(w) FROM CefrWord w WHERE w.pronunciation IS NULL OR TRIM(w.pronunciation) = ''")
+    long countWordsMissingPronunciation();
+
+    @Query("SELECT COUNT(w) FROM CefrWord w WHERE w.definition IS NULL OR TRIM(w.definition) = ''")
+    long countWordsMissingDefinition();
+
+    @Query("SELECT COUNT(w) FROM CefrWord w WHERE w.example IS NULL OR TRIM(w.example) = ''")
+    long countWordsMissingExample();
+
+    @Query("SELECT w FROM CefrWord w WHERE w.vietnameseMeaning IS NULL OR TRIM(w.vietnameseMeaning) = '' ORDER BY w.lemma ASC")
+    Page<CefrWord> findWordsMissingMeaning(Pageable pageable);
+
+    @Query("SELECT w FROM CefrWord w WHERE w.pronunciation IS NULL OR TRIM(w.pronunciation) = '' ORDER BY w.lemma ASC")
+    Page<CefrWord> findWordsMissingPronunciation(Pageable pageable);
+
+    @Query("SELECT w FROM CefrWord w WHERE w.definition IS NULL OR TRIM(w.definition) = '' ORDER BY w.lemma ASC")
+    Page<CefrWord> findWordsMissingDefinition(Pageable pageable);
+
+    @Query("SELECT w FROM CefrWord w WHERE w.example IS NULL OR TRIM(w.example) = '' ORDER BY w.lemma ASC")
+    Page<CefrWord> findWordsMissingExample(Pageable pageable);
 }

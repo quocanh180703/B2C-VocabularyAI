@@ -1,4 +1,4 @@
-package com.vocabularyai.auth.dto;
+package com.vocabularyai.auth.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RefreshTokenRequest {
-    
+
     @NotBlank(message = "Refresh token is required")
     private String refreshToken;
 }

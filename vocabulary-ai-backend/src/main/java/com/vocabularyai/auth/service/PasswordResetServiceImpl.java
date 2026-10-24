@@ -1,7 +1,7 @@
-package com.vocabularyai.ai.service.auth;
+package com.vocabularyai.auth.service;
 
-import com.vocabularyai.ai.entity.PasswordResetToken;
-import com.vocabularyai.ai.repository.PasswordResetTokenRepository;
+import com.vocabularyai.auth.entity.PasswordResetToken;
+import com.vocabularyai.auth.repository.PasswordResetTokenRepository;
 import com.vocabularyai.user.entity.User;
 import com.vocabularyai.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

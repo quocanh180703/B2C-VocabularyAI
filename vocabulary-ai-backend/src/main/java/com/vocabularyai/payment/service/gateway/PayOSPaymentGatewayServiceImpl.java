@@ -7,6 +7,7 @@ import com.vocabularyai.payment.exception.PaymentGatewayException;
 import com.vocabularyai.payment.exception.PaymentTimeoutException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,7 +21,10 @@ import org.springframework.web.client.RestTemplate;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * PayOS Payment Gateway Implementation
@@ -43,9 +47,9 @@ public class PayOSPaymentGatewayServiceImpl implements PaymentGatewayService {
     private final RestTemplate restTemplate;
     
     private static final String GATEWAY_NAME = "PayOS";
-    private static final String PAYMENT_LINK_ENDPOINT = "/api/v1/payment-requests";
-    private static final String PAYMENT_STATUS_ENDPOINT = "/api/v1/payment-requests/%s";
-    private static final String CANCEL_PAYMENT_ENDPOINT = "/api/v1/payment-requests/%s/cancel";
+    private static final String PAYMENT_LINK_ENDPOINT = "/v2/payment-requests";
+    private static final String PAYMENT_STATUS_ENDPOINT = "/v2/payment-requests/%s";
+    private static final String CANCEL_PAYMENT_ENDPOINT = "/v2/payment-requests/%s/cancel";
     
     private static final String HMAC_SHA256 = "HmacSHA256";
     
@@ -58,10 +62,53 @@ public class PayOSPaymentGatewayServiceImpl implements PaymentGatewayService {
             return executeWithRetry(() -> {
                 String url = buildUrl(PAYMENT_LINK_ENDPOINT);
                 
-                log.debug("Calling PayOS API: POST {}", url);
+                // PayOS requires numeric orderCode
+                long orderCodeNum;
+                try {
+                    orderCodeNum = Long.parseLong(request.getOrderCode().replaceAll("\\D", ""));
+                } catch (Exception e) {
+                    orderCodeNum = System.currentTimeMillis() % 1000000000L;
+                }
+                
+                long amount = request.getAmount().longValue();
+                String cancelUrl = request.getCancelUrl();
+                String returnUrl = request.getReturnUrl();
+                
+                // PayOS description: max 25 chars, alphanumeric / unaccented
+                String desc = request.getDescription() != null ? request.getDescription() : "Thanh toan VocabAI";
+                desc = removeAccents(desc);
+                if (desc.length() > 25) {
+                    desc = desc.substring(0, 25).trim();
+                }
+                
+                Map<String, Object> bodyMap = new HashMap<>();
+                bodyMap.put("orderCode", orderCodeNum);
+                bodyMap.put("amount", amount);
+                bodyMap.put("description", desc);
+                bodyMap.put("cancelUrl", cancelUrl);
+                bodyMap.put("returnUrl", returnUrl);
+                
+                String checksumKey = paymentProperties.getPayos().getChecksumKey();
+                if (checksumKey != null && !checksumKey.isBlank()) {
+                    String dataToSign = String.format("amount=%d&cancelUrl=%s&description=%s&orderCode=%d&returnUrl=%s",
+                        amount, cancelUrl, desc, orderCodeNum, returnUrl);
+                    String signature = calculateHmacSha256Hex(dataToSign, checksumKey);
+                    bodyMap.put("signature", signature);
+                } else {
+                    log.warn("PayOS Checksum Key is not configured in payment.payos.checksum-key!");
+                }
+                
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                headers.set("x-client-id", paymentProperties.getPayos().getClientId());
+                headers.set("x-api-key", paymentProperties.getPayos().getApiKey());
+                
+                HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(bodyMap, headers);
+                
+                log.debug("Calling PayOS API: POST {} with orderCode: {}", url, orderCodeNum);
                 ResponseEntity<PayOSCreatePaymentLinkResponse> response = restTemplate.postForEntity(
                     url,
-                    request,
+                    httpEntity,
                     PayOSCreatePaymentLinkResponse.class
                 );
                 
@@ -74,9 +121,7 @@ public class PayOSPaymentGatewayServiceImpl implements PaymentGatewayService {
                 PayOSCreatePaymentLinkResponse paymentResponse = response.getBody();
                 if (paymentResponse == null || !paymentResponse.isSuccess()) {
                     String errorDesc = paymentResponse != null ? paymentResponse.getDesc() : "Unknown error";
-                    throw new PaymentGatewayException(
-                        "PayOS API error: " + errorDesc
-                    );
+                    throw new PaymentGatewayException("PayOS API error: " + errorDesc);
                 }
                 
                 log.info("Payment link created successfully for order: {}, checkoutUrl: {}", 
@@ -90,7 +135,7 @@ public class PayOSPaymentGatewayServiceImpl implements PaymentGatewayService {
             throw e;
         } catch (Exception e) {
             log.error("Failed to create payment link for order: {}", request.getOrderCode(), e);
-            throw new PaymentGatewayException("Unexpected error creating payment link", e);
+            throw new PaymentGatewayException("Unexpected error creating payment link: " + e.getMessage(), e);
         }
     }
     
@@ -99,28 +144,20 @@ public class PayOSPaymentGatewayServiceImpl implements PaymentGatewayService {
         try {
             log.debug("Verifying webhook signature for order: {}, transactionCode: {}", orderCode, transactionCode);
             
-            // Reconstruct message: "orderCode=xxx&amount=yyy&reference=zzz"
             String message = String.format("orderCode=%s&amount=%s&reference=%s", 
                 orderCode, amount, transactionCode);
             
-            // Calculate HMAC-SHA256
-            String calculatedSignature;
-            try {
-                calculatedSignature = calculateHmacSha256(
-                    message,
-                    paymentProperties.getPayos().getApiKey()
-                );
-            } catch (Exception e) {
-                log.error("Error calculating HMAC-SHA256 signature", e);
-                throw new PaymentGatewayException("Failed to calculate webhook signature", e);
+            String key = paymentProperties.getPayos().getChecksumKey();
+            if (key == null || key.isBlank()) {
+                key = paymentProperties.getPayos().getApiKey();
             }
             
-            // Compare signatures
-            boolean isValid = calculatedSignature.equals(signature);
+            String calculatedSignatureHex = calculateHmacSha256Hex(message, key);
+            boolean isValid = calculatedSignatureHex.equalsIgnoreCase(signature);
             
             if (!isValid) {
                 log.warn("Webhook signature mismatch for order: {}", orderCode);
-                log.debug("Expected: {}, Received: {}", calculatedSignature, signature);
+                log.debug("Expected: {}, Received: {}", calculatedSignatureHex, signature);
                 throw new InvalidSignatureException(
                     "Webhook signature verification failed for order: " + orderCode
                 );
@@ -270,24 +307,46 @@ public class PayOSPaymentGatewayServiceImpl implements PaymentGatewayService {
     }
     
     /**
-     * Calculate HMAC-SHA256 signature
+     * Remove Vietnamese accents and special characters
+     */
+    private String removeAccents(String text) {
+        if (text == null) return "";
+        String normalized = Normalizer.normalize(text, Normalizer.Form.NFD);
+        return normalized.replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+                         .replaceAll("đ", "d")
+                         .replaceAll("Đ", "D")
+                         .replaceAll("[^a-zA-Z0-9 ]", " ")
+                         .trim();
+    }
+
+    /**
+     * Convert byte array to lowercase hex string
+     */
+    private String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder(bytes.length * 2);
+        for (byte b : bytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Calculate HMAC-SHA256 signature in lowercase HEX format (required by PayOS)
      * 
      * @param message Message to sign
-     * @param key Secret key
-     * @return Base64-encoded signature
+     * @param key Secret key (Checksum Key)
+     * @return Hex-encoded signature
      */
-    private String calculateHmacSha256(String message, String key) throws Exception {
+    private String calculateHmacSha256Hex(String message, String key) throws Exception {
         Mac mac = Mac.getInstance(HMAC_SHA256);
         SecretKeySpec secretKey = new SecretKeySpec(
             key.getBytes(StandardCharsets.UTF_8),
-            0,
-            key.length(),
             HMAC_SHA256
         );
         mac.init(secretKey);
         
         byte[] signedBytes = mac.doFinal(message.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(signedBytes);
+        return bytesToHex(signedBytes);
     }
     
     /**
@@ -371,12 +430,8 @@ public class PayOSPaymentGatewayServiceImpl implements PaymentGatewayService {
                 // Re-throw payment exceptions as-is
                 throw e;
             } catch (Exception e) {
-                // Catch any other exceptions from operation.execute()
-                lastException = new PaymentGatewayException("Unexpected error: " + e.getMessage(), e);
-                
-                if (attempt >= maxAttempts) {
-                    throw lastException;
-                }
+                log.error("PayOS operation unexpected error on attempt {}: {}", attempt, e.getMessage(), e);
+                throw new PaymentGatewayException("Unexpected error: " + e.getMessage(), e);
             }
         }
         
@@ -390,8 +445,14 @@ public class PayOSPaymentGatewayServiceImpl implements PaymentGatewayService {
      */
     private String buildUrl(String endpoint) {
         String baseUrl = paymentProperties.getPayos().getBaseUrl();
-        if (!baseUrl.endsWith("/")) {
-            baseUrl += "/";
+        if (baseUrl == null || baseUrl.isBlank()) {
+            baseUrl = "https://api-merchant.payos.vn";
+        }
+        if (baseUrl.endsWith("/")) {
+            baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
+        }
+        if (!endpoint.startsWith("/")) {
+            endpoint = "/" + endpoint;
         }
         return baseUrl + endpoint;
     }

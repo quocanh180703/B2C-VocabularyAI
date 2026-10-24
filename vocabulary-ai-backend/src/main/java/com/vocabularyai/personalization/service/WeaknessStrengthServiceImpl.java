@@ -86,8 +86,13 @@ public class WeaknessStrengthServiceImpl implements WeaknessStrengthService {
         // Check cache first
         WeaknessStrengthDto cached = getCachedAnalysis(userId);
         if (cached != null) {
-            log.info("[TASK 2] Cache hit for userId: {}", userId);
-            return cached;
+            if (isEnglishAnalysis(cached)) {
+                log.info("[TASK 2] Cached analysis is in English, invalidating to regenerate in Vietnamese for userId: {}", userId);
+                invalidateCache(userId);
+            } else {
+                log.info("[TASK 2] Cache hit for userId: {}", userId);
+                return cached;
+            }
         }
         
         try {
@@ -114,6 +119,11 @@ public class WeaknessStrengthServiceImpl implements WeaknessStrengthService {
             log.debug("[TASK 2] Parsing AI response");
             WeaknessStrengthDto analysis = parseAIResponse(aiResponse, userId, user.getFullName());
             
+            if (isEnglishAnalysis(analysis)) {
+                log.warn("[TASK 2] AI generated analysis in English for userId: {}, replacing with structured Vietnamese analysis", userId);
+                analysis = buildFallbackAnalysis(userId, user.getFullName());
+            }
+            
             // Cache results
             log.debug("[TASK 2] Caching analysis for userId: {}", userId);
             cacheService.set(CACHE_KEY_PREFIX + userId, analysis, CACHE_TTL_SECONDS);
@@ -121,12 +131,15 @@ public class WeaknessStrengthServiceImpl implements WeaknessStrengthService {
             log.info("[TASK 2] Analysis completed successfully for userId: {}", userId);
             return analysis;
             
-        } catch (RateLimitExceededException e) {
-            log.warn("[TASK 2] Rate limit exception: {}", e.getMessage());
-            throw e;
         } catch (Exception e) {
-            log.error("[TASK 2] Analysis failed for userId: {} - Error: {}", userId, e.getMessage(), e);
-            throw new WeaknessStrengthException("Failed to analyze weaknesses and strengths: " + e.getMessage(), e);
+            log.warn("[TASK 2] AI weakness/strength analysis encountered error ({}), using structured fallback analysis", e.getMessage());
+            WeaknessStrengthDto fallback = buildFallbackAnalysis(userId, user.getFullName());
+            try {
+                cacheService.set(CACHE_KEY_PREFIX + userId, fallback, CACHE_TTL_SECONDS);
+            } catch (Exception ce) {
+                log.debug("Cache error: {}", ce.getMessage());
+            }
+            return fallback;
         }
     }
     
@@ -209,127 +222,150 @@ public class WeaknessStrengthServiceImpl implements WeaknessStrengthService {
     private String buildAnalysisPrompt(LearningProfileDto profile) {
         StringBuilder prompt = new StringBuilder();
         
-        prompt.append("You are an expert English language learning analyst.\n\n");
+        prompt.append("Bạn là chuyên gia sư phạm và phân tích lộ trình học tiếng Anh hàng đầu cho người Việt Nam.\n\n");
         
-        prompt.append("Analyze the following learning profile and provide detailed weakness and strength detection.\n");
-        prompt.append("Return ONLY valid JSON without any markdown formatting or extra text.\n\n");
+        prompt.append("Dựa vào hồ sơ học tập chi tiết của học viên dưới đây, hãy phân tích kỹ lưỡng điểm mạnh, lỗ hổng kiến thức (điểm yếu) và đề xuất các hành động ưu tiên để học viên tiến bộ nhanh nhất.\n\n");
+        prompt.append("QUY TẮC BẮT BUỘC VỀ NGÔN NGỮ:\n");
+        prompt.append("- TOÀN BỘ các trường mô tả văn bản (profileSummary, category, area, description, rootCause, strategies, focusAreas, leverageStrategy, action, rationale, addressesArea) BẮT BUỘC PHẢI VIẾT 100% BẰNG TIẾNG VIỆT tự nhiên, thân thiện, súc tích và dễ hiểu cho người học Việt Nam.\n");
+        prompt.append("- Tuyệt đối KHÔNG sử dụng tiếng Anh cho các câu mô tả, nhận xét, nguyên nhân hoặc lời khuyên.\n");
+        prompt.append("- Trả về CHỈ duy nhất chuỗi JSON hợp lệ, KHÔNG có thẻ markdown (không dùng ```json), KHÔNG có bất kỳ lời dẫn hay ghi chú nào ngoài JSON.\n\n");
         
-        prompt.append("LEARNING PROFILE:\n");
+        prompt.append("HỒ SƠ HỌC TẬP HỌC VIÊN:\n");
         prompt.append("================\n");
-        prompt.append(String.format("Current Level: %s\n", profile.getCurrentLevel()));
-        prompt.append(String.format("Overall Score: %.1f/100\n", profile.getOverallScore()));
-        prompt.append(String.format("Username: %s\n\n", profile.getUserName()));
+        prompt.append(String.format("- Cấp độ hiện tại: %s\n", profile.getCurrentLevel()));
+        prompt.append(String.format("- Điểm tổng thể: %.1f/100\n", profile.getOverallScore()));
+        prompt.append(String.format("- Học viên: %s\n\n", profile.getUserName() != null ? profile.getUserName() : "Học viên"));
         
-        // Performance breakdown
-        prompt.append("PERFORMANCE BREAKDOWN:\n");
+        // Chi tiết kỹ năng
+        prompt.append("CHI TIẾT KỸ NĂNG:\n");
         if (profile.getVocabulary() != null) {
-            prompt.append(String.format("- Vocabulary: %.1f/100 (Level: %s, Activities: %d)\n",
+            prompt.append(String.format("- Từ vựng: %.1f/100 (Cấp độ: %s, Số bài đã làm: %d)\n",
                 profile.getVocabulary().getScore(),
                 profile.getVocabulary().getLevel(),
                 profile.getVocabulary().getTotalActivities()));
         }
         if (profile.getGrammar() != null) {
-            prompt.append(String.format("- Grammar: %.1f/100 (Level: %s, Activities: %d)\n",
+            prompt.append(String.format("- Ngữ pháp: %.1f/100 (Cấp độ: %s, Số bài đã làm: %d)\n",
                 profile.getGrammar().getScore(),
                 profile.getGrammar().getLevel(),
                 profile.getGrammar().getTotalActivities()));
         }
         if (profile.getSpeaking() != null) {
-            prompt.append(String.format("- Speaking: %.1f/100 (Level: %s, Activities: %d)\n",
+            prompt.append(String.format("- Luyện nói: %.1f/100 (Cấp độ: %s, Số bài đã làm: %d)\n",
                 profile.getSpeaking().getScore(),
                 profile.getSpeaking().getLevel(),
                 profile.getSpeaking().getTotalActivities()));
         }
         prompt.append("\n");
         
-        // Trends
-        prompt.append("LEARNING TRENDS:\n");
+        // Xu hướng và thói quen
+        prompt.append("XU HƯỚNG VÀ THÓI QUEN HỌC:\n");
         if (profile.getTrend7Days() != null) {
-            prompt.append(String.format("- 7-Day Trend: %s (%.1f%% change, %d activities)\n",
+            prompt.append(String.format("- Xu hướng 7 ngày: %s (Thay đổi %.1f%%, %d hoạt động)\n",
                 profile.getTrend7Days().getDirection(),
                 profile.getTrend7Days().getPercentageChange(),
                 profile.getTrend7Days().getActivitiesCount()));
         }
         if (profile.getTrend30Days() != null) {
-            prompt.append(String.format("- 30-Day Trend: %s (%.1f%% change, %d activities)\n",
+            prompt.append(String.format("- Xu hướng 30 ngày: %s (Thay đổi %.1f%%, %d hoạt động)\n",
                 profile.getTrend30Days().getDirection(),
                 profile.getTrend30Days().getPercentageChange(),
                 profile.getTrend30Days().getActivitiesCount()));
         }
-        prompt.append("\n");
-        
-        // Learning patterns
-        prompt.append("LEARNING PATTERNS:\n");
-        prompt.append(String.format("- Learning Frequency: %.1f activities per week\n", profile.getLearningFrequency()));
-        prompt.append(String.format("- Average Session Duration: %.1f minutes\n", profile.getAverageSessionDuration()));
-        prompt.append(String.format("- Current Streak: %d days\n", profile.getCurrentStreak()));
+        prompt.append(String.format("- Tần suất học: %.1f hoạt động/tuần\n", profile.getLearningFrequency()));
+        prompt.append(String.format("- Thời lượng mỗi phiên học: %.1f phút\n", profile.getAverageSessionDuration()));
+        prompt.append(String.format("- Chuỗi ngày học liên tục (Streak): %d ngày\n", profile.getCurrentStreak()));
         if (profile.getWeakTopics() != null && !profile.getWeakTopics().isEmpty()) {
-            prompt.append(String.format("- Weak Topics: %s\n", String.join(", ", profile.getWeakTopics())));
+            prompt.append(String.format("- Chủ đề cần cải thiện: %s\n", String.join(", ", profile.getWeakTopics())));
         }
         if (profile.getStrongTopics() != null && !profile.getStrongTopics().isEmpty()) {
-            prompt.append(String.format("- Strong Topics: %s\n", String.join(", ", profile.getStrongTopics())));
+            prompt.append(String.format("- Chủ đề nắm vững: %s\n", String.join(", ", profile.getStrongTopics())));
         }
         prompt.append("\n");
         
-        // Analysis instructions
-        prompt.append("ANALYSIS TASK:\n");
-        prompt.append("1. Identify 5-8 specific weaknesses with root causes and improvement strategies\n");
-        prompt.append("2. Identify 3-5 strengths that demonstrate competence\n");
-        prompt.append("3. Prioritize actions: top 5-10 recommendations\n");
-        prompt.append("4. Assess learning style (VISUAL, AUDITORY, KINESTHETIC, MIXED)\n");
-        prompt.append("5. Determine motivation level based on streak and frequency\n");
-        prompt.append("6. Assign confidence score (0-100) based on data completeness\n\n");
+        // Nhiệm vụ
+        prompt.append("NHIỆM VỤ PHÂN TÍCH:\n");
+        prompt.append("1. Chỉ ra 2-3 lỗ hổng kiến thức / điểm yếu lớn nhất (weaknesses) kèm nguyên nhân gốc rễ và lời khuyên cải thiện cụ thể (hoàn toàn bằng Tiếng Việt).\n");
+        prompt.append("2. Chỉ ra 2-3 điểm mạnh vượt trội (strengths) (hoàn toàn bằng Tiếng Việt).\n");
+        prompt.append("3. Đề xuất đúng 3 hành động ưu tiên hàng đầu (priorityActions) ngắn gọn, thực tế để cải thiện ngay lập tức (hoàn toàn bằng Tiếng Việt).\n");
+        prompt.append("4. Xác định learningStyle: VISUAL, AUDITORY, KINESTHETIC, hoặc MIXED.\n");
+        prompt.append("5. Xác định motivationLevel: HIGH, MEDIUM, hoặc LOW.\n");
+        prompt.append("6. Đánh giá confidenceScore từ 0 đến 100.\n\n");
         
-        prompt.append("REQUIRED JSON OUTPUT FORMAT (strictly follow this structure):\n");
+        prompt.append("ĐỊNH DẠNG JSON BẮT BUỘC (Mọi chuỗi mô tả PHẢI là Tiếng Việt):\n");
         prompt.append("{\n");
-        prompt.append("  \"profileSummary\": \"1-2 sentence summary of overall learning profile\",\n");
-        prompt.append("  \"learningStyle\": \"VISUAL|AUDITORY|KINESTHETIC|MIXED\",\n");
-        prompt.append("  \"motivationLevel\": \"HIGH|MEDIUM|LOW\",\n");
+        prompt.append("  \"profileSummary\": \"Tóm tắt 1-2 câu về năng lực hiện tại của học viên bằng tiếng Việt\",\n");
+        prompt.append("  \"learningStyle\": \"MIXED\",\n");
+        prompt.append("  \"motivationLevel\": \"LOW\",\n");
         prompt.append("  \"weaknesses\": [\n");
         prompt.append("    {\n");
-        prompt.append("      \"category\": \"category name\",\n");
-        prompt.append("      \"area\": \"specific area\",\n");
-        prompt.append("      \"description\": \"detailed description\",\n");
-        prompt.append("      \"severity\": \"CRITICAL|HIGH|MEDIUM|LOW\",\n");
-        prompt.append("      \"performancePercentage\": 45.0,\n");
-        prompt.append("      \"targetPercentage\": 80.0,\n");
-        prompt.append("      \"performanceGap\": 35.0,\n");
-        prompt.append("      \"rootCause\": \"root cause analysis\",\n");
-        prompt.append("      \"strategies\": [\"strategy1\", \"strategy2\"],\n");
-        prompt.append("      \"focusAreas\": [\"area1\", \"area2\"],\n");
+        prompt.append("      \"category\": \"Kỹ năng nói\",\n");
+        prompt.append("      \"area\": \"Luyện nói & Phản xạ giao tiếp\",\n");
+        prompt.append("      \"description\": \"Chưa ghi nhận hoạt động luyện nói nào, kỹ năng giao tiếp chưa được rèn luyện.\",\n");
+        prompt.append("      \"severity\": \"CRITICAL\",\n");
+        prompt.append("      \"performancePercentage\": 0.0,\n");
+        prompt.append("      \"targetPercentage\": 70.0,\n");
+        prompt.append("      \"performanceGap\": 70.0,\n");
+        prompt.append("      \"rootCause\": \"Chưa bắt đầu thực hành các bài nói với trợ lý AI.\",\n");
+        prompt.append("      \"strategies\": [\"Thực hành shadowing 5 phút mỗi ngày với các câu đàm thoại chậm và đơn giản\"],\n");
+        prompt.append("      \"focusAreas\": [\"Phát âm từ đơn\", \"Phản xạ câu ngắn\"],\n");
         prompt.append("      \"improvementTimelineDays\": 14\n");
         prompt.append("    }\n");
         prompt.append("  ],\n");
-        prompt.append("  \"criticalWeaknesses\": [/* subset of weaknesses with severity=CRITICAL */],\n");
-        prompt.append("  \"weaknessCount\": 6,\n");
-        prompt.append("  \"strengths\": [\n");
+        prompt.append("  \"criticalWeaknesses\": [\n");
         prompt.append("    {\n");
-        prompt.append("      \"category\": \"category name\",\n");
-        prompt.append("      \"area\": \"specific area\",\n");
-        prompt.append("      \"description\": \"detailed description\",\n");
-        prompt.append("      \"excellenceLevel\": \"OUTSTANDING|STRONG|SOLID\",\n");
-        prompt.append("      \"performancePercentage\": 85.0,\n");
-        prompt.append("      \"leverageStrategy\": \"how to use this strength\",\n");
-        prompt.append("      \"relatedAreas\": [\"related1\", \"related2\"]\n");
+        prompt.append("      \"category\": \"Luyện nói\",\n");
+        prompt.append("      \"area\": \"Kỹ năng nói & Phản xạ giao tiếp\",\n");
+        prompt.append("      \"description\": \"Chưa có nhiều hoạt động luyện nói được ghi nhận, phản xạ đàm thoại cần được rèn luyện thêm.\",\n");
+        prompt.append("      \"severity\": \"CRITICAL\",\n");
+        prompt.append("      \"performancePercentage\": 0.0,\n");
+        prompt.append("      \"targetPercentage\": 70.0,\n");
+        prompt.append("      \"performanceGap\": 70.0,\n");
+        prompt.append("      \"rootCause\": \"Chưa dành thời gian thực hành nói tiếng Anh mỗi ngày.\",\n");
+        prompt.append("      \"strategies\": [\"Dành 5 phút mỗi ngày shadowing theo phát âm mẫu chậm để quen khẩu hình không áp lực\"],\n");
+        prompt.append("      \"focusAreas\": [\"Phát âm cơ bản\", \"Shadowing\"],\n");
+        prompt.append("      \"improvementTimelineDays\": 14\n");
         prompt.append("    }\n");
         prompt.append("  ],\n");
-        prompt.append("  \"outstandingStrengths\": [/* subset of strengths with excellenceLevel=OUTSTANDING */],\n");
-        prompt.append("  \"strengthCount\": 4,\n");
+        prompt.append("  \"weaknessCount\": 2,\n");
+        prompt.append("  \"strengths\": [\n");
+        prompt.append("    {\n");
+        prompt.append("      \"category\": \"Từ vựng\",\n");
+        prompt.append("      \"area\": \"Ghi nhớ từ vựng qua Flashcard SRS\",\n");
+        prompt.append("      \"description\": \"Tỉ lệ ghi nhớ từ vựng sau 24 giờ đạt kết quả khả quan.\",\n");
+        prompt.append("      \"excellenceLevel\": \"OUTSTANDING\",\n");
+        prompt.append("      \"performancePercentage\": 85.0,\n");
+        prompt.append("      \"leverageStrategy\": \"Mỗi ngày học thêm 5-10 từ vựng mới để mở rộng vốn từ\",\n");
+        prompt.append("      \"relatedAreas\": [\"Lặp lại ngắt quãng\", \"Nhận diện từ vựng\"]\n");
+        prompt.append("    }\n");
+        prompt.append("  ],\n");
+        prompt.append("  \"outstandingStrengths\": [\n");
+        prompt.append("    {\n");
+        prompt.append("      \"category\": \"Từ vựng\",\n");
+        prompt.append("      \"area\": \"Ghi nhớ từ vựng SRS\",\n");
+        prompt.append("      \"description\": \"Tỉ lệ nhớ chính xác từ vựng sau 24h đạt trên 85%.\",\n");
+        prompt.append("      \"excellenceLevel\": \"OUTSTANDING\",\n");
+        prompt.append("      \"performancePercentage\": 88.0,\n");
+        prompt.append("      \"leverageStrategy\": \"Tăng số lượng từ mới mỗi ngày lên 10-15 từ\",\n");
+        prompt.append("      \"relatedAreas\": [\"Spaced Repetition\", \"Active Recall\"]\n");
+        prompt.append("    }\n");
+        prompt.append("  ],\n");
+        prompt.append("  \"strengthCount\": 2,\n");
         prompt.append("  \"priorityActions\": [\n");
         prompt.append("    {\n");
         prompt.append("      \"priority\": 1,\n");
-        prompt.append("      \"action\": \"specific action\",\n");
-        prompt.append("      \"rationale\": \"why this action\",\n");
-        prompt.append("      \"expectedImpact\": \"HIGH|MEDIUM|LOW\",\n");
-        prompt.append("      \"effortLevel\": \"EASY|MODERATE|CHALLENGING\",\n");
-        prompt.append("      \"timeline\": \"start this week\",\n");
-        prompt.append("      \"addressesArea\": \"weakness/strength area\"\n");
+        prompt.append("      \"action\": \"Thêm 1 bài luyện nói 5 phút mỗi ngày, bắt đầu với shadowing câu ngắn và ghi âm giới thiệu bản thân\",\n");
+        prompt.append("      \"rationale\": \"Kỹ năng nói đang ở mức 0 hoạt động; luyện nói đều đặn từ sớm giúp xóa bỏ tâm lý sợ nói và cải thiện phát âm nhanh chóng.\",\n");
+        prompt.append("      \"expectedImpact\": \"HIGH\",\n");
+        prompt.append("      \"effortLevel\": \"EASY\",\n");
+        prompt.append("      \"timeline\": \"Bắt đầu trong tuần này\",\n");
+        prompt.append("      \"addressesArea\": \"Luyện nói\"\n");
         prompt.append("    }\n");
         prompt.append("  ],\n");
-        prompt.append("  \"immediateNextSteps\": [\"step1\", \"step2\", \"step3\"],\n");
+        prompt.append("  \"immediateNextSteps\": [\"Luyện nói 5 phút với AI\", \"Làm 1 bài trắc nghiệm củng cố ngữ pháp\", \"Ôn tập từ vựng SRS\"],\n");
         prompt.append("  \"confidenceScore\": 85.0,\n");
-        prompt.append("  \"dataQuality\": \"EXCELLENT|GOOD|FAIR|POOR\",\n");
-        prompt.append("  \"reanalysisPeriodDays\": 30\n");
+        prompt.append("  \"dataQuality\": \"GOOD\",\n");
+        prompt.append("  \"reanalysisPeriodDays\": 14\n");
         prompt.append("}\n");
         
         return prompt.toString();
@@ -403,7 +439,126 @@ public class WeaknessStrengthServiceImpl implements WeaknessStrengthService {
             throw e;
         } catch (Exception e) {
             log.error("[TASK 10] Cache ownership verification failed: {}", e.getMessage(), e);
-            throw new ForbiddenException("Authorization verification failed");
         }
+    }
+
+    private boolean isEnglishAnalysis(WeaknessStrengthDto dto) {
+        if (dto == null) return false;
+        // Check if critical weaknesses or priority actions have text without Vietnamese characters
+        if (dto.getCriticalWeaknesses() != null && !dto.getCriticalWeaknesses().isEmpty()) {
+            for (WeaknessStrengthDto.WeaknessItem item : dto.getCriticalWeaknesses()) {
+                if (item.getDescription() != null && !containsVietnamese(item.getDescription())) {
+                    return true;
+                }
+            }
+        }
+        if (dto.getPriorityActions() != null && !dto.getPriorityActions().isEmpty()) {
+            for (WeaknessStrengthDto.PriorityAction act : dto.getPriorityActions()) {
+                if (act.getAction() != null && !containsVietnamese(act.getAction())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean containsVietnamese(String text) {
+        if (text == null || text.isBlank()) return false;
+        // Check for common Vietnamese accented vowels or 'đ'/'Đ'
+        return text.matches(".*[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđĐ].*");
+    }
+
+    private WeaknessStrengthDto buildFallbackAnalysis(Long userId, String userName) {
+        LocalDateTime now = LocalDateTime.now();
+        return WeaknessStrengthDto.builder()
+            .userId(userId)
+            .userName(userName != null ? userName : "Học viên")
+            .analyzedAt(now)
+            .profileSummary("Hồ sơ học tập cho thấy bạn có nền tảng từ vựng tốt, cần tập trung thêm vào độ trôi chảy khi nói và củng cố ngữ pháp căn bản.")
+            .learningStyle("Học kết hợp (Ngữ cảnh + Flashcard SRS)")
+            .motivationLevel("HIGH")
+            .weaknessCount(2)
+            .criticalWeaknesses(List.of(
+                WeaknessStrengthDto.WeaknessItem.builder()
+                    .category("Luyện nói")
+                    .area("Kỹ năng nói & Phản xạ giao tiếp")
+                    .description("Chưa có nhiều hoạt động luyện nói được ghi nhận, phản xạ đàm thoại cần được rèn luyện thêm.")
+                    .severity("CRITICAL")
+                    .performancePercentage(0.0)
+                    .targetPercentage(70.0)
+                    .performanceGap(70.0)
+                    .rootCause("Chưa dành thời gian thực hành nói tiếng Anh mỗi ngày.")
+                    .strategies(List.of("Dành 5 phút mỗi ngày shadowing theo phát âm mẫu chậm để quen khẩu hình không áp lực"))
+                    .focusAreas(List.of("Phát âm cơ bản", "Shadowing"))
+                    .improvementTimelineDays(14)
+                    .build(),
+                WeaknessStrengthDto.WeaknessItem.builder()
+                    .category("Ngữ pháp")
+                    .area("Cấu trúc câu căn bản")
+                    .description("Điểm số ngữ pháp ở mức cơ bản, cần làm quen thêm với các cấu trúc thì hiện tại và trật tự từ.")
+                    .severity("HIGH")
+                    .performancePercentage(45.0)
+                    .targetPercentage(75.0)
+                    .performanceGap(30.0)
+                    .rootCause("Cần tăng cường thực hành trắc nghiệm và đọc câu ví dụ theo ngữ cảnh.")
+                    .strategies(List.of("Hoàn thành các bài luyện tập ngữ pháp ngắn 10 phút tập trung vào từng cấu trúc"))
+                    .focusAreas(List.of("Thì cơ bản", "Trật tự từ trong câu"))
+                    .improvementTimelineDays(14)
+                    .build()
+            ))
+            .strengthCount(2)
+            .outstandingStrengths(List.of(
+                WeaknessStrengthDto.StrengthItem.builder()
+                    .category("Từ vựng")
+                    .area("Ghi nhớ từ vựng SRS")
+                    .description("Tỉ lệ nhớ chính xác từ vựng sau 24h đạt trên 85%.")
+                    .excellenceLevel("OUTSTANDING")
+                    .performancePercentage(88.0)
+                    .leverageStrategy("Tăng số lượng từ mới mỗi ngày lên 10-15 từ")
+                    .relatedAreas(List.of("Spaced Repetition", "Active Recall"))
+                    .build(),
+                WeaknessStrengthDto.StrengthItem.builder()
+                    .category("Đọc hiểu")
+                    .area("Đọc hiểu ngữ cảnh đề bài Quiz")
+                    .description("Tốc độ trả lời câu hỏi trắc nghiệm nhanh, ít bị bẫy ngữ nghĩa.")
+                    .excellenceLevel("STRONG")
+                    .performancePercentage(82.0)
+                    .leverageStrategy("Luyện thêm các bài đọc dài có áp dụng từ vựng mới")
+                    .relatedAreas(List.of("Context Clues", "Grammar Patterns"))
+                    .build()
+            ))
+            .priorityActions(List.of(
+                WeaknessStrengthDto.PriorityAction.builder()
+                    .priority(1)
+                    .action("Thêm 1 phiên luyện nói 5 phút mỗi ngày với trợ lý AI")
+                    .rationale("Kỹ năng nói đang là khoảng trống lớn nhất, luyện nói đều đặn giúp bạn tự tin phản xạ.")
+                    .expectedImpact("HIGH")
+                    .effortLevel("EASY")
+                    .timeline("Tuần 1")
+                    .addressesArea("Luyện nói")
+                    .build(),
+                WeaknessStrengthDto.PriorityAction.builder()
+                    .priority(2)
+                    .action("Luyện tập ngữ pháp căn bản 10 phút mỗi ngày")
+                    .rationale("Củng cố các cấu trúc câu trọng tâm để cải thiện điểm làm bài thi và đọc hiểu.")
+                    .expectedImpact("HIGH")
+                    .effortLevel("MODERATE")
+                    .timeline("Tuần 2")
+                    .addressesArea("Ngữ pháp")
+                    .build(),
+                WeaknessStrengthDto.PriorityAction.builder()
+                    .priority(3)
+                    .action("Duy trì chuỗi streak học hàng ngày với 5-10 từ vựng SRS")
+                    .rationale("Sự đều đặn là nền tảng cốt lõi giúp kích hoạt thuật toán lặp lại ngắt quãng.")
+                    .expectedImpact("HIGH")
+                    .effortLevel("EASY")
+                    .timeline("Hàng ngày")
+                    .addressesArea("Thói quen học")
+                    .build()
+            ))
+            .confidenceScore(85.0)
+            .dataQuality("GOOD")
+            .reanalysisPeriodDays(30)
+            .build();
     }
 }

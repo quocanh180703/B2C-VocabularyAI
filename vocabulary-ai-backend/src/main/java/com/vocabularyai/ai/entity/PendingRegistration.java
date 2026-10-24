@@ -1,6 +1,8 @@
 package com.vocabularyai.ai.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.Builder;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -12,9 +14,8 @@ import java.time.LocalDateTime;
     @Index(name = "idx_pending_expires_at", columnList = "expires_at"),
     @Index(name = "idx_pending_created_at", columnList = "created_at")
 })
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @Builder
 public class PendingRegistration {
     @Id
@@ -41,6 +42,20 @@ public class PendingRegistration {
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    public PendingRegistration() {
+    }
+
+    public PendingRegistration(Long id, String email, String username, String fullName, String password, LocalDateTime expiresAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.email = email;
+        this.username = username;
+        this.fullName = fullName;
+        this.password = password;
+        this.expiresAt = expiresAt;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
     @PrePersist
     protected void onCreate() {
