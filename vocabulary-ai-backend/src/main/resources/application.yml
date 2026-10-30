@@ -71,8 +71,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_USERNAME:quocanh220219@gmail.com}
-    password: ${MAIL_PASSWORD:jqbybpgwrydjzuzj}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
     default-encoding: UTF-8
     properties:
       mail:
@@ -188,13 +188,13 @@ jwt:
 # 11. Cloudinary Configuration (Audio Storage)
 # ============================================================
 cloudinary:
-  url: ${CLOUDINARY_URL:cloudinary://347852754341328:ysYZFQwFWNvSR8WgrOyVMcHc8Zk@dzb6rfaxt}
+  url: ${CLOUDINARY_URL:}
 
 # ============================================================
 # 11.5 Gemini Fallback Alias Configuration
 # ============================================================
 gemini:
-  api-key: ${AI_CHAT_API_KEY:sk-4858c9d3176689b889b6a9bc54d391d32502deebc79970b4e4dfb98833e3c68b}
+  api-key: ${AI_CHAT_API_KEY:}
   model: ${AI_CHAT_MODEL:thanhnhan9023/grok-4.6}
 
 # ============================================================
@@ -202,7 +202,7 @@ gemini:
 # ============================================================
 whisper:
   url: ${WHISPER_URL:https://api.vilao.ai/v1/audio/transcriptions}
-  api-key: ${WHISPER_API_KEY:${VILAO_API_KEY:${GROQ_API_KEY:${OPENAI_API_KEY:sk-d580db74021198d80fb8937c563d259f07aec2bece742b46be7980f22443a266}}}}
+  api-key: ${WHISPER_API_KEY:${VILAO_API_KEY:${GROQ_API_KEY:${OPENAI_API_KEY:}}}}
   model: ${WHISPER_MODEL:tsa/groq/whisper-large-v3}
   language: ${WHISPER_LANGUAGE:en}
   timeout-seconds: 30
@@ -213,7 +213,7 @@ whisper:
 # ============================================================
 tts:
   url: ${TTS_URL:https://api.xah.io/v1/audio/speech}
-  api-key: ${TTS_API_KEY:sk-4858c9d3176689b889b6a9bc54d391d32502deebc79970b4e4dfb98833e3c68b}
+  api-key: ${TTS_API_KEY:}
   model: ${TTS_MODEL:namth/grok-voice-latest}
   voice: ${TTS_VOICE:alloy}
   timeout-seconds: 30
@@ -224,7 +224,7 @@ tts:
 ai:
   chat:
     url: ${AI_CHAT_URL:https://api.xah.io/v1/chat/completions}
-    api-key: ${AI_CHAT_API_KEY:sk-4858c9d3176689b889b6a9bc54d391d32502deebc79970b4e4dfb98833e3c68b}
+    api-key: ${AI_CHAT_API_KEY:}
     model: ${AI_CHAT_MODEL:thanhnhan9023/grok-4.6}
   rate-limit:
     daily-tokens: 1000000  # 1M tokens per day
@@ -554,9 +554,9 @@ speaking:
 # ============================================================
 payment:
   payos:
-    api-key: ${PAYOS_API_KEY:ad590596-352a-4922-9e93-27c6c8f57be5}
-    client-id: ${PAYOS_CLIENT_ID:2fac26d7-626f-4123-8f28-193d797605a7}
-    checksum-key: ${PAYOS_CHECKSUM_KEY:2216be65526d4a6d16c88cdbfc2fa21a58c54cef966ed2db679e36fe4138cc4e}
+    api-key: ${PAYOS_API_KEY:}
+    client-id: ${PAYOS_CLIENT_ID:}
+    checksum-key: ${PAYOS_CHECKSUM_KEY:}
     sandbox: ${PAYOS_SANDBOX:true}
     base-url: ${PAYOS_BASE_URL:https://api-merchant.payos.vn}
   # Backend-configured redirect URLs (not from client)
