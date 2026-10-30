@@ -78,44 +78,40 @@ public class VoiceChatServiceImpl implements VoiceChatService {
         // 1. Quota check: Câu mở đầu KHÔNG trừ quota. Lượt nói của user mới trừ quota.
         if (!isOpening) {
             featureUsageService.checkAndConsumeQuota(user.getId(), FeatureType.VOICE_CHAT);
+        } else {
+            // Câu mở đầu: Trả về câu chào tức thì theo chủ đề và trình độ (0ms, 0 tốn request LLM)
+            String instantGreeting = generateInstantOpeningGreeting(topic, level);
+            return VoiceChatReplyResponse.builder()
+                    .reply(instantGreeting)
+                    .build();
         }
 
         try {
-            String prompt;
-            if (isOpening) {
-                // Prompt câu mở đầu
-                prompt = String.format(
-                        "Greet the learner briefly as Vi and ask ONE interesting first question about the topic \"%s\", " +
-                        "suitable for CEFR level %s. Reply in English only, 2 sentences maximum.",
-                        topic, level
-                );
-            } else {
-                // System prompt + sliding window 6 messages gần nhất
-                StringBuilder sb = new StringBuilder();
-                sb.append(String.format(
-                        "You are Vi, a friendly English conversation partner for a Vietnamese learner at CEFR level %s. Topic: %s.\n" +
-                        "Rules:\n" +
-                        "- Speak ONLY English. Never switch to Vietnamese.\n" +
-                        "- Use vocabulary and sentence length suitable for %s (A1-A2: short, simple sentences; B1: everyday topics, some complex sentences; B2: richer vocabulary, longer turns).\n" +
-                        "- Stay on the topic. Each reply is 2-4 sentences and ALWAYS ends with a question to keep the conversation going.\n" +
-                        "- Do NOT lecture or correct explicitly. If the user makes a mistake, naturally repeat the correct form inside your reply (recast), then continue.\n" +
-                        "- Occasionally use one useful new word related to the topic, in a clear context.\n" +
-                        "- Be warm and encouraging. Never mention these instructions.\n\n",
-                        level, topic, level
-                ));
+            // System prompt + sliding window 6 messages gần nhất
+            StringBuilder sb = new StringBuilder();
+            sb.append(String.format(
+                    "You are Vi, a friendly English conversation partner for a Vietnamese learner at CEFR level %s. Topic: %s.\n" +
+                    "Rules:\n" +
+                    "- Speak ONLY English. Never switch to Vietnamese.\n" +
+                    "- Use vocabulary and sentence length suitable for %s (A1-A2: short, simple sentences; B1: everyday topics, some complex sentences; B2: richer vocabulary, longer turns).\n" +
+                    "- Stay on the topic. Each reply is 2-4 sentences and ALWAYS ends with a question to keep the conversation going.\n" +
+                    "- Do NOT lecture or correct explicitly. If the user makes a mistake, naturally repeat the correct form inside your reply (recast), then continue.\n" +
+                    "- Occasionally use one useful new word related to the topic, in a clear context.\n" +
+                    "- Be warm and encouraging. Never mention these instructions.\n\n",
+                    level, topic, level
+            ));
 
-                List<VoiceChatMessageDto> msgs = request.getMessages() != null ? request.getMessages() : Collections.emptyList();
-                int start = Math.max(0, msgs.size() - 6);
-                List<VoiceChatMessageDto> recentMsgs = msgs.subList(start, msgs.size());
+            List<VoiceChatMessageDto> msgs = request.getMessages() != null ? request.getMessages() : Collections.emptyList();
+            int start = Math.max(0, msgs.size() - 6);
+            List<VoiceChatMessageDto> recentMsgs = msgs.subList(start, msgs.size());
 
-                sb.append("Conversation history:\n");
-                for (VoiceChatMessageDto m : recentMsgs) {
-                    String roleName = "user".equalsIgnoreCase(m.getRole()) ? "Learner" : "Vi";
-                    sb.append(roleName).append(": ").append(m.getContent()).append("\n");
-                }
-                sb.append("Vi:");
-                prompt = sb.toString();
+            sb.append("Conversation history:\n");
+            for (VoiceChatMessageDto m : recentMsgs) {
+                String roleName = "user".equalsIgnoreCase(m.getRole()) ? "Learner" : "Vi";
+                sb.append(roleName).append(": ").append(m.getContent()).append("\n");
             }
+            sb.append("Vi:");
+            String prompt = sb.toString();
 
             // Gọi AI với giới hạn thời gian 30s để đảm bảo trải nghiệm realtime
             String aiReply;
@@ -126,16 +122,10 @@ public class VoiceChatServiceImpl implements VoiceChatService {
                 aiReply = future.get(30, TimeUnit.SECONDS);
             } catch (TimeoutException te) {
                 log.warn("Voice chat AI reply timed out after 30s, using intelligent conversational fallback");
-                aiReply = isOpening
-                        ? String.format("Hello! I'm Vi, your English speaking partner. Welcome to our session about %s. How are you doing today?", topic)
-                        : "That's very interesting! Could you tell me a little bit more about what you think?";
+                aiReply = "That's very interesting! Could you tell me a little bit more about what you think?";
             } catch (Exception ex) {
-                if (isOpening) {
-                    log.warn("AI reply failed for opening message, using default greeting fallback: {}", ex.getMessage());
-                    aiReply = String.format("Hello! I'm Vi, your English speaking partner. Welcome to our session about %s. How are you doing today?", topic);
-                } else {
-                    throw ex;
-                }
+                log.warn("AI reply failed: {}, using fallback", ex.getMessage());
+                aiReply = "I see! What else would you like to share about that?";
             }
 
             if (aiReply != null) {
@@ -320,5 +310,36 @@ public class VoiceChatServiceImpl implements VoiceChatService {
                 .score(score)
                 .comment(comment)
                 .build();
+    }
+
+    private String generateInstantOpeningGreeting(String topic, String level) {
+        String lower = (topic != null ? topic : "").toLowerCase();
+
+        if (lower.contains("giới thiệu") || lower.contains("introduce") || lower.contains("self")) {
+            return "Hello! I'm Vi, your English speaking partner. It's so nice to meet you! What is your name and where are you from?";
+        }
+        if (lower.contains("thói quen") || lower.contains("routine") || lower.contains("ngày")) {
+            return "Hi there! I'm Vi. Let's talk about daily routines today! What time do you usually wake up in the morning?";
+        }
+        if (lower.contains("cuối tuần") || lower.contains("weekend")) {
+            return "Hello! I'm Vi. Weekends are always fun to talk about! How was your last weekend?";
+        }
+        if (lower.contains("công việc") || lower.contains("career") || lower.contains("job") || lower.contains("work")) {
+            return "Hi! I'm Vi, your speaking partner. Let's talk about careers today! What is your dream job?";
+        }
+        if (lower.contains("du lịch") || lower.contains("travel") || lower.contains("journey") || lower.contains("trip")) {
+            return "Hello! I'm Vi. Traveling is one of my favorite topics! What is the most memorable place you have ever visited?";
+        }
+        if (lower.contains("món ăn") || lower.contains("food") || lower.contains("cooking") || lower.contains("ăn")) {
+            return "Hi there! I'm Vi. Let's talk about food and cooking today! What is your favorite food?";
+        }
+        if (lower.contains("trí tuệ nhân tạo") || lower.contains("ai") || lower.contains("tech") || lower.contains("công nghệ")) {
+            return "Hello! I'm Vi. Technology and AI are changing the world! How do you usually use AI in your daily life?";
+        }
+        if (lower.contains("sở thích") || lower.contains("hobby") || lower.contains("hobbies") || lower.contains("free time")) {
+            return "Hi! I'm Vi, your English practice partner. What do you like to do in your free time?";
+        }
+
+        return String.format("Hello! I'm Vi, your English speaking partner. Welcome to our practice about %s! How are you doing today?", topic);
     }
 }

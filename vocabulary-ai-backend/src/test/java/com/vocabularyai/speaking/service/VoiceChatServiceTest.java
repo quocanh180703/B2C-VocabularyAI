@@ -90,13 +90,12 @@ class VoiceChatServiceTest {
                 .opening(true)
                 .build();
 
-        when(geminiAIClientService.generateResponse(anyString(), eq(100L)))
-                .thenReturn("Vi: Hello! What hobbies do you enjoy?");
-
         VoiceChatReplyResponse res = voiceChatService.reply(req, testUser);
         assertNotNull(res);
-        assertEquals("Hello! What hobbies do you enjoy?", res.getReply());
+        assertNotNull(res.getReply());
+        assertTrue(res.getReply().contains("Vi"));
         verify(featureUsageService, never()).checkAndConsumeQuota(anyLong(), any());
+        verifyNoInteractions(geminiAIClientService);
     }
 
     @Test
