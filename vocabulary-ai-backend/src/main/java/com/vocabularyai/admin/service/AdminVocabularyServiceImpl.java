@@ -7,7 +7,9 @@ import com.vocabularyai.admin.dto.response.CategoryListResponse;
 import com.vocabularyai.admin.dto.response.VocabularyDetailResponse;
 import com.vocabularyai.admin.dto.response.VocabularyListResponse;
 import com.vocabularyai.admin.repository.AdminVocabularyRepository;
+import com.vocabularyai.vocabulary.entity.CEFRLevel;
 import com.vocabularyai.vocabulary.entity.CefrWord;
+import com.vocabularyai.vocabulary.entity.PartOfSpeech;
 import com.vocabularyai.vocabulary.entity.Word;
 import com.vocabularyai.vocabulary.repository.CefrWordRepository;
 import com.vocabularyai.vocabulary.repository.WordRepository;
@@ -36,57 +38,54 @@ public class AdminVocabularyServiceImpl implements AdminVocabularyService {
     
     @Override
     public Page<VocabularyListResponse> getVocabularyList(Pageable pageable) {
-        log.info("GET /api/admin/vocabulary - Fetching vocabulary list (page={}, size={})",
-            pageable.getPageNumber(), pageable.getPageSize());
-        
-        Page<?> result = repository.getVocabularyList(pageable);
-        
-        List<VocabularyListResponse> content = result.getContent().stream()
-            .map(this::mapToVocabularyListResponse)
-            .collect(Collectors.toList());
-        
-        log.debug("Vocabulary list fetched: {} total", result.getTotalElements());
-        return new PageImpl<>(content, pageable, result.getTotalElements());
+        return getVocabularyFiltered(null, null, null, pageable);
     }
     
     @Override
     public Page<VocabularyListResponse> getVocabularyByLevel(String level, Pageable pageable) {
-        log.info("GET /api/admin/vocabulary - Filtering by level={}", level);
-        
-        Page<?> result = repository.getVocabularyByLevel(level, pageable);
-        
-        List<VocabularyListResponse> content = result.getContent().stream()
-            .map(this::mapToVocabularyListResponse)
-            .collect(Collectors.toList());
-        
-        return new PageImpl<>(content, pageable, result.getTotalElements());
+        return getVocabularyFiltered(null, level, null, pageable);
     }
     
     @Override
     public Page<VocabularyListResponse> searchVocabulary(String searchTerm, Pageable pageable) {
-        log.info("GET /api/admin/vocabulary - Searching: {}", searchTerm);
-        
-        Pageable unsorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
-        Page<?> result = repository.searchVocabulary(searchTerm, unsorted);
-        
-        List<VocabularyListResponse> content = result.getContent().stream()
-            .map(this::mapToVocabularyListResponse)
-            .collect(Collectors.toList());
-        
-        log.debug("Search results: {} matches found", result.getTotalElements());
-        return new PageImpl<>(content, pageable, result.getTotalElements());
+        return getVocabularyFiltered(null, null, searchTerm, pageable);
     }
     
     @Override
     public Page<VocabularyListResponse> getVocabularyByPartOfSpeech(String pos, String level, Pageable pageable) {
-        log.info("GET /api/admin/vocabulary - Filtering by pos={}, level={}", pos, level);
+        return getVocabularyFiltered(pos, level, null, pageable);
+    }
+
+    @Override
+    public Page<VocabularyListResponse> getVocabularyFiltered(String pos, String level, String search, Pageable pageable) {
+        log.info("GET /api/admin/vocabulary - Filtering vocabulary: pos={}, level={}, search={}", pos, level, search);
         
-        Page<?> result = repository.getVocabularyByPartOfSpeech(pos, level, pageable);
+        PartOfSpeech posEnum = null;
+        if (pos != null && !pos.isBlank() && !pos.equalsIgnoreCase("ALL")) {
+            try {
+                posEnum = PartOfSpeech.fromString(pos);
+                if (posEnum == PartOfSpeech.OTHER && !pos.equalsIgnoreCase("OTHER")) {
+                    posEnum = PartOfSpeech.valueOf(pos.toUpperCase());
+                }
+            } catch (Exception e) {
+                log.warn("Invalid partOfSpeech filter: {}", pos);
+            }
+        }
+        
+        CEFRLevel levelEnum = null;
+        if (level != null && !level.isBlank() && !level.equalsIgnoreCase("ALL")) {
+            levelEnum = CEFRLevel.fromString(level);
+        }
+        
+        String cleanSearch = (search != null && !search.isBlank()) ? search.trim() : null;
+        
+        Page<?> result = repository.getVocabularyFiltered(posEnum, levelEnum, cleanSearch, pageable);
         
         List<VocabularyListResponse> content = result.getContent().stream()
             .map(this::mapToVocabularyListResponse)
             .collect(Collectors.toList());
         
+        log.debug("Vocabulary filter results: {} matches found", result.getTotalElements());
         return new PageImpl<>(content, pageable, result.getTotalElements());
     }
     

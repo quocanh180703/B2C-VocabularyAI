@@ -141,25 +141,8 @@ public class AdminVocabularyController {
             
             Pageable pageable = PaginationUtils.createPageable(page, size, sort);
             
-            Page<VocabularyListResponse> result;
-            
-            if (search != null && !search.isBlank()) {
-                // Search by word or definition
-                result = vocabularyService.searchVocabulary(search, pageable);
-                log.debug("Vocabulary searched: {} results", result.getTotalElements());
-            } else if (pos != null && !pos.isBlank() && cefr != null && !cefr.isBlank()) {
-                // Filter by both POS and CEFR level
-                result = vocabularyService.getVocabularyByPartOfSpeech(pos, cefr, pageable);
-                log.debug("Vocabulary filtered by POS and CEFR: {} results", result.getTotalElements());
-            } else if (cefr != null && !cefr.isBlank()) {
-                // Filter by CEFR level only
-                result = vocabularyService.getVocabularyByLevel(cefr, pageable);
-                log.debug("Vocabulary filtered by CEFR level: {} results", result.getTotalElements());
-            } else {
-                // Get all vocabulary
-                result = vocabularyService.getVocabularyList(pageable);
-                log.debug("All vocabulary fetched: {} total", result.getTotalElements());
-            }
+            Page<VocabularyListResponse> result = vocabularyService.getVocabularyFiltered(pos, cefr, search, pageable);
+            log.debug("Vocabulary retrieved: {} results", result.getTotalElements());
             
             return ResponseEntity.ok(
                 ApiResponse.success("Vocabulary list retrieved successfully", result)

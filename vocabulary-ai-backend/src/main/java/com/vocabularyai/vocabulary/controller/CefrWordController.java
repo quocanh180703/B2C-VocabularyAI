@@ -2,7 +2,9 @@ package com.vocabularyai.vocabulary.controller;
 
 import com.vocabularyai.vocabulary.dto.CefrWordResponse;
 import com.vocabularyai.vocabulary.dto.CefrWordSearchRequest;
+import com.vocabularyai.vocabulary.dto.TopicCountResponse;
 import com.vocabularyai.vocabulary.entity.CEFRLevel;
+import com.vocabularyai.vocabulary.entity.WordTopic;
 import com.vocabularyai.vocabulary.service.CefrWordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -198,13 +200,16 @@ public class CefrWordController {
             @Parameter(description = "CEFR level filter (optional)", example = "B2")
             @RequestParam(required = false) CEFRLevel level,
 
+            @Parameter(description = "Topic filter (optional)", example = "WORK")
+            @RequestParam(required = false) WordTopic topic,
+
             @Parameter(description = "Page number", example = "0")
             @RequestParam(defaultValue = "0") int page,
 
             @Parameter(description = "Page size", example = "20")
             @RequestParam(defaultValue = "20") int size
     ) {
-        log.info("GET /cefr-words/search - query: {}, level: {}, page: {}, size: {}", query, level, page, size);
+        log.info("GET /cefr-words/search - query: {}, level: {}, topic: {}, page: {}, size: {}", query, level, topic, page, size);
 
         if (level != null) {
             Long userId = getCurrentUserIdSafely();
@@ -219,12 +224,41 @@ public class CefrWordController {
         CefrWordSearchRequest request = CefrWordSearchRequest.builder()
                 .query(query)
                 .level(level)
+                .topic(topic)
                 .page(page)
                 .size(size)
                 .build();
 
         Page<CefrWordResponse> results = cefrWordService.searchWords(request);
         return ResponseEntity.ok(results);
+    }
+
+    /**
+     * GET /api/cefr-words/topic-counts
+     * 
+     * Get word counts grouped by topic, optionally filtered by level
+     */
+    @GetMapping("/topic-counts")
+    @Operation(summary = "Get topic counts", description = "Get count of words per topic, optionally filtered by CEFR level")
+    @ApiResponse(responseCode = "200", description = "Topic counts retrieved successfully")
+    public ResponseEntity<List<TopicCountResponse>> getTopicCounts(
+            @Parameter(description = "CEFR level filter (optional)", example = "B1")
+            @RequestParam(required = false) CEFRLevel level
+    ) {
+        log.info("GET /cefr-words/topic-counts - level: {}", level);
+
+        if (level != null) {
+            Long userId = getCurrentUserIdSafely();
+            if (!featureUsageService.canAccessCefrLevel(userId, level.name())) {
+                throw new com.vocabularyai.common.exception.UpgradeRequiredException(
+                    "CEFR_B1_C1",
+                    "Cấp độ từ vựng " + level + " chỉ dành cho tài khoản Premium. Vui lòng nâng cấp để mở khóa toàn bộ kho từ vựng."
+                );
+            }
+        }
+
+        List<TopicCountResponse> counts = cefrWordService.getTopicCounts(level);
+        return ResponseEntity.ok(counts);
     }
 
     /**

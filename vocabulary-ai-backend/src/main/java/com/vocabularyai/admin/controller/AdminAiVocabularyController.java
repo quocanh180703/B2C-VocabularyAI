@@ -1,11 +1,7 @@
 package com.vocabularyai.admin.controller;
 
-import com.vocabularyai.admin.dto.request.AiVocabApproveRequest;
-import com.vocabularyai.admin.dto.request.AiVocabBatchGenerateRequest;
-import com.vocabularyai.admin.dto.request.AiVocabGenerateRequest;
-import com.vocabularyai.admin.dto.response.AiGeneratedWordDto;
-import com.vocabularyai.admin.dto.response.AiMissingWordDto;
-import com.vocabularyai.admin.dto.response.AiVocabAuditResponse;
+import com.vocabularyai.admin.dto.request.*;
+import com.vocabularyai.admin.dto.response.*;
 import com.vocabularyai.admin.service.AdminAiVocabularyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,6 +10,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -88,5 +87,119 @@ public class AdminAiVocabularyController {
         response.put("message", "Đã phê duyệt và lưu thành công " + savedCount + " từ vựng vào hệ thống.");
 
         return ResponseEntity.ok(response);
+    }
+
+    // ==================== Topic Classification & Backfill Endpoints ====================
+
+    @PostMapping("/tag-classify")
+    @Operation(summary = "Classify topics for words", description = "Uses AI to classify topics for up to 20 words based on entry definitions")
+    public ResponseEntity<List<AiVocabTagClassifyItemDto>> tagClassify(
+            @Valid @RequestBody AiVocabTagClassifyRequest request
+    ) {
+        log.info("POST /api/admin/ai-vocabulary/tag-classify - Count: {}", request.getLemmas().size());
+        List<AiVocabTagClassifyItemDto> dtos = adminAiVocabularyService.classifyWordTopics(request.getLemmas());
+        return ResponseEntity.ok(dtos);
+    }
+
+    @PostMapping("/tag-approve")
+    @Operation(summary = "Approve topics for words", description = "Saves topic categories to cefr_words and evicts search cache")
+    public ResponseEntity<Map<String, Object>> tagApprove(
+            @Valid @RequestBody AiVocabTagApproveRequest request
+    ) {
+        log.info("POST /api/admin/ai-vocabulary/tag-approve - Count: {}, overwrite: {}", request.getItems().size(), request.isOverwrite());
+        int savedCount = adminAiVocabularyService.approveAndSaveTopics(request);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("savedCount", savedCount);
+        response.put("message", "Đã cập nhật thành công chủ đề cho " + savedCount + " từ vựng.");
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/tag-backfill")
+    @Operation(summary = "Start background backfill of topics", description = "Starts async job to classify and tag untagged words within given scope")
+    public ResponseEntity<AiVocabTagBackfillStatusResponse> tagBackfill(
+            @RequestBody(required = false) AiVocabTagBackfillRequest request
+    ) {
+        if (request == null) {
+            return ResponseEntity.badRequest().body(AiVocabTagBackfillStatusResponse.builder()
+                    .status("FAILED")
+                    .message("Scope rỗng. Vui lòng chỉ định scope 'IDS' hoặc 'IMPORT'.")
+                    .build());
+        }
+
+        String scope = request.getScope() != null ? request.getScope().trim().toUpperCase() : "IDS";
+        request.setScope(scope);
+
+        if ("IDS".equals(scope)) {
+            if (request.getWordIds() == null || request.getWordIds().isEmpty()) {
+                return ResponseEntity.badRequest().body(AiVocabTagBackfillStatusResponse.builder()
+                        .status("FAILED")
+                        .message("Vui lòng chọn ít nhất 1 từ vựng để gắn tag (scope IDS).")
+                        .build());
+            }
+            if (request.getWordIds().size() > 500) {
+                return ResponseEntity.badRequest().body(AiVocabTagBackfillStatusResponse.builder()
+                        .status("FAILED")
+                        .message("Số lượng từ gắn tag tối đa mỗi đợt là 500 từ.")
+                        .build());
+            }
+        } else if ("IMPORT".equals(scope)) {
+            boolean hasCreatedAfter = request.getCreatedAfter() != null;
+            boolean hasSource = request.getSource() != null && !request.getSource().isBlank();
+            if (!hasCreatedAfter && !hasSource) {
+                return ResponseEntity.badRequest().body(AiVocabTagBackfillStatusResponse.builder()
+                        .status("FAILED")
+                        .message("Vui lòng chỉ định nguồn import (source) hoặc ngày tạo (createdAfter) cho scope IMPORT.")
+                        .build());
+            }
+        } else if (!"ALL".equals(scope)) {
+            return ResponseEntity.badRequest().body(AiVocabTagBackfillStatusResponse.builder()
+                    .status("FAILED")
+                    .message("Phạm vi không hợp lệ. Chỉ chấp nhận 'IDS', 'IMPORT' hoặc 'ALL'.")
+                    .build());
+        }
+
+        log.info("POST /api/admin/ai-vocabulary/tag-backfill - scope={}, batchSize={}, threshold={}",
+                request.getScope(), request.getBatchSize(), request.getConfidenceThreshold());
+        AiVocabTagBackfillStatusResponse status = adminAiVocabularyService.startTopicBackfill(request);
+        return ResponseEntity.ok(status);
+    }
+
+    @GetMapping("/sources")
+    @Operation(summary = "Get distinct dataset sources", description = "Returns list of all source tags available in cefr_words")
+    public ResponseEntity<List<String>> getWordSources() {
+        return ResponseEntity.ok(adminAiVocabularyService.getDistinctWordSources());
+    }
+
+    @GetMapping("/tag-backfill/{jobId}")
+    @Operation(summary = "Get topic backfill status", description = "Returns progress of the background topic backfill job")
+    public ResponseEntity<AiVocabTagBackfillStatusResponse> tagBackfillStatus(
+            @PathVariable String jobId
+    ) {
+        AiVocabTagBackfillStatusResponse status = adminAiVocabularyService.getTopicBackfillStatus(jobId);
+        return ResponseEntity.ok(status);
+    }
+
+    @PostMapping("/tag-backfill/cancel")
+    @Operation(summary = "Cancel background backfill", description = "Stops the currently running background backfill job")
+    public ResponseEntity<AiVocabTagBackfillStatusResponse> cancelTagBackfill() {
+        log.info("POST /api/admin/ai-vocabulary/tag-backfill/cancel - Request to stop backfill job");
+        AiVocabTagBackfillStatusResponse status = adminAiVocabularyService.stopTopicBackfill();
+        return ResponseEntity.ok(status);
+    }
+
+    @GetMapping("/tag-queue")
+    @Operation(summary = "Get topic review queue", description = "Lists words where AI suggested topics with low confidence")
+    public ResponseEntity<Page<TopicTagQueueDto>> getTagQueue(
+            @RequestParam(defaultValue = "PENDING") String status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        log.info("GET /api/admin/ai-vocabulary/tag-queue?status={}&page={}&size={}", status, page, size);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<TopicTagQueueDto> queue = adminAiVocabularyService.getTopicTagQueue(status, pageable);
+        return ResponseEntity.ok(queue);
     }
 }

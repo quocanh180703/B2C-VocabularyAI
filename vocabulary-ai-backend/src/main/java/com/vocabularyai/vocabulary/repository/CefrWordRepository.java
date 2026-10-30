@@ -3,6 +3,7 @@ package com.vocabularyai.vocabulary.repository;
 import com.vocabularyai.vocabulary.entity.CEFRLevel;
 import com.vocabularyai.vocabulary.entity.CefrWord;
 import com.vocabularyai.vocabulary.entity.PartOfSpeech;
+import com.vocabularyai.vocabulary.entity.WordTopic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -185,4 +187,82 @@ public interface CefrWordRepository extends JpaRepository<CefrWord, String> {
 
     @Query("SELECT w FROM CefrWord w WHERE w.example IS NULL OR TRIM(w.example) = '' ORDER BY w.lemma ASC")
     Page<CefrWord> findWordsMissingExample(Pageable pageable);
+
+    // ==================== Topic Filter, Group Counts & Backfill Queries ====================
+
+    @Query("SELECT w FROM CefrWord w WHERE " +
+           "(:level IS NULL OR w.cefrLevel = :level) AND " +
+           "(:topic IS NULL OR w.topic = :topic) AND " +
+           "(:query IS NULL OR :query = '' OR " +
+           " LOWER(w.lemma) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+           " LOWER(w.definition) LIKE LOWER(CONCAT('%', :query, '%'))) " +
+           "ORDER BY CASE " +
+           "  WHEN :query IS NOT NULL AND :query <> '' AND LOWER(w.lemma) = LOWER(:query) THEN 0 " +
+           "  WHEN :query IS NOT NULL AND :query <> '' AND LOWER(w.lemma) LIKE LOWER(CONCAT(:query, '%')) THEN 1 " +
+           "  ELSE 2 END, " +
+           "CASE " +
+           "  WHEN w.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.A1 THEN 1 " +
+           "  WHEN w.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.A2 THEN 2 " +
+           "  WHEN w.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.B1 THEN 3 " +
+           "  WHEN w.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.B2 THEN 4 " +
+           "  WHEN w.cefrLevel = com.vocabularyai.vocabulary.entity.CEFRLevel.C1 THEN 5 " +
+           "  ELSE 6 END, " +
+           "LENGTH(w.lemma) ASC, w.lemma ASC")
+    Page<CefrWord> searchAdvanced(
+            @Param("query") String query,
+            @Param("level") CEFRLevel level,
+            @Param("topic") WordTopic topic,
+            Pageable pageable
+    );
+
+    @Query("SELECT w.topic, COUNT(w) FROM CefrWord w " +
+           "WHERE (:level IS NULL OR w.cefrLevel = :level) " +
+           "  AND w.topic IS NOT NULL " +
+           "GROUP BY w.topic")
+    List<Object[]> countWordsGroupedByTopic(@Param("level") CEFRLevel level);
+
+    @Query("SELECT w FROM CefrWord w WHERE w.topic IS NULL ORDER BY w.lemma ASC")
+    Page<CefrWord> findWordsMissingTopic(Pageable pageable);
+
+    @Query("SELECT w FROM CefrWord w WHERE w.topic IS NULL AND (:lastId IS NULL OR w.id > :lastId) ORDER BY w.id ASC")
+    List<CefrWord> findWordsMissingTopicAfterId(@Param("lastId") String lastId, Pageable pageable);
+
+    @Query("SELECT COUNT(w) FROM CefrWord w WHERE w.topic IS NULL")
+    long countWordsMissingTopic();
+
+    Page<CefrWord> findByTopic(WordTopic topic, Pageable pageable);
+
+    Page<CefrWord> findByCefrLevelAndTopic(CEFRLevel level, WordTopic topic, Pageable pageable);
+
+    long countByTopic(WordTopic topic);
+
+    long countByCefrLevelAndTopic(CEFRLevel level, WordTopic topic);
+
+    // ==================== Scoped Topic Backfill Queries ====================
+
+    @Query("SELECT w FROM CefrWord w WHERE w.topic IS NULL AND w.id IN :ids ORDER BY w.lemma ASC")
+    List<CefrWord> findWordsMissingTopicByIds(@Param("ids") List<String> ids);
+
+    @Query("SELECT COUNT(w) FROM CefrWord w WHERE w.topic IS NULL AND " +
+           "(:createdAfter IS NULL OR w.createdAt >= :createdAfter) AND " +
+           "(:source IS NULL OR :source = '' OR w.source = :source)")
+    long countWordsMissingTopicByImport(
+            @Param("createdAfter") LocalDateTime createdAfter,
+            @Param("source") String source
+    );
+
+    @Query("SELECT w FROM CefrWord w WHERE w.topic IS NULL AND " +
+           "(:createdAfter IS NULL OR w.createdAt >= :createdAfter) AND " +
+           "(:source IS NULL OR :source = '' OR w.source = :source) AND " +
+           "(:lastId IS NULL OR w.id > :lastId) " +
+           "ORDER BY w.id ASC")
+    List<CefrWord> findWordsMissingTopicByImportAfterId(
+            @Param("createdAfter") LocalDateTime createdAfter,
+            @Param("source") String source,
+            @Param("lastId") String lastId,
+            Pageable pageable
+    );
+
+    @Query("SELECT DISTINCT w.source FROM CefrWord w WHERE w.source IS NOT NULL AND TRIM(w.source) <> '' ORDER BY w.source ASC")
+    List<String> findDistinctSources();
 }
