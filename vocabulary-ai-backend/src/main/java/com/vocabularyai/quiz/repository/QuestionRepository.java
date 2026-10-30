@@ -32,4 +32,10 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
      * Delete questions by quiz ID
      */
     void deleteByQuizId(Long quizId);
+
+    /**
+     * Find all questions belonging to PUBLISHED quizzes for placement testing
+     */
+    @org.springframework.data.jpa.repository.Query("SELECT q FROM Question q JOIN FETCH q.quiz quiz WHERE quiz.status = com.vocabularyai.quiz.entity.Quiz.QuizStatus.PUBLISHED")
+    List<Question> findAllPublishedQuestions();
 }

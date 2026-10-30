@@ -108,6 +108,9 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
     
     @Override
     public boolean isRateLimitExceeded(Long userId) {
+        if (userId == null) {
+            return false;
+        }
         try {
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime periodStart = now.minus(1, ChronoUnit.DAYS);
@@ -129,6 +132,9 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
     
     @Override
     public long getRemainingTokens(Long userId) {
+        if (userId == null) {
+            return dailyTokenLimit;
+        }
         try {
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime periodStart = now.minus(1, ChronoUnit.DAYS);
@@ -149,6 +155,9 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
     
     @Override
     public long getRemainingRequests(Long userId) {
+        if (userId == null) {
+            return dailyRequestLimit;
+        }
         try {
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime periodStart = now.minus(1, ChronoUnit.DAYS);
@@ -170,12 +179,24 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
     // ==================== Main Response Generation ====================
     
     @Override
-    @Transactional
     public String generateResponse(String prompt, Long userId) {
+        return generateResponse(prompt, userId, true);
+    }
+
+    @Override
+    public String generateResponse(String prompt, Long userId, boolean allowFallback) {
         String feature = inferFeature(prompt);
 
-        // 1. Check circuit breaker - use fallback instead of throwing error
+        // 1. Check circuit breaker
         if (isCircuitBreakerOpen()) {
+            if (!allowFallback) {
+                log.warn("Gemini circuit breaker is OPEN - failing fast without local fallback for feature: {}", feature);
+                if (aiUsageTrackingService != null) {
+                    aiUsageTrackingService.recordLog(userId, feature, modelName, 0, 0, 0,
+                            AiRequestLogStatus.CIRCUIT_BREAKER_OPEN, "Circuit breaker is open");
+                }
+                throw new ExternalServiceException("AI circuit breaker is OPEN - service temporarily unavailable");
+            }
             log.warn("Gemini circuit breaker is OPEN - generating fallback response");
             if (aiUsageTrackingService != null) {
                 aiUsageTrackingService.recordLog(userId, feature, modelName, 0, 0, 0,
@@ -185,7 +206,7 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
         }
         
         // 2. Check rate limit
-        if (isRateLimitExceeded(userId)) {
+        if (userId != null && isRateLimitExceeded(userId)) {
             long remainingTokens = getRemainingTokens(userId);
             log.warn("Rate limit exceeded for user: {}", userId);
             throw new RateLimitExceededException(
@@ -197,19 +218,20 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
         
         // 3. Estimate tokens
         int estimatedTokens = promptEngineeringService.estimateTokenCount(prompt);
-        long remainingTokens = getRemainingTokens(userId);
-        
-        if (estimatedTokens > remainingTokens) {
-            log.warn("Not enough tokens for user: {}, needed: {}, remaining: {}", 
-                     userId, estimatedTokens, remainingTokens);
-            throw new RateLimitExceededException(
-                "Not enough tokens for this request",
-                System.currentTimeMillis() / 1000 + 86400,
-                "DAILY"
-            );
+        if (userId != null) {
+            long remainingTokens = getRemainingTokens(userId);
+            if (estimatedTokens > remainingTokens) {
+                log.warn("Not enough tokens for user: {}, needed: {}, remaining: {}", 
+                         userId, estimatedTokens, remainingTokens);
+                throw new RateLimitExceededException(
+                    "Not enough tokens for this request",
+                    System.currentTimeMillis() / 1000 + 86400,
+                    "DAILY"
+                );
+            }
         }
         
-        // 4. Call Gemini API with retry logic, falling back intelligently if API key is invalid or external service unavailable
+        // 4. Call Gemini API with retry logic
         long startTime = System.currentTimeMillis();
         String response;
         AiRequestLogStatus logStatus = AiRequestLogStatus.SUCCESS;
@@ -219,6 +241,26 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
             response = callGeminiWithRetry(prompt);
             consecutiveFailures.set(0);
         } catch (Exception e) {
+            if (!allowFallback) {
+                log.error("Gemini API call failed without fallback for feature {}: {}", feature, e.getMessage());
+                if (aiUsageTrackingService != null) {
+                    aiUsageTrackingService.recordLog(
+                            userId,
+                            feature,
+                            modelName,
+                            estimatedTokens,
+                            0,
+                            System.currentTimeMillis() - startTime,
+                            AiRequestLogStatus.FAILED,
+                            e.getMessage()
+                    );
+                }
+                if (e instanceof ExternalServiceException) {
+                    throw (ExternalServiceException) e;
+                }
+                throw new ExternalServiceException("Gemini API call failed: " + e.getMessage(), e);
+            }
+
             log.warn("Gemini API call failed ({}), falling back to local intelligent response", e.getMessage());
             response = generateFallbackResponse(prompt);
             logStatus = AiRequestLogStatus.FALLBACK;
@@ -226,9 +268,11 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
         }
         long responseTime = System.currentTimeMillis() - startTime;
         
-        // 5. Update rate limit tracking
+        // 5. Update rate limit tracking (only for authenticated users)
         int actualTokens = estimateActualTokens(response);
-        updateRateLimit(userId, actualTokens);
+        if (userId != null) {
+            updateRateLimit(userId, actualTokens);
+        }
         
         // 6. Record usage metrics for AI Cost Optimizer
         if (aiUsageTrackingService != null) {
@@ -252,6 +296,9 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
 
     private String inferFeature(String prompt) {
         if (prompt == null) return "AI_TUTOR_CHAT";
+        if (prompt.contains("12 chủ đề") || prompt.contains("TOPIC") || prompt.contains("chủ đề cố định") || prompt.contains("phân loại chủ đề")) {
+            return "TOPIC_CLASSIFY";
+        }
         if (prompt.contains("Text to check:") || prompt.contains("correctedText") || prompt.contains("grammar")) {
             return "GRAMMAR_CHECK";
         }
@@ -507,27 +554,65 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
     }
     
     /**
-     * Check if error is retryable (network errors, timeouts)
+     * Check if error is retryable (network errors, timeouts, 429, 5xx)
      */
     private boolean isRetryableError(Exception e) {
+        if (e == null) {
+            return false;
+        }
+
+        // 1. Direct Spring/Java I/O or network timeout exceptions
+        if (e instanceof org.springframework.web.client.ResourceAccessException) {
+            return true;
+        }
+        Throwable cause = e.getCause();
+        while (cause != null) {
+            if (cause instanceof java.net.SocketTimeoutException
+                    || cause instanceof java.net.ConnectException
+                    || cause instanceof java.net.SocketException) {
+                return true;
+            }
+            cause = cause.getCause();
+        }
+
+        // 2. HTTP status code inspection
+        if (e instanceof org.springframework.web.client.HttpStatusCodeException httpEx) {
+            int statusCode = httpEx.getStatusCode().value();
+            // 429 Too Many Requests, or 5xx Server Errors are retryable
+            if (statusCode == 429 || (statusCode >= 500 && statusCode <= 599)) {
+                return true;
+            }
+            // 400, 401, 403, 404, etc. are non-retryable client errors
+            if (statusCode >= 400 && statusCode < 500) {
+                return false;
+            }
+        }
+
+        // 3. Fallback message inspection (case-insensitive)
         String message = e.getMessage();
         if (message == null) {
             return false;
         }
-        
-        return message.contains("timeout") ||
-               message.contains("connection") ||
-               message.contains("500") ||
-               message.contains("503") ||
-               message.contains("temporarily unavailable");
+        String lower = message.toLowerCase();
+        return lower.contains("timed out")
+                || lower.contains("timeout")
+                || lower.contains("connection")
+                || lower.contains("reset")
+                || lower.contains("429")
+                || lower.contains("500")
+                || lower.contains("502")
+                || lower.contains("503")
+                || lower.contains("504")
+                || lower.contains("rate limit")
+                || lower.contains("temporarily unavailable");
     }
     
     /**
      * Calculate exponential backoff delay
-     * 1s, 2s, 4s, 8s, 16s (capped at 16s)
+     * 1.5s, 3s, 6s, 12s (capped at 16s)
      */
     private long calculateBackoffDelay(int attempt) {
-        long delayMs = initialDelayMs * (long) Math.pow(2, attempt - 1);
+        long delayMs = (long) (initialDelayMs * Math.pow(2, attempt - 1));
         return Math.min(delayMs, 16000); // Cap at 16 seconds
     }
     
@@ -576,8 +661,10 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
         return countTokens(response);
     }
     
-    @Transactional
     private void updateRateLimit(Long userId, int tokensUsed) {
+        if (userId == null) {
+            return;
+        }
         try {
             User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.vocabularyai.vocabulary.entity.CEFRLevel;
 import com.vocabularyai.vocabulary.entity.CefrWord;
 import com.vocabularyai.vocabulary.entity.PartOfSpeech;
+import com.vocabularyai.vocabulary.entity.WordTopic;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -57,6 +58,9 @@ public class CefrWordResponse implements Serializable {
     @Schema(description = "Language code", example = "en")
     private String language;
 
+    @Schema(description = "Topic category (12 fixed topics)", example = "WORK")
+    private WordTopic topic;
+
     @Schema(description = "Creation timestamp")
     private LocalDateTime createdAt;
 
@@ -77,6 +81,7 @@ public class CefrWordResponse implements Serializable {
                 .vietnameseMeaning(word.getVietnameseMeaning())
                 .source(word.getSource())
                 .language(word.getLanguage())
+                .topic(word.getTopic())
                 .createdAt(word.getCreatedAt())
                 .updatedAt(word.getUpdatedAt())
                 .build();
@@ -96,6 +101,7 @@ public class CefrWordResponse implements Serializable {
                 .pronunciation(word.getPronunciation())
                 .definition(word.getDefinition())
                 .vietnameseMeaning(word.getVietnameseMeaning())
+                .topic(word.getTopic())
                 .build();
     }
 }

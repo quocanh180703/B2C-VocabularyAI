@@ -2,11 +2,14 @@ package com.vocabularyai.vocabulary.service;
 
 import com.vocabularyai.vocabulary.dto.CefrWordResponse;
 import com.vocabularyai.vocabulary.dto.CefrWordSearchRequest;
+import com.vocabularyai.vocabulary.dto.TopicCountResponse;
 import com.vocabularyai.vocabulary.entity.CEFRLevel;
 import com.vocabularyai.vocabulary.entity.CefrWord;
+import com.vocabularyai.vocabulary.entity.WordTopic;
 import com.vocabularyai.vocabulary.repository.CefrWordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.data.domain.Page;
@@ -16,7 +19,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -113,25 +119,23 @@ public class CefrWordService {
      * Search words by lemma or definition
      * 
      * CACHED: 1 hour TTL
-     * Cache key: cefr-words:search:{query}:{level}:{page}:{size}
+     * Cache key: cefr-words:search:{query}:{level}:{topic}:{page}:{size}
      * 
-     * @param request Search request with query, level, pagination
+     * @param request Search request with query, level, topic, pagination
      * @return Page of matching words
      */
     @Cacheable(
-        key = "'cefr-words:search:' + #request.query + ':' + #request.level + ':' + #request.page + ':' + #request.size",
+        key = "'cefr-words:search:' + #request.query + ':' + #request.level + ':' + #request.topic + ':' + #request.page + ':' + #request.size",
         cacheNames = "cefr-words"
     )
     public Page<CefrWordResponse> searchWords(CefrWordSearchRequest request) {
-        log.debug("Searching CEFR words: query='{}', level={}, page={}, size={}", 
-                request.getQuery(), request.getLevel(), request.getPage(), request.getSize());
+        log.debug("Searching CEFR words: query='{}', level={}, topic={}, page={}, size={}", 
+                request.getQuery(), request.getLevel(), request.getTopic(), request.getPage(), request.getSize());
         
         String query = request.getQuery() != null ? request.getQuery().trim() : "";
         int page = request.getPage() != null ? request.getPage() : 0;
         int size = request.getSize() != null ? request.getSize() : 20;
         
-        // Build pageable: If user is searching with a query and didn't specify explicit sortBy,
-        // use unsorted PageRequest so the repository's exact match & CEFR level ranking takes precedence
         Pageable pageable;
         if (!query.isEmpty() && request.getSortBy() == null) {
             pageable = PageRequest.of(page, size);
@@ -142,34 +146,55 @@ public class CefrWordService {
             Sort sort = Sort.by(direction, request.getSortBy() != null ? request.getSortBy() : "lemma");
             pageable = PageRequest.of(page, size, sort);
         }
-        
-        // If no query, return all words at level or all words
-        if (query.isEmpty()) {
-            if (request.getLevel() != null) {
-                return getWordsByLevel(request.getLevel(), page, size);
-            } else {
-                Page<CefrWord> allWords = cefrWordRepository.findAll(pageable);
-                return allWords.map(CefrWordResponse::fromEntityMinimal);
+
+        Page<CefrWord> results = cefrWordRepository.searchAdvanced(
+                query.isEmpty() ? null : query,
+                request.getLevel(),
+                request.getTopic(),
+                pageable
+        );
+
+        return results.map(CefrWordResponse::fromEntityMinimal);
+    }
+
+    /**
+     * Get word counts grouped by topic at a specific CEFR level (or all levels)
+     *
+     * @param level Optional CEFR level filter
+     * @return List of topic count items
+     */
+    @Cacheable(
+        key = "'cefr-words:topic-counts:' + #level",
+        cacheNames = "cefr-words"
+    )
+    public List<TopicCountResponse> getTopicCounts(CEFRLevel level) {
+        log.debug("Getting topic counts for level: {}", level);
+        List<Object[]> rows = cefrWordRepository.countWordsGroupedByTopic(level);
+        Map<WordTopic, Long> countMap = new HashMap<>();
+        for (Object[] row : rows) {
+            if (row != null && row.length >= 2 && row[0] != null) {
+                WordTopic topic = (WordTopic) row[0];
+                long count = ((Number) row[1]).longValue();
+                countMap.put(topic, count);
             }
         }
-        
-        // Search by lemma or definition
-        Page<CefrWord> results = cefrWordRepository.searchByLemmaOrDefinition(query, pageable);
-        
-        // Filter by level if provided (note: repository query is paginated, so we must construct new predicate)
-        if (request.getLevel() != null) {
-            List<CefrWord> filtered = results.stream()
-                    .filter(w -> w.getCefrLevel() == request.getLevel())
-                    .toList();
-            // Convert back to Page with manual PageImpl (not ideal but necessary for filtering after pagination)
-            return new org.springframework.data.domain.PageImpl<>(
-                    filtered.stream().map(CefrWordResponse::fromEntityMinimal).toList(),
-                    pageable,
-                    filtered.size()
-            );
+
+        List<TopicCountResponse> response = new ArrayList<>();
+        for (WordTopic topic : WordTopic.values()) {
+            response.add(TopicCountResponse.builder()
+                    .topic(topic)
+                    .count(countMap.getOrDefault(topic, 0L))
+                    .build());
         }
-        
-        return results.map(CefrWordResponse::fromEntityMinimal);
+        return response;
+    }
+
+    /**
+     * Clear all cached CEFR words data (e.g. after approving topics or backfill)
+     */
+    @CacheEvict(value = "cefr-words", allEntries = true)
+    public void evictCefrWordsCache() {
+        log.info("Evicted all entries in 'cefr-words' cache");
     }
 
     /**

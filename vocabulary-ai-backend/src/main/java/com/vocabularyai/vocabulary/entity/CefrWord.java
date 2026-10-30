@@ -24,7 +24,9 @@ import java.time.LocalDateTime;
     @Index(name = "idx_cefr_level", columnList = "cefr_level"),
     @Index(name = "idx_cefr_pos", columnList = "part_of_speech"),
     @Index(name = "idx_cefr_language", columnList = "language"),
-    @Index(name = "idx_cefr_level_pos", columnList = "cefr_level, part_of_speech")
+    @Index(name = "idx_cefr_level_pos", columnList = "cefr_level, part_of_speech"),
+    @Index(name = "idx_cefr_topic", columnList = "topic"),
+    @Index(name = "idx_cefr_level_topic", columnList = "cefr_level, topic")
 })
 @Data
 @Builder
@@ -127,6 +129,14 @@ public class CefrWord {
      */
     @Column(name = "source", length = 50)
     private String source;
+
+    /**
+     * Topic category (12 fixed topics)
+     * Nullable: untagged words remain null
+     */
+    @Column(name = "topic", length = 30)
+    @Enumerated(EnumType.STRING)
+    private WordTopic topic;
 
     /**
      * Timestamp created

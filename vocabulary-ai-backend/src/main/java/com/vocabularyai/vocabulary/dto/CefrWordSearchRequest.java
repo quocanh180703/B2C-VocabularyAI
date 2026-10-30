@@ -1,6 +1,7 @@
 package com.vocabularyai.vocabulary.dto;
 
 import com.vocabularyai.vocabulary.entity.CEFRLevel;
+import com.vocabularyai.vocabulary.entity.WordTopic;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,9 @@ public class CefrWordSearchRequest {
 
     @Schema(description = "CEFR level filter (A1, A2, B1, B2, C1)", example = "B1")
     private CEFRLevel level;
+
+    @Schema(description = "Topic filter (12 fixed topics)", example = "WORK")
+    private WordTopic topic;
 
     @Schema(description = "Page number (0-indexed)", example = "0", defaultValue = "0")
     @Min(value = 0, message = "Page must be >= 0")

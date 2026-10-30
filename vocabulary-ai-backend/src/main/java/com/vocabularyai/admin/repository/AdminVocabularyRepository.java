@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.vocabularyai.admin.entity.AdminQueryResult;
+import com.vocabularyai.vocabulary.entity.CEFRLevel;
+import com.vocabularyai.vocabulary.entity.PartOfSpeech;
 
 import java.util.List;
 
@@ -126,6 +128,34 @@ public interface AdminVocabularyRepository extends JpaRepository<AdminQueryResul
            "(:level IS NULL OR cw.cefrLevel = :level) " +
            "ORDER BY cw.lemma ASC")
     Page<?> getVocabularyByPartOfSpeech(@Param("pos") String pos, @Param("level") String level, Pageable pageable);
+    
+    /**
+     * Unified filter query for CEFR vocabulary by Part of Speech, CEFR level, and search keyword
+     */
+    @Query("SELECT new map(" +
+           "cw.id as id, " +
+           "cw.lemma as word, " +
+           "cw.pronunciation as pronunciation, " +
+           "cw.partOfSpeech as partOfSpeech, " +
+           "cw.cefrLevel as cefr, " +
+           "cw.vietnameseMeaning as vietnameseMeaning, " +
+           "COALESCE(cw.vietnameseMeaning, cw.definition) as meaning, " +
+           "cw.definition as definition, " +
+           "cw.source as source, " +
+           "cw.createdAt as createdAt) " +
+           "FROM CefrWord cw " +
+           "WHERE (:pos IS NULL OR cw.partOfSpeech = :pos) AND " +
+           "(:level IS NULL OR cw.cefrLevel = :level) AND " +
+           "(:searchTerm IS NULL OR :searchTerm = '' OR " +
+           " LOWER(cw.lemma) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+           " LOWER(cw.definition) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+           " LOWER(cw.vietnameseMeaning) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) " +
+           "ORDER BY cw.lemma ASC")
+    Page<?> getVocabularyFiltered(
+            @Param("pos") PartOfSpeech pos,
+            @Param("level") CEFRLevel level,
+            @Param("searchTerm") String searchTerm,
+            Pageable pageable);
     
     // ==================== Vocabulary Detail ====================
     

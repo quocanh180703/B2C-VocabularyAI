@@ -33,6 +33,17 @@ public interface GeminiAIClientService {
     String generateResponse(String prompt, Long userId);
     
     /**
+     * Generate response from Gemini API for a given prompt, with option to disable local intelligent fallback
+     * (crucial for JSON/classification pipelines where local conversational fallback produces invalid output).
+     * 
+     * @param prompt The prompt to send to Gemini
+     * @param userId ID of the user (nullable for system jobs)
+     * @param allowFallback true to fallback to local mock/conversational text, false to throw exception
+     * @return Generated response text from Gemini
+     */
+    String generateResponse(String prompt, Long userId, boolean allowFallback);
+    
+    /**
      * Generate response with streaming support
      * 
      * Callbacks are invoked as response is streamed from API

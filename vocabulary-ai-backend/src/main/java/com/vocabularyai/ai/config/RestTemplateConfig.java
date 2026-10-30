@@ -27,8 +27,8 @@ public class RestTemplateConfig {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder
-            .setConnectTimeout(Duration.ofSeconds(10))
-            .setReadTimeout(Duration.ofSeconds(30))
+            .setConnectTimeout(Duration.ofSeconds(15))
+            .setReadTimeout(Duration.ofSeconds(120))
             .requestFactory(this::clientHttpRequestFactory)
             .build();
     }
@@ -40,8 +40,8 @@ public class RestTemplateConfig {
      */
     private ClientHttpRequestFactory clientHttpRequestFactory() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(10000); // 10 seconds
-        factory.setReadTimeout(30000); // 30 seconds
+        factory.setConnectTimeout(15000); // 15 seconds
+        factory.setReadTimeout(120000); // 120 seconds (increased from 30s to prevent AI batch classification timeout)
         factory.setBufferRequestBody(true);
         
         return new BufferingClientHttpRequestFactory(factory);

@@ -32,6 +32,11 @@ public interface AdminVocabularyService {
     Page<VocabularyListResponse> getVocabularyByPartOfSpeech(String pos, String level, Pageable pageable);
     
     /**
+     * Get vocabulary list with unified filters (part of speech, CEFR level, search keyword)
+     */
+    Page<VocabularyListResponse> getVocabularyFiltered(String pos, String level, String search, Pageable pageable);
+    
+    /**
      * Get vocabulary word detail with usage statistics
      */
     VocabularyDetailResponse getVocabularyDetail(String wordId);

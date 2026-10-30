@@ -7,6 +7,8 @@ import com.vocabularyai.learning.repository.LearningProgressRepository;
 import java.time.LocalDate;
 import com.vocabularyai.personalization.dto.LearningProfileDto;
 import com.vocabularyai.personalization.dto.LearningProfileDto.*;
+import com.vocabularyai.placement.entity.PlacementAttempt;
+import com.vocabularyai.placement.repository.PlacementAttemptRepository;
 import com.vocabularyai.speaking.entity.SpeakingLevel;
 import com.vocabularyai.speaking.entity.SpeakingSession;
 import com.vocabularyai.speaking.entity.SpeakingStatus;
@@ -58,6 +60,7 @@ public class LearningProfileServiceImpl implements LearningProfileService {
     private final LearningHistoryRepository learningHistoryRepository;
     private final SpeakingSessionRepository speakingSessionRepository;
     private final SpeakingProgressService speakingProgressService;
+    private final PlacementAttemptRepository placementAttemptRepository;
     
     // Cache constants
     private static final String CACHE_KEY_PREFIX = "ai:profile:";
@@ -146,7 +149,8 @@ public class LearningProfileServiceImpl implements LearningProfileService {
         Double overallScore = calculateOverallScore(learningStats, speakingStats);
         int totalAttemptedWords = learningStats.get("vocabulary") != null && learningStats.get("vocabulary").getTotalActivities() != null
             ? learningStats.get("vocabulary").getTotalActivities() : 0;
-        String currentLevel = estimateLevelFromScore(overallScore, totalAttemptedWords, totalLearningDays);
+        String estimatedLevel = estimateLevelFromScore(overallScore, totalAttemptedWords, totalLearningDays);
+        String currentLevel = getEffectiveLevel(user.getId(), estimatedLevel);
         
         // Get trends
         TrendData trend7Days = calculateTrend(user.getId(), 7);
@@ -726,7 +730,27 @@ public class LearningProfileServiceImpl implements LearningProfileService {
         if (score < 60) return "B1";
         if (score < 75) return "B2";
         if (score < 90) return "C1";
-        return "C2";
+        return "C1";
+    }
+
+    private static final List<String> CEFR_LEVEL_HIERARCHY = List.of("A1", "A2", "B1", "B2", "C1", "C2");
+
+    private String getEffectiveLevel(Long userId, String estimatedLevel) {
+        if (userId == null) return estimatedLevel != null ? estimatedLevel : "A1";
+        Optional<String> placementLevel = placementAttemptRepository.findTopByUserId(userId)
+            .map(PlacementAttempt::getLevelResult);
+        if (placementLevel.isEmpty()) {
+            return estimatedLevel != null ? estimatedLevel : "A1";
+        }
+        return maxCefrLevel(placementLevel.get(), estimatedLevel);
+    }
+
+    private String maxCefrLevel(String l1, String l2) {
+        if (l1 == null) return l2 != null ? l2.toUpperCase() : "A1";
+        if (l2 == null) return l1.toUpperCase();
+        int idx1 = CEFR_LEVEL_HIERARCHY.indexOf(l1.toUpperCase());
+        int idx2 = CEFR_LEVEL_HIERARCHY.indexOf(l2.toUpperCase());
+        return (idx1 >= idx2) ? l1.toUpperCase() : l2.toUpperCase();
     }
 
     private String estimateLevelFromScore(Double score) {
