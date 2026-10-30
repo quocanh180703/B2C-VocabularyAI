@@ -153,6 +153,11 @@ public class XahTextToSpeechService implements TextToSpeechService {
 
             return audioBytes;
         } catch (Exception e) {
+            log.warn("Error calling TTS API with voice '{}': {}. Attempting fallback to default voice '{}'", 
+                targetVoice, e.getMessage(), defaultVoice);
+            if (!targetVoice.equalsIgnoreCase(defaultVoice)) {
+                return synthesizeRawAudio(text, defaultVoice);
+            }
             throw new TextToSpeechException("Error calling TTS API at " + ttsUrl + ": " + e.getMessage(), e);
         }
     }
