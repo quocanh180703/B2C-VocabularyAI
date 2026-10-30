@@ -830,7 +830,7 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
     }
 
     private String generateChatFallback(String prompt) {
-        return "Hello! I am your AI English Learning Assistant. I can help you practice grammar, learn new vocabulary, and review your daily lessons! (Chào bạn! Tôi là trợ lý AI học tiếng Anh. Tôi có thể giúp bạn luyện ngữ pháp, học từ mới và ôn tập bài học mỗi ngày!)";
+        return "Hello! I am your AI English Learning Assistant. How can I help you practice your English speaking today?";
     }
 
     private String generateVocabularyFallback(String prompt) {
