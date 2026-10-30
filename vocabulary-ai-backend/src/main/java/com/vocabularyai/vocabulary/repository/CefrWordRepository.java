@@ -33,6 +33,11 @@ public interface CefrWordRepository extends JpaRepository<CefrWord, String> {
     Optional<CefrWord> findByLemma(String lemma);
 
     /**
+     * Find first word by lemma (case-insensitive)
+     */
+    Optional<CefrWord> findFirstByLemmaIgnoreCase(String lemma);
+
+    /**
      * Check if word exists (case-insensitive)
      */
     boolean existsByLemmaIgnoreCase(String lemma);

@@ -12,7 +12,8 @@ public enum FeatureType {
     SPEAKING("speaking", 5, "Luyện nói & Chấm điểm"),
     GRAMMAR("grammar", 5, "Sửa ngữ pháp"),
     WORD_EXPLAIN("explain", 10, "AI giải thích từ & gợi ý"),
-    ROADMAP("roadmap", 2, "Lộ trình học AI");
+    ROADMAP("roadmap", 2, "Lộ trình học AI"),
+    VOICE_CHAT("voice", 10, "Trò chuyện giọng nói");
 
     private final String key;
     private final int defaultFreeLimit;
