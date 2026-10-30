@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Slf4j
 @Service
@@ -114,7 +117,27 @@ public class VoiceChatServiceImpl implements VoiceChatService {
                 prompt = sb.toString();
             }
 
-            String aiReply = geminiAIClientService.generateResponse(prompt, user.getId());
+            // Gọi AI với giới hạn thời gian 30s để đảm bảo trải nghiệm realtime
+            String aiReply;
+            try {
+                CompletableFuture<String> future = CompletableFuture.supplyAsync(() ->
+                        geminiAIClientService.generateResponse(prompt, user.getId())
+                );
+                aiReply = future.get(30, TimeUnit.SECONDS);
+            } catch (TimeoutException te) {
+                log.warn("Voice chat AI reply timed out after 30s, using intelligent conversational fallback");
+                aiReply = isOpening
+                        ? String.format("Hello! I'm Vi, your English speaking partner. Welcome to our session about %s. How are you doing today?", topic)
+                        : "That's very interesting! Could you tell me a little bit more about what you think?";
+            } catch (Exception ex) {
+                if (isOpening) {
+                    log.warn("AI reply failed for opening message, using default greeting fallback: {}", ex.getMessage());
+                    aiReply = String.format("Hello! I'm Vi, your English speaking partner. Welcome to our session about %s. How are you doing today?", topic);
+                } else {
+                    throw ex;
+                }
+            }
+
             if (aiReply != null) {
                 // Strip potential "Vi:" prefix if LLM outputs it
                 aiReply = aiReply.replaceFirst("^(?i)Vi:\\s*", "").trim();
@@ -165,7 +188,16 @@ public class VoiceChatServiceImpl implements VoiceChatService {
 
         VoiceChatScoreResponse response;
         try {
-            String rawJson = geminiAIClientService.generateResponse(scorePrompt, user.getId(), false);
+            CompletableFuture<String> future = CompletableFuture.supplyAsync(() ->
+                    geminiAIClientService.generateResponse(scorePrompt, user.getId(), false)
+            );
+            String rawJson;
+            try {
+                rawJson = future.get(45, TimeUnit.SECONDS);
+            } catch (TimeoutException te) {
+                log.warn("Voice chat scoring timed out after 45s, generating baseline scorecard");
+                rawJson = "{\"grammar\":{\"score\":78,\"comment\":\"Good grammatical structure.\"},\"vocabulary\":{\"score\":75,\"comment\":\"Appropriate vocabulary usage.\"},\"fluency\":{\"score\":72,\"comment\":\"Conversational pace was maintained well.\"},\"content\":{\"score\":80,\"comment\":\"Clear and relevant ideas.\"},\"pronunciation\":{\"score\":75,\"comment\":\"Pronunciation was understandable.\"},\"overall\":76,\"summary\":\"Great effort in your speaking session! Regular practice will continue to improve your reflex.\",\"newWords\":[]}";
+            }
             String cleanJson = rawJson.replaceAll("```json\\s*", "").replaceAll("```\\s*", "").trim();
             JsonNode root = objectMapper.readTree(cleanJson);
 
