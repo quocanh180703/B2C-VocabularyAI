@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/ai/speaking/voice-chat")
+@RequestMapping({"/api/ai/speaking/voice-chat", "/ai/speaking/voice-chat"})
 @RequiredArgsConstructor
 @Tag(name = "Voice Chat", description = "Endpoints cho chức năng Trò chuyện giọng nói với AI trong Luyện nói")
 @SecurityRequirement(name = "bearer-jwt")
