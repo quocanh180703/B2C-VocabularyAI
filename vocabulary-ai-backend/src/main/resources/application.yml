@@ -225,7 +225,7 @@ ai:
   chat:
     url: ${AI_CHAT_URL:https://api.xah.io/v1/chat/completions}
     api-key: ${AI_CHAT_API_KEY:sk-4858c9d3176689b889b6a9bc54d391d32502deebc79970b4e4dfb98833e3c68b}
-    model: ${AI_CHAT_MODEL:thanhnhan9023/grok-4.6}
+    model: ${AI_CHAT_MODEL:gemini-2.5-flash-lite}
   rate-limit:
     daily-tokens: 1000000  # 1M tokens per day
     daily-requests: 1000   # 1000 requests per day

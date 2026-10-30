@@ -76,7 +76,7 @@ public class GeminiAIClientServiceImpl implements GeminiAIClientService {
     @Value("${ai.chat.api-key:${gemini.api-key:sk-4858c9d3176689b889b6a9bc54d391d32502deebc79970b4e4dfb98833e3c68b}}")
     private String geminiApiKey;
     
-    @Value("${ai.chat.model:${gemini.model:thanhnhan9023/grok-4.6}}")
+    @Value("${ai.chat.model:${gemini.model:gemini-2.5-flash-lite}}")
     private String modelName;
     
     @Value("${ai.rate-limit.daily-tokens:1000000}")
