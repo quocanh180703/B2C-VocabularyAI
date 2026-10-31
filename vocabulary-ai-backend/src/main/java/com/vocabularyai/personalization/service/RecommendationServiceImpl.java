@@ -75,6 +75,7 @@ public class RecommendationServiceImpl implements RecommendationService {
      */
     @Override
     public RecommendationDto generateRecommendations(Long userId) {
+        long startTime = System.currentTimeMillis();
         log.info("[TASK 3] Bắt đầu tạo gợi ý cho userId: {}", userId);
         
         // Xác thực người dùng tồn tại
@@ -87,7 +88,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         // Kiểm tra cache trước
         RecommendationDto cached = getCachedRecommendations(userId);
         if (cached != null) {
-            log.info("[TASK 3] Cache hit cho userId: {}", userId);
+            log.info("[TASK 3] Cache hit cho userId: {} ({}ms)", userId, System.currentTimeMillis() - startTime);
             return cached;
         }
         
@@ -119,15 +120,17 @@ public class RecommendationServiceImpl implements RecommendationService {
             log.debug("[TASK 3] Cache gợi ý cho userId: {}", userId);
             cacheService.set(CACHE_KEY_PREFIX + userId, recommendations, CACHE_TTL_SECONDS);
             
-            log.info("[TASK 3] Tạo gợi ý thành công cho userId: {} ({} gợi ý)", 
-                userId, recommendations.getRecommendationCount());
+            long elapsedMs = System.currentTimeMillis() - startTime;
+            log.info("[TASK 3] Tạo gợi ý thành công cho userId: {} ({} gợi ý) trong {}ms", 
+                userId, recommendations.getRecommendationCount(), elapsedMs);
             return recommendations;
             
         } catch (RateLimitExceededException e) {
             log.warn("[TASK 3] Lỗi rate limit: {}", e.getMessage());
             throw e;
         } catch (Exception e) {
-            log.error("[TASK 3] Tạo gợi ý thất bại cho userId: {} - Lỗi: {}", userId, e.getMessage(), e);
+            log.error("[TASK 3] Tạo gợi ý thất bại cho userId: {} sau {}ms - Lỗi: {}", 
+                userId, System.currentTimeMillis() - startTime, e.getMessage(), e);
             throw new RecommendationException("Không thể tạo gợi ý: " + e.getMessage(), e);
         }
     }
@@ -214,21 +217,21 @@ public class RecommendationServiceImpl implements RecommendationService {
     // ==================== Phương thức Helper Riêng ====================
     
     /**
-     * Xây dựng prompt Gemini để tạo gợi ý
+     * Xây dựng prompt Gemini để tạo gợi ý học tập gọn (GĐ1 tối ưu hóa thời gian sinh token).
      * 
      * Prompt hướng dẫn Gemini:
-     * - Phân tích dữ liệu phân tích
-     * - Xác định 10-15 gợi ý cụ thể
-     * - Xếp hạng theo ưu tiên
-     * - Tạo lịch trình hàng tuần
-     * - Trả về JSON có cấu trúc
+     * - Phân tích dữ liệu điểm mạnh / điểm yếu
+     * - Xác định 6-8 gợi ý hành động cụ thể cho lộ trình
+     * - Ưu tiên theo tác động và nỗ lực
+     * - Ước tính nỗ lực học tập (phút/tuần)
+     * - Trả về JSON gọn hợp lệ để cấp đầu vào cho TASK 4
      */
     private String buildRecommendationPrompt(WeaknessStrengthDto analysis) {
         StringBuilder prompt = new StringBuilder();
         
         prompt.append("Bạn là một chuyên gia tạo kế hoạch học tập cá nhân hóa.\n\n");
         
-        prompt.append("Phân tích dữ liệu phân tích này và tạo 10-15 gợi ý học tập cụ thể.\n");
+        prompt.append("Phân tích dữ liệu phân tích này và tạo 6-8 gợi ý học tập cụ thể.\n");
         prompt.append("Trả về CHỈ JSON hợp lệ không có định dạng markdown.\n\n");
         
         prompt.append("DỮ LIỆU PHÂN TÍCH:\n");
@@ -267,64 +270,30 @@ public class RecommendationServiceImpl implements RecommendationService {
         prompt.append(String.format("- Động lực: %s\n\n", analysis.getMotivationLevel()));
         
         // Hướng dẫn
-        prompt.append("HƯỚNG DẪN TẠO GỢI Ỷ:\n");
-        prompt.append("1. Tạo 10-15 gợi ý cụ thể để cải thiện lĩnh vực yếu\n");
+        prompt.append("HƯỚNG DẪN TẠO GỢI Ý:\n");
+        prompt.append("1. Tạo 6-8 gợi ý cụ thể để cải thiện lĩnh vực yếu\n");
         prompt.append("2. Ưu tiên gợi ý theo tác động và nỗ lực cần thiết\n");
-        prompt.append("3. Bao gồm 3-5 'quick wins' (dễ áp dụng, tác động cao)\n");
-        prompt.append("4. Bao gồm 2-3 'mục tiêu dài hạn' (cần thời gian nhưng giá trị lớn)\n");
-        prompt.append("5. Tạo lịch trình hàng tuần cụ thể\n");
-        prompt.append("6. Ước tính nỗ lực (phút/tuần, ngày/tuần)\n");
-        prompt.append("7. Đề xuất cột mốc dự kiến\n");
-        prompt.append("8. Mục tiêu 4 tuần là gì?\n\n");
+        prompt.append("3. Ước tính nỗ lực học tập (phút/tuần)\n\n");
         
         prompt.append("ĐỊNH DẠNG JSON YÊU CẦU (tuân thủ chặt chẽ):\n");
         prompt.append("{\n");
         prompt.append("  \"strategyOverview\": \"Tóm tắt chiến lược học tập (1-2 câu)\",\n");
         prompt.append("  \"recommendedPhase\": \"BEGINNER|INTERMEDIATE|ADVANCED\",\n");
         prompt.append("  \"primaryFocus\": \"Lĩnh vực chính cần tập trung\",\n");
+        prompt.append("  \"recommendationCount\": 8,\n");
         prompt.append("  \"recommendations\": [\n");
         prompt.append("    {\n");
         prompt.append("      \"priority\": 1,\n");
         prompt.append("      \"type\": \"VOCABULARY|GRAMMAR|SPEAKING|PRACTICE|REVIEW|SUPPLEMENTARY\",\n");
         prompt.append("      \"title\": \"Tiêu đề gợi ý\",\n");
-        prompt.append("      \"description\": \"Mô tả chi tiết\",\n");
-        prompt.append("      \"reasoning\": \"Lý do tại sao được đề xuất\",\n");
         prompt.append("      \"targetArea\": \"Lĩnh vực mục tiêu\",\n");
-        prompt.append("      \"expectedImpact\": \"HIGH|MEDIUM|LOW\",\n");
-        prompt.append("      \"effortLevel\": \"EASY|MODERATE|CHALLENGING\",\n");
         prompt.append("      \"estimatedTimeMinutes\": 30,\n");
-        prompt.append("      \"frequency\": \"daily|weekly|monthly\",\n");
-        prompt.append("      \"resources\": [\n");
-        prompt.append("        {\"title\": \"Tiêu đề\", \"type\": \"VIDEO|ARTICLE|EXERCISE|TOOL\", \"url\": \"http://...\"}\n");
-        prompt.append("      ],\n");
-        prompt.append("      \"successMetrics\": [\"Chỉ số 1\", \"Chỉ số 2\"],\n");
-        prompt.append("      \"warnings\": []\n");
-        prompt.append("    }\n");
-        prompt.append("  ],\n");
-        prompt.append("  \"quickWins\": [/* 3-5 item có impact HIGH và effort EASY */],\n");
-        prompt.append("  \"longTermGoals\": [/* 2-3 item có impact HIGH và effort CHALLENGING */],\n");
-        prompt.append("  \"criticalRecommendations\": [/* Gợi ý để xử lý điểm yếu CRITICAL */],\n");
-        prompt.append("  \"recommendationCount\": 12,\n");
-        prompt.append("  \"weeklySchedule\": [\n");
-        prompt.append("    {\n");
-        prompt.append("      \"dayOfWeek\": \"MONDAY\",\n");
-        prompt.append("      \"mainTask\": \"Nhiệm vụ chính\",\n");
-        prompt.append("      \"recommendedTime\": \"10:00 AM\",\n");
-        prompt.append("      \"duration\": 30,\n");
-        prompt.append("      \"activityType\": \"VOCABULARY|GRAMMAR|SPEAKING\"\n");
+        prompt.append("      \"frequency\": \"daily|weekly|monthly\"\n");
         prompt.append("    }\n");
         prompt.append("  ],\n");
         prompt.append("  \"estimatedEffort\": {\n");
-        prompt.append("    \"minutesPerWeek\": 300,\n");
-        prompt.append("    \"daysPerWeek\": 5,\n");
-        prompt.append("    \"distribution\": \"DISTRIBUTED\",\n");
-        prompt.append("    \"difficulty\": \"MODERATE\"\n");
-        prompt.append("  },\n");
-        prompt.append("  \"expectedMilestones\": [\"Tuần 1: ...\", \"Tuần 2: ...\"],\n");
-        prompt.append("  \"rationale\": \"Lý do tại sao những gợi ý này sẽ giúp đạt mục tiêu\",\n");
-        prompt.append("  \"fourWeekGoal\": \"Mục tiêu 4 tuần là gì\",\n");
-        prompt.append("  \"confidenceScore\": 85.0,\n");
-        prompt.append("  \"reanalysisPeriodDays\": 30\n");
+        prompt.append("    \"minutesPerWeek\": 300\n");
+        prompt.append("  }\n");
         prompt.append("}\n");
         
         return prompt.toString();

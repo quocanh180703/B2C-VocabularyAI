@@ -12,6 +12,7 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Implementation of EmailService
@@ -208,14 +209,22 @@ public class EmailServiceImpl implements EmailService {
         try {
             // Create Context with payment data for Thymeleaf template rendering
             Context context = new Context();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm - dd/MM/yyyy");
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String paidDateStr = paymentData.getPaidDate() != null ? paymentData.getPaidDate().format(dtf) : "";
+            String startDateStr = paymentData.getSubscriptionStartDate() != null ? paymentData.getSubscriptionStartDate().format(df) : "";
+            String endDateStr = paymentData.getSubscriptionEndDate() != null ? paymentData.getSubscriptionEndDate().format(df) : "";
+            String amountStr = paymentData.getAmount() != null ? String.format("%,d VNĐ", paymentData.getAmount().longValue()) : "0 VNĐ";
+            String durationStr = paymentData.getDuration() != null ? (paymentData.getDuration() + " ngày") : "";
+
             context.setVariable("customerName", paymentData.getCustomerName());
             context.setVariable("orderCode", paymentData.getOrderCode());
-            context.setVariable("paidDate", paymentData.getPaidDate());
+            context.setVariable("paidDate", paidDateStr);
             context.setVariable("packageName", paymentData.getPackageName());
-            context.setVariable("duration", paymentData.getDuration());
-            context.setVariable("subscriptionStartDate", paymentData.getSubscriptionStartDate());
-            context.setVariable("subscriptionEndDate", paymentData.getSubscriptionEndDate());
-            context.setVariable("amount", paymentData.getAmount());
+            context.setVariable("duration", durationStr);
+            context.setVariable("subscriptionStartDate", startDateStr);
+            context.setVariable("subscriptionEndDate", endDateStr);
+            context.setVariable("amount", amountStr);
             context.setVariable("transactionCode", paymentData.getTransactionCode());
             context.setVariable("frontendUrl", paymentData.getFrontendUrl());
             

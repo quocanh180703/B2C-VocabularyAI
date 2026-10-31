@@ -139,4 +139,18 @@ public interface SpeakingSessionRepository extends JpaRepository<SpeakingSession
      * @return true nếu phiên tồn tại và thuộc về user
      */
     boolean existsByIdAndUserId(Long id, Long userId);
+
+    @Query("SELECT MAX(s.overallScore) FROM SpeakingSession s WHERE s.user.id = :userId AND s.status = com.vocabularyai.speaking.entity.SpeakingStatus.COMPLETED")
+    Double findMaxOverallScoreByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT AVG(s.overallScore) FROM SpeakingSession s WHERE s.user.id = :userId AND s.overallScore IS NOT NULL")
+    Double findAverageOverallScoreByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT s FROM SpeakingSession s WHERE s.user.id = :userId AND s.status = com.vocabularyai.speaking.entity.SpeakingStatus.COMPLETED ORDER BY s.completedAt DESC")
+    List<SpeakingSession> findLatestCompletedSessions(@Param("userId") Long userId, Pageable pageable);
+
+    default Optional<SpeakingSession> findLatestCompletedSession(Long userId) {
+        List<SpeakingSession> list = findLatestCompletedSessions(userId, org.springframework.data.domain.PageRequest.of(0, 1));
+        return list.isEmpty() ? Optional.empty() : Optional.of(list.get(0));
+    }
 }

@@ -123,4 +123,14 @@ public interface LearningProgressRepository extends JpaRepository<LearningProgre
             @Param("todayStart") LocalDateTime todayStart,
             @Param("todayDate") LocalDate todayDate
     );
+
+    long countByUserIdAndNextReviewAtLessThanEqual(Long userId, LocalDateTime dateTime);
+
+    @Query("SELECT COUNT(lp) FROM LearningProgress lp WHERE lp.user.id = :userId AND lp.nextReviewAt IS NOT NULL AND lp.nextReviewAt < :startOfToday")
+    long countOverdueReviews(@Param("userId") Long userId, @Param("startOfToday") LocalDateTime startOfToday);
+
+    @Query("SELECT lp.word.word, lp.wrongCount FROM LearningProgress lp " +
+           "WHERE lp.user.id = :userId AND lp.status != com.vocabularyai.learning.entity.LearningProgress.LearningStatus.MASTERED AND lp.wrongCount > 0 " +
+           "ORDER BY lp.wrongCount DESC")
+    List<Object[]> findTopForgottenWords(@Param("userId") Long userId, Pageable pageable);
 }

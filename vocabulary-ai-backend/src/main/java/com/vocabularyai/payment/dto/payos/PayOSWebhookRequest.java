@@ -76,6 +76,11 @@ public class PayOSWebhookRequest {
     private PayOSWebhookData data;
     
     /**
+     * Webhook signature directly in payload body
+     */
+    private String signature;
+    
+    /**
      * Nested DTO for webhook data
      */
     @Data
@@ -139,6 +144,12 @@ public class PayOSWebhookRequest {
          * Reference code
          */
         private String referenceCode;
+
+        /**
+         * Reference in official PayOS webhook
+         */
+        @JsonProperty("reference")
+        private String reference;
         
         /**
          * Transaction code from PayOS
@@ -146,6 +157,19 @@ public class PayOSWebhookRequest {
          * Used to prevent duplicate payment processing (idempotency)
          */
         private String transactionCode;
+
+        public String getTransactionCode() {
+            if (transactionCode != null && !transactionCode.isBlank()) {
+                return transactionCode;
+            }
+            if (reference != null && !reference.isBlank()) {
+                return reference;
+            }
+            if (referenceCode != null && !referenceCode.isBlank()) {
+                return referenceCode;
+            }
+            return orderCode != null ? orderCode : null;
+        }
         
         /**
          * Reason for status change
@@ -198,26 +222,26 @@ public class PayOSWebhookRequest {
      * Check if this is a successful payment webhook
      */
     public boolean isPaymentReceived() {
-        return "PAYMENT.RECEIVED".equals(this.code) && 
+        return ("00".equals(this.code) || "PAYMENT.RECEIVED".equalsIgnoreCase(this.code)) && 
                this.data != null && 
-               "PAID".equals(this.data.status);
+               ("PAID".equalsIgnoreCase(this.data.status) || "00".equals(this.data.status));
     }
     
     /**
      * Check if this is a cancelled payment webhook
      */
     public boolean isPaymentCancelled() {
-        return ("PAYMENT_CANCELLED".equals(this.code) || "PAYMENT.CANCELLED".equals(this.code)) && 
+        return ("PAYMENT_CANCELLED".equalsIgnoreCase(this.code) || "PAYMENT.CANCELLED".equalsIgnoreCase(this.code)) && 
                this.data != null && 
-               "CANCELLED".equals(this.data.status);
+               ("CANCELLED".equalsIgnoreCase(this.data.status));
     }
     
     /**
      * Check if this is an expired payment webhook
      */
     public boolean isPaymentExpired() {
-        return "PAYMENT_EXPIRED".equals(this.code) && 
+        return ("PAYMENT_EXPIRED".equalsIgnoreCase(this.code) || "PAYMENT.EXPIRED".equalsIgnoreCase(this.code)) && 
                this.data != null && 
-               "EXPIRED".equals(this.data.status);
+               ("EXPIRED".equalsIgnoreCase(this.data.status));
     }
 }

@@ -71,8 +71,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_USERNAME:}
-    password: ${MAIL_PASSWORD:}
+    username: ${MAIL_USERNAME:quocanh220219@gmail.com}
+    password: ${MAIL_PASSWORD:jqbybpgwrydjzuzj}
     default-encoding: UTF-8
     properties:
       mail:
@@ -195,7 +195,7 @@ cloudinary:
 # ============================================================
 gemini:
   api-key: ${AI_CHAT_API_KEY:}
-  model: ${AI_CHAT_MODEL:thanhnhan9023/grok-4.6}
+  model: ${AI_CHAT_MODEL:thanhnhan9023/gemini-3.7-flash-high}
 
 # ============================================================
 # 11.6 Speech-to-Text Configuration (Vilao AI Whisper / Groq / OpenAI)
@@ -225,7 +225,7 @@ ai:
   chat:
     url: ${AI_CHAT_URL:https://api.xah.io/v1/chat/completions}
     api-key: ${AI_CHAT_API_KEY:}
-    model: ${AI_CHAT_MODEL:thanhnhan9023/grok-4.6}
+    model: ${AI_CHAT_MODEL:thanhnhan9023/gemini-3.7-flash-high}
   rate-limit:
     daily-tokens: 1000000  # 1M tokens per day
     daily-requests: 1000   # 1000 requests per day

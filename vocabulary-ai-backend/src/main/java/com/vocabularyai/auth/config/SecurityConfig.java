@@ -113,6 +113,8 @@ public class SecurityConfig {
                     "/api/payments/packages",
                     "/payments/webhook",
                     "/api/payments/webhook",
+                    "/payments/verify/**",
+                    "/api/payments/verify/**",
                     "/ai/speaking/tts/stream",
                     "/api/ai/speaking/tts/stream",
                     "/notifications/**",

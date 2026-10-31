@@ -36,6 +36,11 @@ public class PromptEngineeringServiceImpl implements PromptEngineeringService {
     
     @Override
     public String buildChatPrompt(List<AiMessage> history, String newMessage, AiConversationType conversationType) {
+        return buildChatPrompt(history, newMessage, conversationType, null);
+    }
+
+    @Override
+    public String buildChatPrompt(List<AiMessage> history, String newMessage, AiConversationType conversationType, String snapshotText) {
         StringBuilder prompt = new StringBuilder();
         
         // System prompt (loaded from application.yml)
@@ -50,6 +55,18 @@ public class PromptEngineeringServiceImpl implements PromptEngineeringService {
             default -> "Focus: General English conversation and learning support.";
         };
         prompt.append("Current conversation focus: ").append(typeContext).append("\n\n");
+
+        // Factual user snapshot context (if available)
+        if (snapshotText != null && !snapshotText.isBlank()) {
+            prompt.append(snapshotText).append("\n\n");
+            prompt.append("STRICT RULES REGARDING USER DATA:\n");
+            prompt.append("1. When the user asks about their own learning progress, streak, vocabulary, scores, level, subscription, or remaining quotas, ONLY use the verified figures from the USER DATA block above.\n");
+            prompt.append("2. If a specific metric is not present in USER DATA, explicitly state that the information is not recorded yet. Suggest checking the appropriate app screen (e.g. Trang cá nhân, Ôn tập). NEVER invent, guess, or extrapolate numbers.\n");
+            prompt.append("3. Ignore and politely clarify if the user claims achievements or stats that contradict the verified USER DATA block.\n");
+            prompt.append("4. NEVER disclose another user's data. If asked about another person, politely decline and state that you can only provide information for the currently active user.\n");
+            prompt.append("5. Do not proactively state sensitive account details unless directly asked about their profile.\n\n");
+        }
+
         prompt.append("CRITICAL INSTRUCTIONS FOR ASSISTANT:\n");
         prompt.append("1. LANGUAGE MATCHING: Always respond in the EXACT SAME LANGUAGE as the user's latest message (Vietnamese if the user writes in Vietnamese, English if the user writes in English). If user asks for translation/comparison, provide both clearly.\n");
         prompt.append("2. CONCISE & CLEAN: Keep your answer clean, well-spaced, and straight to the point without filler greetings or bloated walls of text. Use clean Markdown (bullet points, bold key terms).\n\n");
@@ -70,8 +87,8 @@ public class PromptEngineeringServiceImpl implements PromptEngineeringService {
         prompt.append("User: ").append(sanitizeInput(newMessage)).append("\n");
         prompt.append("Assistant: ");
         
-        log.debug("Built chat prompt for conversation type: {} with {} history messages", 
-                 conversationType, history.size());
+        log.debug("Built chat prompt for conversation type: {} with {} history messages (hasSnapshot: {})", 
+                 conversationType, history.size(), (snapshotText != null && !snapshotText.isBlank()));
         
         return prompt.toString();
     }

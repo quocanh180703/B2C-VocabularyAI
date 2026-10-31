@@ -312,7 +312,20 @@ public class LearningProfileServiceImpl implements LearningProfileService {
             int totalAttempts = (speakingProgress.getStatistics() != null && speakingProgress.getStatistics().getTotalAttempts() != null)
                 ? speakingProgress.getStatistics().getTotalAttempts().intValue() : 0;
             
-            if (totalAttempts == 0 || avgScore == null) {
+            if (avgScore == null || avgScore <= 0.0 || totalAttempts == 0) {
+                Double directAvg = speakingSessionRepository.findAverageOverallScoreByUserId(userId);
+                Double directMax = speakingSessionRepository.findMaxOverallScoreByUserId(userId);
+                if (directAvg != null && directAvg > 0) {
+                    avgScore = directAvg;
+                    bestScore = directMax != null ? directMax : directAvg;
+                    if (totalAttempts == 0) {
+                        long completedCount = speakingSessionRepository.countByUserIdAndStatus(userId, SpeakingStatus.COMPLETED);
+                        totalAttempts = (int) Math.max(1, completedCount);
+                    }
+                }
+            }
+
+            if (totalAttempts == 0 || avgScore == null || avgScore <= 0.0) {
                 return PerformanceMetric.builder()
                     .score(0.0)
                     .bestScore(0.0)
@@ -467,7 +480,8 @@ public class LearningProfileServiceImpl implements LearningProfileService {
     /**
      * Calculate current learning streak across all activities (vocab, quizzes, speaking)
      */
-    private Integer calculateCurrentStreak(Long userId) {
+    @Override
+    public Integer calculateCurrentStreak(Long userId) {
         List<java.sql.Date> activitySqlDates = learningHistoryRepository.findActivityDatesByUserId(userId);
         if (activitySqlDates == null || activitySqlDates.isEmpty()) {
             return 0;
@@ -504,7 +518,8 @@ public class LearningProfileServiceImpl implements LearningProfileService {
     /**
      * Calculate longest learning streak across all activities
      */
-    private Integer calculateLongestStreak(Long userId) {
+    @Override
+    public Integer calculateLongestStreak(Long userId) {
         List<java.sql.Date> activitySqlDates = learningHistoryRepository.findActivityDatesByUserId(userId);
         if (activitySqlDates == null || activitySqlDates.isEmpty()) {
             return 0;

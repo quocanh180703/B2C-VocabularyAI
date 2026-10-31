@@ -75,6 +75,14 @@ public interface PaymentGatewayService {
     String getPaymentStatus(String transactionCode);
     
     /**
+     * Get full payment info from payment gateway by order code
+     * 
+     * @param orderCode Order code
+     * @return PayOSPaymentInfoResponse with full details including status and transactions
+     */
+    com.vocabularyai.payment.dto.payos.PayOSPaymentInfoResponse getPaymentInfo(String orderCode);
+    
+    /**
      * Cancel a payment order
      * 
      * Initiates cancellation with the payment gateway
