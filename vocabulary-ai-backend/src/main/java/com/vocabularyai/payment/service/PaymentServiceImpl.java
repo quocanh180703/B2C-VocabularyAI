@@ -4,6 +4,7 @@ import com.vocabularyai.auth.service.EmailService;
 import com.vocabularyai.payment.config.PaymentProperties;
 import com.vocabularyai.payment.dto.payos.PayOSCreatePaymentLinkRequest;
 import com.vocabularyai.payment.dto.payos.PayOSCreatePaymentLinkResponse;
+import com.vocabularyai.payment.dto.payos.PayOSPaymentInfoResponse;
 import com.vocabularyai.payment.dto.payos.PayOSWebhookRequest;
 import com.vocabularyai.payment.dto.payos.PaymentEmailData;
 import com.vocabularyai.payment.entity.Package;
@@ -187,7 +188,7 @@ public class PaymentServiceImpl implements PaymentService {
         if (paymentRepository.existsByTransactionCode(transactionCode)) {
             log.warn("Payment already processed for transactionCode: {}, returning success for idempotency",
                     transactionCode);
-            throw new DuplicatePaymentException("Payment already processed: " + transactionCode);
+            return true;
         }
 
         // Verify amount matches
@@ -197,61 +198,156 @@ public class PaymentServiceImpl implements PaymentService {
             throw new IllegalArgumentException("Payment amount mismatch");
         }
 
-        // Update PaymentOrder status
+        processOrderActivation(paymentOrder, transactionCode, data.getTransferType(), new BigDecimal(amount));
+        log.info("Payment webhook processed successfully for orderCode: {}", orderCode);
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public PaymentOrder verifyAndActivatePayment(String orderCode, Long currentUserId) {
+        log.info("Verifying and activating payment for orderCode: {}, currentUserId: {}", orderCode, currentUserId);
+
+        PaymentOrder paymentOrder = paymentOrderRepository.findByOrderCode(orderCode)
+                .orElseThrow(() -> new IllegalArgumentException("PaymentOrder not found: " + orderCode));
+
+        if (currentUserId != null && !paymentOrder.getUserId().equals(currentUserId)) {
+            log.warn("User {} is verifying order {} of user {}", currentUserId, orderCode, paymentOrder.getUserId());
+        }
+
+        // If already paid and subscription is active, return immediately
+        if ("PAID".equals(paymentOrder.getStatus())) {
+            boolean active = hasActiveSubscription(paymentOrder.getUserId());
+            if (active) {
+                log.info("Order {} is already PAID and active subscription exists", orderCode);
+                return paymentOrder;
+            }
+        }
+
+        // Query PayOS API directly
+        PayOSPaymentInfoResponse info = paymentGatewayService.getPaymentInfo(orderCode);
+        if (info == null || info.getData() == null) {
+            log.warn("PayOS returned no data for orderCode: {}", orderCode);
+            return paymentOrder;
+        }
+
+        String payosStatus = info.getData().getStatus();
+        log.info("PayOS status for orderCode {}: {}", orderCode, payosStatus);
+
+        if ("PAID".equalsIgnoreCase(payosStatus)) {
+            String txnRef = null;
+            if (info.getData().getTransactions() != null && !info.getData().getTransactions().isEmpty()) {
+                txnRef = info.getData().getTransactions().get(0).getReference();
+            }
+            if (txnRef == null || txnRef.isBlank()) {
+                txnRef = info.getData().getId();
+            }
+            if (txnRef == null || txnRef.isBlank()) {
+                txnRef = orderCode;
+            }
+
+            BigDecimal paidAmount = info.getData().getAmount() != null
+                    ? new BigDecimal(info.getData().getAmount())
+                    : paymentOrder.getAmount();
+
+            return processOrderActivation(paymentOrder, txnRef, "BANK_TRANSFER", paidAmount);
+        } else if ("CANCELLED".equalsIgnoreCase(payosStatus)) {
+            paymentOrder.setStatus("CANCELLED");
+            return paymentOrderRepository.save(paymentOrder);
+        } else if ("EXPIRED".equalsIgnoreCase(payosStatus)) {
+            paymentOrder.setStatus("EXPIRED");
+            return paymentOrderRepository.save(paymentOrder);
+        }
+
+        return paymentOrder;
+    }
+
+    /**
+     * Common order activation logic:
+     * 1. Mark order PAID
+     * 2. Save Payment
+     * 3. Upsert Subscription (handling uk_subscription_user_id)
+     * 4. Send payment-success invoice email
+     */
+    @Transactional
+    public PaymentOrder processOrderActivation(PaymentOrder paymentOrder, String transactionCode,
+            String paymentMethod, BigDecimal amount) {
+        log.info("Activating order: id={}, orderCode={}, transactionCode={}", 
+                paymentOrder.getId(), paymentOrder.getOrderCode(), transactionCode);
+
+        // 1. Update PaymentOrder
         paymentOrder.setStatus("PAID");
-        paymentOrder.setPaidAt(LocalDateTime.now());
-        paymentOrderRepository.save(paymentOrder);
+        if (paymentOrder.getPaidAt() == null) {
+            paymentOrder.setPaidAt(LocalDateTime.now());
+        }
+        paymentOrder = paymentOrderRepository.save(paymentOrder);
 
-        log.debug("PaymentOrder status updated to PAID");
+        // 2. Find or create Payment
+        String txn = (transactionCode != null && !transactionCode.isBlank()) ? transactionCode : paymentOrder.getOrderCode();
+        Payment payment = paymentRepository.findByPaymentOrderId(paymentOrder.getId())
+                .orElseGet(() -> paymentRepository.findByTransactionCode(txn).orElse(null));
 
-        // Create Payment record
-        Payment payment = Payment.builder()
-                .paymentOrderId(paymentOrder.getId())
-                .transactionCode(transactionCode)
-                .amount(new BigDecimal(amount))
-                .status("SUCCESS")
-                .paymentMethod(data.getTransferType())
-                .paidAt(LocalDateTime.now())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
+        if (payment == null) {
+            payment = Payment.builder()
+                    .paymentOrderId(paymentOrder.getId())
+                    .transactionCode(txn)
+                    .amount(amount != null ? amount : paymentOrder.getAmount())
+                    .status("SUCCESS")
+                    .paymentMethod(paymentMethod != null ? paymentMethod : "BANK_TRANSFER")
+                    .paidAt(LocalDateTime.now())
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .build();
+            payment = paymentRepository.save(payment);
+            log.info("Payment record created: id={}, transactionCode={}", payment.getId(), txn);
+        }
 
-        payment = paymentRepository.save(payment);
-        log.info("Payment record created: id={}, transactionCode={}", payment.getId(), transactionCode);
+        // 3. Upsert Subscription
+        final Long pkgId = paymentOrder.getPackageId();
+        Package pkg = packageRepository.findById(pkgId)
+                .orElseThrow(() -> new IllegalArgumentException("Package not found: " + pkgId));
 
-        // Create Subscription
-        Package pkg = packageRepository.findById(paymentOrder.getPackageId())
-                .orElseThrow(() -> new IllegalArgumentException("Package not found"));
-
-        LocalDateTime startAt = LocalDateTime.now();
-        LocalDateTime endAt = startAt.plusDays(pkg.getDurationDays());
-
-        Subscription subscription = Subscription.builder()
-                .userId(paymentOrder.getUserId())
-                .packageId(paymentOrder.getPackageId())
-                .paymentId(payment.getId())
-                .status("ACTIVE")
-                .startAt(startAt)
-                .endAt(endAt)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-
+        Optional<Subscription> existingSubOpt = subscriptionRepository.findByUserId(paymentOrder.getUserId());
+        Subscription subscription;
+        if (existingSubOpt.isPresent()) {
+            subscription = existingSubOpt.get();
+            LocalDateTime currentEnd = subscription.getEndAt();
+            LocalDateTime baseTime = (subscription.isActive() && currentEnd != null && currentEnd.isAfter(LocalDateTime.now()))
+                    ? currentEnd
+                    : LocalDateTime.now();
+            subscription.setPackageId(pkg.getId());
+            subscription.setPaymentId(payment.getId());
+            subscription.setStatus("ACTIVE");
+            subscription.setStartAt(LocalDateTime.now());
+            subscription.setEndAt(baseTime.plusDays(pkg.getDurationDays()));
+            subscription.setUpdatedAt(LocalDateTime.now());
+            log.info("Existing subscription updated/extended: id={}, userId={}, endAt={}", subscription.getId(),
+                    paymentOrder.getUserId(), subscription.getEndAt());
+        } else {
+            LocalDateTime startAt = LocalDateTime.now();
+            LocalDateTime endAt = startAt.plusDays(pkg.getDurationDays());
+            subscription = Subscription.builder()
+                    .userId(paymentOrder.getUserId())
+                    .packageId(pkg.getId())
+                    .paymentId(payment.getId())
+                    .status("ACTIVE")
+                    .startAt(startAt)
+                    .endAt(endAt)
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .build();
+            log.info("New subscription created: userId={}, endAt={}", paymentOrder.getUserId(), endAt);
+        }
         subscription = subscriptionRepository.save(subscription);
-        log.info("Subscription created: id={}, userId={}, endAt={}", subscription.getId(),
-                paymentOrder.getUserId(), endAt);
 
-        // Send payment success email
+        // 4. Send payment success email
         try {
             sendPaymentSuccessEmail(paymentOrder, payment, pkg, subscription);
         } catch (Exception e) {
-            // Log error but don't fail the payment processing - email is non-critical
-            log.error("Failed to send payment success email for orderCode: {}", orderCode, e);
+            log.error("Failed to send payment success email for orderCode: {}", paymentOrder.getOrderCode(), e);
         }
 
-        log.info("Payment webhook processed successfully for orderCode: {}", orderCode);
-
-        return true;
+        return paymentOrder;
     }
 
     @Override

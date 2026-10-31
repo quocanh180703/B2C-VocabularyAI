@@ -5,6 +5,7 @@ import com.vocabularyai.speaking.dto.response.SpeakingProgressResponse.*;
 import com.vocabularyai.speaking.entity.SpeakingFeedback;
 import com.vocabularyai.speaking.entity.SpeakingSession;
 import com.vocabularyai.speaking.entity.SpeakingStatus;
+import com.vocabularyai.speaking.repository.SpeakingAttemptRepository;
 import com.vocabularyai.speaking.repository.SpeakingFeedbackRepository;
 import com.vocabularyai.speaking.repository.SpeakingSessionRepository;
 import com.vocabularyai.speaking.service.analysis.dto.SpeakingAnalysisResult;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 public class SpeakingProgressServiceImpl implements SpeakingProgressService {
     
     private final SpeakingSessionRepository sessionRepository;
+    private final SpeakingAttemptRepository attemptRepository;
     private final SpeakingFeedbackRepository feedbackRepository;
     private final SpeakingFeedbackService feedbackService;
     private final UserRepository userRepository;
@@ -160,7 +162,8 @@ public class SpeakingProgressServiceImpl implements SpeakingProgressService {
                 milestones.add("🏆 30 speaking sessions completed");
             }
             
-            Double avgScore = feedbackService.calculateAverageOverallScore(userId);
+            Double avgScore = feedbackRepository.calculateAverageOverallScoreByUserId(userId)
+                    .orElseGet(() -> sessionRepository.findAverageOverallScoreByUserId(userId));
             if (avgScore != null && avgScore > 80) {
                 milestones.add("💯 Average score over 80");
             }
@@ -219,12 +222,17 @@ public class SpeakingProgressServiceImpl implements SpeakingProgressService {
     private StatisticsData buildStatistics(Long userId, List<SpeakingSession> completedSessions) {
         try {
             long totalSessions = sessionRepository.countByUserId(userId);
-            long totalAttempts = 0;
-            for (SpeakingSession session : completedSessions) {
-                Integer count = session.getAttemptCount();
-                if (count != null) {
-                    totalAttempts += count.longValue();
+            long totalAttempts = attemptRepository.countByUserId(userId);
+            if (totalAttempts == 0) {
+                for (SpeakingSession session : completedSessions) {
+                    Integer count = session.getAttemptCount();
+                    if (count != null && count > 0) {
+                        totalAttempts += count.longValue();
+                    }
                 }
+            }
+            if (totalAttempts == 0 && !completedSessions.isEmpty()) {
+                totalAttempts = completedSessions.size();
             }
             
             long totalTimeSeconds = totalAttempts * 30;
@@ -250,11 +258,14 @@ public class SpeakingProgressServiceImpl implements SpeakingProgressService {
     
     private ScoresData buildAverageScores(Long userId) {
         try {
-            Double overallAvg = feedbackService.calculateAverageOverallScore(userId);
-            Double grammarAvg = feedbackService.calculateAverageGrammarScore(userId);
-            Double vocabAvg = feedbackService.calculateAverageVocabularyScore(userId);
-            Double fluencyAvg = feedbackService.calculateAverageFluencyScore(userId);
-            Double contentAvg = feedbackService.calculateAverageContentScore(userId);
+            Double overallAvg = feedbackRepository.calculateAverageOverallScoreByUserId(userId).orElse(null);
+            if (overallAvg == null) {
+                overallAvg = sessionRepository.findAverageOverallScoreByUserId(userId);
+            }
+            Double grammarAvg = feedbackRepository.calculateAverageGrammarScoreByUserId(userId).orElse(null);
+            Double vocabAvg = feedbackRepository.calculateAverageVocabularyScoreByUserId(userId).orElse(null);
+            Double fluencyAvg = feedbackRepository.calculateAverageFluencyScoreByUserId(userId).orElse(null);
+            Double contentAvg = feedbackRepository.calculateAverageContentScoreByUserId(userId).orElse(null);
             
             return ScoresData.builder()
                     .overallScore(overallAvg)

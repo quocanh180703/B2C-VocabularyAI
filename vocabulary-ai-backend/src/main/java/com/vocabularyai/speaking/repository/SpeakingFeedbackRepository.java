@@ -199,4 +199,19 @@ public interface SpeakingFeedbackRepository extends JpaRepository<SpeakingFeedba
      * @return true nếu có feedback cho phiên
      */
     boolean existsBySessionId(Long sessionId);
+
+    @Query("SELECT AVG(f.overallScore) FROM SpeakingFeedback f WHERE (f.attempt.session.user.id = :userId OR f.session.user.id = :userId) AND f.overallScore IS NOT NULL")
+    Optional<Double> calculateAverageOverallScoreByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT AVG(f.grammarScore) FROM SpeakingFeedback f WHERE (f.attempt.session.user.id = :userId OR f.session.user.id = :userId) AND f.grammarScore IS NOT NULL")
+    Optional<Double> calculateAverageGrammarScoreByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT AVG(f.vocabularyScore) FROM SpeakingFeedback f WHERE (f.attempt.session.user.id = :userId OR f.session.user.id = :userId) AND f.vocabularyScore IS NOT NULL")
+    Optional<Double> calculateAverageVocabularyScoreByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT AVG(f.fluencyScore) FROM SpeakingFeedback f WHERE (f.attempt.session.user.id = :userId OR f.session.user.id = :userId) AND f.fluencyScore IS NOT NULL")
+    Optional<Double> calculateAverageFluencyScoreByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT AVG(f.contentScore) FROM SpeakingFeedback f WHERE (f.attempt.session.user.id = :userId OR f.session.user.id = :userId) AND f.contentScore IS NOT NULL")
+    Optional<Double> calculateAverageContentScoreByUserId(@Param("userId") Long userId);
 }

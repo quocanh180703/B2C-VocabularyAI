@@ -27,13 +27,25 @@ public interface PromptEngineeringService {
      * - Conversation history for context
      * - New user message
      * - Conversation type hints (GENERAL, VOCABULARY, GRAMMAR, LEARNING)
-     * 
      * @param history Message history from conversation
      * @param newMessage New message from user
      * @param conversationType Type of conversation
      * @return Complete prompt ready to send to Gemini API
      */
-    String buildChatPrompt(List<AiMessage> history, String newMessage, AiConversationType conversationType);
+    default String buildChatPrompt(List<AiMessage> history, String newMessage, AiConversationType conversationType) {
+        return buildChatPrompt(history, newMessage, conversationType, null);
+    }
+
+    /**
+     * Build chat prompt with conversation context and factual user snapshot
+     * 
+     * @param history Message history from conversation
+     * @param newMessage New message from user
+     * @param conversationType Type of conversation
+     * @param snapshotText Formatted text of verified user learning & account snapshot (optional, can be null)
+     * @return Complete prompt ready to send to Gemini API
+     */
+    String buildChatPrompt(List<AiMessage> history, String newMessage, AiConversationType conversationType, String snapshotText);
     
     /**
      * Build vocabulary explanation prompt

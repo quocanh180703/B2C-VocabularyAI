@@ -65,6 +65,8 @@ public class ChatServiceImpl implements ChatService {
     private final ConversationMapper conversationMapper;
     private final MessageMapper messageMapper;
     private final ObjectMapper objectMapper;
+    private final UserSnapshotService userSnapshotService;
+    private final UserSnapshotFormatter userSnapshotFormatter;
     
     @Value("${ai.conversation.context-window-size:10}")
     private int contextWindowSize;
@@ -133,16 +135,27 @@ public class ChatServiceImpl implements ChatService {
         // 3. Lấy conversation context
         List<AiMessage> recentMessages = messageRepository.findRecentMessages(conversationId, contextWindowSize);
         
-        // 4. Xây dựng prompt
+        // 4. Lấy snapshot thông tin học tập & tài khoản của user (degrade an toàn nếu lỗi)
+        String snapshotText = null;
+        try {
+            var snapshot = userSnapshotService.buildSnapshot(userId);
+            snapshotText = userSnapshotFormatter.format(snapshot);
+            log.debug("User snapshot built successfully for user: {}", userId);
+        } catch (Exception e) {
+            log.error("Failed to build user snapshot for user {}: {}", userId, e.getMessage());
+        }
+
+        // 5. Xây dựng prompt
         String fullPrompt = promptService.buildChatPrompt(
             recentMessages,
             request.getContent(),
-            conversation.getType()
+            conversation.getType(),
+            snapshotText
         );
         
         log.debug("Built prompt, estimated tokens: {}", promptService.estimateTokenCount(fullPrompt));
         
-        // 5. Gọi Gemini API để lấy phản hồi
+        // 6. Gọi Gemini API để lấy phản hồi
         String aiResponse;
         try {
             aiResponse = geminiService.generateResponse(fullPrompt, userId);

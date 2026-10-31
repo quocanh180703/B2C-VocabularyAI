@@ -137,4 +137,7 @@ public interface SpeakingAttemptRepository extends JpaRepository<SpeakingAttempt
      * @param sessionId ID của phiên
      */
     void deleteBySessionId(Long sessionId);
+
+    @Query("SELECT COUNT(a) FROM SpeakingAttempt a WHERE a.session.user.id = :userId")
+    long countByUserId(@Param("userId") Long userId);
 }

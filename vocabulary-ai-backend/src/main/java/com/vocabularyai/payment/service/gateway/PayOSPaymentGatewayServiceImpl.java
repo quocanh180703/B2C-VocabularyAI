@@ -156,8 +156,17 @@ public class PayOSPaymentGatewayServiceImpl implements PaymentGatewayService {
             boolean isValid = calculatedSignatureHex.equalsIgnoreCase(signature);
             
             if (!isValid) {
-                log.warn("Webhook signature mismatch for order: {}", orderCode);
-                log.debug("Expected: {}, Received: {}", calculatedSignatureHex, signature);
+                log.warn("Webhook signature mismatch for order: {}, verifying directly with PayOS API...", orderCode);
+                try {
+                    PayOSPaymentInfoResponse info = getPaymentInfo(orderCode);
+                    if (info != null && info.getData() != null && "PAID".equalsIgnoreCase(info.getData().getStatus())) {
+                        log.info("Direct PayOS API verification confirmed order {} is PAID", orderCode);
+                        return true;
+                    }
+                } catch (Exception apiEx) {
+                    log.warn("Fallback PayOS API verification failed: {}", apiEx.getMessage());
+                }
+                
                 throw new InvalidSignatureException(
                     "Webhook signature verification failed for order: " + orderCode
                 );
@@ -175,35 +184,64 @@ public class PayOSPaymentGatewayServiceImpl implements PaymentGatewayService {
     }
     
     @Override
-    public String getPaymentStatus(String transactionCode) {
-        log.info("Getting payment status for transactionCode: {}", transactionCode);
+    public PayOSPaymentInfoResponse getPaymentInfo(String orderCode) {
+        log.info("Getting payment info from PayOS for orderCode: {}", orderCode);
         
         try {
             return executeWithRetry(() -> {
-                String url = buildUrl(String.format(PAYMENT_STATUS_ENDPOINT, transactionCode));
+                String cleanOrderCode = orderCode != null ? orderCode.replaceAll("\\D", "") : "";
+                if (cleanOrderCode.isBlank()) {
+                    cleanOrderCode = orderCode;
+                }
+                String url = buildUrl(String.format(PAYMENT_STATUS_ENDPOINT, cleanOrderCode));
+                
+                HttpHeaders headers = new HttpHeaders();
+                headers.set("x-client-id", paymentProperties.getPayos().getClientId());
+                headers.set("x-api-key", paymentProperties.getPayos().getApiKey());
+                
+                HttpEntity<?> entity = new HttpEntity<>(headers);
                 
                 log.debug("Calling PayOS API: GET {}", url);
-                ResponseEntity<PayOSCreatePaymentLinkResponse> response = restTemplate.getForEntity(
+                ResponseEntity<PayOSPaymentInfoResponse> response = restTemplate.exchange(
                     url,
-                    PayOSCreatePaymentLinkResponse.class
+                    org.springframework.http.HttpMethod.GET,
+                    entity,
+                    PayOSPaymentInfoResponse.class
                 );
                 
                 if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
-                    throw new PaymentGatewayException("Failed to get payment status");
+                    throw new PaymentGatewayException("Failed to get payment info: HTTP " + response.getStatusCode());
                 }
                 
-                PayOSCreatePaymentLinkResponse paymentResponse = response.getBody();
-                String status = paymentResponse.getData() != null ? "UNKNOWN" : "UNKNOWN";
+                PayOSPaymentInfoResponse body = response.getBody();
+                if (!body.isSuccess() && body.getData() == null) {
+                    throw new PaymentGatewayException("PayOS returned error: " + body.getDesc());
+                }
                 
-                log.info("Payment status for transactionCode {}: {}", transactionCode, status);
-                return status;
+                log.info("PayOS payment info retrieved for order {}: status={}", 
+                    orderCode, body.getData() != null ? body.getData().getStatus() : "null");
+                return body;
             });
-            
         } catch (PaymentTimeoutException | PaymentGatewayException e) {
             throw e;
         } catch (Exception e) {
-            log.error("Failed to get payment status for transactionCode: {}", transactionCode, e);
-            throw new PaymentGatewayException("Failed to get payment status", e);
+            log.error("Failed to get payment info for orderCode: {}", orderCode, e);
+            throw new PaymentGatewayException("Failed to get payment info: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public String getPaymentStatus(String transactionCode) {
+        log.info("Getting payment status for transactionCode: {}", transactionCode);
+        try {
+            PayOSPaymentInfoResponse info = getPaymentInfo(transactionCode);
+            if (info != null && info.getData() != null && info.getData().getStatus() != null) {
+                return info.getData().getStatus();
+            }
+            return "UNKNOWN";
+        } catch (Exception e) {
+            log.warn("Could not retrieve status for transactionCode {}: {}", transactionCode, e.getMessage());
+            return "UNKNOWN";
         }
     }
     

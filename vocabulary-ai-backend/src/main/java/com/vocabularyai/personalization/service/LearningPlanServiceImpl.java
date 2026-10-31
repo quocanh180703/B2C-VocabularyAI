@@ -5,6 +5,7 @@ import com.vocabularyai.ai.service.gemini.GeminiAIClientService;
 import com.vocabularyai.ai.service.cache.CacheService;
 import com.vocabularyai.common.exception.RateLimitExceededException;
 import com.vocabularyai.common.exception.ResourceNotFoundException;
+import com.vocabularyai.ai.util.JsonResponseExtractor;
 import com.vocabularyai.personalization.dto.RecommendationDto;
 import com.vocabularyai.personalization.dto.LearningPlanDto;
 import com.vocabularyai.user.entity.User;
@@ -72,6 +73,7 @@ public class LearningPlanServiceImpl implements LearningPlanService {
      */
     @Override
     public LearningPlanDto createLearningPlan(Long userId) {
+        long startTime = System.currentTimeMillis();
         log.info("[TASK 4] Bắt đầu tạo kế hoạch học tập cho userId: {}", userId);
         
         // Xác thực người dùng tồn tại
@@ -81,7 +83,7 @@ public class LearningPlanServiceImpl implements LearningPlanService {
         // Kiểm tra cache trước
         LearningPlanDto cached = getCachedPlan(userId);
         if (cached != null) {
-            log.info("[TASK 4] Cache hit cho userId: {}", userId);
+            log.info("[TASK 4] Cache hit cho userId: {} ({}ms)", userId, System.currentTimeMillis() - startTime);
             return cached;
         }
         
@@ -113,12 +115,15 @@ public class LearningPlanServiceImpl implements LearningPlanService {
             log.debug("[TASK 4] Cache kế hoạch cho userId: {}", userId);
             cacheService.set(CACHE_KEY_PREFIX + userId, plan, CACHE_TTL_SECONDS);
             
-            log.info("[TASK 4] Tạo kế hoạch thành công cho userId: {} (4 tuần, {} ngày)", 
-                userId, plan.getWeeks() != null ? plan.getWeeks().size() * 7 : 0);
+            long elapsedMs = System.currentTimeMillis() - startTime;
+            log.info("[TASK 4] Tạo kế hoạch thành công cho userId: {} (4 tuần, {} ngày) trong {}ms", 
+                userId, plan.getWeeks() != null ? plan.getWeeks().size() * 7 : 0, elapsedMs);
             return plan;
             
         } catch (Exception e) {
-            log.warn("[TASK 4] AI plan generation encountered error ({}), using structured fallback plan", e.getMessage());
+            long elapsedMs = System.currentTimeMillis() - startTime;
+            log.warn("[TASK 4] AI plan generation encountered error ({}) sau {}ms, using structured fallback plan", 
+                e.getMessage(), elapsedMs);
             LearningPlanDto fallback = buildFallbackPlan(userId, user.getFullName());
             try {
                 cacheService.set(CACHE_KEY_PREFIX + userId, fallback, CACHE_TTL_SECONDS);
@@ -240,11 +245,13 @@ public class LearningPlanServiceImpl implements LearningPlanService {
         prompt.append(String.format("Chiến lược: %s\n", recommendations.getStrategyOverview()));
         prompt.append(String.format("Tập trung chính: %s\n", recommendations.getPrimaryFocus()));
         prompt.append(String.format("Giai đoạn: %s\n", recommendations.getRecommendedPhase()));
-        prompt.append(String.format("Tổng nỗ lực: %d phút/tuần\n\n", 
-            recommendations.getEstimatedEffort().getMinutesPerWeek()));
+        int minutesPerWeek = (recommendations.getEstimatedEffort() != null && recommendations.getEstimatedEffort().getMinutesPerWeek() != null)
+            ? recommendations.getEstimatedEffort().getMinutesPerWeek() : 300;
+        prompt.append(String.format("Tổng nỗ lực: %d phút/tuần\n\n", minutesPerWeek));
         
         // Gợi ý
-        prompt.append("GỢI Ỷ HỌC TẬP (").append(recommendations.getRecommendationCount()).append(" gợi ý):\n");
+        int recCount = recommendations.getRecommendations() != null ? recommendations.getRecommendations().size() : 0;
+        prompt.append("GỢI Ý HỌC TẬP (").append(recCount).append(" gợi ý):\n");
         if (recommendations.getRecommendations() != null) {
             for (RecommendationDto.RecommendationItem rec : recommendations.getRecommendations()) {
                 prompt.append(String.format("- %s: %s (%s phút, %s)\n",
@@ -254,78 +261,42 @@ public class LearningPlanServiceImpl implements LearningPlanService {
         prompt.append("\n");
         
         // Hướng dẫn
-        prompt.append("HƯỚNG DẪN TẠO KẾ HOẠCH:\n");
-        prompt.append("1. Tạo kế hoạch 4 tuần (tuần 1-4)\n");
-        prompt.append("2. Mỗi tuần có 7 ngày (thứ 2-chủ nhật, không có ngày off)\n");
-        prompt.append("3. Mỗi ngày có 2-4 nhiệm vụ cụ thể\n");
-        prompt.append("4. Phân bổ gợi ý xuyên suốt 4 tuần\n");
-        prompt.append("5. Tăng dần độ khó: Tuần 1 dễ, Tuần 2-3 vừa, Tuần 4 khó\n");
-        prompt.append("6. Bao gồm 4 cột mốc/milestone (1 mỗi tuần)\n");
-        prompt.append("7. Ước tính chính xác thời gian cho mỗi nhiệm vụ\n");
-        prompt.append("8. Thêm \"review day\" vào cuối mỗi tuần\n");
-        prompt.append("9. Cân bằng giữa các loại hoạt động (vocabulary, grammar, speaking, practice)\n");
-        prompt.append("10. Cung cấp các lưu ý hữu ích cho mỗi ngày\n\n");
+        prompt.append("HƯỚNG DẪN TẠO KẾ HOẠCH GỌN:\n");
+        prompt.append("1. Tạo đầy đủ 4 tuần (weekNumber từ 1 đến 4), mỗi tuần đủ 7 ngày (MONDAY đến SUNDAY).\n");
+        prompt.append("2. Mỗi ngày chỉ cần 1 nhiệm vụ cốt lõi ngắn gọn (order, title, type: VOCABULARY|GRAMMAR|SPEAKING|PRACTICE|REVIEW|QUIZ, durationMinutes).\n");
+        prompt.append("3. Tạo 4 cột mốc quan trọng (milestones) cho 4 tuần.\n");
+        prompt.append("4. Giữ nội dung súc tích để phản hồi nhanh nhất.\n\n");
         
         prompt.append("ĐỊNH DẠNG JSON YÊU CẦU (tuân thủ chặt chẽ):\n");
         prompt.append("{\n");
-        prompt.append("  \"planTitle\": \"Tiêu đề kế hoạch\",\n");
-        prompt.append("  \"planDescription\": \"Mô tả tổng quát\",\n");
-        prompt.append("  \"primaryGoal\": \"Mục tiêu chính (1-3 câu)\",\n");
-        prompt.append("  \"secondaryGoals\": [\"Mục tiêu thứ cấp 1\", \"Mục tiêu thứ cấp 2\"],\n");
+        prompt.append("  \"planTitle\": \"Tiêu đề kế hoạch ngắn gọn\",\n");
+        prompt.append("  \"planDescription\": \"Mô tả tổng quát (1-2 câu)\",\n");
+        prompt.append("  \"primaryGoal\": \"Mục tiêu chính (1 câu)\",\n");
         prompt.append("  \"totalCommitmentMinutesPerWeek\": 300,\n");
+        prompt.append("  \"milestones\": [\n");
+        prompt.append("    { \"week\": 1, \"name\": \"Cột mốc tuần 1\", \"description\": \"Mô tả ngắn\" },\n");
+        prompt.append("    { \"week\": 2, \"name\": \"Cột mốc tuần 2\", \"description\": \"Mô tả ngắn\" },\n");
+        prompt.append("    { \"week\": 3, \"name\": \"Cột mốc tuần 3\", \"description\": \"Mô tả ngắn\" },\n");
+        prompt.append("    { \"week\": 4, \"name\": \"Cột mốc tuần 4\", \"description\": \"Mô tả ngắn\" }\n");
+        prompt.append("  ],\n");
         prompt.append("  \"weeks\": [\n");
         prompt.append("    {\n");
         prompt.append("      \"weekNumber\": 1,\n");
-        prompt.append("      \"weekTitle\": \"Tuần 1: Nền tảng\",\n");
-        prompt.append("      \"weekGoal\": \"Mục tiêu tuần này\",\n");
-        prompt.append("      \"mainTheme\": \"Chủ đề chính\",\n");
-        prompt.append("      \"description\": \"Mô tả chi tiết\",\n");
+        prompt.append("      \"weekTitle\": \"Tuần 1: Khởi động & Nền tảng\",\n");
+        prompt.append("      \"weekGoal\": \"Mục tiêu tuần 1\",\n");
+        prompt.append("      \"mainTheme\": \"Chủ đề chính tuần 1\",\n");
         prompt.append("      \"totalMinutes\": 300,\n");
-        prompt.append("      \"mainActivities\": [\"Hoạt động 1\", \"Hoạt động 2\"],\n");
-        prompt.append("      \"checkpoints\": [\"Kiểm tra 1\"],\n");
         prompt.append("      \"days\": [\n");
-        prompt.append("        {\n");
-        prompt.append("          \"dayOfWeek\": \"MONDAY\",\n");
-        prompt.append("          \"date\": \"2026-09-01\",\n");
-        prompt.append("          \"dayTitle\": \"Thứ 2: Khởi động\",\n");
-        prompt.append("          \"dailyGoal\": \"Hoàn thành X\",\n");
-        prompt.append("          \"totalMinutes\": 45,\n");
-        prompt.append("          \"expectedDifficulty\": \"EASY\",\n");
-        prompt.append("          \"notes\": \"Lưu ý của ngày này\",\n");
-        prompt.append("          \"tasks\": [\n");
-        prompt.append("            {\n");
-        prompt.append("              \"order\": 1,\n");
-        prompt.append("              \"title\": \"Bài 1\",\n");
-        prompt.append("              \"description\": \"Mô tả nhiệm vụ\",\n");
-        prompt.append("              \"type\": \"VOCABULARY|GRAMMAR|SPEAKING|PRACTICE|REVIEW|QUIZ\",\n");
-        prompt.append("              \"durationMinutes\": 30,\n");
-        prompt.append("              \"objective\": \"Mục tiêu cụ thể\",\n");
-        prompt.append("              \"instructions\": \"Hướng dẫn\",\n");
-        prompt.append("              \"resources\": [\"Tài nguyên 1\"],\n");
-        prompt.append("              \"successCriteria\": \"Tiêu chí thành công\"\n");
-        prompt.append("            }\n");
-        prompt.append("          ]\n");
-        prompt.append("        }\n");
+        prompt.append("        { \"dayOfWeek\": \"MONDAY\", \"dayTitle\": \"Thứ 2\", \"tasks\": [{ \"order\": 1, \"title\": \"Shadowing phát âm A1\", \"type\": \"SPEAKING\", \"durationMinutes\": 15 }] },\n");
+        prompt.append("        { \"dayOfWeek\": \"TUESDAY\", \"dayTitle\": \"Thứ 3\", \"tasks\": [{ \"order\": 1, \"title\": \"Học 8 từ vựng chủ đề gia đình\", \"type\": \"VOCABULARY\", \"durationMinutes\": 15 }] },\n");
+        prompt.append("        { \"dayOfWeek\": \"WEDNESDAY\", \"dayTitle\": \"Thứ 4\", \"tasks\": [{ \"order\": 1, \"title\": \"Cấu trúc câu cơ bản\", \"type\": \"GRAMMAR\", \"durationMinutes\": 15 }] },\n");
+        prompt.append("        { \"dayOfWeek\": \"THURSDAY\", \"dayTitle\": \"Thứ 5\", \"tasks\": [{ \"order\": 1, \"title\": \"Tự nói và ghi âm 5 câu\", \"type\": \"SPEAKING\", \"durationMinutes\": 15 }] },\n");
+        prompt.append("        { \"dayOfWeek\": \"FRIDAY\", \"dayTitle\": \"Thứ 6\", \"tasks\": [{ \"order\": 1, \"title\": \"Làm bài trắc nghiệm nhanh\", \"type\": \"QUIZ\", \"durationMinutes\": 15 }] },\n");
+        prompt.append("        { \"dayOfWeek\": \"SATURDAY\", \"dayTitle\": \"Thứ 7\", \"tasks\": [{ \"order\": 1, \"title\": \"Xem video ngắn có phụ đề\", \"type\": \"PRACTICE\", \"durationMinutes\": 20 }] },\n");
+        prompt.append("        { \"dayOfWeek\": \"SUNDAY\", \"dayTitle\": \"Chủ nhật\", \"tasks\": [{ \"order\": 1, \"title\": \"Ôn tập tổng hợp tuần 1\", \"type\": \"REVIEW\", \"durationMinutes\": 30 }] }\n");
         prompt.append("      ]\n");
         prompt.append("    }\n");
-        prompt.append("  ],\n");
-        prompt.append("  \"milestones\": [\n");
-        prompt.append("    {\n");
-        prompt.append("      \"week\": 1,\n");
-        prompt.append("      \"name\": \"Cột mốc 1\",\n");
-        prompt.append("      \"description\": \"Mô tả\",\n");
-        prompt.append("      \"evaluation\": \"Cách đánh giá\",\n");
-        prompt.append("      \"reward\": \"Phần thưởng\"\n");
-        prompt.append("    }\n");
-        prompt.append("  ],\n");
-        prompt.append("  \"successCriteria\": [\"Tiêu chí 1\", \"Tiêu chí 2\"],\n");
-        prompt.append("  \"strategy\": \"Chiến lược chung\",\n");
-        prompt.append("  \"requiredResources\": [\"Tài nguyên 1\"],\n");
-        prompt.append("  \"importantNotes\": [\"Lưu ý 1\"],\n");
-        prompt.append("  \"challengeMitigation\": [\"Cách giải quyết 1\"],\n");
-        prompt.append("  \"confidenceScore\": 85.0,\n");
-        prompt.append("  \"difficultyLevel\": \"MODERATE\",\n");
-        prompt.append("  \"adjustmentFrequencyDays\": 7\n");
+        prompt.append("  ]\n");
         prompt.append("}\n");
         
         return prompt.toString();
@@ -338,8 +309,11 @@ public class LearningPlanServiceImpl implements LearningPlanService {
         try {
             log.debug("[TASK 4] Phân tích phản hồi JSON cho userId: {}", userId);
             
+            // Trích xuất JSON an toàn (xóa markdown ```json nếu có)
+            String jsonString = JsonResponseExtractor.extractJsonString(aiResponse);
+            
             // Phân tích JSON
-            LearningPlanDto dto = objectMapper.readValue(aiResponse, LearningPlanDto.class);
+            LearningPlanDto dto = objectMapper.readValue(jsonString, LearningPlanDto.class);
             
             // Đặt userId, userName, timestamp
             dto.setUserId(userId);

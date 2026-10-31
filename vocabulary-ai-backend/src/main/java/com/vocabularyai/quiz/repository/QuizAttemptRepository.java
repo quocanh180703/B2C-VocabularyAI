@@ -52,4 +52,15 @@ public interface QuizAttemptRepository extends JpaRepository<QuizAttempt, Long> 
      * Find quiz attempt by ID and verify user ownership
      */
     Optional<QuizAttempt> findByIdAndUserId(Long id, Long userId);
+
+    @Query("SELECT AVG(qa.score) FROM QuizAttempt qa WHERE qa.user.id = :userId AND qa.submittedAt IS NOT NULL")
+    Double getAverageScoreByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT qa FROM QuizAttempt qa WHERE qa.user.id = :userId AND qa.submittedAt IS NOT NULL ORDER BY qa.submittedAt DESC")
+    java.util.List<QuizAttempt> findLatestCompletedAttempts(@Param("userId") Long userId, Pageable pageable);
+
+    default Optional<QuizAttempt> findLatestCompletedAttempt(Long userId) {
+        java.util.List<QuizAttempt> list = findLatestCompletedAttempts(userId, org.springframework.data.domain.PageRequest.of(0, 1));
+        return list.isEmpty() ? Optional.empty() : Optional.of(list.get(0));
+    }
 }

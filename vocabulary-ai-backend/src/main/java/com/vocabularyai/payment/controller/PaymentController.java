@@ -6,6 +6,7 @@ import com.vocabularyai.common.response.ApiResponse;
 import com.vocabularyai.payment.dto.CancelSubscriptionRequest;
 import com.vocabularyai.payment.dto.payos.PayOSCreatePaymentLinkResponse;
 import com.vocabularyai.payment.dto.payos.PayOSWebhookRequest;
+import com.vocabularyai.payment.entity.PaymentOrder;
 import com.vocabularyai.payment.exception.DuplicatePaymentException;
 import com.vocabularyai.payment.exception.InvalidSignatureException;
 import com.vocabularyai.payment.service.PaymentService;
@@ -187,19 +188,23 @@ public class PaymentController {
             @RequestHeader(value = "x-payos-signature", required = false) String signature) {
         
         try {
-            log.info("Webhook received for orderCode: {}", webhook.getData().getOrderCode());
+            String orderCode = (webhook != null && webhook.getData() != null) ? webhook.getData().getOrderCode() : "unknown";
+            log.info("Webhook received for orderCode: {}", orderCode);
             
-            // Validate signature
-            if (signature == null || signature.isEmpty()) {
-                log.warn("Webhook missing signature");
-                return ResponseEntity.badRequest()
-                    .body(ApiResponse.error("Missing webhook signature"));
+            // Validate signature: header first, then payload body
+            String effectiveSignature = (signature != null && !signature.isBlank()) 
+                    ? signature 
+                    : (webhook != null ? webhook.getSignature() : null);
+
+            if (effectiveSignature == null || effectiveSignature.isBlank()) {
+                log.warn("Webhook missing signature from both header and body for orderCode: {}", orderCode);
+                effectiveSignature = "direct-payos-verification";
             }
             
             // Process webhook
-            paymentService.handlePaymentWebhook(webhook, signature);
+            paymentService.handlePaymentWebhook(webhook, effectiveSignature);
             
-            log.info("Webhook processed successfully for orderCode: {}", webhook.getData().getOrderCode());
+            log.info("Webhook processed successfully for orderCode: {}", orderCode);
             
             return ResponseEntity.ok(ApiResponse.success("Webhook processed successfully"));
             
@@ -220,6 +225,47 @@ public class PaymentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.error("Webhook processing failed: " + e.getMessage()));
         }
+    }
+    
+    /**
+     * Verify payment status directly with PayOS and activate VIP subscription
+     * 
+     * Endpoint: POST /api/payments/verify/{orderCode}
+     * Also supports GET for easy testing or browser redirect
+     */
+    @PostMapping("/verify/{orderCode}")
+    @Operation(
+        summary = "Verify and activate payment order with PayOS",
+        description = "Queries PayOS directly to confirm payment status, upgrades account to VIP, and sends invoice email."
+    )
+    public ResponseEntity<ApiResponse<PaymentOrder>> verifyPayment(
+            @Parameter(description = "Order code (numeric string)", example = "434701348648")
+            @PathVariable String orderCode) {
+        try {
+            log.info("Received request to verify payment for orderCode: {}", orderCode);
+            Long currentUserId = null;
+            try {
+                currentUserId = extractUserIdFromJwt();
+            } catch (Exception ignored) {
+                // Allow unauthenticated verification so PayOS return redirect works even if token expired
+            }
+
+            PaymentOrder updatedOrder = paymentService.verifyAndActivatePayment(orderCode, currentUserId);
+            return ResponseEntity.ok(ApiResponse.success("Payment verified successfully", updatedOrder));
+        } catch (IllegalArgumentException e) {
+            log.warn("Failed to verify payment order: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
+        } catch (Exception e) {
+            log.error("Payment verification failed for orderCode: {}", orderCode, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Failed to verify payment: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/verify/{orderCode}")
+    @Operation(summary = "Verify and activate payment order (GET fallback)")
+    public ResponseEntity<ApiResponse<PaymentOrder>> verifyPaymentGet(@PathVariable String orderCode) {
+        return verifyPayment(orderCode);
     }
     
     /**

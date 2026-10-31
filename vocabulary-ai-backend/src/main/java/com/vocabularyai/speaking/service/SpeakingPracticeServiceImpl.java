@@ -24,9 +24,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.vocabularyai.speaking.entity.SpeakingStatus;
 
 /**
  * SpeakingPracticeServiceImpl
@@ -125,6 +127,8 @@ public class SpeakingPracticeServiceImpl implements SpeakingPracticeService {
             // STEP 7: Update session score in database
             if (analysisResult.getAnalysisScores() != null && analysisResult.getAnalysisScores().getOverall() != null) {
                 session.setOverallScore(analysisResult.getAnalysisScores().getOverall());
+                session.setStatus(SpeakingStatus.COMPLETED);
+                session.setCompletedAt(LocalDateTime.now());
                 session = sessionRepository.save(session);
             }
             

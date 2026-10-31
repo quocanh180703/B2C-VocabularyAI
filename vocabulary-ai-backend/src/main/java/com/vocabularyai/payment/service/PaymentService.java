@@ -80,6 +80,17 @@ public interface PaymentService {
     boolean handlePaymentWebhook(PayOSWebhookRequest webhook, String signature);
     
     /**
+     * Verify payment status directly with payment gateway and activate VIP subscription
+     * 
+     * Used when user returns to returnUrl or polls to sync payment state
+     * 
+     * @param orderCode Order code to verify
+     * @param currentUserId Authenticated user ID (optional check)
+     * @return PaymentOrder updated
+     */
+    PaymentOrder verifyAndActivatePayment(String orderCode, Long currentUserId);
+    
+    /**
      * Get payment order details
      * 
      * @param orderId Payment order ID

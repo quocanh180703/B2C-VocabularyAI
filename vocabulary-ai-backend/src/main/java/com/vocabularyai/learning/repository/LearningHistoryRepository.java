@@ -94,4 +94,19 @@ public interface LearningHistoryRepository extends JpaRepository<LearningHistory
            "  SELECT id FROM speaking_sessions WHERE user_id = :userId AND created_at >= :startOfDay" +
            ") combined", nativeQuery = true)
     long countTodayActivities(@Param("userId") Long userId, @Param("startOfDay") LocalDateTime startOfDay);
+
+    @Query("SELECT COUNT(lh) FROM LearningHistory lh WHERE lh.user.id = :userId AND lh.createdAt >= :since")
+    long countActivitiesSince(@Param("userId") Long userId, @Param("since") LocalDateTime since);
+
+    @Query("SELECT COUNT(lh) FROM LearningHistory lh WHERE lh.user.id = :userId AND lh.createdAt >= :startDate AND lh.createdAt < :endDate")
+    long countActivitiesBetween(@Param("userId") Long userId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
+    @Query("SELECT " +
+           "COALESCE(SUM(CASE WHEN lh.isCorrect = true THEN 1 ELSE 0 END), 0) * 100.0 / " +
+           "COALESCE(SUM(CASE WHEN lh.isCorrect IS NOT NULL THEN 1 ELSE 0 END), 1) " +
+           "FROM LearningHistory lh WHERE lh.user.id = :userId AND lh.createdAt >= :since")
+    Double getAccuracyRateSince(@Param("userId") Long userId, @Param("since") LocalDateTime since);
+
+    @Query("SELECT lh.activityType, COUNT(lh) FROM LearningHistory lh WHERE lh.user.id = :userId AND lh.createdAt >= :startOfDay GROUP BY lh.activityType")
+    java.util.List<Object[]> countTodayByActivityType(@Param("userId") Long userId, @Param("startOfDay") LocalDateTime startOfDay);
 }

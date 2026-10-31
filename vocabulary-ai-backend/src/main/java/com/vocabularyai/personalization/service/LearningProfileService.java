@@ -156,4 +156,14 @@ public interface LearningProfileService {
      * @return Average duration in minutes
      */
     Double getAverageSessionDuration(Long userId);
+
+    /**
+     * Calculate current streak across all activities (vocab, quizzes, speaking)
+     */
+    Integer calculateCurrentStreak(Long userId);
+
+    /**
+     * Calculate longest streak across all activities
+     */
+    Integer calculateLongestStreak(Long userId);
 }
