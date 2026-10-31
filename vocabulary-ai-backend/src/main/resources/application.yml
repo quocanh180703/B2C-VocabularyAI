@@ -188,13 +188,13 @@ jwt:
 # 11. Cloudinary Configuration (Audio Storage)
 # ============================================================
 cloudinary:
-  url: ${CLOUDINARY_URL:cloudinary://347852754341328:ysYZFQwFWNvSR8WgrOyVMcHc8Zk@dzb6rfaxt}
+  url: ${CLOUDINARY_URL:}
 
 # ============================================================
 # 11.5 Gemini Fallback Alias Configuration
 # ============================================================
 gemini:
-  api-key: ${AI_CHAT_API_KEY:sk-74a3ef563d5b2908a5bc57206f659d78b0dcc1788c5cbd6ebfe38b6a062674b2}
+  api-key: ${AI_CHAT_API_KEY:}
   model: ${AI_CHAT_MODEL:thanhnhan9023/gemini-3.7-flash-high}
 
 # ============================================================
@@ -202,7 +202,7 @@ gemini:
 # ============================================================
 whisper:
   url: ${WHISPER_URL:https://api.vilao.ai/v1/audio/transcriptions}
-  api-key: ${WHISPER_API_KEY:${VILAO_API_KEY:${GROQ_API_KEY:${OPENAI_API_KEY:sk-9a27a25c5fd521ed372cb3cc76e90ff2e1b5d5fc91db6f8fbe4dbf83bb9ebae5}}}}
+  api-key: ${WHISPER_API_KEY:${VILAO_API_KEY:${GROQ_API_KEY:${OPENAI_API_KEY:}}}}
   model: ${WHISPER_MODEL:tsa/groq/whisper-large-v3}
   language: ${WHISPER_LANGUAGE:en}
   timeout-seconds: 30
@@ -213,7 +213,7 @@ whisper:
 # ============================================================
 tts:
   url: ${TTS_URL:https://api.xah.io/v1/audio/speech}
-  api-key: ${TTS_API_KEY:sk-74a3ef563d5b2908a5bc57206f659d78b0dcc1788c5cbd6ebfe38b6a062674b2}
+  api-key: ${TTS_API_KEY:}
   model: ${TTS_MODEL:namth/grok-voice-latest}
   voice: ${TTS_VOICE:alloy}
   timeout-seconds: 30
@@ -224,7 +224,7 @@ tts:
 ai:
   chat:
     url: ${AI_CHAT_URL:https://api.xah.io/v1/chat/completions}
-    api-key: ${AI_CHAT_API_KEY:sk-74a3ef563d5b2908a5bc57206f659d78b0dcc1788c5cbd6ebfe38b6a062674b2}
+    api-key: ${AI_CHAT_API_KEY:}
     model: ${AI_CHAT_MODEL:thanhnhan9023/gemini-3.7-flash-high}
   rate-limit:
     daily-tokens: 1000000  # 1M tokens per day
@@ -554,9 +554,9 @@ speaking:
 # ============================================================
 payment:
   payos:
-    api-key: ${PAYOS_API_KEY:ad590596-352a-4922-9e93-27c6c8f57be5}
-    client-id: ${PAYOS_CLIENT_ID:2fac26d7-626f-4123-8f28-193d797605a7}
-    checksum-key: ${PAYOS_CHECKSUM_KEY:2216be65526d4a6d16c88cdbfc2fa21a58c54cef966ed2db679e36fe4138cc4e}
+    api-key: ${PAYOS_API_KEY:}
+    client-id: ${PAYOS_CLIENT_ID:}
+    checksum-key: ${PAYOS_CHECKSUM_KEY:}
     sandbox: ${PAYOS_SANDBOX:true}
     base-url: ${PAYOS_BASE_URL:https://api-merchant.payos.vn}
   # Backend-configured redirect URLs (not from client)
