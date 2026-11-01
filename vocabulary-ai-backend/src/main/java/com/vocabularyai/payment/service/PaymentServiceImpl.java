@@ -18,11 +18,14 @@ import com.vocabularyai.payment.repository.PaymentOrderRepository;
 import com.vocabularyai.payment.repository.PaymentRepository;
 import com.vocabularyai.payment.repository.SubscriptionRepository;
 import com.vocabularyai.payment.service.gateway.PaymentGatewayService;
+import com.vocabularyai.common.exception.ForbiddenException;
+import com.vocabularyai.common.exception.UnauthorizedException;
 import com.vocabularyai.user.entity.User;
 import com.vocabularyai.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -203,16 +206,28 @@ public class PaymentServiceImpl implements PaymentService {
         return true;
     }
 
+    private boolean isAdmin() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth != null && auth.getAuthorities().stream()
+                .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
+    }
+
     @Override
     @Transactional
     public PaymentOrder verifyAndActivatePayment(String orderCode, Long currentUserId) {
         log.info("Verifying and activating payment for orderCode: {}, currentUserId: {}", orderCode, currentUserId);
 
+        if (currentUserId == null) {
+            throw new UnauthorizedException("Authentication required to verify payment");
+        }
+
         PaymentOrder paymentOrder = paymentOrderRepository.findByOrderCode(orderCode)
                 .orElseThrow(() -> new IllegalArgumentException("PaymentOrder not found: " + orderCode));
 
-        if (currentUserId != null && !paymentOrder.getUserId().equals(currentUserId)) {
-            log.warn("User {} is verifying order {} of user {}", currentUserId, orderCode, paymentOrder.getUserId());
+        if (!paymentOrder.getUserId().equals(currentUserId) && !isAdmin()) {
+            log.warn("User {} is verifying order {} of user {}",
+                currentUserId, orderCode, paymentOrder.getUserId());
+            throw new ForbiddenException("Payment order does not belong to you");
         }
 
         // If already paid and subscription is active, return immediately

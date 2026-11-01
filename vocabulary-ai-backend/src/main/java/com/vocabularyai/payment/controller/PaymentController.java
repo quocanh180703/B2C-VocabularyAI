@@ -243,15 +243,13 @@ public class PaymentController {
             @PathVariable String orderCode) {
         try {
             log.info("Received request to verify payment for orderCode: {}", orderCode);
-            Long currentUserId = null;
-            try {
-                currentUserId = extractUserIdFromJwt();
-            } catch (Exception ignored) {
-                // Allow unauthenticated verification so PayOS return redirect works even if token expired
-            }
+            Long currentUserId = extractUserIdFromJwt();
 
             PaymentOrder updatedOrder = paymentService.verifyAndActivatePayment(orderCode, currentUserId);
             return ResponseEntity.ok(ApiResponse.success("Payment verified successfully", updatedOrder));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponse.error("Authentication required"));
         } catch (IllegalArgumentException e) {
             log.warn("Failed to verify payment order: {}", e.getMessage());
             return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
@@ -260,12 +258,6 @@ public class PaymentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ApiResponse.error("Failed to verify payment: " + e.getMessage()));
         }
-    }
-
-    @GetMapping("/verify/{orderCode}")
-    @Operation(summary = "Verify and activate payment order (GET fallback)")
-    public ResponseEntity<ApiResponse<PaymentOrder>> verifyPaymentGet(@PathVariable String orderCode) {
-        return verifyPayment(orderCode);
     }
     
     /**

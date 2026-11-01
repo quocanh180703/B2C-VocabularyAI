@@ -185,8 +185,8 @@ public class VoiceChatServiceImpl implements VoiceChatService {
             try {
                 rawJson = future.get(45, TimeUnit.SECONDS);
             } catch (TimeoutException te) {
-                log.warn("Voice chat scoring timed out after 45s, generating baseline scorecard");
-                rawJson = "{\"grammar\":{\"score\":78,\"comment\":\"Good grammatical structure.\"},\"vocabulary\":{\"score\":75,\"comment\":\"Appropriate vocabulary usage.\"},\"fluency\":{\"score\":72,\"comment\":\"Conversational pace was maintained well.\"},\"content\":{\"score\":80,\"comment\":\"Clear and relevant ideas.\"},\"pronunciation\":{\"score\":75,\"comment\":\"Pronunciation was understandable.\"},\"overall\":76,\"summary\":\"Great effort in your speaking session! Regular practice will continue to improve your reflex.\",\"newWords\":[]}";
+                log.warn("Voice chat scoring timed out after 45s");
+                throw new ExternalServiceException("Voice chat scoring timed out");
             }
             String cleanJson = rawJson.replaceAll("```json\\s*", "").replaceAll("```\\s*", "").trim();
             JsonNode root = objectMapper.readTree(cleanJson);
@@ -270,25 +270,11 @@ public class VoiceChatServiceImpl implements VoiceChatService {
                     .newWords(newWordsList)
                     .build();
 
+        } catch (ExternalServiceException e) {
+            throw e;
         } catch (Exception e) {
             log.error("Failed to score voice chat session: {}", e.getMessage(), e);
-            // Fallback response nếu chấm điểm lỗi
-            VoiceChatCriterionScoreDto defaultScore = VoiceChatCriterionScoreDto.builder()
-                    .score(70)
-                    .comment("Good effort during the conversation.")
-                    .estimatedFromTranscript(true)
-                    .build();
-
-            response = VoiceChatScoreResponse.builder()
-                    .grammar(defaultScore)
-                    .vocabulary(defaultScore)
-                    .fluency(defaultScore)
-                    .content(defaultScore)
-                    .pronunciation(defaultScore)
-                    .overall(70)
-                    .summary("Well done completing your voice chat session! Keep practicing regularly.")
-                    .newWords(Collections.emptyList())
-                    .build();
+            throw new ExternalServiceException("Voice chat scoring failed", e);
         }
 
         return response;
