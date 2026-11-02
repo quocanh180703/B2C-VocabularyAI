@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.vocabularyai.admin.entity.AdminQueryResult;
+import com.vocabularyai.speaking.entity.SpeakingSession;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * Admin Speaking Repository
  */
 @Repository
-public interface AdminSpeakingRepository extends JpaRepository<AdminQueryResult, Long> {
+public interface AdminSpeakingRepository extends JpaRepository<SpeakingSession, Long> {
     
     /**
      * Get paginated list of all speaking sessions

@@ -133,7 +133,7 @@ public class UserSnapshotFormatter {
         sb.append("[GÓI CƯỚC & LƯỢT DÙNG AI HÔM NAY]\n");
         sb.append("- Gói tài khoản: ").append(snapshot.getSubscriptionPlan() != null ? snapshot.getSubscriptionPlan() : "FREE");
         if (Boolean.TRUE.equals(snapshot.getIsVip())) {
-            sb.append(" (Gói Premium VIP");
+            sb.append(" (Gói Premium PRO");
             if (snapshot.getSubscriptionExpiresAt() != null) {
                 sb.append(", có hạn đến ").append(snapshot.getSubscriptionExpiresAt().format(DATE_FMT));
             }

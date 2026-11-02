@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.vocabularyai.admin.entity.AdminQueryResult;
+import com.vocabularyai.user.entity.User;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * Provides queries for admin system management (dashboard, settings, etc.)
  */
 @Repository
-public interface AdminSystemRepository extends JpaRepository<AdminQueryResult, Long> {
+public interface AdminSystemRepository extends JpaRepository<User, Long> {
     
     /**
      * Get system overview statistics

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.vocabularyai.admin.entity.AdminQueryResult;
+import com.vocabularyai.payment.entity.Subscription;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * Provides queries for subscription management (admin system-wide view)
  */
 @Repository
-public interface AdminSubscriptionRepository extends JpaRepository<AdminQueryResult, Long> {
+public interface AdminSubscriptionRepository extends JpaRepository<Subscription, Long> {
     
     // ==================== Subscription List with Pagination ====================
     

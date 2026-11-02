@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.vocabularyai.admin.entity.AdminQueryResult;
+import com.vocabularyai.user.entity.User;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * Provides queries for reporting and analytics
  */
 @Repository
-public interface AdminReportsRepository extends JpaRepository<AdminQueryResult, Long> {
+public interface AdminReportsRepository extends JpaRepository<User, Long> {
     
     /**
      * Get user engagement report (daily active users)

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.vocabularyai.admin.entity.AdminQueryResult;
+import com.vocabularyai.user.entity.User;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.Map;
  * All queries return DTOs or primitive types for admin view
  */
 @Repository
-public interface AdminStudentRepository extends JpaRepository<AdminQueryResult, Long> {
+public interface AdminStudentRepository extends JpaRepository<User, Long> {
     
     // ==================== Student List with Pagination ====================
     
