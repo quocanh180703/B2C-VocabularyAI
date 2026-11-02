@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.vocabularyai.admin.entity.AdminQueryResult;
+import com.vocabularyai.quiz.entity.Quiz;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * Supports listing, searching, and filtering quizzes
  */
 @Repository
-public interface AdminQuizRepository extends JpaRepository<AdminQueryResult, Long> {
+public interface AdminQuizRepository extends JpaRepository<Quiz, Long> {
     
     // ==================== Quiz List ====================
     

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.vocabularyai.admin.entity.AdminQueryResult;
+import com.vocabularyai.payment.entity.Payment;
 
 /**
  * Admin Payment Repository
@@ -18,7 +18,7 @@ import com.vocabularyai.admin.entity.AdminQueryResult;
  * Provides queries for payment management (admin system-wide view)
  */
 @Repository
-public interface AdminPaymentRepository extends JpaRepository<AdminQueryResult, Long> {
+public interface AdminPaymentRepository extends JpaRepository<Payment, Long> {
     
     // ==================== Payment List with Pagination ====================
     

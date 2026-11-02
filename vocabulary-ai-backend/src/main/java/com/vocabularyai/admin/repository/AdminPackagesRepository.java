@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.vocabularyai.admin.entity.AdminQueryResult;
+import com.vocabularyai.payment.entity.Package;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * Supports listing, searching, and filtering packages
  */
 @Repository
-public interface AdminPackagesRepository extends JpaRepository<AdminQueryResult, Long> {
+public interface AdminPackagesRepository extends JpaRepository<Package, Long> {
     
     /**
      * Get paginated list of all packages

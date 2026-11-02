@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.vocabularyai.admin.entity.AdminQueryResult;
+import com.vocabularyai.ai.entity.AiConversation;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * Supports listing, searching, and filtering AI conversations
  */
 @Repository
-public interface AdminAiRepository extends JpaRepository<AdminQueryResult, Long> {
+public interface AdminAiRepository extends JpaRepository<AiConversation, Long> {
     
     // ==================== Conversation List ====================
     

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.vocabularyai.admin.entity.AdminQueryResult;
+import com.vocabularyai.vocabulary.entity.CefrWord;
 import com.vocabularyai.vocabulary.entity.CEFRLevel;
 import com.vocabularyai.vocabulary.entity.PartOfSpeech;
 
@@ -20,7 +20,7 @@ import java.util.List;
  * Supports listing, searching, and filtering CEFR words
  */
 @Repository
-public interface AdminVocabularyRepository extends JpaRepository<AdminQueryResult, Long> {
+public interface AdminVocabularyRepository extends JpaRepository<CefrWord, String> {
     
     // ==================== CEFR Word List ====================
     
