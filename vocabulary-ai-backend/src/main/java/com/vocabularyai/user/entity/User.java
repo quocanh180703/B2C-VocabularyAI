@@ -20,7 +20,8 @@ import java.util.List;
 @Table(name = "users", indexes = {
     @Index(name = "idx_users_role", columnList = "role"),
     @Index(name = "idx_users_status", columnList = "status"),
-    @Index(name = "idx_users_created_at", columnList = "created_at")
+    @Index(name = "idx_users_created_at", columnList = "created_at"),
+    @Index(name = "uk_users_provider_id", columnList = "provider_id", unique = true)
 })
 @Data
 @Builder
@@ -58,6 +59,14 @@ public class User implements UserDetails {
     @Column(nullable = false)
     @Builder.Default
     private UserStatus status = UserStatus.ACTIVE;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    @Builder.Default
+    private AuthProvider provider = AuthProvider.LOCAL;
+    
+    @Column(name = "provider_id", length = 255)
+    private String providerId;
     
     @Column(name = "email_reminders_enabled", nullable = false)
     @Builder.Default
