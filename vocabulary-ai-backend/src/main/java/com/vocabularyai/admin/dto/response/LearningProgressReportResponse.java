@@ -26,4 +26,7 @@ public class LearningProgressReportResponse {
     
     @Schema(description = "Number of unique users", example = "250")
     private Long uniqueUsers;
+
+    @Schema(description = "Total speaking practice sessions", example = "18")
+    private Long totalSpeakingSessions;
 }

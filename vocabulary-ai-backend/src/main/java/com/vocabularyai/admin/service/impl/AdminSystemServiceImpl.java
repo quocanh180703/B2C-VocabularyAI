@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.lang.management.ManagementFactory;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -76,22 +77,18 @@ public class AdminSystemServiceImpl implements AdminSystemService {
         
         List<?> results = adminSystemRepository.getSystemHealth();
         
-        if (results.isEmpty()) {
-            return SystemHealthResponse.builder()
-                    .totalUsers(0L)
-                    .apiCallsToday(0L)
-                    .averageResponseTime(0L)
-                    .errorRate(0.0)
-                    .status("HEALTHY")
-                    .build();
+        long totalUsers = 0L;
+        long apiCalls = 0L;
+        long avgResponseTime = 0L;
+        double errorRate = 0.0;
+        
+        if (!results.isEmpty()) {
+            Map<String, Object> result = (Map<String, Object>) results.get(0);
+            totalUsers = result.get("totalUsers") != null ? ((Number) result.get("totalUsers")).longValue() : 0L;
+            apiCalls = result.get("apiCallsToday") != null ? ((Number) result.get("apiCallsToday")).longValue() : 0L;
+            avgResponseTime = result.get("averageResponseTime") != null ? ((Number) result.get("averageResponseTime")).longValue() : 0L;
+            errorRate = result.get("errorRate") != null ? ((Number) result.get("errorRate")).doubleValue() : 0.0;
         }
-        
-        Map<String, Object> result = (Map<String, Object>) results.get(0);
-        
-        long totalUsers = result.get("totalUsers") != null ? ((Number) result.get("totalUsers")).longValue() : 0L;
-        long apiCalls = result.get("apiCallsToday") != null ? ((Number) result.get("apiCallsToday")).longValue() : 0L;
-        long avgResponseTime = result.get("averageResponseTime") != null ? ((Number) result.get("averageResponseTime")).longValue() : 0L;
-        double errorRate = result.get("errorRate") != null ? ((Number) result.get("errorRate")).doubleValue() : 0.0;
         
         // Determine health status
         String status;
@@ -105,12 +102,31 @@ public class AdminSystemServiceImpl implements AdminSystemService {
             status = "HEALTHY";
         }
         
+        // Compute real JVM Uptime and Memory
+        long uptimeMillis = ManagementFactory.getRuntimeMXBean().getUptime();
+        long hours = uptimeMillis / (1000 * 60 * 60);
+        long minutes = (uptimeMillis % (1000 * 60 * 60)) / (1000 * 60);
+        String uptimeStr = hours > 0 ? (hours + "h " + minutes + "m") : (minutes + "m");
+        
+        Runtime rt = Runtime.getRuntime();
+        long totalMem = rt.totalMemory();
+        long freeMem = rt.freeMemory();
+        long usedMem = totalMem - freeMem;
+        long usedMB = usedMem / (1024 * 1024);
+        long totalMB = totalMem / (1024 * 1024);
+        int memPercent = totalMem > 0 ? (int) ((usedMem * 100) / totalMem) : 0;
+        String memStr = usedMB + "MB / " + totalMB + "MB";
+        
         return SystemHealthResponse.builder()
                 .totalUsers(totalUsers)
                 .apiCallsToday(apiCalls)
                 .averageResponseTime(avgResponseTime)
                 .errorRate(errorRate)
                 .status(status)
+                .uptime(uptimeStr)
+                .jvmMemory(memStr)
+                .jvmMemoryPercent(memPercent)
+                .dbPoolStatus("Connected (HikariCP)")
                 .build();
     }
 }
