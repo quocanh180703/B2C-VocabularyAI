@@ -1,6 +1,7 @@
 package com.vocabularyai.speaking.service;
 
 import com.vocabularyai.speaking.dto.request.SubmitSpeakingAttemptRequest;
+import com.vocabularyai.speaking.service.storage.AudioMetadata;
 import com.vocabularyai.speaking.dto.response.SpeakingAttemptResponse;
 import com.vocabularyai.speaking.entity.SpeakingAttempt;
 import com.vocabularyai.speaking.entity.SpeakingSession;
@@ -28,7 +29,7 @@ import java.util.List;
  * - Lấy thông tin attempts
  * - Xóa attempts
  * 
- * CẢNH BÁO: MVP phase - Audio storage sẽ được implement sau
+ * CẢNH BÁO: Audio storage tích hợp qua AudioStorageService
  */
 @Service
 @RequiredArgsConstructor
@@ -65,13 +66,15 @@ public class SpeakingAttemptServiceImpl implements SpeakingAttemptService {
         int attemptNumber = (int) (attemptCount + 1);
         
         // MVP: Tạm thời lưu URL là tên file (sẽ implement upload storage sau)
-        String audioUrl = generateAudioUrl(sessionId, attemptNumber, audioFile.getOriginalFilename());
+        // Upload audio qua AudioStorageService
+        AudioMetadata audioMetadata = audioStorageService.uploadAudio(sessionId, attemptNumber, audioFile);
+        String audioUrl = audioMetadata.getAudioUrl();
         
         // Tạo attempt entity
         SpeakingAttempt attempt = SpeakingAttempt.builder()
                 .session(session)
                 .audioUrl(audioUrl)
-                .audioDurationSeconds(0) // TODO: Extract từ file metadata
+                .audioDurationSeconds(audioMetadata.getDurationSeconds() != null ? audioMetadata.getDurationSeconds() : 0)
                 .attemptNumber(attemptNumber)
                 .build();
         
@@ -298,16 +301,4 @@ public class SpeakingAttemptServiceImpl implements SpeakingAttemptService {
         return "";
     }
     
-    /**
-     * Tạo URL cho audio file (MVP: tạm thời dùng tên file)
-     * 
-     * TODO: Implement upload storage (local/Cloudinary/S3)
-     */
-    private String generateAudioUrl(Long sessionId, int attemptNumber, String originalFilename) {
-        // Format: /storage/audio/session-{sessionId}/attempt-{attemptNumber}-{timestamp}.{ext}
-        String ext = getFileExtension(originalFilename);
-        long timestamp = System.currentTimeMillis();
-        return String.format("/storage/audio/session-%d/attempt-%d-%d.%s", 
-                sessionId, attemptNumber, timestamp, ext);
-    }
 }

@@ -25,4 +25,12 @@ public class SystemHealthResponse {
     private Double errorRate;
     
     private String status;
+
+    private String uptime;
+
+    private String jvmMemory;
+
+    private Integer jvmMemoryPercent;
+
+    private String dbPoolStatus;
 }

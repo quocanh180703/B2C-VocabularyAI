@@ -3,6 +3,7 @@ package com.vocabularyai.admin.service.impl;
 import com.vocabularyai.admin.dto.response.*;
 import com.vocabularyai.admin.repository.AdminReportsRepository;
 import com.vocabularyai.admin.service.AdminReportsService;
+import com.vocabularyai.speaking.repository.SpeakingSessionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class AdminReportsServiceImpl implements AdminReportsService {
     
     private final AdminReportsRepository adminReportsRepository;
+    private final SpeakingSessionRepository speakingSessionRepository;
     
     @Override
     public List<UserEngagementReportResponse> getUserEngagementReport() {
@@ -44,6 +46,13 @@ public class AdminReportsServiceImpl implements AdminReportsService {
     public LearningProgressReportResponse getLearningProgressReport() {
         log.debug("Fetching learning progress report");
         
+        long speakingCount = 0L;
+        try {
+            speakingCount = speakingSessionRepository.count();
+        } catch (Exception e) {
+            log.warn("Error counting speaking sessions: {}", e.getMessage());
+        }
+        
         List<?> results = adminReportsRepository.getLearningProgressReport();
         
         if (results.isEmpty()) {
@@ -52,6 +61,7 @@ public class AdminReportsServiceImpl implements AdminReportsService {
                     .avgScore(0.0)
                     .avgCompletionTime(0L)
                     .uniqueUsers(0L)
+                    .totalSpeakingSessions(speakingCount)
                     .build();
         }
         
@@ -62,6 +72,7 @@ public class AdminReportsServiceImpl implements AdminReportsService {
                 .avgScore(result.get("avgScore") != null ? ((Number) result.get("avgScore")).doubleValue() : 0.0)
                 .avgCompletionTime(result.get("avgCompletionTime") != null ? ((Number) result.get("avgCompletionTime")).longValue() : 0L)
                 .uniqueUsers(result.get("uniqueUsers") != null ? ((Number) result.get("uniqueUsers")).longValue() : 0L)
+                .totalSpeakingSessions(speakingCount)
                 .build();
     }
     
@@ -74,13 +85,17 @@ public class AdminReportsServiceImpl implements AdminReportsService {
         return results.stream()
                 .map(item -> {
                     Map<String, Object> resultMap = (Map<String, Object>) item;
+                    int attemptCount = resultMap.get("attemptCount") != null ? ((Number) resultMap.get("attemptCount")).intValue() : 0;
+                    double completedCount = resultMap.get("completedCount") != null ? ((Number) resultMap.get("completedCount")).doubleValue() : 0.0;
+                    int completionRate = attemptCount > 0 ? (int) Math.round((completedCount * 100.0) / attemptCount) : 0;
+                    
                     return ContentPerformanceReportResponse.builder()
                             .quizId(((Number) resultMap.get("quizId")).longValue())
                             .quizTitle((String) resultMap.get("quizTitle"))
-                            .level((String) resultMap.get("level"))
-                            .attemptCount(resultMap.get("attemptCount") != null ? ((Number) resultMap.get("attemptCount")).intValue() : 0)
+                            .level(resultMap.get("level") != null ? resultMap.get("level").toString() : "A1")
+                            .attemptCount(attemptCount)
                             .avgScore(resultMap.get("avgScore") != null ? ((Number) resultMap.get("avgScore")).doubleValue() : 0.0)
-                            .completionRate(resultMap.get("completionRate") != null ? ((Number) resultMap.get("completionRate")).intValue() : 0)
+                            .completionRate(completionRate)
                             .build();
                 })
                 .collect(Collectors.toList());

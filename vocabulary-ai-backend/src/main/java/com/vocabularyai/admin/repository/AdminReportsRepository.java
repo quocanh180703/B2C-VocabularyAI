@@ -1,10 +1,7 @@
 package com.vocabularyai.admin.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.vocabularyai.user.entity.User;
@@ -40,27 +37,28 @@ public interface AdminReportsRepository extends JpaRepository<User, Long> {
      */
     @Query("SELECT new map(" +
            "COUNT(DISTINCT qa.id) as totalAttempts, " +
-           "0 as avgScore, " +
+           "COALESCE(AVG(qa.score), 0.0) as avgScore, " +
            "0 as avgCompletionTime, " +
            "COUNT(DISTINCT qa.user.id) as uniqueUsers) " +
            "FROM QuizAttempt qa")
     List<?> getLearningProgressReport();
     
     /**
-     * Get content performance report (most attempted quizzes)
+     * Get content performance report (all quizzes with real attempt count and real avg score)
      * 
-     * @param limit Limit number of results
      * @return Map with quiz performance data
      */
     @Query("SELECT new map(" +
            "q.id as quizId, " +
            "q.title as quizTitle, " +
            "q.level as level, " +
-           "0 as attemptCount, " +
-           "0.0 as avgScore, " +
-           "0 as completionRate) " +
+           "COUNT(qa.id) as attemptCount, " +
+           "COALESCE(AVG(qa.score), 0.0) as avgScore, " +
+           "COALESCE(SUM(CASE WHEN qa.submittedAt IS NOT NULL THEN 1.0 ELSE 0.0 END), 0.0) as completedCount) " +
            "FROM Quiz q " +
-           "ORDER BY q.createdAt DESC")
+           "LEFT JOIN QuizAttempt qa ON qa.quiz = q " +
+           "GROUP BY q.id, q.title, q.level " +
+           "ORDER BY COUNT(qa.id) DESC, q.id DESC")
     List<?> getContentPerformanceReport();
     
     /**
