@@ -117,7 +117,7 @@ public class AuthService {
                 User user = refreshToken.getUser();
 
                 // ✅ TASK 5: Validate user status before refreshing
-                validateUserStatusForTokenRefresh(user);
+                validateUserStatus(user);
 
                 // Generate new access token
                 String newAccessToken = jwtProvider.generateAccessToken(
@@ -146,7 +146,7 @@ public class AuthService {
          * @param user User to validate
          * @throws UnauthorizedException If user is not ACTIVE
          */
-        private void validateUserStatusForTokenRefresh(User user) {
+        public void validateUserStatus(User user) {
                 if (user.getStatus() == User.UserStatus.INACTIVE) {
                         log.warn("Cannot refresh token for inactive user: {}", user.getUsername());
                         throw new UnauthorizedException(
@@ -185,7 +185,7 @@ public class AuthService {
         /**
          * Generate auth response with tokens
          */
-        private AuthResponse generateAuthResponse(User user) {
+        public AuthResponse generateAuthResponse(User user) {
                 // Generate access token
                 String accessToken = jwtProvider.generateAccessToken(
                                 user.getUsername(),

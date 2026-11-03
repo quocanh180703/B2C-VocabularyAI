@@ -33,4 +33,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * Check if email exists
      */
     boolean existsByEmail(String email);
+
+    /**
+     * Find user by provider ID (e.g. Google sub)
+     */
+    Optional<User> findByProviderId(String providerId);
 }

@@ -1,6 +1,8 @@
 package com.vocabularyai.auth.controller;
 
 import com.vocabularyai.auth.service.AuthService;
+import com.vocabularyai.auth.service.GoogleAuthService;
+import com.vocabularyai.auth.dto.request.GoogleLoginRequest;
 import com.vocabularyai.auth.service.RegisterOtpService;
 import com.vocabularyai.auth.service.ForgotPasswordService;
 import com.vocabularyai.auth.dto.request.ValidateRegisterRequest;
@@ -44,6 +46,7 @@ public class AuthController {
     private final AuthService authService;
     private final RegisterOtpService registerOtpService;
     private final ForgotPasswordService forgotPasswordService;
+    private final GoogleAuthService googleAuthService;
 
     /**
      * Step 1: Validate Registration Information & Send OTP
@@ -168,6 +171,24 @@ public class AuthController {
 
         return ResponseEntity.ok(
                 ApiResponse.success("Login successful", authResponse));
+    }
+
+    /**
+     * User Login / Register with Google
+     */
+    @PostMapping("/google")
+    @Operation(summary = "Google login", description = "Authenticate or register user using Google ID token")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Login successful"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request or Google login unconfigured"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Invalid Google token")
+    })
+    public ResponseEntity<ApiResponse<AuthResponse>> loginWithGoogle(
+            @Valid @RequestBody GoogleLoginRequest request) {
+        log.info("Google login request received");
+        AuthResponse authResponse = googleAuthService.loginWithGoogle(request.getIdToken());
+        return ResponseEntity.ok(
+                ApiResponse.success("Đăng nhập Google thành công", authResponse));
     }
 
     /**
