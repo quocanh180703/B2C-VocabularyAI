@@ -3,6 +3,7 @@ package com.vocabularyai.listening.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocabularyai.ai.service.gemini.GeminiAIClientService;
+import com.vocabularyai.common.exception.DuplicateResourceException;
 import com.vocabularyai.common.exception.ResourceNotFoundException;
 import com.vocabularyai.listening.dto.*;
 import com.vocabularyai.listening.entity.ListeningExercise;
@@ -65,7 +66,8 @@ public class ListeningExerciseServiceImpl implements ListeningExerciseService {
 
         String passageText;
         byte[] audioBytes;
-        Path audioFilePath;
+        Path audioFilePath = null;
+        ListeningExercise exercise;
 
         try {
             // 2. Build prompt & generate passage via Gemini
@@ -94,25 +96,32 @@ public class ListeningExerciseServiceImpl implements ListeningExerciseService {
             audioFilePath = listeningDir.resolve(filename);
             Files.write(audioFilePath, audioBytes);
 
+            // 5. Save exercise entity to database (inside try block for rollback & cleanup on failure)
+            exercise = ListeningExercise.builder()
+                    .userId(userId)
+                    .topic(topic)
+                    .level(level)
+                    .voice(voice)
+                    .passageText(passageText)
+                    .audioPath(audioFilePath.toAbsolutePath().toString())
+                    .status("CREATED")
+                    .build();
+
+            exercise = repository.save(exercise);
+            log.info("Listening exercise created successfully - id: {}", exercise.getId());
+
         } catch (Exception e) {
             log.error("Failed to create listening exercise for user {}. Rolling back quota.", userId, e);
             featureUsageService.rollbackQuota(userId, FeatureType.LISTENING);
+            if (audioFilePath != null) {
+                try {
+                    Files.deleteIfExists(audioFilePath);
+                } catch (Exception ignored) {
+                    // Do not mask original error
+                }
+            }
             throw new RuntimeException("Tạo bài luyện nghe thất bại: " + e.getMessage(), e);
         }
-
-        // 5. Save exercise entity to database
-        ListeningExercise exercise = ListeningExercise.builder()
-                .userId(userId)
-                .topic(topic)
-                .level(level)
-                .voice(voice)
-                .passageText(passageText)
-                .audioPath(audioFilePath.toAbsolutePath().toString())
-                .status("CREATED")
-                .build();
-
-        exercise = repository.save(exercise);
-        log.info("Listening exercise created successfully - id: {}", exercise.getId());
 
         // 6. Return response WITHOUT passageText (anti-cheat)
         return CreateListeningResponse.builder()
@@ -151,6 +160,10 @@ public class ListeningExerciseServiceImpl implements ListeningExerciseService {
     public ListeningSubmitResponse submitExercise(Long exerciseId, Long userId, ListeningSubmitRequest request) {
         ListeningExercise exercise = repository.findByIdAndUserId(exerciseId, userId)
                 .orElseThrow(() -> ResourceNotFoundException.of("ListeningExercise", "id", exerciseId));
+
+        if ("COMPLETED".equalsIgnoreCase(exercise.getStatus())) {
+            throw new DuplicateResourceException("Bài nghe này đã được chấm điểm");
+        }
 
         String typedText = request != null && request.getTypedText() != null ? request.getTypedText().trim() : "";
 
@@ -265,6 +278,8 @@ public class ListeningExerciseServiceImpl implements ListeningExerciseService {
                 "Requirements:\n" +
                 "- %s\n" +
                 "- Style: Natural spoken English or clear monologue suitable for listening dictation.\n" +
+                "- For A1-A2 levels: do not use numbers, dates, or years. From B1 and above, if numbers are used, write them out in words (e.g. \"twenty\", not \"20\").\n" +
+                "- Do not use rare or difficult-to-spell proper names; only use very common names (e.g. John, London) or avoid proper names altogether.\n" +
                 "- DO NOT include any title, label, preamble, markdown formatting, quotation marks, or explanations.\n" +
                 "- Output ONLY the plain English paragraph text.",
                 topic, level, constraints
