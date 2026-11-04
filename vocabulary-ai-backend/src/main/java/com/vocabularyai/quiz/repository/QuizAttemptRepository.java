@@ -22,6 +22,12 @@ public interface QuizAttemptRepository extends JpaRepository<QuizAttempt, Long> 
      */
     @EntityGraph(attributePaths = {"quiz"})
     Page<QuizAttempt> findByUserId(Long userId, Pageable pageable);
+
+    /**
+     * Get completed quiz attempts by user (history)
+     */
+    @EntityGraph(attributePaths = {"quiz"})
+    Page<QuizAttempt> findByUserIdAndSubmittedAtIsNotNull(Long userId, Pageable pageable);
     
     /**
      * Get quiz attempts by quiz
