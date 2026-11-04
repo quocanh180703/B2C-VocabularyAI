@@ -3,6 +3,7 @@ package com.vocabularyai.quiz.repository;
 import com.vocabularyai.quiz.entity.QuizAttempt;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,7 +20,14 @@ public interface QuizAttemptRepository extends JpaRepository<QuizAttempt, Long> 
     /**
      * Get quiz attempts by user
      */
+    @EntityGraph(attributePaths = {"quiz"})
     Page<QuizAttempt> findByUserId(Long userId, Pageable pageable);
+
+    /**
+     * Get completed quiz attempts by user (history)
+     */
+    @EntityGraph(attributePaths = {"quiz"})
+    Page<QuizAttempt> findByUserIdAndSubmittedAtIsNotNull(Long userId, Pageable pageable);
     
     /**
      * Get quiz attempts by quiz

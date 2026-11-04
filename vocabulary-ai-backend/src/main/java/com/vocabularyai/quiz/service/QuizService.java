@@ -329,14 +329,8 @@ public class QuizService {
     public Page<QuizAttemptResponse> getUserQuizHistory(Long userId, Pageable pageable) {
         log.info("Getting quiz history for user: {}", userId);
         
-        Page<QuizAttempt> attempts = attemptRepository.findByUserId(userId, pageable);
-        return new PageImpl<>(
-            attempts.getContent().stream()
-                .map(QuizAttemptResponse::fromEntity)
-                .collect(Collectors.toList()),
-            pageable,
-            attempts.getTotalElements()
-        );
+        Page<QuizAttempt> attempts = attemptRepository.findByUserIdAndSubmittedAtIsNotNull(userId, pageable);
+        return attempts.map(QuizAttemptResponse::fromEntity);
     }
     
     /**
