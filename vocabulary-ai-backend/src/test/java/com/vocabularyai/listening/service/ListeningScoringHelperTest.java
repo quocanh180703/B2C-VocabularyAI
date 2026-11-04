@@ -48,5 +48,30 @@ class ListeningScoringHelperTest {
         ListeningScoringHelper.ScoringResult spamRes = ListeningScoringHelper.evaluate(passage, spamUser);
         assertTrue(spamRes.score < 20);
     }
+
+    @Test
+    void testTenWordsWithTwoMissing() {
+        String passage = "one two three four five six seven eight nine ten";
+        String user = "one two three four five six seven eight"; // missing nine, ten
+
+        ListeningScoringHelper.ScoringResult res = ListeningScoringHelper.evaluate(passage, user);
+        assertEquals(80, res.score);
+        assertEquals(8, res.correctWords);
+
+        long missingCount = res.wordResults.stream()
+                .filter(w -> "MISSING".equalsIgnoreCase(w.getStatus()))
+                .count();
+        assertEquals(2, missingCount);
+    }
+
+    @Test
+    void testTenWordsWithFiveExtraWords() {
+        String passage = "one two three four five six seven eight nine ten";
+        String user = "one two three four five six seven eight nine ten extra junk words added here";
+
+        ListeningScoringHelper.ScoringResult res = ListeningScoringHelper.evaluate(passage, user);
+        assertTrue(res.score < 100, "Score must be penalized when typing extra words");
+        assertEquals(10, res.correctWords);
+    }
 }
 
