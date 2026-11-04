@@ -1,6 +1,12 @@
 package com.vocabularyai.ai.controller;
 
 import com.vocabularyai.ai.dto.request.GrammarCheckRequest;
+import com.vocabularyai.ai.dto.request.TopicGrammarCheckRequest;
+import com.vocabularyai.ai.dto.request.GeneratePracticePromptRequest;
+import com.vocabularyai.ai.dto.response.PracticePromptResponse;
+import com.vocabularyai.ai.dto.request.CheckTranslationRequest;
+import com.vocabularyai.ai.dto.response.TranslationCheckResponse;
+import com.vocabularyai.ai.dto.response.TopicGrammarCheckResponse;
 import com.vocabularyai.ai.dto.response.GrammarCheckResponse;
 import com.vocabularyai.ai.service.grammar.GrammarCheckingService;
 import com.vocabularyai.common.response.ApiResponse;
@@ -130,6 +136,95 @@ public class GrammarController {
         }
     }
     
+    
+    /**
+     * POST /api/v1/ai/grammar/check-topic
+     * 
+     * Kiem tra ngu phap bai viet theo chu de kem danh gia dan y
+     */
+    @PostMapping("/check-topic")
+    public ResponseEntity<ApiResponse<TopicGrammarCheckResponse>> checkTopicGrammar(
+            @Valid @RequestBody TopicGrammarCheckRequest request) {
+        log.info("Checking topic grammar: topic={}, level={}, length={}",
+            request.getTopic(), request.getLevel(), request.getText() != null ? request.getText().length() : 0);
+
+        User user = userService.getCurrentUser();
+        featureUsageService.checkAndConsumeQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.GRAMMAR);
+        try {
+            TopicGrammarCheckResponse response = grammarService.checkTopicGrammar(request, user.getId());
+            return ResponseEntity.ok(ApiResponse.success(
+                "Topic grammar check completed",
+                response
+            ));
+        } catch (Exception e) {
+            featureUsageService.rollbackQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.GRAMMAR);
+            throw e;
+        }
+    }
+
+    
+    /**
+     * GET /api/v1/ai/grammar/practice/prompt
+     * 
+     * Lay de luyen dich tieng Viet da co trong DB (khong goi AI, ton 0 token)
+     */
+    @GetMapping("/practice/prompt")
+    public ResponseEntity<ApiResponse<PracticePromptResponse>> getPracticePrompt(
+            @RequestParam Long wordId,
+            @RequestParam(required = false, defaultValue = "SENTENCE") String mode) {
+        log.info("Getting existing grammar practice prompt: wordId={}, mode={}", wordId, mode);
+
+        PracticePromptResponse response = grammarService.getExistingPracticePrompt(wordId, mode);
+        return ResponseEntity.ok(ApiResponse.success(
+            response != null ? "Practice prompt found" : "No practice prompt yet",
+            response
+        ));
+    }
+
+    /**
+     * POST /api/v1/ai/grammar/practice/generate
+     * 
+     * Tao de luyen dich tieng Viet theo tu yeu thich (khong tru quota)
+     */
+    @PostMapping("/practice/generate")
+    public ResponseEntity<ApiResponse<PracticePromptResponse>> generatePracticePrompt(
+            @Valid @RequestBody GeneratePracticePromptRequest request) {
+        log.info("Generating grammar practice prompt: wordId={}, mode={}, forceNew={}",
+            request.getWordId(), request.getMode(), request.getForceNew());
+
+        User user = userService.getCurrentUser();
+        PracticePromptResponse response = grammarService.generatePracticePrompt(request, user.getId());
+        return ResponseEntity.ok(ApiResponse.success(
+            "Practice prompt generated",
+            response
+        ));
+    }
+
+    /**
+     * POST /api/v1/ai/grammar/check-translation
+     * 
+     * Cham bai dich tieng Anh doi chieu de tieng Viet va tu muc tieu (tru quota GRAMMAR)
+     */
+    @PostMapping("/check-translation")
+    public ResponseEntity<ApiResponse<TranslationCheckResponse>> checkTranslation(
+            @Valid @RequestBody CheckTranslationRequest request) {
+        log.info("Checking translation for targetWord: {}, length={}", 
+            request.getTargetWord(), request.getText() != null ? request.getText().length() : 0);
+
+        User user = userService.getCurrentUser();
+        featureUsageService.checkAndConsumeQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.GRAMMAR);
+        try {
+            TranslationCheckResponse response = grammarService.checkTranslation(request, user.getId());
+            return ResponseEntity.ok(ApiResponse.success(
+                "Translation checked successfully",
+                response
+            ));
+        } catch (Exception e) {
+            featureUsageService.rollbackQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.GRAMMAR);
+            throw e;
+        }
+    }
+
     // ==================== Batch Text Grammar Check ====================
     
     /**

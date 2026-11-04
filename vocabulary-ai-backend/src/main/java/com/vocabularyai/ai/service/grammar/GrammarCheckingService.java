@@ -1,6 +1,12 @@
 package com.vocabularyai.ai.service.grammar;
 
+import com.vocabularyai.ai.dto.request.TopicGrammarCheckRequest;
 import com.vocabularyai.ai.dto.response.GrammarCheckResponse;
+import com.vocabularyai.ai.dto.response.TopicGrammarCheckResponse;
+import com.vocabularyai.ai.dto.request.GeneratePracticePromptRequest;
+import com.vocabularyai.ai.dto.response.PracticePromptResponse;
+import com.vocabularyai.ai.dto.request.CheckTranslationRequest;
+import com.vocabularyai.ai.dto.response.TranslationCheckResponse;
 
 import java.util.List;
 
@@ -101,4 +107,25 @@ public interface GrammarCheckingService {
      * @return GrammarCheckResponse nếu cached, null nếu không
      */
     GrammarCheckResponse getCachedGrammarCheck(String textHash);
+
+    /**
+     * Kiem tra ngu phap theo chu de kem danh gia dan y
+     */
+    TopicGrammarCheckResponse checkTopicGrammar(TopicGrammarCheckRequest request, Long userId);
+
+    /**
+     * Lay de luyen dich tieng Viet da co trong DB neu co (khong goi AI, ton 0 token)
+     */
+    PracticePromptResponse getExistingPracticePrompt(Long wordId, String mode);
+
+    /**
+     * Tao de luyen dich tieng Viet theo tu muc tieu (khong tra cau tieng Anh)
+     */
+    PracticePromptResponse generatePracticePrompt(GeneratePracticePromptRequest request, Long userId);
+
+    /**
+     * Cham bai dich tieng Anh doi chieu voi de tieng Viet va tu muc tieu
+     */
+    TranslationCheckResponse checkTranslation(CheckTranslationRequest request, Long userId);
+
 }

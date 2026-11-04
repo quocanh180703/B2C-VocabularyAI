@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.vocabularyai.user.entity.User;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -66,16 +67,31 @@ public class FavoriteWordService {
             if (cefrOpt.isPresent()) {
                 var cefr = cefrOpt.get();
                 word = wordRepository.findByWord(cefr.getLemma()).orElse(null);
+                String viMeaning = (cefr.getVietnameseMeaning() != null && !cefr.getVietnameseMeaning().isBlank())
+                    ? cefr.getVietnameseMeaning().trim()
+                    : (cefr.getDefinition() != null ? cefr.getDefinition() : cefr.getLemma());
+
                 if (word == null) {
                     word = wordRepository.save(Word.builder()
                         .word(cefr.getLemma())
-                        .meaning(cefr.getDefinition() != null ? cefr.getDefinition() : cefr.getLemma())
+                        .meaning(viMeaning)
                         .definition(cefr.getDefinition())
                         .pronunciation(cefr.getPronunciation())
                         .level(cefr.getCefrLevel() != null ? cefr.getCefrLevel().toString() : "A1")
                         .partOfSpeech(cefr.getPartOfSpeech() != null ? cefr.getPartOfSpeech().toString() : "")
                         .build());
+                } else if (cefr.getVietnameseMeaning() != null && !cefr.getVietnameseMeaning().isBlank()) {
+                    if (word.getMeaning() == null || word.getMeaning().isBlank() || word.getMeaning().equals(word.getDefinition())) {
+                        word.setMeaning(viMeaning);
+                        word = wordRepository.save(word);
+                    }
                 }
+            }
+        } else if (word.getMeaning() == null || word.getMeaning().isBlank() || word.getMeaning().equals(word.getDefinition())) {
+            var cefrOpt = cefrWordRepository.findByLemma(word.getWord());
+            if (cefrOpt.isPresent() && cefrOpt.get().getVietnameseMeaning() != null && !cefrOpt.get().getVietnameseMeaning().isBlank()) {
+                word.setMeaning(cefrOpt.get().getVietnameseMeaning().trim());
+                word = wordRepository.save(word);
             }
         }
 
@@ -98,19 +114,15 @@ public class FavoriteWordService {
 
         return FavoriteWordResponse.fromEntity(savedFavorite);
     }
-    
-    @Transactional
-    public void removeFromFavorites(Long userId, Long wordId) {
-        removeFromFavorites(userId, String.valueOf(wordId));
-    }
 
     /**
-     * Remove word from favorites (supports numeric ID, CEFR UUID or lemma)
+     * Remove word from favorites (supports numeric word ID or CEFR UUID/lemma)
      */
     @Transactional
     public void removeFromFavorites(Long userId, String wordIdentifier) {
         log.info("Removing word {} from favorites for user {}", wordIdentifier, userId);
         Long wordId = null;
+
         try {
             wordId = Long.parseLong(wordIdentifier);
         } catch (NumberFormatException ignored) {}
@@ -143,17 +155,38 @@ public class FavoriteWordService {
     }
     
     /**
-     * Get all favorite words for user
+     * Get all favorite words for user (ensuring Vietnamese meaning is present)
      */
     @Transactional(readOnly = true)
     public Page<FavoriteWordResponse> getUserFavorites(Long userId, Pageable pageable) {
         log.info("Getting favorite words for user {}", userId);
         
         Page<FavoriteWord> favoriteWords = favoriteWordRepository.findByUserId(userId, pageable);
+        List<FavoriteWordResponse> list = favoriteWords.getContent().stream()
+            .map(fav -> {
+                FavoriteWordResponse resp = FavoriteWordResponse.fromEntity(fav);
+                if (resp != null && resp.getWord() != null) {
+                    Word w = fav.getWord();
+                    String meaning = (w != null) ? w.getMeaning() : null;
+                    if (meaning == null || meaning.isBlank() || (w != null && meaning.equals(w.getDefinition()))) {
+                        if (w != null && w.getWord() != null) {
+                            cefrWordRepository.findByLemma(w.getWord()).ifPresent(cefr -> {
+                                if (cefr.getVietnameseMeaning() != null && !cefr.getVietnameseMeaning().isBlank()) {
+                                    resp.getWord().setMeaning(cefr.getVietnameseMeaning().trim());
+                                    resp.getWord().setVietnameseMeaning(cefr.getVietnameseMeaning().trim());
+                                }
+                            });
+                        }
+                    } else if (resp.getWord().getVietnameseMeaning() == null) {
+                        resp.getWord().setVietnameseMeaning(meaning);
+                    }
+                }
+                return resp;
+            })
+            .collect(Collectors.toList());
+
         return new PageImpl<>(
-            favoriteWords.getContent().stream()
-                .map(FavoriteWordResponse::fromEntity)
-                .collect(Collectors.toList()),
+            list,
             pageable,
             favoriteWords.getTotalElements()
         );

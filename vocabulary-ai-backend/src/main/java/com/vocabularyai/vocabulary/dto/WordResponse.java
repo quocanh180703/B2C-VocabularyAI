@@ -33,6 +33,9 @@ public class WordResponse {
     @Schema(description = "Meaning/translation", example = "The occurrence of events by chance in a happy or beneficial way")
     private String meaning;
 
+    @Schema(description = "Vietnamese meaning of word", example = "sự lựa chọn thay thế")
+    private String vietnameseMeaning;
+
     @Schema(description = "Part of speech", example = "noun")
     private String partOfSpeech;
 
@@ -74,6 +77,7 @@ public class WordResponse {
                 .id(word.getId())
                 .word(word.getWord())
                 .meaning(word.getMeaning())
+                .vietnameseMeaning(word.getMeaning())
                 .partOfSpeech(word.getPartOfSpeech())
                 .pronunciation(word.getPronunciation())
                 .definition(word.getDefinition())
@@ -99,6 +103,7 @@ public class WordResponse {
                 .id(word.getId())
                 .word(word.getWord())
                 .meaning(word.getMeaning())
+                .vietnameseMeaning(word.getMeaning())
                 .partOfSpeech(word.getPartOfSpeech())
                 .level(word.getLevel())
                 .build();
