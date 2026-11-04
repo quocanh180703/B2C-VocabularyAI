@@ -21,6 +21,7 @@ public class QuizAttemptResponse {
     
     private Long id;
     private Long quizId;
+    private String quizTitle;
     private Double score;
     private Integer totalQuestions;
     private Integer correctAnswers;
@@ -36,7 +37,8 @@ public class QuizAttemptResponse {
         }
         return QuizAttemptResponse.builder()
             .id(attempt.getId())
-            .quizId(attempt.getQuiz().getId())
+            .quizId(attempt.getQuiz() != null ? attempt.getQuiz().getId() : null)
+            .quizTitle(attempt.getQuiz() != null ? attempt.getQuiz().getTitle() : null)
             .score(attempt.getScore())
             .totalQuestions(attempt.getTotalQuestions())
             .correctAnswers(attempt.getCorrectAnswers())
