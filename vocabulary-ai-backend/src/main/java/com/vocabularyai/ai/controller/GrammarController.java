@@ -6,6 +6,11 @@ import com.vocabularyai.ai.dto.request.GeneratePracticePromptRequest;
 import com.vocabularyai.ai.dto.response.PracticePromptResponse;
 import com.vocabularyai.ai.dto.request.CheckTranslationRequest;
 import com.vocabularyai.ai.dto.response.TranslationCheckResponse;
+import com.vocabularyai.ai.dto.response.GrammarHistorySummaryResponse;
+import com.vocabularyai.ai.dto.response.GrammarHistoryDetailResponse;
+import com.vocabularyai.common.util.PaginationUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.vocabularyai.ai.dto.response.TopicGrammarCheckResponse;
 import com.vocabularyai.ai.dto.response.GrammarCheckResponse;
 import com.vocabularyai.ai.service.grammar.GrammarCheckingService;
@@ -162,7 +167,6 @@ public class GrammarController {
         }
     }
 
-    
     /**
      * GET /api/v1/ai/grammar/practice/prompt
      * 
@@ -223,6 +227,47 @@ public class GrammarController {
             featureUsageService.rollbackQuota(user.getId(), com.vocabularyai.payment.entity.FeatureType.GRAMMAR);
             throw e;
         }
+    }
+
+    /**
+     * GET /api/v1/ai/grammar/history
+     * 
+     * Danh sach lich su luyen viet, phan trang, loc theo mode (khong tru quota)
+     */
+    @GetMapping("/history")
+    public ResponseEntity<ApiResponse<Page<GrammarHistorySummaryResponse>>> getGrammarHistory(
+            @RequestParam(required = false) String mode,
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "10") Integer size) {
+        log.info("Getting grammar history: mode={}, page={}, size={}", mode, page, size);
+
+        User user = userService.getCurrentUser();
+        Pageable pageable = PaginationUtils.createPageableDesc(page, size, "createdAt");
+        Page<GrammarHistorySummaryResponse> historyPage = grammarService.getHistory(user.getId(), mode, pageable);
+
+        return ResponseEntity.ok(ApiResponse.success(
+            "Grammar practice history retrieved successfully",
+            historyPage
+        ));
+    }
+
+    /**
+     * GET /api/v1/ai/grammar/history/{id}
+     * 
+     * Chi tiet 1 lan luyen viet (khong tru quota)
+     */
+    @GetMapping("/history/{id}")
+    public ResponseEntity<ApiResponse<GrammarHistoryDetailResponse>> getGrammarHistoryDetail(
+            @PathVariable Long id) {
+        log.info("Getting grammar history detail: id={}", id);
+
+        User user = userService.getCurrentUser();
+        GrammarHistoryDetailResponse detail = grammarService.getHistoryDetail(id, user.getId());
+
+        return ResponseEntity.ok(ApiResponse.success(
+            "Grammar practice history detail retrieved successfully",
+            detail
+        ));
     }
 
     // ==================== Batch Text Grammar Check ====================

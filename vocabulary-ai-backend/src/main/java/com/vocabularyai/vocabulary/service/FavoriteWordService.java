@@ -96,6 +96,10 @@ public class FavoriteWordService {
         }
 
         if (word == null) {
+            word = wordRepository.findByWord(wordIdentifier).orElse(null);
+        }
+
+        if (word == null) {
             throw ResourceNotFoundException.of("Word", "id", wordIdentifier);
         }
 
@@ -136,6 +140,12 @@ public class FavoriteWordService {
                 var w = wordRepository.findByWord(cefrOpt.get().getLemma());
                 if (w.isPresent()) {
                     wordId = w.get().getId();
+                }
+            }
+            if (wordId == null) {
+                var directWord = wordRepository.findByWord(wordIdentifier);
+                if (directWord.isPresent()) {
+                    wordId = directWord.get().getId();
                 }
             }
         }

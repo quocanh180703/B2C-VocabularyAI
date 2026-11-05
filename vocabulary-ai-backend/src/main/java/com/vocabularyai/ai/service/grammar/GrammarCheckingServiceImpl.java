@@ -14,6 +14,15 @@ import com.vocabularyai.ai.entity.GrammarPracticePrompt;
 import com.vocabularyai.ai.repository.GrammarPracticePromptRepository;
 import com.vocabularyai.vocabulary.entity.Word;
 import com.vocabularyai.vocabulary.repository.WordRepository;
+import com.vocabularyai.vocabulary.repository.FavoriteWordRepository;
+import com.vocabularyai.ai.entity.GrammarPracticeHistory;
+import com.vocabularyai.ai.repository.GrammarPracticeHistoryRepository;
+import com.vocabularyai.ai.dto.response.GrammarHistorySummaryResponse;
+import com.vocabularyai.ai.dto.response.GrammarHistoryDetailResponse;
+import com.vocabularyai.common.exception.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import com.vocabularyai.ai.dto.response.TopicOutlineReport;
 import com.vocabularyai.ai.util.GrammarWordMatchHelper;
 import com.vocabularyai.ai.service.cache.CacheService;
@@ -56,6 +65,8 @@ public class GrammarCheckingServiceImpl implements GrammarCheckingService {
 
     private final GrammarPracticePromptRepository promptRepository;
     private final WordRepository wordRepository;
+    private final FavoriteWordRepository favoriteWordRepository;
+    private final GrammarPracticeHistoryRepository historyRepository;
 
     
     @Value("${ai.grammar.cache-ttl-hours:1}")
@@ -128,6 +139,8 @@ public class GrammarCheckingServiceImpl implements GrammarCheckingService {
         
         log.info("Grammar check completed and cached, took: {}ms", System.currentTimeMillis() - startTime);
         
+        int freeScore = Math.max(0, 100 - (response.getErrors() != null ? response.getErrors().size() : 0) * 15);
+        savePracticeHistory(userId, "FREE", null, freeScore, text, Collections.emptyMap(), response);
         return response;
     }
     
@@ -549,7 +562,9 @@ public class GrammarCheckingServiceImpl implements GrammarCheckingService {
         prompt.append("}\n");
 
         String aiResponse = geminiService.generateResponse(prompt.toString(), userId);
-        return parseTopicGrammarResponse(text, aiResponse, suggestedWords, usedWords, unusedWords, structures);
+        TopicGrammarCheckResponse response = parseTopicGrammarResponse(text, aiResponse, suggestedWords, usedWords, unusedWords, structures);
+        savePracticeHistory(userId, "TOPIC", request.getTopic(), response.getScore(), text, request, response);
+        return response;
     }
 
     @SuppressWarnings("unchecked")
@@ -687,7 +702,12 @@ public class GrammarCheckingServiceImpl implements GrammarCheckingService {
             ? request.getMode().trim().toUpperCase() : "SENTENCE";
 
         Word word = wordRepository.findById(request.getWordId())
-            .orElseThrow(() -> new IllegalArgumentException("Word not found with id: " + request.getWordId()));
+            .orElseThrow(() -> new ResourceNotFoundException("Word not found with id: " + request.getWordId()));
+
+        // Chặn lạm dụng quota: chỉ tạo đề cho từ nằm trong danh sách yêu thích của chính user
+        if (userId != null && !favoriteWordRepository.existsByUserIdAndWordId(userId, request.getWordId())) {
+            throw new ResourceNotFoundException("Word is not in user's favorite list: " + request.getWordId());
+        }
 
         boolean forceNew = Boolean.TRUE.equals(request.getForceNew());
         List<GrammarPracticePrompt> existingPrompts = promptRepository.findByWordIdAndMode(word.getId(), mode);
@@ -800,14 +820,23 @@ public class GrammarCheckingServiceImpl implements GrammarCheckingService {
         }
         prompt.append("\n\nStudent's English Translation:\n\"\"\"\n").append(text).append("\n\"\"\"\n\n");
         prompt.append("Tasks:\n");
-        prompt.append("1. Check if the translation accurately conveys the original Vietnamese meaning (catch mistranslation, wrong meaning, unnatural phrasing).\n");
-        prompt.append("2. Check grammar, spelling, punctuation, and style errors.\n");
-        prompt.append("3. Verify if target vocabulary '").append(targetWord).append("' was used appropriately.\n");
-        prompt.append("4. Provide the ideal, natural corrected English translation.\n");
-        prompt.append("5. Calculate a score (0 to 100) combining translation fidelity, grammar correctness, and target word usage.\n");
-        prompt.append("6. Provide friendly Vietnamese feedback (1-2 sentences) explaining whether they captured the meaning and used the target word well.\n\n");
+        prompt.append("1. Meaning Evaluation: Check if the translation accurately conveys the original Vietnamese meaning (catch mistranslation, wrong meaning, unnatural phrasing).\n");
+        prompt.append("   - Classify 'meaningMatch' strictly as: \"MATCH\" (meaning is accurately conveyed), \"PARTIAL\" (partially conveyed or minor inaccuracy), or \"MISMATCH\" (wrong meaning, off-topic, or completely inaccurate translation).\n");
+        prompt.append("2. Overall Verdict: Classify 'overall' strictly as \"PASS\" or \"FAIL\".\n");
+        prompt.append("   - If meaningMatch is \"MISMATCH\" or target vocabulary is missing/completely misused, 'overall' MUST be \"FAIL\".\n");
+        prompt.append("   - If meaningMatch is \"MATCH\" (or acceptable \"PARTIAL\") AND target word is used acceptably, 'overall' can be \"PASS\".\n");
+        prompt.append("3. Check grammar, spelling, punctuation, and style errors.\n");
+        prompt.append("4. Verify if target vocabulary '").append(targetWord).append("' was used appropriately.\n");
+        prompt.append("5. Calculate a holistic score (0 to 100):\n");
+        prompt.append("   - CRITICAL RULE: If meaningMatch is \"MISMATCH\", the score CANNOT exceed 40 (typically 20-35 even if grammar is 100% correct)!\n");
+        prompt.append("   - If meaningMatch is \"PARTIAL\", score should range from 50 to 75.\n");
+        prompt.append("   - If meaningMatch is \"MATCH\", score should range from 80 to 100 based on grammar and phrasing.\n");
+        prompt.append("6. Provide the ideal, natural corrected English translation.\n");
+        prompt.append("7. Provide friendly Vietnamese feedback (1-2 sentences) explaining whether they captured the meaning and used the target word well.\n\n");
         prompt.append("Respond STRICTLY in JSON format with no markdown wrappers:\n");
         prompt.append("{\n");
+        prompt.append("  \"meaningMatch\": \"MATCH\",\n");
+        prompt.append("  \"overall\": \"PASS\",\n");
         prompt.append("  \"correctedText\": \"...\",\n");
         prompt.append("  \"score\": 88,\n");
         prompt.append("  \"errors\": [\n");
@@ -830,7 +859,9 @@ public class GrammarCheckingServiceImpl implements GrammarCheckingService {
         prompt.append("}\n");
 
         String aiResponse = geminiService.generateResponse(prompt.toString(), userId);
-        return parseTranslationCheckResponse(text, aiResponse, request.getViPrompt(), targetWord, isUsed);
+        TranslationCheckResponse response = parseTranslationCheckResponse(text, aiResponse, request.getViPrompt(), targetWord, isUsed);
+        savePracticeHistory(userId, "TRANSLATION", targetWord, response.getScore(), text, request, response);
+        return response;
     }
 
     @SuppressWarnings("unchecked")
@@ -848,6 +879,15 @@ public class GrammarCheckingServiceImpl implements GrammarCheckingService {
             List<GrammarError> errors = parseErrorsList(parsed.get("errors"));
             List<GrammarSuggestion> suggestions = parseSuggestionsList(parsed.get("suggestions"));
 
+            String meaningMatch = (String) parsed.get("meaningMatch");
+            if (meaningMatch == null || meaningMatch.trim().isEmpty()) {
+                meaningMatch = isUsed ? "MATCH" : "PARTIAL";
+            }
+            meaningMatch = meaningMatch.trim().toUpperCase();
+            if (!meaningMatch.equals("MATCH") && !meaningMatch.equals("PARTIAL") && !meaningMatch.equals("MISMATCH")) {
+                meaningMatch = isUsed ? "MATCH" : "PARTIAL";
+            }
+
             Integer score = null;
             if (parsed.get("score") instanceof Number) {
                 score = ((Number) parsed.get("score")).intValue();
@@ -856,12 +896,37 @@ public class GrammarCheckingServiceImpl implements GrammarCheckingService {
                 score = Math.max(0, 100 - errors.size() * 15);
             }
 
+            String overall = (String) parsed.get("overall");
+            if (overall == null || overall.trim().isEmpty()) {
+                overall = ("MISMATCH".equals(meaningMatch) || !isUsed || score < 50) ? "FAIL" : "PASS";
+            }
+            overall = overall.trim().toUpperCase();
+
+            // Guardrails for meaning and target word:
+            if ("MISMATCH".equals(meaningMatch)) {
+                overall = "FAIL";
+                if (score > 40) {
+                    score = Math.min(score, 35);
+                }
+            }
+            if (!isUsed) {
+                overall = "FAIL";
+                if (score > 70) {
+                    score = 65;
+                }
+            }
+            if (score < 50) {
+                overall = "FAIL";
+            }
+
             String feedback = (String) parsed.get("feedback");
             if (feedback == null || feedback.trim().isEmpty()) {
-                if (isUsed) {
-                    feedback = "Bạn đã dịch rất tốt và áp dụng chuẩn xác từ vựng mục tiêu '" + targetWord + "'.";
-                } else {
+                if ("MISMATCH".equals(meaningMatch)) {
+                    feedback = "Bản dịch chưa sát nghĩa câu tiếng Việt gốc. Hãy đối chiếu lại nội dung và cấu trúc câu nhé!";
+                } else if (!isUsed) {
                     feedback = "Bạn đã hoàn thành bản dịch, tuy nhiên chưa áp dụng từ vựng mục tiêu '" + targetWord + "'. Hãy thử kết hợp từ này nhé!";
+                } else {
+                    feedback = "Bạn đã dịch rất tốt và áp dụng chuẩn xác từ vựng mục tiêu '" + targetWord + "'.";
                 }
             }
 
@@ -875,22 +940,108 @@ public class GrammarCheckingServiceImpl implements GrammarCheckingService {
                 .isTargetWordUsed(isUsed)
                 .viPrompt(viPrompt)
                 .feedback(feedback)
+                .meaningMatch(meaningMatch)
+                .overall(overall)
                 .build();
         } catch (Exception e) {
             log.warn("Error parsing translation check AI response: {}, using fallback", e.getMessage());
 
+            String fallbackMeaning = isUsed ? "MATCH" : "PARTIAL";
+            String fallbackOverall = isUsed ? "PASS" : "FAIL";
+            int fallbackScore = isUsed ? 80 : 50;
+
             return TranslationCheckResponse.builder()
                 .originalText(originalText)
                 .correctedText(originalText)
-                .score(isUsed ? 80 : 60)
+                .score(fallbackScore)
                 .errors(Collections.emptyList())
                 .suggestions(Collections.emptyList())
                 .targetWord(targetWord)
                 .isTargetWordUsed(isUsed)
                 .viPrompt(viPrompt)
                 .feedback(isUsed ? "Bản dịch đã dùng từ mục tiêu '" + targetWord + "'." : "Chưa tìm thấy từ mục tiêu '" + targetWord + "' trong câu dịch.")
+                .meaningMatch(fallbackMeaning)
+                .overall(fallbackOverall)
                 .build();
         }
+    }
+
+    // ==================== Grammar Practice History ====================
+
+    private void savePracticeHistory(
+            Long userId,
+            String mode,
+            String label,
+            Integer score,
+            String inputText,
+            Object context,
+            Object result) {
+        if (userId == null) return;
+        try {
+            String contextJson = context != null ? objectMapper.writeValueAsString(context) : "{}";
+            String resultJson = result != null ? objectMapper.writeValueAsString(result) : "{}";
+
+            historyRepository.save(GrammarPracticeHistory.builder()
+                .userId(userId)
+                .mode(mode)
+                .label(label)
+                .score(score != null ? score : 0)
+                .inputText(inputText != null ? inputText : "")
+                .contextJson(contextJson)
+                .resultJson(resultJson)
+                .build());
+            log.info("Saved grammar practice history for user {}, mode {}", userId, mode);
+        } catch (Exception e) {
+            log.warn("Failed to save grammar practice history for user {}: {}", userId, e.getMessage());
+        }
+    }
+
+    @Override
+    public Page<GrammarHistorySummaryResponse> getHistory(Long userId, String mode, Pageable pageable) {
+        log.info("Getting grammar practice history for user: {}, mode: {}", userId, mode);
+
+        Page<GrammarPracticeHistory> page;
+        if (mode != null && !mode.trim().isEmpty() && !"ALL".equalsIgnoreCase(mode.trim())) {
+            page = historyRepository.findByUserIdAndMode(userId, mode.trim().toUpperCase(), pageable);
+        } else {
+            page = historyRepository.findByUserId(userId, pageable);
+        }
+
+        List<GrammarHistorySummaryResponse> list = page.getContent().stream()
+            .map(h -> {
+                String text = h.getInputText() != null ? h.getInputText().trim() : "";
+                String preview = text.length() > 100 ? text.substring(0, 100) + "..." : text;
+                return GrammarHistorySummaryResponse.builder()
+                    .id(h.getId())
+                    .mode(h.getMode())
+                    .label(h.getLabel())
+                    .score(h.getScore())
+                    .preview(preview)
+                    .createdAt(h.getCreatedAt())
+                    .build();
+            })
+            .collect(Collectors.toList());
+
+        return new PageImpl<>(list, pageable, page.getTotalElements());
+    }
+
+    @Override
+    public GrammarHistoryDetailResponse getHistoryDetail(Long id, Long userId) {
+        log.info("Getting grammar practice history detail: id={}, user={}", id, userId);
+
+        GrammarPracticeHistory history = historyRepository.findByIdAndUserId(id, userId)
+            .orElseThrow(() -> new ResourceNotFoundException("History record not found with id: " + id));
+
+        return GrammarHistoryDetailResponse.builder()
+            .id(history.getId())
+            .mode(history.getMode())
+            .label(history.getLabel())
+            .score(history.getScore())
+            .inputText(history.getInputText())
+            .contextJson(history.getContextJson())
+            .resultJson(history.getResultJson())
+            .createdAt(history.getCreatedAt())
+            .build();
     }
 
 }

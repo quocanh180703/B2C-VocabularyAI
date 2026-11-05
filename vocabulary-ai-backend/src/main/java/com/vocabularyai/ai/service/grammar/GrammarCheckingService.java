@@ -7,6 +7,10 @@ import com.vocabularyai.ai.dto.request.GeneratePracticePromptRequest;
 import com.vocabularyai.ai.dto.response.PracticePromptResponse;
 import com.vocabularyai.ai.dto.request.CheckTranslationRequest;
 import com.vocabularyai.ai.dto.response.TranslationCheckResponse;
+import com.vocabularyai.ai.dto.response.GrammarHistorySummaryResponse;
+import com.vocabularyai.ai.dto.response.GrammarHistoryDetailResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -128,4 +132,13 @@ public interface GrammarCheckingService {
      */
     TranslationCheckResponse checkTranslation(CheckTranslationRequest request, Long userId);
 
+    /**
+     * Lay danh sach lich su luyen viet (phan trang, loc theo mode)
+     */
+    Page<GrammarHistorySummaryResponse> getHistory(Long userId, String mode, Pageable pageable);
+
+    /**
+     * Lay chi tiet 1 lan luyen viet trong lich su
+     */
+    GrammarHistoryDetailResponse getHistoryDetail(Long id, Long userId);
 }

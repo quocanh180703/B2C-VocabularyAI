@@ -48,6 +48,12 @@ public class TranslationGrammarCheckUnitTest {
     @Mock
     private WordRepository wordRepository;
 
+    @Mock
+    private com.vocabularyai.vocabulary.repository.FavoriteWordRepository favoriteWordRepository;
+
+    @Mock
+    private com.vocabularyai.ai.repository.GrammarPracticeHistoryRepository historyRepository;
+
     @Spy
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -59,6 +65,7 @@ public class TranslationGrammarCheckUnitTest {
     void testGeneratePracticePrompt_UsesCachedWhenAtLeast1() {
         Word word = Word.builder().id(10L).word("essential").meaning("thiết yếu").level("B1").build();
         when(wordRepository.findById(10L)).thenReturn(Optional.of(word));
+        when(favoriteWordRepository.existsByUserIdAndWordId(1L, 10L)).thenReturn(true);
 
         List<GrammarPracticePrompt> existing = new ArrayList<>();
         existing.add(GrammarPracticePrompt.builder().id(1L).wordId(10L).mode("SENTENCE").viText("Nước là điều thiết yếu đối với sự sống.").build());
@@ -99,6 +106,7 @@ public class TranslationGrammarCheckUnitTest {
     void testGeneratePracticePrompt_GeneratesWithAIWhenEmpty() {
         Word word = Word.builder().id(20L).word("abundant").meaning("dồi dào").level("B2").build();
         when(wordRepository.findById(20L)).thenReturn(Optional.of(word));
+        when(favoriteWordRepository.existsByUserIdAndWordId(1L, 20L)).thenReturn(true);
         when(promptRepository.findByWordIdAndMode(20L, "SENTENCE")).thenReturn(Collections.emptyList());
 
         when(geminiService.generateResponse(anyString(), eq(1L))).thenReturn("Khu vực này có nguồn tài nguyên khoáng sản dồi dào.");
@@ -151,6 +159,54 @@ public class TranslationGrammarCheckUnitTest {
         assertEquals("abundant", resp.getTargetWord());
         assertEquals("This region has abundant natural resources.", resp.getCorrectedText());
         assertNotNull(resp.getFeedback());
+    }
+
+    @Test
+    @DisplayName("Should throw ResourceNotFoundException when word is not in user's favorites")
+    void testGeneratePracticePrompt_ThrowsWhenNotFavorite() {
+        Word word = Word.builder().id(30L).word("lucid").meaning("rõ ràng").level("C1").build();
+        when(wordRepository.findById(30L)).thenReturn(Optional.of(word));
+        when(favoriteWordRepository.existsByUserIdAndWordId(1L, 30L)).thenReturn(false);
+
+        GeneratePracticePromptRequest req = GeneratePracticePromptRequest.builder().wordId(30L).mode("SENTENCE").build();
+        assertThrows(com.vocabularyai.common.exception.ResourceNotFoundException.class, () -> {
+            grammarService.generatePracticePrompt(req, 1L);
+        });
+    }
+
+    @Test
+    @DisplayName("Ca 7: Should fail and cap score when translation meaning is MISMATCH despite having 0 grammar errors")
+    void testCheckTranslation_FailsWhenMeaningMismatch() {
+        CheckTranslationRequest req = CheckTranslationRequest.builder()
+            .text("I love eating apples and bananas.")
+            .viPrompt("Nếu bạn không thích uống cà phê, trà xanh là một sự lựa chọn thay thế tốt cho sức khỏe.")
+            .targetWord("alternative")
+            .targetMeaning("sự lựa chọn thay thế")
+            .mode("SENTENCE")
+            .build();
+
+        String aiMockResponse = """
+            {
+              "meaningMatch": "MISMATCH",
+              "overall": "FAIL",
+              "correctedText": "If you do not like drinking coffee, green tea is a good healthy alternative.",
+              "score": 90,
+              "errors": [],
+              "suggestions": [],
+              "feedback": "Bản dịch của bạn hoàn toàn lệch nghĩa câu tiếng Việt gốc và chưa dùng từ alternative."
+            }
+            """;
+
+        when(geminiService.generateResponse(anyString(), eq(1L))).thenReturn(aiMockResponse);
+
+        TranslationCheckResponse resp = grammarService.checkTranslation(req, 1L);
+
+        assertNotNull(resp);
+        assertEquals("MISMATCH", resp.getMeaningMatch());
+        assertEquals("FAIL", resp.getOverall());
+        assertTrue(resp.getScore() <= 40, "Score must be capped at <= 40 when meaning is MISMATCH");
+        assertEquals(false, resp.getIsTargetWordUsed());
+        verify(historyRepository, times(1)).save(any(com.vocabularyai.ai.entity.GrammarPracticeHistory.class));
     }
 }
 
