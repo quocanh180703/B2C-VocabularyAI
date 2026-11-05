@@ -35,6 +35,18 @@ public class TopicGrammarCheckUnitTest {
     @Mock
     private CacheService cacheService;
 
+    @Mock
+    private com.vocabularyai.ai.repository.GrammarPracticePromptRepository promptRepository;
+
+    @Mock
+    private com.vocabularyai.vocabulary.repository.WordRepository wordRepository;
+
+    @Mock
+    private com.vocabularyai.vocabulary.repository.FavoriteWordRepository favoriteWordRepository;
+
+    @Mock
+    private com.vocabularyai.ai.repository.GrammarPracticeHistoryRepository historyRepository;
+
     @Spy
     private ObjectMapper objectMapper = new ObjectMapper();
 

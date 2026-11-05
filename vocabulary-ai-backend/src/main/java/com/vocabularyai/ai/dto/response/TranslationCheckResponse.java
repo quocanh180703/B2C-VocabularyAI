@@ -21,5 +21,7 @@ public class TranslationCheckResponse {
     private Boolean isTargetWordUsed;
     private String viPrompt;
     private String feedback;
+    private String meaningMatch; // "MATCH", "PARTIAL", "MISMATCH"
+    private String overall;      // "PASS", "FAIL"
 }
 
