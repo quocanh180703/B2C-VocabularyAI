@@ -25,7 +25,7 @@ import java.util.List;
 @Tag(name = "Admin Reports", description = "API for analytics and reporting")
 @RequiredArgsConstructor
 @Slf4j
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
 public class AdminReportsController {
     
     private final AdminReportsService adminReportsService;
@@ -78,6 +78,7 @@ public class AdminReportsController {
      * @return Revenue data
      */
     @GetMapping("/revenue")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Get revenue report", description = "Get financial metrics and revenue data")
     public ResponseEntity<RevenueReportResponse> getRevenueReport() {
         log.info("GET /api/admin/reports/revenue - Get revenue report");

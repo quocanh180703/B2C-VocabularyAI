@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Tag(name = "Admin Students", description = "Admin student management endpoints")
 @SecurityRequirement(name = "bearerAuth")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
 public class AdminStudentController {
     
     private final AdminStudentService studentService;

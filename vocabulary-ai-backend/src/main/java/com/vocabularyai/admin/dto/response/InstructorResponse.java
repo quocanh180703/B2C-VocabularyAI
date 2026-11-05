@@ -48,3 +48,4 @@ public class InstructorResponse implements Serializable {
     @Schema(description = "Account creation date")
     private LocalDateTime createdAt;
 }
+

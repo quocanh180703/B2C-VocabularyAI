@@ -48,7 +48,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Tag(name = "Admin Vocabulary", description = "Admin vocabulary management endpoints")
 @SecurityRequirement(name = "bearerAuth")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
 public class AdminVocabularyController {
     
     private final AdminVocabularyService vocabularyService;

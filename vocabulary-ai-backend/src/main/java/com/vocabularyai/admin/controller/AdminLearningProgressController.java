@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/admin/learning-progress")
 @RequiredArgsConstructor
 @Tag(name = "Admin - Learning Progress Management")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
 public class AdminLearningProgressController {
     
     private final AdminLearningProgressService service;
@@ -45,12 +45,14 @@ public class AdminLearningProgressController {
     }
     
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Tạo tiến độ học")
     public ResponseEntity<LearningProgressDetailResponse> createProgress(@Valid @RequestBody CreateLearningProgressRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createProgress(request));
     }
     
     @PutMapping("/{progressId}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Cập nhật tiến độ học")
     public ResponseEntity<LearningProgressDetailResponse> updateProgress(
             @PathVariable Long progressId,
@@ -59,6 +61,7 @@ public class AdminLearningProgressController {
     }
     
     @DeleteMapping("/{progressId}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Xóa tiến độ học")
     public ResponseEntity<Void> deleteProgress(@PathVariable Long progressId) {
         service.deleteProgress(progressId);

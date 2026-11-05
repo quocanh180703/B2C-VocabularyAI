@@ -135,8 +135,9 @@ public class AdminInstructorPhase1UnitTest {
         for (Class<?> clazz : adminControllers) {
             PreAuthorize annotation = clazz.getAnnotation(PreAuthorize.class);
             assertNotNull(annotation, clazz.getSimpleName() + " must have @PreAuthorize annotation");
-            assertTrue(annotation.value().contains("hasRole('ADMIN')"),
-                    clazz.getSimpleName() + " must enforce hasRole('ADMIN')");
+            assertTrue(annotation.value().contains("ADMIN"),
+                    clazz.getSimpleName() + " must enforce ADMIN access");
         }
     }
 }
+

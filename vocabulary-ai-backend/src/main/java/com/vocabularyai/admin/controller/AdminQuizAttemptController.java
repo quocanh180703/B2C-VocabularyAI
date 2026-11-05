@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/admin/quiz-attempts")
 @RequiredArgsConstructor
 @Tag(name = "Admin - Quiz Attempt Management")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
 public class AdminQuizAttemptController {
     
     private final AdminQuizAttemptService service;
@@ -45,12 +45,14 @@ public class AdminQuizAttemptController {
     }
     
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Tạo lần làm bài")
     public ResponseEntity<QuizAttemptDetailResponse> createAttempt(@Valid @RequestBody CreateQuizAttemptRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createAttempt(request));
     }
     
     @PutMapping("/{attemptId}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Cập nhật lần làm bài")
     public ResponseEntity<QuizAttemptDetailResponse> updateAttempt(
             @PathVariable Long attemptId,
@@ -59,6 +61,7 @@ public class AdminQuizAttemptController {
     }
     
     @DeleteMapping("/{attemptId}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Xóa lần làm bài")
     public ResponseEntity<Void> deleteAttempt(@PathVariable Long attemptId) {
         service.deleteAttempt(attemptId);

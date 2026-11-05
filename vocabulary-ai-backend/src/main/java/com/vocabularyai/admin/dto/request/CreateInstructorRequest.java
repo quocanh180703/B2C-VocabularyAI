@@ -38,3 +38,4 @@ public class CreateInstructorRequest {
     @Size(min = 2, max = 150, message = ValidationConstants.FULL_NAME_SIZE)
     private String fullName;
 }
+

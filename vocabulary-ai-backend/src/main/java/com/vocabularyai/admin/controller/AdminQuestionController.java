@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/admin/questions")
 @RequiredArgsConstructor
 @Tag(name = "Admin - Question Management")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
 public class AdminQuestionController {
     
     private final AdminQuestionService service;

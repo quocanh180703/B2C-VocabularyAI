@@ -59,7 +59,7 @@ public class QuizController {
      * Get all quizzes including drafts (Admin)
      */
     @GetMapping("/admin/all")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Get all quizzes (admin)", description = "Retrieve all quizzes including draft and published")
     public ResponseEntity<ApiResponse<Page<QuizResponse>>> getAllQuizzes(
@@ -75,7 +75,7 @@ public class QuizController {
      * Create quiz (Admin)
      */
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Create quiz", description = "Create a new quiz (admin only)")
     public ResponseEntity<ApiResponse<QuizResponse>> createQuiz(
@@ -91,7 +91,7 @@ public class QuizController {
      * Update quiz (Admin)
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Update quiz", description = "Update quiz details (admin only)")
     public ResponseEntity<ApiResponse<QuizResponse>> updateQuiz(
@@ -107,7 +107,7 @@ public class QuizController {
      * Delete quiz (Admin)
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Delete quiz", description = "Delete a quiz and its questions (admin only)")
     public ResponseEntity<ApiResponse<Void>> deleteQuiz(@PathVariable Long id) {
