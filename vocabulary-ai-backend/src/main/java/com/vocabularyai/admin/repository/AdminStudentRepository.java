@@ -37,6 +37,7 @@ public interface AdminStudentRepository extends JpaRepository<User, Long> {
            "u.username as username, " +
            "u.email as email, " +
            "u.fullName as fullName, " +
+           "u.role as role, " +
            "u.status as status, " +
            "COUNT(DISTINCT s.id) as totalSessions, " +
            "CASE WHEN MAX(sub.id) IS NOT NULL AND sub.status = 'ACTIVE' AND sub.endAt > CURRENT_TIMESTAMP " +
@@ -45,9 +46,13 @@ public interface AdminStudentRepository extends JpaRepository<User, Long> {
            "FROM User u " +
            "LEFT JOIN LearningHistory s ON u.id = s.user.id " +
            "LEFT JOIN Subscription sub ON u.id = sub.userId " +
-           "WHERE u.role = 'STUDENT' " +
-           "GROUP BY u.id, u.username, u.email, u.fullName, u.status, u.createdAt")
-    Page<?> getStudentList(Pageable pageable);
+           "WHERE u.role = :role " +
+           "GROUP BY u.id, u.username, u.email, u.fullName, u.role, u.status, u.createdAt")
+    Page<?> getStudentListByRole(@Param("role") User.UserRole role, Pageable pageable);
+
+    default Page<?> getStudentList(Pageable pageable) {
+        return getStudentListByRole(User.UserRole.STUDENT, pageable);
+    }
     
     /**
      * Get paginated list of students filtered by status
@@ -61,14 +66,19 @@ public interface AdminStudentRepository extends JpaRepository<User, Long> {
            "u.username as username, " +
            "u.email as email, " +
            "u.fullName as fullName, " +
+           "u.role as role, " +
            "u.status as status, " +
            "COUNT(DISTINCT s.id) as totalSessions, " +
            "u.createdAt as createdAt) " +
            "FROM User u " +
            "LEFT JOIN LearningHistory s ON u.id = s.user.id " +
-           "WHERE u.role = 'STUDENT' AND u.status = :status " +
-           "GROUP BY u.id, u.username, u.email, u.fullName, u.status, u.createdAt")
-    Page<?> getStudentListByStatus(@Param("status") String status, Pageable pageable);
+           "WHERE u.role = :role AND u.status = :status " +
+           "GROUP BY u.id, u.username, u.email, u.fullName, u.role, u.status, u.createdAt")
+    Page<?> getStudentListByRoleAndStatus(@Param("role") User.UserRole role, @Param("status") User.UserStatus status, Pageable pageable);
+
+    default Page<?> getStudentListByStatus(String status, Pageable pageable) {
+        return getStudentListByRoleAndStatus(User.UserRole.STUDENT, User.UserStatus.valueOf(status), pageable);
+    }
     
     /**
      * Search students by email or full name
@@ -82,21 +92,26 @@ public interface AdminStudentRepository extends JpaRepository<User, Long> {
            "u.username as username, " +
            "u.email as email, " +
            "u.fullName as fullName, " +
+           "u.role as role, " +
            "u.status as status, " +
            "COUNT(DISTINCT s.id) as totalSessions, " +
            "u.createdAt as createdAt) " +
            "FROM User u " +
            "LEFT JOIN LearningHistory s ON u.id = s.user.id " +
-           "WHERE u.role = 'STUDENT' AND " +
+           "WHERE u.role = :role AND " +
            "(LOWER(u.username) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
            "LOWER(u.email) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
            "LOWER(u.fullName) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) " +
-           "GROUP BY u.id, u.username, u.email, u.fullName, u.status, u.createdAt " +
+           "GROUP BY u.id, u.username, u.email, u.fullName, u.role, u.status, u.createdAt " +
            "ORDER BY CASE " +
            "WHEN LOWER(u.username) = LOWER(:searchTerm) OR LOWER(u.email) = LOWER(:searchTerm) OR LOWER(u.fullName) = LOWER(:searchTerm) THEN 0 " +
            "WHEN LOWER(u.username) LIKE LOWER(CONCAT(:searchTerm, '%')) OR LOWER(u.email) LIKE LOWER(CONCAT(:searchTerm, '%')) OR LOWER(u.fullName) LIKE LOWER(CONCAT(:searchTerm, '%')) THEN 1 " +
            "ELSE 2 END, u.createdAt DESC")
-    Page<?> searchStudents(@Param("searchTerm") String searchTerm, Pageable pageable);
+    Page<?> searchStudentsByRole(@Param("role") User.UserRole role, @Param("searchTerm") String searchTerm, Pageable pageable);
+
+    default Page<?> searchStudents(String searchTerm, Pageable pageable) {
+        return searchStudentsByRole(User.UserRole.STUDENT, searchTerm, pageable);
+    }
     
     // ==================== Student Detail ====================
     
@@ -113,6 +128,7 @@ public interface AdminStudentRepository extends JpaRepository<User, Long> {
            "u.username as username, " +
            "u.email as email, " +
            "u.fullName as fullName, " +
+           "u.role as role, " +
            "u.avatarUrl as avatarUrl, " +
            "u.status as status, " +
            "u.createdAt as createdAt, " +
@@ -132,8 +148,8 @@ public interface AdminStudentRepository extends JpaRepository<User, Long> {
            "LEFT JOIN FavoriteWord fw ON u.id = fw.user.id " +
            "LEFT JOIN Subscription sub ON u.id = sub.userId AND sub.status = 'ACTIVE' " +
            "LEFT JOIN Package pkg ON sub.packageId = pkg.id " +
-           "WHERE u.id = :userId AND u.role = 'STUDENT' " +
-           "GROUP BY u.id, u.username, u.email, u.fullName, u.avatarUrl, u.status, " +
+           "WHERE u.id = :userId AND (u.role = com.vocabularyai.user.entity.User.UserRole.STUDENT OR u.role = com.vocabularyai.user.entity.User.UserRole.INSTRUCTOR) " +
+           "GROUP BY u.id, u.username, u.email, u.fullName, u.role, u.avatarUrl, u.status, " +
            "u.createdAt, u.updatedAt, sub.id, sub.status, sub.startAt, sub.endAt, pkg.name")
     List<?> getStudentDetail(@Param("userId") Long userId);
     

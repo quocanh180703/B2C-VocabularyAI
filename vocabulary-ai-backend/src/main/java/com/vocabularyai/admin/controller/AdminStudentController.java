@@ -1,6 +1,9 @@
 package com.vocabularyai.admin.controller;
 
+import com.vocabularyai.admin.dto.request.CreateInstructorRequest;
+import com.vocabularyai.admin.dto.response.InstructorResponse;
 import com.vocabularyai.admin.dto.response.StudentListResponse;
+import jakarta.validation.Valid;
 import com.vocabularyai.admin.dto.response.StudentDetailResponse;
 import com.vocabularyai.admin.dto.response.StudentStatsResponse;
 import com.vocabularyai.admin.service.AdminStudentService;
@@ -119,7 +122,10 @@ public class AdminStudentController {
             @RequestParam(required = false) String status,
             
             @Parameter(description = "Search by email or name", example = "nguy")
-            @RequestParam(required = false) String search) {
+            @RequestParam(required = false) String search,
+            
+            @Parameter(description = "Filter by user role (STUDENT, INSTRUCTOR)", example = "STUDENT")
+            @RequestParam(required = false, defaultValue = "STUDENT") String role) {
         
         try {
             log.info("GET /api/admin/students - Fetching student list (page={}, size={}, status={}, search={})",
@@ -131,15 +137,15 @@ public class AdminStudentController {
             
             if (search != null && !search.isBlank()) {
                 // Search by email or name
-                result = studentService.searchStudents(search, pageable);
+                result = studentService.searchStudents(role, search, pageable);
                 log.debug("Students searched: {} results", result.getTotalElements());
             } else if (status != null && !status.isBlank()) {
                 // Filter by status
-                result = studentService.getStudentListByStatus(status, pageable);
+                result = studentService.getStudentListByStatus(role, status, pageable);
                 log.debug("Students filtered by status: {} results", result.getTotalElements());
             } else {
                 // Get all students
-                result = studentService.getStudentList(pageable);
+                result = studentService.getStudentList(role, pageable);
                 log.debug("All students fetched: {} total", result.getTotalElements());
             }
             
@@ -316,5 +322,39 @@ public class AdminStudentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.error("Failed to retrieve student statistics: " + e.getMessage()));
         }
+    }
+    /**
+     * Admin directly creates an instructor account
+     *
+     * Endpoint: POST /api/admin/students/instructors
+     */
+    @PostMapping("/instructors")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+        summary = "Create instructor account",
+        description = "Admin directly creates an instructor account without OTP (admin only)"
+    )
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "201",
+            description = "Instructor account created successfully",
+            content = @Content(schema = @Schema(implementation = ApiResponse.class))
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "400",
+            description = "Validation error"
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "409",
+            description = "Username or email already exists"
+        )
+    })
+    public ResponseEntity<ApiResponse<InstructorResponse>> createInstructor(
+            @Valid @RequestBody CreateInstructorRequest request) {
+        log.info("POST /api/admin/students/instructors - Creating instructor account: username={}, email={}",
+            request.getUsername(), request.getEmail());
+        InstructorResponse instructor = studentService.createInstructor(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(ApiResponse.success("Tạo tài khoản Instructor thành công", instructor));
     }
 }

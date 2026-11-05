@@ -120,7 +120,7 @@ public class User implements UserDetails {
     // Enums
     
     public enum UserRole {
-        ADMIN, STUDENT
+        ADMIN, STUDENT, INSTRUCTOR
     }
     
     public enum UserStatus {

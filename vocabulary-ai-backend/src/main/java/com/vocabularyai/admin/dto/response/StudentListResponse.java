@@ -37,6 +37,9 @@ public class StudentListResponse implements Serializable {
     @Schema(description = "Full name", example = "Nguyễn Văn A")
     private String fullName;
     
+    @Schema(description = "User role (STUDENT, INSTRUCTOR, ADMIN)", example = "STUDENT")
+    private String role;
+
     @Schema(description = "User status (ACTIVE, INACTIVE, BANNED)", example = "ACTIVE")
     private String status;
     
