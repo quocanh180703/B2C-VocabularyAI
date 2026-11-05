@@ -23,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -311,7 +312,7 @@ public class LearningService {
         final List<ProgressStatisticsResponse.RecentActivitySummary> recentActivities = new ArrayList<>();
         
         try {
-            quizAttemptRepository.findByUserId(userId, PageRequest.of(0, 3)).forEach(qa -> {
+            quizAttemptRepository.findByUserId(userId, PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "createdAt"))).forEach(qa -> {
                 String qTitle = qa.getQuiz() != null ? qa.getQuiz().getTitle() : "Bài trắc nghiệm";
                 recentActivities.add(ProgressStatisticsResponse.RecentActivitySummary.builder()
                     .type("QUIZ")
@@ -326,11 +327,15 @@ public class LearningService {
         }
 
         try {
-            speakingSessionRepository.findByUserId(userId, PageRequest.of(0, 3)).forEach(ss -> {
+            speakingSessionRepository.findByUserId(userId, PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "createdAt"))).forEach(ss -> {
+                String statusText = ss.getStatus() != null ? ss.getStatus().getDisplayName() : "Luyện tập";
+                if (ss.getOverallScore() != null && ss.getOverallScore() > 0) {
+                    statusText = String.format("Điểm: %.0f%% · %s", ss.getOverallScore(), statusText);
+                }
                 recentActivities.add(ProgressStatisticsResponse.RecentActivitySummary.builder()
                     .type("SPEAKING")
                     .title("Luyện nói: " + (ss.getTopic() != null ? ss.getTopic() : "Chủ đề tự do"))
-                    .result(ss.getStatus() != null ? ss.getStatus().name() : "Luyện tập")
+                    .result(statusText)
                     .timeAgo(formatTimeAgo(ss.getCreatedAt()))
                     .createdAt(ss.getCreatedAt())
                     .build());
@@ -340,7 +345,7 @@ public class LearningService {
         }
 
         try {
-            historyRepository.findByUserId(userId, PageRequest.of(0, 3)).forEach(lh -> {
+            historyRepository.findByUserId(userId, PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "createdAt"))).forEach(lh -> {
                 String wordText = lh.getWord() != null ? lh.getWord().getWord() : "Từ vựng";
                 String actName = lh.getActivityType() == LearningHistory.ActivityType.LEARN ? "Học từ mới: " : "Ôn tập: ";
                 recentActivities.add(ProgressStatisticsResponse.RecentActivitySummary.builder()
