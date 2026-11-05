@@ -1,0 +1,2 @@
+-- Migration V117: Expand users role enum to support INSTRUCTOR
+ALTER TABLE users MODIFY COLUMN role ENUM('ADMIN', 'STUDENT', 'INSTRUCTOR') NOT NULL DEFAULT 'STUDENT';
