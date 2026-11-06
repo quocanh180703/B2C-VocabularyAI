@@ -33,38 +33,37 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class QuizService {
-    
+
     private final QuizRepository quizRepository;
     private final QuestionRepository questionRepository;
     private final QuizAttemptRepository attemptRepository;
     private final QuizAnswerRepository answerRepository;
     private final CategoryRepository categoryRepository;
     private final NotificationService notificationService;
-    
+
     /**
      * Get all published quizzes
      */
     @Transactional(readOnly = true)
     public Page<QuizResponse> getPublishedQuizzes(Pageable pageable) {
         log.info("Getting published quizzes");
-        Page<Quiz> quizzes = quizRepository.findByVisibilityAndStatus(QuizVisibility.PUBLIC, Quiz.QuizStatus.PUBLISHED, pageable);
+        Page<Quiz> quizzes = quizRepository.findByVisibilityAndStatus(QuizVisibility.PUBLIC, Quiz.QuizStatus.PUBLISHED,
+                pageable);
         Map<Long, Integer> countMap = questionRepository.countQuestionsGroupByQuizId().stream()
-            .collect(Collectors.toMap(
-                row -> (Long) row[0],
-                row -> ((Number) row[1]).intValue(),
-                (existing, replacement) -> existing
-            ));
+                .collect(Collectors.toMap(
+                        row -> (Long) row[0],
+                        row -> ((Number) row[1]).intValue(),
+                        (existing, replacement) -> existing));
         return new PageImpl<>(
-            quizzes.getContent().stream()
-                .map(q -> {
-                    QuizResponse resp = QuizResponse.fromEntity(q);
-                    resp.setQuestionCount(countMap.getOrDefault(q.getId(), 5));
-                    return resp;
-                })
-                .collect(Collectors.toList()),
-            pageable,
-            quizzes.getTotalElements()
-        );
+                quizzes.getContent().stream()
+                        .map(q -> {
+                            QuizResponse resp = QuizResponse.fromEntity(q);
+                            resp.setQuestionCount(countMap.getOrDefault(q.getId(), 0));
+                            return resp;
+                        })
+                        .collect(Collectors.toList()),
+                pageable,
+                quizzes.getTotalElements());
     }
 
     /**
@@ -75,24 +74,22 @@ public class QuizService {
         log.info("Getting quizzes created by user: {}", userId);
         Page<Quiz> quizzes = quizRepository.findByCreatedById(userId, pageable);
         Map<Long, Integer> countMap = questionRepository.countQuestionsGroupByQuizId().stream()
-            .collect(Collectors.toMap(
-                row -> (Long) row[0],
-                row -> ((Number) row[1]).intValue(),
-                (existing, replacement) -> existing
-            ));
+                .collect(Collectors.toMap(
+                        row -> (Long) row[0],
+                        row -> ((Number) row[1]).intValue(),
+                        (existing, replacement) -> existing));
         return new PageImpl<>(
-            quizzes.getContent().stream()
-                .map(q -> {
-                    QuizResponse resp = QuizResponse.fromEntity(q);
-                    resp.setQuestionCount(countMap.getOrDefault(q.getId(), 5));
-                    return resp;
-                })
-                .collect(Collectors.toList()),
-            pageable,
-            quizzes.getTotalElements()
-        );
+                quizzes.getContent().stream()
+                        .map(q -> {
+                            QuizResponse resp = QuizResponse.fromEntity(q);
+                            resp.setQuestionCount(countMap.getOrDefault(q.getId(), 0));
+                            return resp;
+                        })
+                        .collect(Collectors.toList()),
+                pageable,
+                quizzes.getTotalElements());
     }
-    
+
     /**
      * Get quiz by ID
      */
@@ -100,12 +97,12 @@ public class QuizService {
     public QuizResponse getQuizById(Long quizId) {
         log.info("Getting quiz with id: {}", quizId);
         Quiz quiz = quizRepository.findById(quizId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+                .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
         QuizResponse resp = QuizResponse.fromEntity(quiz);
         resp.setQuestionCount((int) questionRepository.countByQuizId(quizId));
         return resp;
     }
-    
+
     /**
      * Get all quizzes (Admin)
      */
@@ -120,30 +117,27 @@ public class QuizService {
         Page<Quiz> quizzes;
         if (role == User.UserRole.INSTRUCTOR) {
             quizzes = quizRepository.findByVisibilityIn(
-                java.util.List.of(QuizVisibility.PUBLIC, QuizVisibility.PENDING),
-                pageable
-            );
+                    java.util.List.of(QuizVisibility.PUBLIC, QuizVisibility.PENDING),
+                    pageable);
         } else {
             quizzes = quizRepository.findAll(pageable);
         }
 
         Map<Long, Integer> countMap = questionRepository.countQuestionsGroupByQuizId().stream()
-            .collect(Collectors.toMap(
-                row -> (Long) row[0],
-                row -> ((Number) row[1]).intValue(),
-                (existing, replacement) -> existing
-            ));
+                .collect(Collectors.toMap(
+                        row -> (Long) row[0],
+                        row -> ((Number) row[1]).intValue(),
+                        (existing, replacement) -> existing));
         return new PageImpl<>(
-            quizzes.getContent().stream()
-                .map(q -> {
-                    QuizResponse resp = QuizResponse.fromEntity(q);
-                    resp.setQuestionCount(countMap.getOrDefault(q.getId(), 5));
-                    return resp;
-                })
-                .collect(Collectors.toList()),
-            pageable,
-            quizzes.getTotalElements()
-        );
+                quizzes.getContent().stream()
+                        .map(q -> {
+                            QuizResponse resp = QuizResponse.fromEntity(q);
+                            resp.setQuestionCount(countMap.getOrDefault(q.getId(), 0));
+                            return resp;
+                        })
+                        .collect(Collectors.toList()),
+                pageable,
+                quizzes.getTotalElements());
     }
 
     /**
@@ -152,24 +146,24 @@ public class QuizService {
     @Transactional
     public QuizResponse createQuiz(CreateQuizRequest request) {
         log.info("Creating new quiz: {}", request.getTitle());
-        
+
         Quiz quiz = Quiz.builder()
-            .title(request.getTitle())
-            .description(request.getDescription())
-            .level(request.getLevel())
-            .timeLimit(request.getTimeLimit() != null ? request.getTimeLimit() : 600)
-            .status(Quiz.QuizStatus.PUBLISHED)
-            .build();
-        
+                .title(request.getTitle())
+                .description(request.getDescription())
+                .level(request.getLevel())
+                .timeLimit(request.getTimeLimit() != null ? request.getTimeLimit() : 600)
+                .status(Quiz.QuizStatus.PUBLISHED)
+                .build();
+
         if (request.getCategoryId() != null) {
             var category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> ResourceNotFoundException.of("Category", "id", request.getCategoryId()));
+                    .orElseThrow(() -> ResourceNotFoundException.of("Category", "id", request.getCategoryId()));
             quiz.setCategory(category);
         }
-        
+
         Quiz saved = quizRepository.save(quiz);
         log.info("Quiz created successfully with id: {}", saved.getId());
-        
+
         return QuizResponse.fromEntity(saved);
     }
 
@@ -180,7 +174,7 @@ public class QuizService {
     public QuizResponse updateQuiz(Long quizId, CreateQuizRequest request, String status) {
         log.info("Updating quiz id: {}", quizId);
         Quiz quiz = quizRepository.findById(quizId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+                .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (request.getTitle() != null && !request.getTitle().isBlank()) {
             quiz.setTitle(request.getTitle());
@@ -197,7 +191,8 @@ public class QuizService {
         if (status != null && !status.isBlank()) {
             try {
                 quiz.setStatus(Quiz.QuizStatus.valueOf(status.toUpperCase()));
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
         quiz.setUpdatedAt(LocalDateTime.now());
         Quiz updated = quizRepository.save(quiz);
@@ -219,20 +214,23 @@ public class QuizService {
         questionRepository.deleteByQuizId(quizId);
         quizRepository.deleteById(quizId);
     }
-    
+
     /**
      * Start quiz attempt
      */
     @Transactional
     public QuizAttemptResponse startQuizAttempt(User user, Long quizId) {
         log.info("User {} starting quiz {}", user.getId(), quizId);
-        
+
         Quiz quiz = quizRepository.findById(quizId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
-        
-        boolean isPublicAndPublished = quiz.getVisibility() == QuizVisibility.PUBLIC && quiz.getStatus() == Quiz.QuizStatus.PUBLISHED;
-        boolean isOwner = quiz.getCreatedBy() != null && user != null && user.getId().equals(quiz.getCreatedBy().getId());
-        boolean isStaff = user != null && (user.getRole() == User.UserRole.ADMIN || user.getRole() == User.UserRole.INSTRUCTOR);
+                .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+
+        boolean isPublicAndPublished = quiz.getVisibility() == QuizVisibility.PUBLIC
+                && quiz.getStatus() == Quiz.QuizStatus.PUBLISHED;
+        boolean isOwner = quiz.getCreatedBy() != null && user != null
+                && user.getId().equals(quiz.getCreatedBy().getId());
+        boolean isStaff = user != null
+                && (user.getRole() == User.UserRole.ADMIN || user.getRole() == User.UserRole.INSTRUCTOR);
 
         if (!isPublicAndPublished && !isOwner && !isStaff) {
             throw ResourceNotFoundException.of("Quiz", "id", quizId);
@@ -241,74 +239,74 @@ public class QuizService {
         if (quiz.getStatus() != Quiz.QuizStatus.PUBLISHED && !isOwner && !isStaff) {
             throw new BadRequestException("Quiz is not available");
         }
-        
+
         long questionCount = questionRepository.countByQuizId(quizId);
         if (questionCount == 0) {
             throw new BadRequestException("Quiz has no questions");
         }
-        
+
         QuizAttempt attempt = QuizAttempt.builder()
-            .user(user)
-            .quiz(quiz)
-            .startedAt(LocalDateTime.now())
-            .totalQuestions((int) questionCount)
-            .build();
-        
+                .user(user)
+                .quiz(quiz)
+                .startedAt(LocalDateTime.now())
+                .totalQuestions((int) questionCount)
+                .build();
+
         QuizAttempt saved = attemptRepository.save(attempt);
         log.info("Quiz attempt started with id: {}", saved.getId());
-        
+
         return QuizAttemptResponse.fromEntity(saved);
     }
-    
+
     /**
      * Submit quiz answers and calculate score
      */
     @Transactional
     public QuizAttemptResponse submitQuiz(Long attemptId, Long userId, SubmitQuizRequest request) {
         log.info("Submitting quiz attempt: {} for user: {}", attemptId, userId);
-        
+
         QuizAttempt attempt = getAttemptAndVerifyOwnership(attemptId, userId);
-        
+
         if (attempt.isCompleted()) {
             throw new BadRequestException("Quiz already submitted");
         }
-        
+
         int correctCount = 0;
-        
+
         // Process each answer
         for (SubmitQuizRequest.QuestionAnswer qa : request.getAnswers()) {
             Question question = questionRepository.findById(qa.getQuestionId())
-                .orElseThrow(() -> ResourceNotFoundException.of("Question", "id", qa.getQuestionId()));
-            
+                    .orElseThrow(() -> ResourceNotFoundException.of("Question", "id", qa.getQuestionId()));
+
             boolean isCorrect = qa.getAnswer() != null && qa.getAnswer().equals(question.getCorrectAnswer());
-            
+
             QuizAnswer answer = QuizAnswer.builder()
-                .attempt(attempt)
-                .question(question)
-                .answer(qa.getAnswer())
-                .correct(isCorrect)
-                .build();
-            
+                    .attempt(attempt)
+                    .question(question)
+                    .answer(qa.getAnswer())
+                    .correct(isCorrect)
+                    .build();
+
             answerRepository.save(answer);
-            
+
             if (isCorrect) {
                 correctCount++;
             }
         }
-        
+
         // Calculate score
         double score = (double) correctCount / attempt.getTotalQuestions() * 100;
-        
+
         attempt.setCorrectAnswers(correctCount);
         attempt.setScore(score);
         attempt.setSubmittedAt(LocalDateTime.now());
-        
+
         QuizAttempt saved = attemptRepository.save(attempt);
         log.info("Quiz submitted with score: {}", score);
-        
+
         return QuizAttemptResponse.fromEntity(saved);
     }
-    
+
     /**
      * Get quiz with questions (for taking quiz)
      */
@@ -320,26 +318,28 @@ public class QuizService {
     @Transactional(readOnly = true)
     public QuizWithQuestionsResponse getQuizForTaking(Long quizId, Long currentUserId) {
         log.info("Getting quiz for taking: {}, currentUserId: {}", quizId, currentUserId);
-        
+
         Quiz quiz = quizRepository.findById(quizId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
-        
-        boolean isPublicAndPublished = quiz.getVisibility() == QuizVisibility.PUBLIC && quiz.getStatus() == Quiz.QuizStatus.PUBLISHED;
-        boolean isOwner = currentUserId != null && quiz.getCreatedBy() != null && currentUserId.equals(quiz.getCreatedBy().getId());
+                .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+
+        boolean isPublicAndPublished = quiz.getVisibility() == QuizVisibility.PUBLIC
+                && quiz.getStatus() == Quiz.QuizStatus.PUBLISHED;
+        boolean isOwner = currentUserId != null && quiz.getCreatedBy() != null
+                && currentUserId.equals(quiz.getCreatedBy().getId());
         boolean isStaff = isStaffUser();
 
         if (!isPublicAndPublished && !isOwner && !isStaff) {
             throw ResourceNotFoundException.of("Quiz", "id", quizId);
         }
-        
+
         var questions = questionRepository.findByQuizId(quizId).stream()
-            .map(q -> QuestionResponse.fromEntity(q, false))
-            .collect(Collectors.toList());
-        
+                .map(q -> QuestionResponse.fromEntity(q, false))
+                .collect(Collectors.toList());
+
         return QuizWithQuestionsResponse.builder()
-            .quiz(QuizResponse.fromEntity(quiz))
-            .questions(questions)
-            .build();
+                .quiz(QuizResponse.fromEntity(quiz))
+                .questions(questions)
+                .build();
     }
 
     /**
@@ -349,23 +349,23 @@ public class QuizService {
     public QuizWithQuestionsResponse getMyQuizDetail(Long quizId, Long userId) {
         log.info("Getting my quiz detail: quizId={}, userId={}", quizId, userId);
         Quiz quiz = quizRepository.findById(quizId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+                .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
             throw ResourceNotFoundException.of("Quiz", "id", quizId);
         }
 
         var questions = questionRepository.findByQuizId(quizId).stream()
-            .map(q -> QuestionResponse.fromEntity(q, true))
-            .collect(Collectors.toList());
+                .map(q -> QuestionResponse.fromEntity(q, true))
+                .collect(Collectors.toList());
 
         QuizResponse resp = QuizResponse.fromEntity(quiz);
         resp.setQuestionCount(questions.size());
 
         return QuizWithQuestionsResponse.builder()
-            .quiz(resp)
-            .questions(questions)
-            .build();
+                .quiz(resp)
+                .questions(questions)
+                .build();
     }
 
     /**
@@ -375,7 +375,7 @@ public class QuizService {
     public QuizResponse updateUserQuiz(Long quizId, Long userId, UpdateMyQuizRequest request) {
         log.info("User {} updating quiz {}", userId, quizId);
         Quiz quiz = quizRepository.findById(quizId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+                .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
             throw ResourceNotFoundException.of("Quiz", "id", quizId);
@@ -409,18 +409,19 @@ public class QuizService {
             for (UpdateMyQuizRequest.QuestionDto qDto : request.getQuestions()) {
                 String optionsJson;
                 try {
-                    optionsJson = mapper.writeValueAsString(qDto.getOptions() != null ? qDto.getOptions() : java.util.Collections.emptyList());
+                    optionsJson = mapper.writeValueAsString(
+                            qDto.getOptions() != null ? qDto.getOptions() : java.util.Collections.emptyList());
                 } catch (Exception e) {
                     optionsJson = "[]";
                 }
 
                 Question question = Question.builder()
-                    .quiz(quiz)
-                    .content(qDto.getContent())
-                    .options(optionsJson)
-                    .correctAnswer(qDto.getCorrectAnswer() != null ? qDto.getCorrectAnswer() : 0)
-                    .explanation(qDto.getExplanation())
-                    .build();
+                        .quiz(quiz)
+                        .content(qDto.getContent())
+                        .options(optionsJson)
+                        .correctAnswer(qDto.getCorrectAnswer() != null ? qDto.getCorrectAnswer() : 0)
+                        .explanation(qDto.getExplanation())
+                        .build();
                 questionRepository.save(question);
             }
         }
@@ -439,7 +440,7 @@ public class QuizService {
     public void deleteUserQuiz(Long quizId, Long userId) {
         log.info("User {} deleting quiz {}", userId, quizId);
         Quiz quiz = quizRepository.findById(quizId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+                .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
             throw ResourceNotFoundException.of("Quiz", "id", quizId);
@@ -476,7 +477,7 @@ public class QuizService {
     public QuizResponse publishRequest(Long quizId, Long userId) {
         log.info("User {} requesting publish for quiz {}", userId, quizId);
         Quiz quiz = quizRepository.findById(quizId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+                .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
             throw ResourceNotFoundException.of("Quiz", "id", quizId);
@@ -494,13 +495,13 @@ public class QuizService {
         quiz.setUpdatedAt(LocalDateTime.now());
         Quiz saved = quizRepository.save(quiz);
 
-        String authorName = (quiz.getCreatedBy().getUsername() != null) ? quiz.getCreatedBy().getUsername() : "học viên";
+        String authorName = (quiz.getCreatedBy().getUsername() != null) ? quiz.getCreatedBy().getUsername()
+                : "học viên";
         notificationService.notifyInstructorsAndAdmins(
-            "Bài tập mới chờ duyệt",
-            "Học viên @" + authorName + " vừa gửi bài tập '" + quiz.getTitle() + "' chờ duyệt",
-            NotificationType.EXERCISE_PENDING_REVIEW,
-            "/admin/content-review?tab=exercise-review"
-        );
+                "Bài tập mới chờ duyệt",
+                "Học viên @" + authorName + " vừa gửi bài tập '" + quiz.getTitle() + "' chờ duyệt",
+                NotificationType.EXERCISE_PENDING_REVIEW,
+                "/admin/content-review?tab=exercise-review");
 
         QuizResponse resp = QuizResponse.fromEntity(saved);
         resp.setQuestionCount((int) questionRepository.countByQuizId(quizId));
@@ -514,7 +515,7 @@ public class QuizService {
     public QuizResponse withdrawPublishRequest(Long quizId, Long userId) {
         log.info("User {} withdrawing publish request for quiz {}", userId, quizId);
         Quiz quiz = quizRepository.findById(quizId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+                .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
             throw ResourceNotFoundException.of("Quiz", "id", quizId);
@@ -540,7 +541,7 @@ public class QuizService {
     public QuizResponse hideQuiz(Long quizId, Long userId) {
         log.info("User {} hiding quiz {}", userId, quizId);
         Quiz quiz = quizRepository.findById(quizId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+                .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
             throw ResourceNotFoundException.of("Quiz", "id", quizId);
@@ -558,30 +559,30 @@ public class QuizService {
         resp.setQuestionCount((int) questionRepository.countByQuizId(quizId));
         return resp;
     }
-    
+
     /**
      * Get quiz attempt with answers
      */
     @Transactional(readOnly = true)
     public QuizAttemptWithAnswersResponse getQuizAttemptWithAnswers(Long attemptId, Long userId) {
         log.info("Getting quiz attempt: {} for user: {}", attemptId, userId);
-        
+
         QuizAttempt attempt = getAttemptAndVerifyOwnership(attemptId, userId);
-        
+
         if (!attempt.isCompleted()) {
             throw new BadRequestException("Quiz attempt not completed");
         }
-        
+
         var answers = answerRepository.findByAttemptId(attemptId).stream()
-            .map(qa -> QuizAnswerDetailResponse.fromEntity(qa))
-            .collect(Collectors.toList());
-        
+                .map(qa -> QuizAnswerDetailResponse.fromEntity(qa))
+                .collect(Collectors.toList());
+
         return QuizAttemptWithAnswersResponse.builder()
-            .attempt(QuizAttemptResponse.fromEntity(attempt))
-            .answers(answers)
-            .build();
+                .attempt(QuizAttemptResponse.fromEntity(attempt))
+                .answers(answers)
+                .build();
     }
-    
+
     /**
      * Get quiz attempt with answers (public version - no userId check)
      * Used internally for public endpoints
@@ -589,35 +590,35 @@ public class QuizService {
     @Transactional(readOnly = true)
     public QuizAttemptWithAnswersResponse getQuizAttemptWithAnswers(Long attemptId) {
         log.info("Getting quiz attempt: {}", attemptId);
-        
+
         QuizAttempt attempt = attemptRepository.findById(attemptId)
-            .orElseThrow(() -> ResourceNotFoundException.of("QuizAttempt", "id", attemptId));
-        
+                .orElseThrow(() -> ResourceNotFoundException.of("QuizAttempt", "id", attemptId));
+
         if (!attempt.isCompleted()) {
             throw new BadRequestException("Quiz attempt not completed");
         }
-        
+
         var answers = answerRepository.findByAttemptId(attemptId).stream()
-            .map(qa -> QuizAnswerDetailResponse.fromEntity(qa))
-            .collect(Collectors.toList());
-        
+                .map(qa -> QuizAnswerDetailResponse.fromEntity(qa))
+                .collect(Collectors.toList());
+
         return QuizAttemptWithAnswersResponse.builder()
-            .attempt(QuizAttemptResponse.fromEntity(attempt))
-            .answers(answers)
-            .build();
+                .attempt(QuizAttemptResponse.fromEntity(attempt))
+                .answers(answers)
+                .build();
     }
-    
+
     /**
      * Get user's quiz history
      */
     @Transactional(readOnly = true)
     public Page<QuizAttemptResponse> getUserQuizHistory(Long userId, Pageable pageable) {
         log.info("Getting quiz history for user: {}", userId);
-        
+
         Page<QuizAttempt> attempts = attemptRepository.findByUserIdAndSubmittedAtIsNotNull(userId, pageable);
         return attempts.map(QuizAttemptResponse::fromEntity);
     }
-    
+
     /**
      * Get quiz attempt and verify ownership (IDOR prevention)
      * 
@@ -627,10 +628,11 @@ public class QuizService {
      */
     private QuizAttempt getAttemptAndVerifyOwnership(Long attemptId, Long userId) {
         return attemptRepository.findByIdAndUserId(attemptId, userId)
-            .orElseThrow(() -> {
-                log.warn("IDOR prevention: Unauthorized access attempt: attemptId={}, userId={}", attemptId, userId);
-                return new ForbiddenException("You don't have permission to access this quiz attempt");
-            });
+                .orElseThrow(() -> {
+                    log.warn("IDOR prevention: Unauthorized access attempt: attemptId={}, userId={}", attemptId,
+                            userId);
+                    return new ForbiddenException("You don't have permission to access this quiz attempt");
+                });
     }
 
     private boolean isStaffUser() {
@@ -638,9 +640,11 @@ public class QuizService {
             var auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
             if (auth != null && auth.isAuthenticated()) {
                 return auth.getAuthorities().stream()
-                    .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()) || "ROLE_INSTRUCTOR".equals(a.getAuthority()));
+                        .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority())
+                                || "ROLE_INSTRUCTOR".equals(a.getAuthority()));
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return false;
     }
 }
