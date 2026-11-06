@@ -77,6 +77,58 @@ public class QuizController {
     }
 
     /**
+     * Get my quiz detail with correct answers (Owner only)
+     */
+    @GetMapping("/mine/{id}")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Get my quiz detail", description = "Retrieve quiz details and questions with correct answers for owner")
+    public ResponseEntity<ApiResponse<QuizWithQuestionsResponse>> getMyQuizDetail(
+            @PathVariable Long id) {
+        Long userId = userService.getCurrentUserId();
+        log.info("Getting my quiz detail: quizId={}, userId={}", id, userId);
+        QuizWithQuestionsResponse response = quizService.getMyQuizDetail(id, userId);
+        return ResponseEntity.ok(
+            ApiResponse.success("Lấy chi tiết bài tập thành công", response)
+        );
+    }
+
+    /**
+     * Update my quiz (Owner only, PRIVATE or REJECTED)
+     */
+    @PutMapping("/mine/{id}")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Update my quiz", description = "Update quiz details and questions (owner only, PRIVATE or REJECTED)")
+    public ResponseEntity<ApiResponse<QuizResponse>> updateMyQuiz(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateMyQuizRequest request) {
+        Long userId = userService.getCurrentUserId();
+        log.info("Updating my quiz: quizId={}, userId={}", id, userId);
+        QuizResponse quiz = quizService.updateUserQuiz(id, userId, request);
+        return ResponseEntity.ok(
+            ApiResponse.success("Cập nhật bài tập thành công", quiz)
+        );
+    }
+
+    /**
+     * Delete my quiz (Owner only, PRIVATE or REJECTED)
+     */
+    @DeleteMapping("/mine/{id}")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Delete my quiz", description = "Delete quiz and its questions (owner only, PRIVATE or REJECTED)")
+    public ResponseEntity<ApiResponse<Void>> deleteMyQuiz(
+            @PathVariable Long id) {
+        Long userId = userService.getCurrentUserId();
+        log.info("Deleting my quiz: quizId={}, userId={}", id, userId);
+        quizService.deleteUserQuiz(id, userId);
+        return ResponseEntity.ok(
+            ApiResponse.success("Xóa bài tập thành công", null)
+        );
+    }
+
+    /**
      * Get all quizzes including drafts (Admin)
      */
     @GetMapping("/admin/all")
@@ -145,8 +197,12 @@ public class QuizController {
     public ResponseEntity<ApiResponse<QuizWithQuestionsResponse>> getQuizForTaking(
             @PathVariable Long id) {
         log.info("Getting quiz for taking: {}", id);
+        Long currentUserId = null;
+        try {
+            currentUserId = userService.getCurrentUserId();
+        } catch (Exception ignored) {}
         
-        QuizWithQuestionsResponse response = quizService.getQuizForTaking(id);
+        QuizWithQuestionsResponse response = quizService.getQuizForTaking(id, currentUserId);
         
         return ResponseEntity.ok(
             ApiResponse.success("Quiz retrieved successfully", response)

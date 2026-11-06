@@ -206,7 +206,15 @@ public class QuizService {
         Quiz quiz = quizRepository.findById(quizId)
             .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
         
-        if (quiz.getStatus() != Quiz.QuizStatus.PUBLISHED) {
+        boolean isPublicAndPublished = quiz.getVisibility() == QuizVisibility.PUBLIC && quiz.getStatus() == Quiz.QuizStatus.PUBLISHED;
+        boolean isOwner = quiz.getCreatedBy() != null && user != null && user.getId().equals(quiz.getCreatedBy().getId());
+        boolean isStaff = user != null && (user.getRole() == User.UserRole.ADMIN || user.getRole() == User.UserRole.INSTRUCTOR);
+
+        if (!isPublicAndPublished && !isOwner && !isStaff) {
+            throw ResourceNotFoundException.of("Quiz", "id", quizId);
+        }
+
+        if (quiz.getStatus() != Quiz.QuizStatus.PUBLISHED && !isOwner && !isStaff) {
             throw new BadRequestException("Quiz is not available");
         }
         
@@ -282,13 +290,22 @@ public class QuizService {
      */
     @Transactional(readOnly = true)
     public QuizWithQuestionsResponse getQuizForTaking(Long quizId) {
-        log.info("Getting quiz for taking: {}", quizId);
+        return getQuizForTaking(quizId, null);
+    }
+
+    @Transactional(readOnly = true)
+    public QuizWithQuestionsResponse getQuizForTaking(Long quizId, Long currentUserId) {
+        log.info("Getting quiz for taking: {}, currentUserId: {}", quizId, currentUserId);
         
         Quiz quiz = quizRepository.findById(quizId)
             .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
         
-        if (quiz.getStatus() != Quiz.QuizStatus.PUBLISHED) {
-            throw new BadRequestException("Quiz is not available");
+        boolean isPublicAndPublished = quiz.getVisibility() == QuizVisibility.PUBLIC && quiz.getStatus() == Quiz.QuizStatus.PUBLISHED;
+        boolean isOwner = currentUserId != null && quiz.getCreatedBy() != null && currentUserId.equals(quiz.getCreatedBy().getId());
+        boolean isStaff = isStaffUser();
+
+        if (!isPublicAndPublished && !isOwner && !isStaff) {
+            throw ResourceNotFoundException.of("Quiz", "id", quizId);
         }
         
         var questions = questionRepository.findByQuizId(quizId).stream()
@@ -299,6 +316,133 @@ public class QuizService {
             .quiz(QuizResponse.fromEntity(quiz))
             .questions(questions)
             .build();
+    }
+
+    /**
+     * Get my quiz detail with correct answers (Owner only)
+     */
+    @Transactional(readOnly = true)
+    public QuizWithQuestionsResponse getMyQuizDetail(Long quizId, Long userId) {
+        log.info("Getting my quiz detail: quizId={}, userId={}", quizId, userId);
+        Quiz quiz = quizRepository.findById(quizId)
+            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+
+        if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
+            throw ResourceNotFoundException.of("Quiz", "id", quizId);
+        }
+
+        var questions = questionRepository.findByQuizId(quizId).stream()
+            .map(q -> QuestionResponse.fromEntity(q, true))
+            .collect(Collectors.toList());
+
+        QuizResponse resp = QuizResponse.fromEntity(quiz);
+        resp.setQuestionCount(questions.size());
+
+        return QuizWithQuestionsResponse.builder()
+            .quiz(resp)
+            .questions(questions)
+            .build();
+    }
+
+    /**
+     * Update quiz created by user (Owner only, PRIVATE or REJECTED)
+     */
+    @Transactional
+    public QuizResponse updateUserQuiz(Long quizId, Long userId, UpdateMyQuizRequest request) {
+        log.info("User {} updating quiz {}", userId, quizId);
+        Quiz quiz = quizRepository.findById(quizId)
+            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+
+        if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
+            throw new ForbiddenException("Bạn không có quyền chỉnh sửa bài tập này");
+        }
+
+        if (quiz.getVisibility() == QuizVisibility.PENDING) {
+            throw new BadRequestException("Bài tập đang chờ duyệt, vui lòng rút yêu cầu trước khi chỉnh sửa");
+        }
+        if (quiz.getVisibility() == QuizVisibility.PUBLIC) {
+            throw new BadRequestException("Bài tập đã công khai, không thể chỉnh sửa trực tiếp");
+        }
+
+        if (request.getTitle() != null && !request.getTitle().isBlank()) {
+            quiz.setTitle(request.getTitle().trim());
+        }
+        if (request.getDescription() != null) {
+            quiz.setDescription(request.getDescription().trim());
+        }
+        if (request.getLevel() != null) {
+            quiz.setLevel(request.getLevel());
+        }
+        if (request.getTimeLimit() != null && request.getTimeLimit() > 0) {
+            int timeInSeconds = request.getTimeLimit() <= 60 ? request.getTimeLimit() * 60 : request.getTimeLimit();
+            quiz.setTimeLimit(timeInSeconds);
+        }
+
+        if (request.getQuestions() != null && !request.getQuestions().isEmpty()) {
+            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            questionRepository.deleteByQuizId(quizId);
+
+            for (UpdateMyQuizRequest.QuestionDto qDto : request.getQuestions()) {
+                String optionsJson;
+                try {
+                    optionsJson = mapper.writeValueAsString(qDto.getOptions() != null ? qDto.getOptions() : java.util.Collections.emptyList());
+                } catch (Exception e) {
+                    optionsJson = "[]";
+                }
+
+                Question question = Question.builder()
+                    .quiz(quiz)
+                    .content(qDto.getContent())
+                    .options(optionsJson)
+                    .correctAnswer(qDto.getCorrectAnswer() != null ? qDto.getCorrectAnswer() : 0)
+                    .explanation(qDto.getExplanation())
+                    .build();
+                questionRepository.save(question);
+            }
+        }
+
+        quiz.setUpdatedAt(LocalDateTime.now());
+        Quiz saved = quizRepository.save(quiz);
+        QuizResponse resp = QuizResponse.fromEntity(saved);
+        resp.setQuestionCount((int) questionRepository.countByQuizId(quizId));
+        return resp;
+    }
+
+    /**
+     * Delete quiz created by user (Owner only, PRIVATE or REJECTED)
+     */
+    @Transactional
+    public void deleteUserQuiz(Long quizId, Long userId) {
+        log.info("User {} deleting quiz {}", userId, quizId);
+        Quiz quiz = quizRepository.findById(quizId)
+            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+
+        if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
+            throw new ForbiddenException("Bạn không có quyền xóa bài tập này");
+        }
+
+        if (quiz.getVisibility() == QuizVisibility.PENDING) {
+            throw new BadRequestException("Bài tập đang chờ duyệt, vui lòng rút yêu cầu trước khi xóa");
+        }
+        if (quiz.getVisibility() == QuizVisibility.PUBLIC) {
+            throw new BadRequestException("Bài tập đã công khai, không thể xóa trực tiếp");
+        }
+
+        // 1. Delete quiz attempt answers
+        java.util.List<QuizAttempt> attempts = attemptRepository.findByQuizId(quizId, Pageable.unpaged()).getContent();
+        for (QuizAttempt attempt : attempts) {
+            java.util.List<QuizAnswer> answers = answerRepository.findByAttemptId(attempt.getId());
+            answerRepository.deleteAll(answers);
+        }
+        // 2. Delete quiz attempts
+        attemptRepository.deleteAll(attempts);
+
+        // 3. Delete questions
+        questionRepository.deleteByQuizId(quizId);
+
+        // 4. Delete quiz
+        quizRepository.delete(quiz);
+        log.info("Deleted user quiz id: {}", quizId);
     }
     
     /**
@@ -373,5 +517,16 @@ public class QuizService {
                 log.warn("IDOR prevention: Unauthorized access attempt: attemptId={}, userId={}", attemptId, userId);
                 return new ForbiddenException("You don't have permission to access this quiz attempt");
             });
+    }
+
+    private boolean isStaffUser() {
+        try {
+            var auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null && auth.isAuthenticated()) {
+                return auth.getAuthorities().stream()
+                    .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()) || "ROLE_INSTRUCTOR".equals(a.getAuthority()));
+            }
+        } catch (Exception ignored) {}
+        return false;
     }
 }
