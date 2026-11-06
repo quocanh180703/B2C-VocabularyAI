@@ -9,6 +9,8 @@ import com.vocabularyai.quiz.entity.QuizVisibility;
 import com.vocabularyai.quiz.repository.*;
 import com.vocabularyai.user.entity.User;
 import com.vocabularyai.vocabulary.repository.CategoryRepository;
+import com.vocabularyai.notification.service.NotificationService;
+import com.vocabularyai.notification.entity.NotificationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -36,6 +38,7 @@ public class QuizService {
     private final QuizAttemptRepository attemptRepository;
     private final QuizAnswerRepository answerRepository;
     private final CategoryRepository categoryRepository;
+    private final NotificationService notificationService;
     
     /**
      * Get all published quizzes
@@ -443,6 +446,96 @@ public class QuizService {
         // 4. Delete quiz
         quizRepository.delete(quiz);
         log.info("Deleted user quiz id: {}", quizId);
+    }
+
+    /**
+     * Request publication of user quiz (PRIVATE/REJECTED -> PENDING)
+     */
+    @Transactional
+    public QuizResponse publishRequest(Long quizId, Long userId) {
+        log.info("User {} requesting publish for quiz {}", userId, quizId);
+        Quiz quiz = quizRepository.findById(quizId)
+            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+
+        if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
+            throw new ForbiddenException("Bạn không có quyền gửi duyệt bài tập này");
+        }
+
+        if (quiz.getVisibility() == QuizVisibility.PENDING) {
+            throw new BadRequestException("Bài tập đang trong quá trình chờ duyệt");
+        }
+        if (quiz.getVisibility() == QuizVisibility.PUBLIC) {
+            throw new BadRequestException("Bài tập đã được công khai trên hệ thống");
+        }
+
+        quiz.setVisibility(QuizVisibility.PENDING);
+        quiz.setReviewNote(null);
+        quiz.setUpdatedAt(LocalDateTime.now());
+        Quiz saved = quizRepository.save(quiz);
+
+        String authorName = (quiz.getCreatedBy().getUsername() != null) ? quiz.getCreatedBy().getUsername() : "học viên";
+        notificationService.notifyInstructorsAndAdmins(
+            "Bài tập mới chờ duyệt",
+            "Học viên @" + authorName + " vừa gửi bài tập '" + quiz.getTitle() + "' chờ duyệt",
+            NotificationType.EXERCISE_PENDING_REVIEW,
+            "/admin/content-review?tab=exercise-review"
+        );
+
+        QuizResponse resp = QuizResponse.fromEntity(saved);
+        resp.setQuestionCount((int) questionRepository.countByQuizId(quizId));
+        return resp;
+    }
+
+    /**
+     * Withdraw publish request (PENDING -> PRIVATE)
+     */
+    @Transactional
+    public QuizResponse withdrawPublishRequest(Long quizId, Long userId) {
+        log.info("User {} withdrawing publish request for quiz {}", userId, quizId);
+        Quiz quiz = quizRepository.findById(quizId)
+            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+
+        if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
+            throw new ForbiddenException("Bạn không có quyền thao tác trên bài tập này");
+        }
+
+        if (quiz.getVisibility() != QuizVisibility.PENDING) {
+            throw new BadRequestException("Chỉ có thể rút yêu cầu khi bài tập đang ở trạng thái chờ duyệt");
+        }
+
+        quiz.setVisibility(QuizVisibility.PRIVATE);
+        quiz.setUpdatedAt(LocalDateTime.now());
+        Quiz saved = quizRepository.save(quiz);
+
+        QuizResponse resp = QuizResponse.fromEntity(saved);
+        resp.setQuestionCount((int) questionRepository.countByQuizId(quizId));
+        return resp;
+    }
+
+    /**
+     * Hide published quiz back to private (PUBLIC -> PRIVATE)
+     */
+    @Transactional
+    public QuizResponse hideQuiz(Long quizId, Long userId) {
+        log.info("User {} hiding quiz {}", userId, quizId);
+        Quiz quiz = quizRepository.findById(quizId)
+            .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
+
+        if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
+            throw new ForbiddenException("Bạn không có quyền thao tác trên bài tập này");
+        }
+
+        if (quiz.getVisibility() != QuizVisibility.PUBLIC) {
+            throw new BadRequestException("Chỉ có thể ẩn bài tập khi đang ở chế độ công khai");
+        }
+
+        quiz.setVisibility(QuizVisibility.PRIVATE);
+        quiz.setUpdatedAt(LocalDateTime.now());
+        Quiz saved = quizRepository.save(quiz);
+
+        QuizResponse resp = QuizResponse.fromEntity(saved);
+        resp.setQuestionCount((int) questionRepository.countByQuizId(quizId));
+        return resp;
     }
     
     /**

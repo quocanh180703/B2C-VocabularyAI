@@ -55,4 +55,10 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
      */
     @EntityGraph(attributePaths = {"category", "createdBy"})
     Page<Quiz> findByVisibilityAndStatus(QuizVisibility visibility, Quiz.QuizStatus status, Pageable pageable);
+
+    /**
+     * Find quizzes by visibility for review
+     */
+    @EntityGraph(attributePaths = {"category", "createdBy", "reviewedBy"})
+    Page<Quiz> findByVisibility(QuizVisibility visibility, Pageable pageable);
 }

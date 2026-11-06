@@ -33,6 +33,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import com.vocabularyai.notification.service.NotificationService;
+import com.vocabularyai.notification.entity.NotificationType;
 
 @ExtendWith(MockitoExtension.class)
 public class UserQuizMineUnitTest {
@@ -51,6 +53,9 @@ public class UserQuizMineUnitTest {
 
     @Mock
     private CategoryRepository categoryRepository;
+
+    @Mock
+    private com.vocabularyai.notification.service.NotificationService notificationService;
 
     @InjectMocks
     private QuizService quizService;
@@ -297,4 +302,73 @@ public class UserQuizMineUnitTest {
         });
         assertTrue(ex.getMessage().contains("chờ duyệt"));
     }
+
+    @Test
+    @DisplayName("publishRequest succeeds for PRIVATE quiz and sends notifications")
+    void testPublishRequestSuccess() {
+        when(quizRepository.findById(100L)).thenReturn(Optional.of(privateQuiz));
+        when(quizRepository.save(any(Quiz.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(questionRepository.countByQuizId(100L)).thenReturn(1L);
+
+        QuizResponse res = quizService.publishRequest(100L, owner.getId());
+
+        assertEquals("PENDING", res.getVisibility());
+        verify(notificationService).notifyInstructorsAndAdmins(
+                eq("Bài tập mới chờ duyệt"),
+                contains("quizcreator"),
+                eq(NotificationType.EXERCISE_PENDING_REVIEW),
+                contains("tab=exercise-review")
+        );
+    }
+
+    @Test
+    @DisplayName("publishRequest fails if quiz already PENDING or PUBLIC")
+    void testPublishRequestAlreadyPendingOrPublic() {
+        when(quizRepository.findById(300L)).thenReturn(Optional.of(pendingQuiz));
+        assertThrows(BadRequestException.class, () -> quizService.publishRequest(300L, owner.getId()));
+
+        when(quizRepository.findById(200L)).thenReturn(Optional.of(publicQuiz));
+        assertThrows(BadRequestException.class, () -> quizService.publishRequest(200L, owner.getId()));
+    }
+
+    @Test
+    @DisplayName("withdrawPublishRequest succeeds for PENDING quiz")
+    void testWithdrawPublishRequestSuccess() {
+        when(quizRepository.findById(300L)).thenReturn(Optional.of(pendingQuiz));
+        when(quizRepository.save(any(Quiz.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(questionRepository.countByQuizId(300L)).thenReturn(1L);
+
+        QuizResponse res = quizService.withdrawPublishRequest(300L, owner.getId());
+
+        assertEquals("PRIVATE", res.getVisibility());
+        verify(quizRepository).save(pendingQuiz);
+    }
+
+    @Test
+    @DisplayName("withdrawPublishRequest fails for non-PENDING quiz")
+    void testWithdrawPublishRequestFailsNonPending() {
+        when(quizRepository.findById(100L)).thenReturn(Optional.of(privateQuiz));
+        assertThrows(BadRequestException.class, () -> quizService.withdrawPublishRequest(100L, owner.getId()));
+    }
+
+    @Test
+    @DisplayName("hideQuiz succeeds for PUBLIC quiz")
+    void testHideQuizSuccess() {
+        when(quizRepository.findById(200L)).thenReturn(Optional.of(publicQuiz));
+        when(quizRepository.save(any(Quiz.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(questionRepository.countByQuizId(200L)).thenReturn(1L);
+
+        QuizResponse res = quizService.hideQuiz(200L, owner.getId());
+
+        assertEquals("PRIVATE", res.getVisibility());
+        verify(quizRepository).save(publicQuiz);
+    }
+
+    @Test
+    @DisplayName("hideQuiz fails for non-PUBLIC quiz")
+    void testHideQuizFailsNonPublic() {
+        when(quizRepository.findById(100L)).thenReturn(Optional.of(privateQuiz));
+        assertThrows(BadRequestException.class, () -> quizService.hideQuiz(100L, owner.getId()));
+    }
+
 }

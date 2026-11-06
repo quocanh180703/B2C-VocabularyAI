@@ -129,6 +129,57 @@ public class QuizController {
     }
 
     /**
+     * Request publication of user quiz (PRIVATE/REJECTED -> PENDING)
+     */
+    @PostMapping("/mine/{id}/publish-request")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Request publication of quiz", description = "Send user quiz for review by instructors")
+    public ResponseEntity<ApiResponse<QuizResponse>> publishRequest(
+            @PathVariable Long id) {
+        Long userId = userService.getCurrentUserId();
+        log.info("User {} requesting publication for quiz {}", userId, id);
+        QuizResponse quiz = quizService.publishRequest(id, userId);
+        return ResponseEntity.ok(
+            ApiResponse.success("Đã gửi yêu cầu duyệt bài tập tới giảng viên", quiz)
+        );
+    }
+
+    /**
+     * Withdraw publication request (PENDING -> PRIVATE)
+     */
+    @PostMapping("/mine/{id}/withdraw")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Withdraw publication request", description = "Withdraw pending quiz review back to private")
+    public ResponseEntity<ApiResponse<QuizResponse>> withdrawPublishRequest(
+            @PathVariable Long id) {
+        Long userId = userService.getCurrentUserId();
+        log.info("User {} withdrawing publication request for quiz {}", userId, id);
+        QuizResponse quiz = quizService.withdrawPublishRequest(id, userId);
+        return ResponseEntity.ok(
+            ApiResponse.success("Đã rút yêu cầu duyệt bài tập", quiz)
+        );
+    }
+
+    /**
+     * Hide published quiz back to private (PUBLIC -> PRIVATE)
+     */
+    @PostMapping("/mine/{id}/hide")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Hide published quiz", description = "Revert published quiz back to private")
+    public ResponseEntity<ApiResponse<QuizResponse>> hideQuiz(
+            @PathVariable Long id) {
+        Long userId = userService.getCurrentUserId();
+        log.info("User {} hiding quiz {}", userId, id);
+        QuizResponse quiz = quizService.hideQuiz(id, userId);
+        return ResponseEntity.ok(
+            ApiResponse.success("Đã chuyển bài tập về chế độ riêng tư", quiz)
+        );
+    }
+
+    /**
      * Get all quizzes including drafts (Admin)
      */
     @GetMapping("/admin/all")
