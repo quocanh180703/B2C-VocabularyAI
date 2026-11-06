@@ -9,6 +9,7 @@ import com.vocabularyai.common.exception.ResourceNotFoundException;
 import com.vocabularyai.document.dto.DocumentAnalysisResponse;
 import com.vocabularyai.document.dto.DocumentChatRequest;
 import com.vocabularyai.document.dto.DocumentChatResponse;
+import com.vocabularyai.document.dto.DraftQuestionDto;
 import com.vocabularyai.document.dto.GenerateQuizFromDocumentRequest;
 import com.vocabularyai.document.entity.DocumentStatus;
 import com.vocabularyai.document.entity.UserDocument;
@@ -16,11 +17,6 @@ import com.vocabularyai.document.repository.UserDocumentRepository;
 import com.vocabularyai.payment.entity.FeatureType;
 import com.vocabularyai.payment.service.FeatureUsageService;
 import com.vocabularyai.quiz.dto.QuizResponse;
-import com.vocabularyai.quiz.entity.Question;
-import com.vocabularyai.quiz.entity.Quiz;
-import com.vocabularyai.quiz.entity.QuizVisibility;
-import com.vocabularyai.quiz.repository.QuestionRepository;
-import com.vocabularyai.quiz.repository.QuizRepository;
 import com.vocabularyai.user.entity.User;
 import com.vocabularyai.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -32,10 +28,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -46,15 +42,14 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
     private final FeatureUsageService featureUsageService;
     private final UserDocumentRepository userDocumentRepository;
     private final UserRepository userRepository;
-    private final QuizRepository quizRepository;
-    private final QuestionRepository questionRepository;
+    private final DocumentQuizPersistenceService documentQuizPersistenceService;
     private final ObjectMapper objectMapper;
 
     @Override
     @Transactional(readOnly = true)
     public DocumentAnalysisResponse analyzeDocument(Long documentId, Long userId) {
         UserDocument doc = getValidDocument(documentId, userId);
-        String textSnippet = getTextSnippet(doc.getExtractedText(), 8000);
+        String textSnippet = getTextSnippet(doc.getExtractedText(), 100000);
 
         String prompt = """
             Bạn là một chuyên gia ngôn ngữ tiếng Anh và sư phạm. Hãy phân tích nội dung tài liệu sau và trả về kết quả dưới định dạng JSON duy nhất:
@@ -102,15 +97,7 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
                     .build();
         } catch (Exception e) {
             log.error("Failed to analyze document id={} with Gemini", documentId, e);
-            return DocumentAnalysisResponse.builder()
-                    .documentId(doc.getId())
-                    .summary("Tài liệu đã được trích xuất thành công và sẵn sàng để tạo câu hỏi trắc nghiệm.")
-                    .suggestedLevel("B1")
-                    .suggestedQuestionTypes("MULTIPLE_CHOICE")
-                    .keyTopics(List.of("Từ vựng chính", "Ngữ cảnh bài học"))
-                    .keyVocabulary(List.of())
-                    .suggestedQuestionsCount(10)
-                    .build();
+            throw new BadRequestException("Không thể phân tích tài liệu bằng AI: " + e.getMessage());
         }
     }
 
@@ -118,7 +105,7 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
     @Transactional(readOnly = true)
     public DocumentChatResponse chatWithDocument(Long documentId, Long userId, DocumentChatRequest request) {
         UserDocument doc = getValidDocument(documentId, userId);
-        String textSnippet = getTextSnippet(doc.getExtractedText(), 10000);
+        String textSnippet = getTextSnippet(doc.getExtractedText(), 100000);
 
         StringBuilder chatHistory = new StringBuilder();
         if (request.getMessages() != null) {
@@ -140,15 +127,65 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
             %s
             
             HƯỚNG DẪN:
-            - Trả lời thân thiện, súc tích bằng tiếng Việt.
-            - Nếu người dùng yêu cầu tập trung vào phần nào (ví dụ: chỉ hỏi về thì quá khứ, chỉ hỏi từ vựng chương 1, giảm độ khó...), hãy gợi ý các câu hỏi mẫu phù hợp.
-            - Hướng dẫn người dùng có thể bấm 'Tạo bài tập' bất cứ lúc nào khi đã hài lòng với định hướng.
+            - Trả lời thân thiện, súc tích bằng tiếng Việt trong trường "reply".
+            - Nếu người dùng yêu cầu soạn câu hỏi, đưa ra ví dụ bài tập hoặc gợi ý câu hỏi mẫu, hãy tạo các câu hỏi trắc nghiệm tiếng Anh hoàn chỉnh trong danh sách "draftQuestions". Nếu không có yêu cầu câu hỏi hoặc chỉ hỏi đáp thông thường, để "draftQuestions" là mảng rỗng [].
+            - Mỗi câu hỏi trong "draftQuestions" gồm: "content" (tiếng Anh), "options" (mảng 4 lựa chọn tiếng Anh), "correctAnswer" (chỉ số 0-3), "explanation" (giải thích chi tiết bằng tiếng Việt).
+            - Trả về kết quả dưới định dạng JSON duy nhất (không kèm markdown ngoài JSON):
+            {
+              "reply": "Câu trả lời thân thiện của bạn bằng tiếng Việt...",
+              "draftQuestions": [
+                {
+                  "content": "Câu hỏi trắc nghiệm tiếng Anh...",
+                  "options": ["Lựa chọn A", "Lựa chọn B", "Lựa chọn C", "Lựa chọn D"],
+                  "correctAnswer": 0,
+                  "explanation": "Giải thích chi tiết tại sao đúng..."
+                }
+              ]
+            }
             """.formatted(textSnippet, chatHistory.toString());
 
         try {
-            String reply = geminiAIClientService.generateResponse(prompt, userId, false);
+            String aiRaw = geminiAIClientService.generateResponse(prompt, userId, false);
+            String cleaned = cleanJson(aiRaw);
+            String replyText = null;
+            List<DraftQuestionDto> draftQuestions = new ArrayList<>();
+
+            try {
+                JsonNode root = objectMapper.readTree(cleaned);
+                if (root.has("reply") && !root.get("reply").asText().isBlank()) {
+                    replyText = root.get("reply").asText();
+                }
+                if (root.has("draftQuestions") && root.get("draftQuestions").isArray()) {
+                    for (JsonNode qNode : root.get("draftQuestions")) {
+                        String content = qNode.path("content").asText(null);
+                        JsonNode optsNode = qNode.path("options");
+                        List<String> options = new ArrayList<>();
+                        if (optsNode.isArray()) {
+                            optsNode.forEach(o -> options.add(o.asText()));
+                        }
+                        int correct = qNode.path("correctAnswer").asInt(0);
+                        String explanation = qNode.path("explanation").asText("");
+                        if (content != null && !content.isBlank() && options.size() == 4) {
+                            draftQuestions.add(DraftQuestionDto.builder()
+                                    .content(content.trim())
+                                    .options(options)
+                                    .correctAnswer(Math.max(0, Math.min(3, correct)))
+                                    .explanation(explanation)
+                                    .build());
+                        }
+                    }
+                }
+            } catch (Exception parseEx) {
+                log.debug("Chat response parsed as fallback text: {}", parseEx.getMessage());
+            }
+
+            if (replyText == null || replyText.isBlank()) {
+                replyText = (aiRaw != null && !aiRaw.isBlank()) ? aiRaw.trim() : "Tôi đã hiểu yêu cầu của bạn. Bạn có thể tiến hành tạo bài tập bất cứ lúc nào!";
+            }
+
             return DocumentChatResponse.builder()
-                    .reply(reply != null ? reply.trim() : "Tôi đã hiểu yêu cầu của bạn. Bạn có thể tiến hành tạo bài tập bất cứ lúc nào!")
+                    .reply(replyText)
+                    .draftQuestions(draftQuestions)
                     .build();
         } catch (Exception e) {
             log.error("Failed to chat with document id={}", documentId, e);
@@ -166,17 +203,41 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
         featureUsageService.checkAndConsumeQuota(userId, FeatureType.EXERCISE_GENERATION);
 
         try {
+            int targetCount = request.getQuestionCount() != null ? Math.min(Math.max(request.getQuestionCount(), 5), 20) : 10;
+
             // 2. Generate questions via AI
-            List<RawAiQuestion> rawQuestions = generateRawQuestionsWithRetry(doc, request, userId);
+            List<RawAiQuestion> rawQuestions = generateRawQuestionsWithRetry(doc, request, userId, targetCount);
 
             // 3. AI Self-Verification step
             List<RawAiQuestion> verifiedQuestions = verifyQuestionsWithAi(rawQuestions, doc, userId);
-            if (verifiedQuestions.isEmpty()) {
-                verifiedQuestions = rawQuestions;
+            List<RawAiQuestion> validQuestions = filterAndDeduplicate(verifiedQuestions);
+            if (validQuestions.isEmpty()) {
+                validQuestions = filterAndDeduplicate(rawQuestions);
             }
 
-            // 4. Save Quiz and Questions in database transaction
-            return persistQuizTransaction(user, doc, request, verifiedQuestions);
+            // 4. Gate logic: If valid questions are less than target, generate 1 round of supplementary questions
+            if (validQuestions.size() < targetCount) {
+                int missing = targetCount - validQuestions.size();
+                log.info("Quiz has {}/{} valid questions, generating {} supplementary questions", validQuestions.size(), targetCount, missing);
+                try {
+                    List<RawAiQuestion> supplement = generateSupplementaryQuestions(doc, request, userId, missing, validQuestions);
+                    for (var q : supplement) {
+                        if (validQuestions.size() < targetCount) {
+                            validQuestions.add(q);
+                        }
+                    }
+                } catch (Exception ex) {
+                    log.warn("Supplementary generation error: {}", ex.getMessage());
+                }
+            }
+
+            // 5. Final Gate Check: Must have at least 1 valid question
+            if (validQuestions.isEmpty()) {
+                throw new BadRequestException("AI không thể tạo câu hỏi trắc nghiệm hợp lệ đạt chuẩn chất lượng.");
+            }
+
+            // 6. Save Quiz and Questions in database transaction via separate service
+            return documentQuizPersistenceService.persistQuizTransaction(user, doc, request, validQuestions);
         } catch (Exception e) {
             log.error("Failed to generate quiz for document id={}, rolling back quota for user {}", documentId, userId, e);
             featureUsageService.rollbackQuota(userId, FeatureType.EXERCISE_GENERATION);
@@ -187,9 +248,8 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
         }
     }
 
-    private List<RawAiQuestion> generateRawQuestionsWithRetry(UserDocument doc, GenerateQuizFromDocumentRequest req, Long userId) {
-        String textSnippet = getTextSnippet(doc.getExtractedText(), 15000);
-        int targetCount = req.getQuestionCount() != null ? Math.min(Math.max(req.getQuestionCount(), 5), 20) : 10;
+    private List<RawAiQuestion> generateRawQuestionsWithRetry(UserDocument doc, GenerateQuizFromDocumentRequest req, Long userId, int targetCount) {
+        String textSnippet = getTextSnippet(doc.getExtractedText(), 100000);
         String level = normalizeLevel(req.getLevel());
         String extra = req.getExtraPrompt() != null && !req.getExtraPrompt().isBlank() ? "Ghi chú thêm từ người dùng: " + req.getExtraPrompt().trim() : "";
 
@@ -227,18 +287,9 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
                 String aiRaw = geminiAIClientService.generateResponse(prompt, userId, false);
                 String cleaned = cleanJson(aiRaw);
                 List<RawAiQuestion> list = objectMapper.readValue(cleaned, new TypeReference<List<RawAiQuestion>>() {});
-                if (list != null && !list.isEmpty()) {
-                    List<RawAiQuestion> valid = new ArrayList<>();
-                    for (var q : list) {
-                        if (q.getContent() != null && !q.getContent().isBlank()
-                                && q.getOptions() != null && q.getOptions().size() == 4
-                                && q.getCorrectAnswer() != null && q.getCorrectAnswer() >= 0 && q.getCorrectAnswer() <= 3) {
-                            valid.add(q);
-                        }
-                    }
-                    if (!valid.isEmpty()) {
-                        return valid;
-                    }
+                List<RawAiQuestion> valid = filterAndDeduplicate(list);
+                if (!valid.isEmpty()) {
+                    return valid;
                 }
             } catch (Exception e) {
                 log.warn("Attempt {} to generate quiz questions failed: {}", attempt, e.getMessage());
@@ -289,57 +340,71 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
         return questions;
     }
 
-    @Transactional
-    protected QuizResponse persistQuizTransaction(User user, UserDocument doc, GenerateQuizFromDocumentRequest req, List<RawAiQuestion> questions) {
-        String title = (req.getTitle() != null && !req.getTitle().isBlank())
-                ? req.getTitle().trim()
-                : (doc.getOriginalName().replaceFirst("[.][^.]+$", "") + " - " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-
-        String levelStr = normalizeLevel(req.getLevel());
-        Quiz.QuizLevel quizLevel;
-        try {
-            quizLevel = Quiz.QuizLevel.valueOf(levelStr);
-        } catch (Exception e) {
-            quizLevel = Quiz.QuizLevel.B1;
+    private List<RawAiQuestion> generateSupplementaryQuestions(UserDocument doc, GenerateQuizFromDocumentRequest req, Long userId, int count, List<RawAiQuestion> existing) {
+        String textSnippet = getTextSnippet(doc.getExtractedText(), 100000);
+        String level = normalizeLevel(req.getLevel());
+        StringBuilder existingText = new StringBuilder("Không được trùng lặp các câu hỏi đã có sau:\n");
+        for (var q : existing) {
+            existingText.append("- ").append(q.getContent()).append("\n");
         }
 
-        Quiz quiz = Quiz.builder()
-                .title(title)
-                .description("Bài tập trắc nghiệm do AI tạo từ tài liệu: " + doc.getOriginalName())
-                .level(quizLevel)
-                .timeLimit(Math.max(questions.size() * 60, 300))
-                .status(Quiz.QuizStatus.PUBLISHED)
-                .visibility(QuizVisibility.PRIVATE)
-                .createdBy(user)
-                .isAiGenerated(true)
-                .sourceDocument(doc)
-                .build();
+        String prompt = """
+            Hãy bổ sung chính xác %d câu hỏi trắc nghiệm tiếng Anh cấp độ %s từ tài liệu sau.
+            %s
+            
+            TÀI LIỆU NGUỒN:
+            \"\"\"
+            %s
+            \"\"\"
+            
+            Trả về DUY NHẤT một mảng JSON %d câu hỏi:
+            [
+              {
+                "content": "...",
+                "options": ["A", "B", "C", "D"],
+                "correctAnswer": 0,
+                "explanation": "..."
+              }
+            ]
+            """.formatted(count, level, existingText.toString(), textSnippet, count);
 
-        Quiz savedQuiz = quizRepository.save(quiz);
+        try {
+            String aiRaw = geminiAIClientService.generateResponse(prompt, userId, false);
+            String cleaned = cleanJson(aiRaw);
+            List<RawAiQuestion> list = objectMapper.readValue(cleaned, new TypeReference<List<RawAiQuestion>>() {});
+            List<RawAiQuestion> valid = filterAndDeduplicate(list);
+            Set<String> existingContents = new HashSet<>();
+            existing.forEach(e -> existingContents.add(e.getContent().trim().toLowerCase()));
 
-        List<Question> questionEntities = new ArrayList<>();
-        for (var q : questions) {
-            try {
-                String optionsJson = objectMapper.writeValueAsString(q.getOptions());
-                Question qEntity = Question.builder()
-                        .quiz(savedQuiz)
-                        .content(q.getContent().trim())
-                        .options(optionsJson)
-                        .correctAnswer(q.getCorrectAnswer())
-                        .explanation(q.getExplanation() != null ? q.getExplanation().trim() : "")
-                        .build();
-                questionEntities.add(qEntity);
-            } catch (Exception e) {
-                log.error("Failed to serialize question options", e);
+            List<RawAiQuestion> result = new ArrayList<>();
+            for (var q : valid) {
+                if (!existingContents.contains(q.getContent().trim().toLowerCase())) {
+                    result.add(q);
+                }
+            }
+            return result;
+        } catch (Exception e) {
+            log.warn("Failed to generate supplementary questions: {}", e.getMessage());
+            return List.of();
+        }
+    }
+
+    private List<RawAiQuestion> filterAndDeduplicate(List<RawAiQuestion> list) {
+        if (list == null || list.isEmpty()) return new ArrayList<>();
+        List<RawAiQuestion> valid = new ArrayList<>();
+        Set<String> seen = new HashSet<>();
+        for (var q : list) {
+            if (q != null && q.getContent() != null && !q.getContent().isBlank()
+                    && q.getOptions() != null && q.getOptions().size() == 4
+                    && q.getOptions().stream().noneMatch(o -> o == null || o.isBlank())
+                    && q.getCorrectAnswer() != null && q.getCorrectAnswer() >= 0 && q.getCorrectAnswer() <= 3) {
+                String norm = q.getContent().trim().toLowerCase();
+                if (seen.add(norm)) {
+                    valid.add(q);
+                }
             }
         }
-
-        questionRepository.saveAll(questionEntities);
-        log.info("Saved AI Quiz id={} with {} questions for user {}", savedQuiz.getId(), questionEntities.size(), user.getId());
-
-        QuizResponse resp = QuizResponse.fromEntity(savedQuiz);
-        resp.setQuestionCount(questionEntities.size());
-        return resp;
+        return valid;
     }
 
     private UserDocument getValidDocument(Long documentId, Long userId) {

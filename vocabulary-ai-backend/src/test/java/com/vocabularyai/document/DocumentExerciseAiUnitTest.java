@@ -2,6 +2,7 @@ package com.vocabularyai.document;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocabularyai.ai.service.gemini.GeminiAIClientService;
+import com.vocabularyai.common.exception.BadRequestException;
 import com.vocabularyai.document.dto.DocumentAnalysisResponse;
 import com.vocabularyai.document.dto.DocumentChatRequest;
 import com.vocabularyai.document.dto.DocumentChatResponse;
@@ -11,13 +12,10 @@ import com.vocabularyai.document.entity.DocumentStatus;
 import com.vocabularyai.document.entity.UserDocument;
 import com.vocabularyai.document.repository.UserDocumentRepository;
 import com.vocabularyai.document.service.DocumentExerciseAiServiceImpl;
+import com.vocabularyai.document.service.DocumentQuizPersistenceService;
 import com.vocabularyai.payment.entity.FeatureType;
 import com.vocabularyai.payment.service.FeatureUsageService;
 import com.vocabularyai.quiz.dto.QuizResponse;
-import com.vocabularyai.quiz.entity.Quiz;
-import com.vocabularyai.quiz.entity.QuizVisibility;
-import com.vocabularyai.quiz.repository.QuestionRepository;
-import com.vocabularyai.quiz.repository.QuizRepository;
 import com.vocabularyai.user.entity.User;
 import com.vocabularyai.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,158 +37,187 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class DocumentExerciseAiUnitTest {
 
-    @Mock
-    private GeminiAIClientService geminiAIClientService;
+        @Mock
+        private GeminiAIClientService geminiAIClientService;
 
-    @Mock
-    private FeatureUsageService featureUsageService;
+        @Mock
+        private FeatureUsageService featureUsageService;
 
-    @Mock
-    private UserDocumentRepository userDocumentRepository;
+        @Mock
+        private UserDocumentRepository userDocumentRepository;
 
-    @Mock
-    private UserRepository userRepository;
+        @Mock
+        private UserRepository userRepository;
 
-    @Mock
-    private QuizRepository quizRepository;
+        @Mock
+        private DocumentQuizPersistenceService documentQuizPersistenceService;
 
-    @Mock
-    private QuestionRepository questionRepository;
+        @Spy
+        private ObjectMapper objectMapper = new ObjectMapper();
 
-    @Spy
-    private ObjectMapper objectMapper = new ObjectMapper();
+        @InjectMocks
+        private DocumentExerciseAiServiceImpl aiExerciseService;
 
-    @InjectMocks
-    private DocumentExerciseAiServiceImpl aiExerciseService;
+        private User testUser;
+        private UserDocument testDoc;
 
-    private User testUser;
-    private UserDocument testDoc;
+        @BeforeEach
+        void setUp() {
+                testUser = User.builder()
+                                .id(1L)
+                                .username("student1")
+                                .email("student1@example.com")
+                                .role(User.UserRole.STUDENT)
+                                .build();
 
-    @BeforeEach
-    void setUp() {
-        testUser = User.builder()
-                .id(1L)
-                .username("student1")
-                .email("student1@example.com")
-                .role(User.UserRole.STUDENT)
-                .build();
+                testDoc = UserDocument.builder()
+                                .id(10L)
+                                .user(testUser)
+                                .originalName("technology_lesson.docx")
+                                .fileType(DocumentFileType.DOCX)
+                                .fileSize(2048L)
+                                .extractedText("Artificial intelligence is transforming education and daily life...")
+                                .charCount(68)
+                                .status(DocumentStatus.READY)
+                                .build();
+        }
 
-        testDoc = UserDocument.builder()
-                .id(10L)
-                .user(testUser)
-                .originalName("technology_lesson.docx")
-                .fileType(DocumentFileType.DOCX)
-                .fileSize(2048L)
-                .extractedText("Artificial intelligence is transforming education and daily life...")
-                .charCount(68)
-                .status(DocumentStatus.READY)
-                .build();
-    }
+        @Test
+        @DisplayName("Analyze document không trừ quota và trả về tóm tắt cùng level gợi ý")
+        void testAnalyzeDocumentSuccessfully() {
+                when(userDocumentRepository.findByIdAndUserId(10L, 1L)).thenReturn(Optional.of(testDoc));
 
-    @Test
-    @DisplayName("Analyze document không trừ quota và trả về tóm tắt cùng level gợi ý")
-    void testAnalyzeDocumentSuccessfully() {
-        when(userDocumentRepository.findByIdAndUserId(10L, 1L)).thenReturn(Optional.of(testDoc));
+                String mockAiResponse = """
+                                {
+                                  "summary": "Tài liệu giới thiệu về ứng dụng của trí tuệ nhân tạo.",
+                                  "suggestedLevel": "B2",
+                                  "suggestedQuestionTypes": "MULTIPLE_CHOICE",
+                                  "keyTopics": ["Trí tuệ nhân tạo", "Giáo dục hiện đại"],
+                                  "keyVocabulary": ["transforming", "artificial intelligence"],
+                                  "suggestedQuestionsCount": 10
+                                }
+                                """;
 
-        String mockAiResponse = """
-            {
-              "summary": "Tài liệu giới thiệu về ứng dụng của trí tuệ nhân tạo.",
-              "suggestedLevel": "B2",
-              "suggestedQuestionTypes": "MULTIPLE_CHOICE",
-              "keyTopics": ["Trí tuệ nhân tạo", "Giáo dục hiện đại"],
-              "keyVocabulary": ["transforming", "artificial intelligence"],
-              "suggestedQuestionsCount": 10
-            }
-            """;
+                when(geminiAIClientService.generateResponse(anyString(), eq(1L), eq(false))).thenReturn(mockAiResponse);
 
-        when(geminiAIClientService.generateResponse(anyString(), eq(1L), eq(false))).thenReturn(mockAiResponse);
+                DocumentAnalysisResponse resp = aiExerciseService.analyzeDocument(10L, 1L);
+                assertNotNull(resp);
+                assertEquals(10L, resp.getDocumentId());
+                assertEquals("B2", resp.getSuggestedLevel());
+                assertEquals(2, resp.getKeyTopics().size());
+                verify(featureUsageService, never()).checkAndConsumeQuota(any(), any());
+        }
 
-        DocumentAnalysisResponse resp = aiExerciseService.analyzeDocument(10L, 1L);
-        assertNotNull(resp);
-        assertEquals(10L, resp.getDocumentId());
-        assertEquals("B2", resp.getSuggestedLevel());
-        assertEquals(2, resp.getKeyTopics().size());
-        verify(featureUsageService, never()).checkAndConsumeQuota(any(), any());
-    }
+        @Test
+        @DisplayName("Analyze document lỗi ném BadRequestException (không fallback âm thầm)")
+        void testAnalyzeDocumentThrowsBadRequestExceptionOnAiError() {
+                when(userDocumentRepository.findByIdAndUserId(10L, 1L)).thenReturn(Optional.of(testDoc));
+                when(geminiAIClientService.generateResponse(anyString(), eq(1L), eq(false)))
+                                .thenThrow(new RuntimeException("Gemini quota exceeded"));
 
-    @Test
-    @DisplayName("Chat with document không trừ quota và trả về phản hồi hỗ trợ tinh chỉnh")
-    void testChatWithDocumentSuccessfully() {
-        when(userDocumentRepository.findByIdAndUserId(10L, 1L)).thenReturn(Optional.of(testDoc));
-        when(geminiAIClientService.generateResponse(anyString(), eq(1L), eq(false)))
-                .thenReturn("Tôi sẽ tập trung soạn câu hỏi về từ vựng công nghệ cho bạn.");
+                assertThrows(BadRequestException.class, () -> aiExerciseService.analyzeDocument(10L, 1L));
+        }
 
-        DocumentChatRequest request = DocumentChatRequest.builder()
-                .messages(List.of(
-                        DocumentChatRequest.ChatMessageItem.builder().role("user").content("Tập trung vào từ vựng mới nhé!").build()
-                ))
-                .build();
+        @Test
+        @DisplayName("Chat with document trả về phản hồi kèm draftQuestions khi AI sinh câu hỏi")
+        void testChatWithDocumentWithDraftQuestions() {
+                when(userDocumentRepository.findByIdAndUserId(10L, 1L)).thenReturn(Optional.of(testDoc));
 
-        DocumentChatResponse resp = aiExerciseService.chatWithDocument(10L, 1L, request);
-        assertNotNull(resp);
-        assertTrue(resp.getReply().contains("từ vựng công nghệ"));
-        verify(featureUsageService, never()).checkAndConsumeQuota(any(), any());
-    }
+                String mockChatJson = """
+                                {
+                                  "reply": "Dưới đây là 1 câu hỏi mẫu về thì quá khứ:",
+                                  "draftQuestions": [
+                                    {
+                                      "content": "What did AI do yesterday?",
+                                      "options": ["Helped", "Nothing", "Left", "Failed"],
+                                      "correctAnswer": 0,
+                                      "explanation": "Helped is the correct past simple form."
+                                    }
+                                  ]
+                                }
+                                """;
+                when(geminiAIClientService.generateResponse(anyString(), eq(1L), eq(false)))
+                                .thenReturn(mockChatJson);
 
-    @Test
-    @DisplayName("Tạo bài tập thành công: trừ 1 lượt EXERCISE_GENERATION, lưu Quiz PRIVATE và Question")
-    void testGenerateQuizSuccessfully() {
-        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
-        when(userDocumentRepository.findByIdAndUserId(10L, 1L)).thenReturn(Optional.of(testDoc));
+                DocumentChatRequest request = DocumentChatRequest.builder()
+                                .messages(List.of(
+                                                DocumentChatRequest.ChatMessageItem.builder().role("user")
+                                                                .content("Tạo 1 câu hỏi mẫu").build()))
+                                .build();
 
-        String rawQuestionsJson = """
-            [
-              {
-                "content": "What is AI doing according to the text?",
-                "options": ["Transforming education", "Nothing", "Sleeping", "Playing"],
-                "correctAnswer": 0,
-                "explanation": "AI is transforming education as mentioned in the lesson."
-              }
-            ]
-            """;
+                DocumentChatResponse resp = aiExerciseService.chatWithDocument(10L, 1L, request);
+                assertNotNull(resp);
+                assertTrue(resp.getReply().contains("Dưới đây là"));
+                assertNotNull(resp.getDraftQuestions());
+                assertEquals(1, resp.getDraftQuestions().size());
+                assertEquals("What did AI do yesterday?", resp.getDraftQuestions().get(0).getContent());
+                assertEquals(0, resp.getDraftQuestions().get(0).getCorrectAnswer());
+        }
 
-        // First call generates questions, second call verifies
-        when(geminiAIClientService.generateResponse(anyString(), eq(1L), eq(false)))
-                .thenReturn(rawQuestionsJson);
+        @Test
+        @DisplayName("Tạo bài tập thành công: trừ 1 lượt EXERCISE_GENERATION, gọi persistence service")
+        void testGenerateQuizSuccessfully() {
+                when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+                when(userDocumentRepository.findByIdAndUserId(10L, 1L)).thenReturn(Optional.of(testDoc));
 
-        when(quizRepository.save(any(Quiz.class))).thenAnswer(inv -> {
-            Quiz q = inv.getArgument(0);
-            q.setId(500L);
-            return q;
-        });
+                String rawQuestionsJson = """
+                                [
+                                  {
+                                    "content": "What is AI doing according to the text?",
+                                    "options": ["Transforming education", "Nothing", "Sleeping", "Playing"],
+                                    "correctAnswer": 0,
+                                    "explanation": "AI is transforming education as mentioned in the lesson."
+                                  }
+                                ]
+                                """;
 
-        GenerateQuizFromDocumentRequest req = GenerateQuizFromDocumentRequest.builder()
-                .title("Bài tập AI công nghệ")
-                .level("B2")
-                .questionCount(5)
-                .build();
+                when(geminiAIClientService.generateResponse(anyString(), eq(1L), eq(false)))
+                                .thenReturn(rawQuestionsJson);
 
-        QuizResponse resp = aiExerciseService.generateQuiz(10L, 1L, req);
-        assertNotNull(resp);
-        assertEquals(500L, resp.getId());
-        assertEquals("PRIVATE", resp.getVisibility());
-        assertTrue(resp.getIsAiGenerated());
+                QuizResponse mockSavedQuiz = QuizResponse.builder()
+                                .id(500L)
+                                .title("Bài tập AI công nghệ")
+                                .visibility("PRIVATE")
+                                .isAiGenerated(true)
+                                .questionCount(1)
+                                .build();
 
-        verify(featureUsageService, times(1)).checkAndConsumeQuota(1L, FeatureType.EXERCISE_GENERATION);
-        verify(featureUsageService, never()).rollbackQuota(any(), any());
-        verify(questionRepository, times(1)).saveAll(anyList());
-    }
+                when(documentQuizPersistenceService.persistQuizTransaction(eq(testUser), eq(testDoc), any(), anyList()))
+                                .thenReturn(mockSavedQuiz);
 
-    @Test
-    @DisplayName("Tạo bài tập thất bại do AI lỗi: rollback 1 lượt quota")
-    void testGenerateQuizFailsRollbackQuota() {
-        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
-        when(userDocumentRepository.findByIdAndUserId(10L, 1L)).thenReturn(Optional.of(testDoc));
-        when(geminiAIClientService.generateResponse(anyString(), eq(1L), eq(false)))
-                .thenThrow(new RuntimeException("Gemini timeout"));
+                GenerateQuizFromDocumentRequest req = GenerateQuizFromDocumentRequest.builder()
+                                .title("Bài tập AI công nghệ")
+                                .level("B2")
+                                .questionCount(5)
+                                .build();
 
-        GenerateQuizFromDocumentRequest req = GenerateQuizFromDocumentRequest.builder()
-                .level("B2")
-                .questionCount(5)
-                .build();
+                QuizResponse resp = aiExerciseService.generateQuiz(10L, 1L, req);
+                assertNotNull(resp);
+                assertEquals(500L, resp.getId());
+                assertEquals("PRIVATE", resp.getVisibility());
+                assertTrue(resp.getIsAiGenerated());
 
-        assertThrows(Exception.class, () -> aiExerciseService.generateQuiz(10L, 1L, req));
-        verify(featureUsageService, times(1)).checkAndConsumeQuota(1L, FeatureType.EXERCISE_GENERATION);
-        verify(featureUsageService, times(1)).rollbackQuota(1L, FeatureType.EXERCISE_GENERATION);
-    }
+                verify(featureUsageService, times(1)).checkAndConsumeQuota(1L, FeatureType.EXERCISE_GENERATION);
+                verify(featureUsageService, never()).rollbackQuota(any(), any());
+                verify(documentQuizPersistenceService, times(1)).persistQuizTransaction(eq(testUser), eq(testDoc),
+                                any(), anyList());
+        }
+
+        @Test
+        @DisplayName("Tạo bài tập thất bại do AI lỗi: rollback 1 lượt quota")
+        void testGenerateQuizFailsRollbackQuota() {
+                when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+                when(userDocumentRepository.findByIdAndUserId(10L, 1L)).thenReturn(Optional.of(testDoc));
+                when(geminiAIClientService.generateResponse(anyString(), eq(1L), eq(false)))
+                                .thenThrow(new RuntimeException("Gemini timeout"));
+
+                GenerateQuizFromDocumentRequest req = GenerateQuizFromDocumentRequest.builder()
+                                .level("B2")
+                                .questionCount(5)
+                                .build();
+
+                assertThrows(Exception.class, () -> aiExerciseService.generateQuiz(10L, 1L, req));
+                verify(featureUsageService, times(1)).checkAndConsumeQuota(1L, FeatureType.EXERCISE_GENERATION);
+                verify(featureUsageService, times(1)).rollbackQuota(1L, FeatureType.EXERCISE_GENERATION);
+        }
 }
