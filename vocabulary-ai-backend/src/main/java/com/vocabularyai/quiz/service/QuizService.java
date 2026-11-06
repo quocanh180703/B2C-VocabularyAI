@@ -5,6 +5,7 @@ import com.vocabularyai.common.exception.ForbiddenException;
 import com.vocabularyai.common.exception.ResourceNotFoundException;
 import com.vocabularyai.quiz.dto.*;
 import com.vocabularyai.quiz.entity.*;
+import com.vocabularyai.quiz.entity.QuizVisibility;
 import com.vocabularyai.quiz.repository.*;
 import com.vocabularyai.user.entity.User;
 import com.vocabularyai.vocabulary.repository.CategoryRepository;
@@ -42,7 +43,33 @@ public class QuizService {
     @Transactional(readOnly = true)
     public Page<QuizResponse> getPublishedQuizzes(Pageable pageable) {
         log.info("Getting published quizzes");
-        Page<Quiz> quizzes = quizRepository.findByStatus(Quiz.QuizStatus.PUBLISHED, pageable);
+        Page<Quiz> quizzes = quizRepository.findByVisibilityAndStatus(QuizVisibility.PUBLIC, Quiz.QuizStatus.PUBLISHED, pageable);
+        Map<Long, Integer> countMap = questionRepository.countQuestionsGroupByQuizId().stream()
+            .collect(Collectors.toMap(
+                row -> (Long) row[0],
+                row -> ((Number) row[1]).intValue(),
+                (existing, replacement) -> existing
+            ));
+        return new PageImpl<>(
+            quizzes.getContent().stream()
+                .map(q -> {
+                    QuizResponse resp = QuizResponse.fromEntity(q);
+                    resp.setQuestionCount(countMap.getOrDefault(q.getId(), 5));
+                    return resp;
+                })
+                .collect(Collectors.toList()),
+            pageable,
+            quizzes.getTotalElements()
+        );
+    }
+
+    /**
+     * Get quizzes created by current user (My Quizzes)
+     */
+    @Transactional(readOnly = true)
+    public Page<QuizResponse> getUserQuizzes(Long userId, Pageable pageable) {
+        log.info("Getting quizzes created by user: {}", userId);
+        Page<Quiz> quizzes = quizRepository.findByCreatedById(userId, pageable);
         Map<Long, Integer> countMap = questionRepository.countQuestionsGroupByQuizId().stream()
             .collect(Collectors.toMap(
                 row -> (Long) row[0],

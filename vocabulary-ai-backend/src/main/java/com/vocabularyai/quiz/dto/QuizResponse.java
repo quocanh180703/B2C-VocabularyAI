@@ -28,6 +28,14 @@ public class QuizResponse {
     private Integer timeLimit;
     private Integer questionCount;
     private String status;
+    private Long createdBy;
+    private String creatorUsername;
+    private String visibility;
+    private Boolean isAiGenerated;
+    private Long sourceDocumentId;
+    private String reviewNote;
+    private Long reviewedBy;
+    private LocalDateTime reviewedAt;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     
@@ -44,7 +52,15 @@ public class QuizResponse {
             .level(quiz.getLevel() != null ? quiz.getLevel().name() : null)
             .timeLimit(quiz.getTimeLimit())
             .questionCount(5)
-            .status(quiz.getStatus().name())
+            .status(quiz.getStatus() != null ? quiz.getStatus().name() : null)
+            .createdBy(quiz.getCreatedBy() != null ? quiz.getCreatedBy().getId() : null)
+            .creatorUsername(quiz.getCreatedBy() != null ? quiz.getCreatedBy().getUsername() : null)
+            .visibility(quiz.getVisibility() != null ? quiz.getVisibility().name() : null)
+            .isAiGenerated(quiz.isAiGenerated())
+            .sourceDocumentId(quiz.getSourceDocument() != null ? quiz.getSourceDocument().getId() : null)
+            .reviewNote(quiz.getReviewNote())
+            .reviewedBy(quiz.getReviewedBy() != null ? quiz.getReviewedBy().getId() : null)
+            .reviewedAt(quiz.getReviewedAt())
             .createdAt(quiz.getCreatedAt())
             .updatedAt(quiz.getUpdatedAt())
             .build();

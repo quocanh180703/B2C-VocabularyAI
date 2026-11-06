@@ -38,10 +38,10 @@ public class QuizController {
     }
     
     /**
-     * Get all published quizzes
+     * Get all published quizzes (Public only)
      */
     @GetMapping
-    @Operation(summary = "Get published quizzes", description = "Retrieve all published quizzes")
+    @Operation(summary = "Get published quizzes", description = "Retrieve all published public quizzes")
     public ResponseEntity<ApiResponse<Page<QuizResponse>>> getPublishedQuizzes(
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "20") Integer size) {
@@ -52,6 +52,27 @@ public class QuizController {
         
         return ResponseEntity.ok(
             ApiResponse.success("Quizzes retrieved successfully", quizzes)
+        );
+    }
+
+    /**
+     * Get quizzes created by authenticated user (My Quizzes)
+     */
+    @GetMapping("/mine")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Get my quizzes", description = "Retrieve quizzes created by current user")
+    public ResponseEntity<ApiResponse<Page<QuizResponse>>> getMyQuizzes(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "20") Integer size) {
+        Long userId = userService.getCurrentUserId();
+        log.info("Getting quizzes created by user: {}", userId);
+
+        Pageable pageable = PaginationUtils.createPageableDesc(page, size, "createdAt");
+        Page<QuizResponse> quizzes = quizService.getUserQuizzes(userId, pageable);
+
+        return ResponseEntity.ok(
+            ApiResponse.success("Lấy danh sách bài tập của bạn thành công", quizzes)
         );
     }
 
@@ -178,44 +199,19 @@ public class QuizController {
     }
     
     /**
-     * Get quiz attempt with answers (authenticated)
-     */
-    @GetMapping("/attempts/{attemptId}")
-    @Operation(
-        summary = "Get quiz attempt details",
-        description = "Get quiz attempt with all answers and explanations"
-    )
-    public ResponseEntity<ApiResponse<QuizAttemptWithAnswersResponse>> getQuizAttemptDetails(
-            @PathVariable Long attemptId,
-            @org.springframework.security.core.annotation.AuthenticationPrincipal com.vocabularyai.user.entity.User user) {
-        log.info("Getting quiz attempt details: {}", attemptId);
-        
-        QuizAttemptWithAnswersResponse response;
-        if (user != null) {
-            response = quizService.getQuizAttemptWithAnswers(attemptId, user.getId());
-        } else {
-            response = quizService.getQuizAttemptWithAnswers(attemptId);
-        }
-        
-        return ResponseEntity.ok(
-            ApiResponse.success("Quiz attempt retrieved successfully", response)
-        );
-    }
-    
-    /**
-     * Get user's quiz history (authenticated)
+     * Get user's quiz attempt history (authenticated)
      */
     @GetMapping("/history")
     @PreAuthorize("isAuthenticated()")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(
-        summary = "Get user's quiz history",
-        description = "Get all quiz attempts by current user"
+        summary = "Get user's quiz attempt history",
+        description = "Retrieve all quiz attempts for the authenticated user"
     )
-    public ResponseEntity<ApiResponse<Page<QuizAttemptResponse>>> getQuizHistory(
+    public ResponseEntity<ApiResponse<Page<QuizAttemptResponse>>> getUserQuizHistory(
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "20") Integer size) {
-        log.info("Getting quiz history");
+        log.info("Getting quiz history for current user");
         
         Long userId = userService.getCurrentUserId();
         Pageable pageable = PaginationUtils.createPageableDesc(page, size, "createdAt");
@@ -223,6 +219,28 @@ public class QuizController {
         
         return ResponseEntity.ok(
             ApiResponse.success("Quiz history retrieved successfully", history)
+        );
+    }
+    
+    /**
+     * Get quiz attempt details with answers (authenticated)
+     */
+    @GetMapping("/attempts/{attemptId}")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(
+        summary = "Get quiz attempt details with answers",
+        description = "Retrieve detailed results of a quiz attempt including questions and answers"
+    )
+    public ResponseEntity<ApiResponse<QuizAttemptWithAnswersResponse>> getQuizAttempt(
+            @PathVariable Long attemptId) {
+        log.info("Getting quiz attempt details: {}", attemptId);
+        
+        Long userId = userService.getCurrentUserId();
+        QuizAttemptWithAnswersResponse response = quizService.getQuizAttemptWithAnswers(attemptId, userId);
+        
+        return ResponseEntity.ok(
+            ApiResponse.success("Quiz attempt details retrieved successfully", response)
         );
     }
 }
