@@ -14,49 +14,55 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin/learning-progress")
 @RequiredArgsConstructor
 @Tag(name = "Admin - Learning Progress Management")
+@PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
 public class AdminLearningProgressController {
-    
+
     private final AdminLearningProgressService service;
-    
+
     @GetMapping
     @Operation(summary = "Danh sách tiến độ học")
     public ResponseEntity<Page<LearningProgressListResponse>> listProgress(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
-        
+
         Pageable pageable = PageRequest.of(page, size);
         Page<LearningProgressListResponse> result = service.listProgress(pageable);
-        
+
         return ResponseEntity.ok(result);
     }
-    
+
     @GetMapping("/{progressId}")
     @Operation(summary = "Chi tiết tiến độ học")
     public ResponseEntity<LearningProgressDetailResponse> getDetail(@PathVariable Long progressId) {
         return ResponseEntity.ok(service.getProgressDetail(progressId));
     }
-    
+
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Tạo tiến độ học")
-    public ResponseEntity<LearningProgressDetailResponse> createProgress(@Valid @RequestBody CreateLearningProgressRequest request) {
+    public ResponseEntity<LearningProgressDetailResponse> createProgress(
+            @Valid @RequestBody CreateLearningProgressRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createProgress(request));
     }
-    
+
     @PutMapping("/{progressId}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Cập nhật tiến độ học")
     public ResponseEntity<LearningProgressDetailResponse> updateProgress(
             @PathVariable Long progressId,
             @Valid @RequestBody UpdateLearningProgressRequest request) {
         return ResponseEntity.ok(service.updateProgress(progressId, request));
     }
-    
+
     @DeleteMapping("/{progressId}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Xóa tiến độ học")
     public ResponseEntity<Void> deleteProgress(@PathVariable Long progressId) {
         service.deleteProgress(progressId);

@@ -40,6 +40,9 @@ public class StudentDetailResponse implements Serializable {
     @Schema(description = "Full name", example = "Nguyễn Văn A")
     private String fullName;
     
+    @Schema(description = "User role (STUDENT, INSTRUCTOR, ADMIN)", example = "STUDENT")
+    private String role;
+
     @Schema(description = "Avatar URL", example = "https://example.com/avatar.jpg")
     private String avatarUrl;
     

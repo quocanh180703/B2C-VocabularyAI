@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Admin Packages Management", description = "API for managing subscription packages")
 @RequiredArgsConstructor
 @Slf4j
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminPackagesController {
     
     private final AdminPackagesService adminPackagesService;

@@ -14,12 +14,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin/quiz-attempts")
 @RequiredArgsConstructor
 @Tag(name = "Admin - Quiz Attempt Management")
+@PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
 public class AdminQuizAttemptController {
     
     private final AdminQuizAttemptService service;
@@ -43,12 +45,14 @@ public class AdminQuizAttemptController {
     }
     
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Tạo lần làm bài")
     public ResponseEntity<QuizAttemptDetailResponse> createAttempt(@Valid @RequestBody CreateQuizAttemptRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createAttempt(request));
     }
     
     @PutMapping("/{attemptId}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Cập nhật lần làm bài")
     public ResponseEntity<QuizAttemptDetailResponse> updateAttempt(
             @PathVariable Long attemptId,
@@ -57,6 +61,7 @@ public class AdminQuizAttemptController {
     }
     
     @DeleteMapping("/{attemptId}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Xóa lần làm bài")
     public ResponseEntity<Void> deleteAttempt(@PathVariable Long attemptId) {
         service.deleteAttempt(attemptId);

@@ -38,10 +38,10 @@ public class QuizController {
     }
     
     /**
-     * Get all published quizzes
+     * Get all published quizzes (Public only)
      */
     @GetMapping
-    @Operation(summary = "Get published quizzes", description = "Retrieve all published quizzes")
+    @Operation(summary = "Get published quizzes", description = "Retrieve all published public quizzes")
     public ResponseEntity<ApiResponse<Page<QuizResponse>>> getPublishedQuizzes(
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "20") Integer size) {
@@ -56,10 +56,134 @@ public class QuizController {
     }
 
     /**
+     * Get quizzes created by authenticated user (My Quizzes)
+     */
+    @GetMapping("/mine")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Get my quizzes", description = "Retrieve quizzes created by current user")
+    public ResponseEntity<ApiResponse<Page<QuizResponse>>> getMyQuizzes(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "20") Integer size) {
+        Long userId = userService.getCurrentUserId();
+        log.info("Getting quizzes created by user: {}", userId);
+
+        Pageable pageable = PaginationUtils.createPageableDesc(page, size, "createdAt");
+        Page<QuizResponse> quizzes = quizService.getUserQuizzes(userId, pageable);
+
+        return ResponseEntity.ok(
+            ApiResponse.success("Lấy danh sách bài tập của bạn thành công", quizzes)
+        );
+    }
+
+    /**
+     * Get my quiz detail with correct answers (Owner only)
+     */
+    @GetMapping("/mine/{id}")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Get my quiz detail", description = "Retrieve quiz details and questions with correct answers for owner")
+    public ResponseEntity<ApiResponse<QuizWithQuestionsResponse>> getMyQuizDetail(
+            @PathVariable Long id) {
+        Long userId = userService.getCurrentUserId();
+        log.info("Getting my quiz detail: quizId={}, userId={}", id, userId);
+        QuizWithQuestionsResponse response = quizService.getMyQuizDetail(id, userId);
+        return ResponseEntity.ok(
+            ApiResponse.success("Lấy chi tiết bài tập thành công", response)
+        );
+    }
+
+    /**
+     * Update my quiz (Owner only, PRIVATE or REJECTED)
+     */
+    @PutMapping("/mine/{id}")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Update my quiz", description = "Update quiz details and questions (owner only, PRIVATE or REJECTED)")
+    public ResponseEntity<ApiResponse<QuizResponse>> updateMyQuiz(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateMyQuizRequest request) {
+        Long userId = userService.getCurrentUserId();
+        log.info("Updating my quiz: quizId={}, userId={}", id, userId);
+        QuizResponse quiz = quizService.updateUserQuiz(id, userId, request);
+        return ResponseEntity.ok(
+            ApiResponse.success("Cập nhật bài tập thành công", quiz)
+        );
+    }
+
+    /**
+     * Delete my quiz (Owner only, PRIVATE or REJECTED)
+     */
+    @DeleteMapping("/mine/{id}")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Delete my quiz", description = "Delete quiz and its questions (owner only, PRIVATE or REJECTED)")
+    public ResponseEntity<ApiResponse<Void>> deleteMyQuiz(
+            @PathVariable Long id) {
+        Long userId = userService.getCurrentUserId();
+        log.info("Deleting my quiz: quizId={}, userId={}", id, userId);
+        quizService.deleteUserQuiz(id, userId);
+        return ResponseEntity.ok(
+            ApiResponse.success("Xóa bài tập thành công", null)
+        );
+    }
+
+    /**
+     * Request publication of user quiz (PRIVATE/REJECTED -> PENDING)
+     */
+    @PostMapping("/mine/{id}/publish-request")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Request publication of quiz", description = "Send user quiz for review by instructors")
+    public ResponseEntity<ApiResponse<QuizResponse>> publishRequest(
+            @PathVariable Long id) {
+        Long userId = userService.getCurrentUserId();
+        log.info("User {} requesting publication for quiz {}", userId, id);
+        QuizResponse quiz = quizService.publishRequest(id, userId);
+        return ResponseEntity.ok(
+            ApiResponse.success("Đã gửi yêu cầu duyệt bài tập tới giảng viên", quiz)
+        );
+    }
+
+    /**
+     * Withdraw publication request (PENDING -> PRIVATE)
+     */
+    @PostMapping("/mine/{id}/withdraw")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Withdraw publication request", description = "Withdraw pending quiz review back to private")
+    public ResponseEntity<ApiResponse<QuizResponse>> withdrawPublishRequest(
+            @PathVariable Long id) {
+        Long userId = userService.getCurrentUserId();
+        log.info("User {} withdrawing publication request for quiz {}", userId, id);
+        QuizResponse quiz = quizService.withdrawPublishRequest(id, userId);
+        return ResponseEntity.ok(
+            ApiResponse.success("Đã rút yêu cầu duyệt bài tập", quiz)
+        );
+    }
+
+    /**
+     * Hide published quiz back to private (PUBLIC -> PRIVATE)
+     */
+    @PostMapping("/mine/{id}/hide")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Hide published quiz", description = "Revert published quiz back to private")
+    public ResponseEntity<ApiResponse<QuizResponse>> hideQuiz(
+            @PathVariable Long id) {
+        Long userId = userService.getCurrentUserId();
+        log.info("User {} hiding quiz {}", userId, id);
+        QuizResponse quiz = quizService.hideQuiz(id, userId);
+        return ResponseEntity.ok(
+            ApiResponse.success("Đã chuyển bài tập về chế độ riêng tư", quiz)
+        );
+    }
+
+    /**
      * Get all quizzes including drafts (Admin)
      */
     @GetMapping("/admin/all")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Get all quizzes (admin)", description = "Retrieve all quizzes including draft and published")
     public ResponseEntity<ApiResponse<Page<QuizResponse>>> getAllQuizzes(
@@ -75,7 +199,7 @@ public class QuizController {
      * Create quiz (Admin)
      */
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Create quiz", description = "Create a new quiz (admin only)")
     public ResponseEntity<ApiResponse<QuizResponse>> createQuiz(
@@ -91,7 +215,7 @@ public class QuizController {
      * Update quiz (Admin)
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Update quiz", description = "Update quiz details (admin only)")
     public ResponseEntity<ApiResponse<QuizResponse>> updateQuiz(
@@ -107,7 +231,7 @@ public class QuizController {
      * Delete quiz (Admin)
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Delete quiz", description = "Delete a quiz and its questions (admin only)")
     public ResponseEntity<ApiResponse<Void>> deleteQuiz(@PathVariable Long id) {
@@ -124,8 +248,12 @@ public class QuizController {
     public ResponseEntity<ApiResponse<QuizWithQuestionsResponse>> getQuizForTaking(
             @PathVariable Long id) {
         log.info("Getting quiz for taking: {}", id);
+        Long currentUserId = null;
+        try {
+            currentUserId = userService.getCurrentUserId();
+        } catch (Exception ignored) {}
         
-        QuizWithQuestionsResponse response = quizService.getQuizForTaking(id);
+        QuizWithQuestionsResponse response = quizService.getQuizForTaking(id, currentUserId);
         
         return ResponseEntity.ok(
             ApiResponse.success("Quiz retrieved successfully", response)
@@ -178,44 +306,19 @@ public class QuizController {
     }
     
     /**
-     * Get quiz attempt with answers (authenticated)
-     */
-    @GetMapping("/attempts/{attemptId}")
-    @Operation(
-        summary = "Get quiz attempt details",
-        description = "Get quiz attempt with all answers and explanations"
-    )
-    public ResponseEntity<ApiResponse<QuizAttemptWithAnswersResponse>> getQuizAttemptDetails(
-            @PathVariable Long attemptId,
-            @org.springframework.security.core.annotation.AuthenticationPrincipal com.vocabularyai.user.entity.User user) {
-        log.info("Getting quiz attempt details: {}", attemptId);
-        
-        QuizAttemptWithAnswersResponse response;
-        if (user != null) {
-            response = quizService.getQuizAttemptWithAnswers(attemptId, user.getId());
-        } else {
-            response = quizService.getQuizAttemptWithAnswers(attemptId);
-        }
-        
-        return ResponseEntity.ok(
-            ApiResponse.success("Quiz attempt retrieved successfully", response)
-        );
-    }
-    
-    /**
-     * Get user's quiz history (authenticated)
+     * Get user's quiz attempt history (authenticated)
      */
     @GetMapping("/history")
     @PreAuthorize("isAuthenticated()")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(
-        summary = "Get user's quiz history",
-        description = "Get all quiz attempts by current user"
+        summary = "Get user's quiz attempt history",
+        description = "Retrieve all quiz attempts for the authenticated user"
     )
-    public ResponseEntity<ApiResponse<Page<QuizAttemptResponse>>> getQuizHistory(
+    public ResponseEntity<ApiResponse<Page<QuizAttemptResponse>>> getUserQuizHistory(
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "20") Integer size) {
-        log.info("Getting quiz history");
+        log.info("Getting quiz history for current user");
         
         Long userId = userService.getCurrentUserId();
         Pageable pageable = PaginationUtils.createPageableDesc(page, size, "createdAt");
@@ -223,6 +326,28 @@ public class QuizController {
         
         return ResponseEntity.ok(
             ApiResponse.success("Quiz history retrieved successfully", history)
+        );
+    }
+    
+    /**
+     * Get quiz attempt details with answers (authenticated)
+     */
+    @GetMapping("/attempts/{attemptId}")
+    @PreAuthorize("isAuthenticated()")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(
+        summary = "Get quiz attempt details with answers",
+        description = "Retrieve detailed results of a quiz attempt including questions and answers"
+    )
+    public ResponseEntity<ApiResponse<QuizAttemptWithAnswersResponse>> getQuizAttempt(
+            @PathVariable Long attemptId) {
+        log.info("Getting quiz attempt details: {}", attemptId);
+        
+        Long userId = userService.getCurrentUserId();
+        QuizAttemptWithAnswersResponse response = quizService.getQuizAttemptWithAnswers(attemptId, userId);
+        
+        return ResponseEntity.ok(
+            ApiResponse.success("Quiz attempt details retrieved successfully", response)
         );
     }
 }

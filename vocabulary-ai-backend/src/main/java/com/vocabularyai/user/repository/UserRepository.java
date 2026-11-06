@@ -38,4 +38,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * Find user by provider ID (e.g. Google sub)
      */
     Optional<User> findByProviderId(String providerId);
+
+    java.util.List<User> findByRoleIn(java.util.Collection<User.UserRole> roles);
 }

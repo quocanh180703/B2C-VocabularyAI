@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ import java.util.List;
 @Tag(name = "Admin Reports", description = "API for analytics and reporting")
 @RequiredArgsConstructor
 @Slf4j
+@PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
 public class AdminReportsController {
     
     private final AdminReportsService adminReportsService;
@@ -76,6 +78,7 @@ public class AdminReportsController {
      * @return Revenue data
      */
     @GetMapping("/revenue")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Get revenue report", description = "Get financial metrics and revenue data")
     public ResponseEntity<RevenueReportResponse> getRevenueReport() {
         log.info("GET /api/admin/reports/revenue - Get revenue report");
