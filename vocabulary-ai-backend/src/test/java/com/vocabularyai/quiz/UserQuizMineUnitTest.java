@@ -269,13 +269,13 @@ public class UserQuizMineUnitTest {
     }
 
     @Test
-    @DisplayName("Non-owner updating quiz throws ForbiddenException")
-    void testNonOwnerUpdatingQuizThrowsForbidden() {
+    @DisplayName("Non-owner updating quiz throws ResourceNotFoundException")
+    void testNonOwnerUpdatingQuizThrowsNotFound() {
         when(quizRepository.findById(100L)).thenReturn(Optional.of(privateQuiz));
 
         UpdateMyQuizRequest req = UpdateMyQuizRequest.builder().title("Try Edit").build();
 
-        assertThrows(ForbiddenException.class, () -> {
+        assertThrows(ResourceNotFoundException.class, () -> {
             quizService.updateUserQuiz(100L, otherUser.getId(), req);
         });
     }

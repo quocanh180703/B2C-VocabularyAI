@@ -1,6 +1,7 @@
 package com.vocabularyai.report;
 
 import com.vocabularyai.common.exception.BadRequestException;
+import com.vocabularyai.common.exception.ConflictException;
 import com.vocabularyai.common.exception.DuplicateResourceException;
 import com.vocabularyai.common.exception.ResourceNotFoundException;
 import com.vocabularyai.report.dto.ContentReportResponse;
@@ -176,4 +177,57 @@ public class AdminContentReportUnitTest {
         assertThrows(ResourceNotFoundException.class, () ->
                 contentReportService.resolveReport(999L, instructorUser, resolveReq));
     }
+    @Test
+    @DisplayName("Resolve report throws ConflictException when report is not PENDING")
+    void testResolveReport_AlreadyResolved_ThrowsConflict() {
+        ContentReport existing = ContentReport.builder()
+                .id(5L)
+                .status(ContentReportStatus.APPROVED)
+                .build();
+        when(contentReportRepository.findById(5L)).thenReturn(Optional.of(existing));
+
+        ResolveContentReportRequest resolveReq = ResolveContentReportRequest.builder()
+                .status(ContentReportStatus.REJECTED)
+                .adminNote("Từ chối lại")
+                .build();
+
+        assertThrows(ConflictException.class, () ->
+                contentReportService.resolveReport(5L, instructorUser, resolveReq));
+    }
+
+    @Test
+    @DisplayName("Resolve report throws BadRequestException when setting status back to PENDING")
+    void testResolveReport_CannotSetPending() {
+        ContentReport existing = ContentReport.builder()
+                .id(5L)
+                .status(ContentReportStatus.PENDING)
+                .build();
+        when(contentReportRepository.findById(5L)).thenReturn(Optional.of(existing));
+
+        ResolveContentReportRequest resolveReq = ResolveContentReportRequest.builder()
+                .status(ContentReportStatus.PENDING)
+                .build();
+
+        assertThrows(BadRequestException.class, () ->
+                contentReportService.resolveReport(5L, instructorUser, resolveReq));
+    }
+
+    @Test
+    @DisplayName("Resolve report throws BadRequestException when REJECTED without adminNote")
+    void testResolveReport_RejectedWithoutNote_ThrowsBadRequest() {
+        ContentReport existing = ContentReport.builder()
+                .id(5L)
+                .status(ContentReportStatus.PENDING)
+                .build();
+        when(contentReportRepository.findById(5L)).thenReturn(Optional.of(existing));
+
+        ResolveContentReportRequest resolveReq = ResolveContentReportRequest.builder()
+                .status(ContentReportStatus.REJECTED)
+                .adminNote("")
+                .build();
+
+        assertThrows(BadRequestException.class, () ->
+                contentReportService.resolveReport(5L, instructorUser, resolveReq));
+    }
+
 }

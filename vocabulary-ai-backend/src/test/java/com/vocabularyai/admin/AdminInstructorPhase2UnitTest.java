@@ -1,15 +1,18 @@
 package com.vocabularyai.admin;
 
 import com.vocabularyai.admin.controller.*;
+import com.vocabularyai.admin.service.AdminStudentService;
 import com.vocabularyai.quiz.controller.QuizController;
 import com.vocabularyai.user.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import com.vocabularyai.common.exception.ForbiddenException;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 public class AdminInstructorPhase2UnitTest {
 
@@ -111,5 +114,17 @@ public class AdminInstructorPhase2UnitTest {
         assertNotNull(ann2);
         assertEquals("hasRole('ADMIN')", ann2.value());
     }
-}
+    @Test
+    @DisplayName("Instructor querying role=ADMIN in AdminStudentController throws ForbiddenException")
+    void testInstructorQueryingAdminRoleThrowsForbidden() {
+        AdminStudentService mockService = mock(AdminStudentService.class);
+        AdminStudentController controller = new AdminStudentController(mockService);
 
+        User instructor = User.builder().id(99L).role(User.UserRole.INSTRUCTOR).build();
+
+        assertThrows(ForbiddenException.class, () -> {
+            controller.getStudents(instructor, 0, 20, "createdAt,desc", null, null, "ADMIN");
+        });
+    }
+
+}

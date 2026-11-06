@@ -1,6 +1,7 @@
 package com.vocabularyai.report.service;
 
 import com.vocabularyai.common.exception.BadRequestException;
+import com.vocabularyai.common.exception.ConflictException;
 import com.vocabularyai.common.exception.DuplicateResourceException;
 import com.vocabularyai.common.exception.ResourceNotFoundException;
 import com.vocabularyai.report.dto.ContentReportResponse;
@@ -115,6 +116,16 @@ public class ContentReportServiceImpl implements ContentReportService {
 
         ContentReport report = contentReportRepository.findById(reportId)
                 .orElseThrow(() -> ResourceNotFoundException.of("Báo cáo nội dung", "id", reportId));
+
+        if (report.getStatus() != ContentReportStatus.PENDING) {
+            throw new ConflictException("Báo cáo này đã được xử lý trước đó");
+        }
+        if (request.getStatus() == ContentReportStatus.PENDING) {
+            throw new BadRequestException("Không thể đặt lại trạng thái về PENDING");
+        }
+        if (request.getStatus() == ContentReportStatus.REJECTED && (request.getAdminNote() == null || request.getAdminNote().trim().isBlank())) {
+            throw new BadRequestException("Lý do từ chối (adminNote) không được để trống khi từ chối báo cáo");
+        }
 
         report.setStatus(request.getStatus());
         if (request.getAdminNote() != null) {

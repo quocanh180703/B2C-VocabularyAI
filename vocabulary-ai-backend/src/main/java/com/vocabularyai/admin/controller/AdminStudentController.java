@@ -7,6 +7,9 @@ import jakarta.validation.Valid;
 import com.vocabularyai.admin.dto.response.StudentDetailResponse;
 import com.vocabularyai.admin.dto.response.StudentStatsResponse;
 import com.vocabularyai.admin.service.AdminStudentService;
+import com.vocabularyai.common.exception.ForbiddenException;
+import com.vocabularyai.user.entity.User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.vocabularyai.common.response.ApiResponse;
 import com.vocabularyai.common.util.PaginationUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -109,6 +112,7 @@ public class AdminStudentController {
         )
     })
     public ResponseEntity<ApiResponse<Page<StudentListResponse>>> getStudents(
+            @AuthenticationPrincipal User currentUser,
             @Parameter(description = "Page number (0-based)", example = "0")
             @RequestParam(required = false, defaultValue = "0") Integer page,
             
@@ -127,6 +131,12 @@ public class AdminStudentController {
             @Parameter(description = "Filter by user role (STUDENT, INSTRUCTOR)", example = "STUDENT")
             @RequestParam(required = false, defaultValue = "STUDENT") String role) {
         
+        if (currentUser != null && currentUser.getRole() == User.UserRole.INSTRUCTOR) {
+            if ("ADMIN".equalsIgnoreCase(role)) {
+                throw new ForbiddenException("Giảng viên không có quyền xem danh sách quản trị viên");
+            }
+        }
+
         try {
             log.info("GET /api/admin/students - Fetching student list (page={}, size={}, status={}, search={})",
                 page, size, status, search);
@@ -153,6 +163,8 @@ public class AdminStudentController {
                 ApiResponse.success("Students retrieved successfully", result)
             );
             
+        } catch (ForbiddenException fe) {
+            throw fe;
         } catch (Exception e) {
             log.error("Error retrieving student list", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

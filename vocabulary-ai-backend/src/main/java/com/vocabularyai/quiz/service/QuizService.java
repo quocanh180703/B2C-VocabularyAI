@@ -378,7 +378,7 @@ public class QuizService {
             .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
-            throw new ForbiddenException("Bạn không có quyền chỉnh sửa bài tập này");
+            throw ResourceNotFoundException.of("Quiz", "id", quizId);
         }
 
         if (quiz.getVisibility() == QuizVisibility.PENDING) {
@@ -442,7 +442,7 @@ public class QuizService {
             .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
-            throw new ForbiddenException("Bạn không có quyền xóa bài tập này");
+            throw ResourceNotFoundException.of("Quiz", "id", quizId);
         }
 
         if (quiz.getVisibility() == QuizVisibility.PENDING) {
@@ -479,7 +479,7 @@ public class QuizService {
             .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
-            throw new ForbiddenException("Bạn không có quyền gửi duyệt bài tập này");
+            throw ResourceNotFoundException.of("Quiz", "id", quizId);
         }
 
         if (quiz.getVisibility() == QuizVisibility.PENDING) {
@@ -517,7 +517,7 @@ public class QuizService {
             .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
-            throw new ForbiddenException("Bạn không có quyền thao tác trên bài tập này");
+            throw ResourceNotFoundException.of("Quiz", "id", quizId);
         }
 
         if (quiz.getVisibility() != QuizVisibility.PENDING) {
@@ -543,7 +543,7 @@ public class QuizService {
             .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
-            throw new ForbiddenException("Bạn không có quyền thao tác trên bài tập này");
+            throw ResourceNotFoundException.of("Quiz", "id", quizId);
         }
 
         if (quiz.getVisibility() != QuizVisibility.PUBLIC) {
