@@ -1,6 +1,7 @@
 package com.vocabularyai.quiz;
 
 import com.vocabularyai.common.exception.BadRequestException;
+import com.vocabularyai.common.exception.ConflictException;
 import com.vocabularyai.common.exception.ForbiddenException;
 import com.vocabularyai.common.exception.ResourceNotFoundException;
 import com.vocabularyai.quiz.dto.QuestionResponse;
@@ -369,6 +370,44 @@ public class UserQuizMineUnitTest {
     void testHideQuizFailsNonPublic() {
         when(quizRepository.findById(100L)).thenReturn(Optional.of(privateQuiz));
         assertThrows(BadRequestException.class, () -> quizService.hideQuiz(100L, owner.getId()));
+    }
+
+
+    @Test
+    @DisplayName("deleteQuiz throws ConflictException when quiz has attempts")
+    void testDeleteQuizThrowsConflictWhenAttemptsExist() {
+        when(quizRepository.existsById(100L)).thenReturn(true);
+        when(attemptRepository.existsByQuizId(100L)).thenReturn(true);
+
+        ConflictException ex = assertThrows(ConflictException.class, () -> quizService.deleteQuiz(100L));
+        assertTrue(ex.getMessage().contains("Bài đã có người làm"));
+        verify(quizRepository, never()).deleteById(anyLong());
+    }
+
+    @Test
+    @DisplayName("deleteQuiz succeeds when quiz has no attempts")
+    void testDeleteQuizSucceedsWhenNoAttempts() {
+        when(quizRepository.existsById(100L)).thenReturn(true);
+        when(attemptRepository.existsByQuizId(100L)).thenReturn(false);
+
+        quizService.deleteQuiz(100L);
+
+        verify(questionRepository).deleteByQuizId(100L);
+        verify(quizRepository).deleteById(100L);
+    }
+
+    @Test
+    @DisplayName("getAllQuizzes for INSTRUCTOR filters to PUBLIC and PENDING only")
+    void testGetAllQuizzesFiltersForInstructor() {
+        Pageable pageable = org.springframework.data.domain.PageRequest.of(0, 10);
+        when(quizRepository.findByVisibilityIn(eq(java.util.List.of(QuizVisibility.PUBLIC, QuizVisibility.PENDING)), eq(pageable)))
+                .thenReturn(new org.springframework.data.domain.PageImpl<>(java.util.List.of(publicQuiz, pendingQuiz), pageable, 2));
+
+        var res = quizService.getAllQuizzes(pageable, User.UserRole.INSTRUCTOR);
+
+        assertEquals(2, res.getContent().size());
+        verify(quizRepository).findByVisibilityIn(any(), eq(pageable));
+        verify(quizRepository, never()).findAll(eq(pageable));
     }
 
 }

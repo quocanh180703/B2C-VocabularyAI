@@ -4,7 +4,9 @@ import com.vocabularyai.common.response.ApiResponse;
 import com.vocabularyai.common.util.PaginationUtils;
 import com.vocabularyai.quiz.dto.*;
 import com.vocabularyai.quiz.service.QuizService;
+import com.vocabularyai.user.entity.User;
 import com.vocabularyai.user.service.UserService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -187,11 +189,13 @@ public class QuizController {
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Get all quizzes (admin)", description = "Retrieve all quizzes including draft and published")
     public ResponseEntity<ApiResponse<Page<QuizResponse>>> getAllQuizzes(
+            @AuthenticationPrincipal User user,
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "50") Integer size) {
-        log.info("Getting all quizzes for admin");
+        log.info("Getting all quizzes for admin/instructor: {}", user != null ? user.getUsername() : "anonymous");
         Pageable pageable = PaginationUtils.createPageableDesc(page, size, "createdAt");
-        Page<QuizResponse> quizzes = quizService.getAllQuizzes(pageable);
+        User.UserRole role = user != null ? user.getRole() : null;
+        Page<QuizResponse> quizzes = quizService.getAllQuizzes(pageable, role);
         return ResponseEntity.ok(ApiResponse.success("All quizzes retrieved successfully", quizzes));
     }
 
@@ -199,7 +203,7 @@ public class QuizController {
      * Create quiz (Admin)
      */
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
+    @PreAuthorize("hasRole('ADMIN')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Create quiz", description = "Create a new quiz (admin only)")
     public ResponseEntity<ApiResponse<QuizResponse>> createQuiz(
@@ -215,7 +219,7 @@ public class QuizController {
      * Update quiz (Admin)
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
+    @PreAuthorize("hasRole('ADMIN')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Update quiz", description = "Update quiz details (admin only)")
     public ResponseEntity<ApiResponse<QuizResponse>> updateQuiz(
@@ -231,7 +235,7 @@ public class QuizController {
      * Delete quiz (Admin)
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
+    @PreAuthorize("hasRole('ADMIN')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Delete quiz", description = "Delete a quiz and its questions (admin only)")
     public ResponseEntity<ApiResponse<Void>> deleteQuiz(@PathVariable Long id) {

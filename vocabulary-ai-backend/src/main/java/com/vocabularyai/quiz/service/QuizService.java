@@ -1,6 +1,7 @@
 package com.vocabularyai.quiz.service;
 
 import com.vocabularyai.common.exception.BadRequestException;
+import com.vocabularyai.common.exception.ConflictException;
 import com.vocabularyai.common.exception.ForbiddenException;
 import com.vocabularyai.common.exception.ResourceNotFoundException;
 import com.vocabularyai.quiz.dto.*;
@@ -110,8 +111,22 @@ public class QuizService {
      */
     @Transactional(readOnly = true)
     public Page<QuizResponse> getAllQuizzes(Pageable pageable) {
-        log.info("Getting all quizzes (Admin)");
-        Page<Quiz> quizzes = quizRepository.findAll(pageable);
+        return getAllQuizzes(pageable, null);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<QuizResponse> getAllQuizzes(Pageable pageable, User.UserRole role) {
+        log.info("Getting all quizzes (role={})", role);
+        Page<Quiz> quizzes;
+        if (role == User.UserRole.INSTRUCTOR) {
+            quizzes = quizRepository.findByVisibilityIn(
+                java.util.List.of(QuizVisibility.PUBLIC, QuizVisibility.PENDING),
+                pageable
+            );
+        } else {
+            quizzes = quizRepository.findAll(pageable);
+        }
+
         Map<Long, Integer> countMap = questionRepository.countQuestionsGroupByQuizId().stream()
             .collect(Collectors.toMap(
                 row -> (Long) row[0],
@@ -195,6 +210,12 @@ public class QuizService {
     @Transactional
     public void deleteQuiz(Long quizId) {
         log.info("Deleting quiz: {}", quizId);
+        if (!quizRepository.existsById(quizId)) {
+            throw ResourceNotFoundException.of("Quiz", "id", quizId);
+        }
+        if (attemptRepository.existsByQuizId(quizId)) {
+            throw new ConflictException("Bài đã có người làm, không thể xóa — hãy chuyển bài về ARCHIVED thay vì xóa");
+        }
         questionRepository.deleteByQuizId(quizId);
         quizRepository.deleteById(quizId);
     }

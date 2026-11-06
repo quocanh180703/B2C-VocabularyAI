@@ -2,6 +2,7 @@ package com.vocabularyai.admin;
 
 import com.vocabularyai.admin.controller.*;
 import com.vocabularyai.quiz.controller.QuizController;
+import com.vocabularyai.user.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -74,9 +75,9 @@ public class AdminInstructorPhase2UnitTest {
     }
 
     @Test
-    @DisplayName("Quiz write and details endpoints in QuizController should allow INSTRUCTOR")
+    @DisplayName("Quiz read allows INSTRUCTOR but mutations are ADMIN only in QuizController")
     void testQuizControllerEndpoints() throws NoSuchMethodException {
-        Method getAllQuizzes = QuizController.class.getMethod("getAllQuizzes", Integer.class, Integer.class);
+        Method getAllQuizzes = QuizController.class.getMethod("getAllQuizzes", User.class, Integer.class, Integer.class);
         PreAuthorize ann1 = getAllQuizzes.getAnnotation(PreAuthorize.class);
         assertNotNull(ann1);
         assertTrue(ann1.value().contains("INSTRUCTOR"));
@@ -84,7 +85,17 @@ public class AdminInstructorPhase2UnitTest {
         Method createQuiz = QuizController.class.getMethod("createQuiz", com.vocabularyai.quiz.dto.CreateQuizRequest.class);
         PreAuthorize ann2 = createQuiz.getAnnotation(PreAuthorize.class);
         assertNotNull(ann2);
-        assertTrue(ann2.value().contains("INSTRUCTOR"));
+        assertEquals("hasRole('ADMIN')", ann2.value());
+
+        Method updateQuiz = QuizController.class.getMethod("updateQuiz", Long.class, com.vocabularyai.quiz.dto.CreateQuizRequest.class, String.class);
+        PreAuthorize ann3 = updateQuiz.getAnnotation(PreAuthorize.class);
+        assertNotNull(ann3);
+        assertEquals("hasRole('ADMIN')", ann3.value());
+
+        Method deleteQuiz = QuizController.class.getMethod("deleteQuiz", Long.class);
+        PreAuthorize ann4 = deleteQuiz.getAnnotation(PreAuthorize.class);
+        assertNotNull(ann4);
+        assertEquals("hasRole('ADMIN')", ann4.value());
     }
 
     @Test
