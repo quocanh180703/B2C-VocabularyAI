@@ -1,6 +1,7 @@
 package com.vocabularyai.quiz.service;
 
 import com.vocabularyai.common.exception.BadRequestException;
+import com.vocabularyai.common.exception.ConflictException;
 import com.vocabularyai.common.exception.ForbiddenException;
 import com.vocabularyai.common.exception.ResourceNotFoundException;
 import com.vocabularyai.quiz.dto.*;
@@ -110,8 +111,22 @@ public class QuizService {
      */
     @Transactional(readOnly = true)
     public Page<QuizResponse> getAllQuizzes(Pageable pageable) {
-        log.info("Getting all quizzes (Admin)");
-        Page<Quiz> quizzes = quizRepository.findAll(pageable);
+        return getAllQuizzes(pageable, null);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<QuizResponse> getAllQuizzes(Pageable pageable, User.UserRole role) {
+        log.info("Getting all quizzes (role={})", role);
+        Page<Quiz> quizzes;
+        if (role == User.UserRole.INSTRUCTOR) {
+            quizzes = quizRepository.findByVisibilityIn(
+                java.util.List.of(QuizVisibility.PUBLIC, QuizVisibility.PENDING),
+                pageable
+            );
+        } else {
+            quizzes = quizRepository.findAll(pageable);
+        }
+
         Map<Long, Integer> countMap = questionRepository.countQuestionsGroupByQuizId().stream()
             .collect(Collectors.toMap(
                 row -> (Long) row[0],
@@ -195,6 +210,12 @@ public class QuizService {
     @Transactional
     public void deleteQuiz(Long quizId) {
         log.info("Deleting quiz: {}", quizId);
+        if (!quizRepository.existsById(quizId)) {
+            throw ResourceNotFoundException.of("Quiz", "id", quizId);
+        }
+        if (attemptRepository.existsByQuizId(quizId)) {
+            throw new ConflictException("Bài đã có người làm, không thể xóa — hãy chuyển bài về ARCHIVED thay vì xóa");
+        }
         questionRepository.deleteByQuizId(quizId);
         quizRepository.deleteById(quizId);
     }
@@ -357,7 +378,7 @@ public class QuizService {
             .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
-            throw new ForbiddenException("Bạn không có quyền chỉnh sửa bài tập này");
+            throw ResourceNotFoundException.of("Quiz", "id", quizId);
         }
 
         if (quiz.getVisibility() == QuizVisibility.PENDING) {
@@ -421,7 +442,7 @@ public class QuizService {
             .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
-            throw new ForbiddenException("Bạn không có quyền xóa bài tập này");
+            throw ResourceNotFoundException.of("Quiz", "id", quizId);
         }
 
         if (quiz.getVisibility() == QuizVisibility.PENDING) {
@@ -458,7 +479,7 @@ public class QuizService {
             .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
-            throw new ForbiddenException("Bạn không có quyền gửi duyệt bài tập này");
+            throw ResourceNotFoundException.of("Quiz", "id", quizId);
         }
 
         if (quiz.getVisibility() == QuizVisibility.PENDING) {
@@ -496,7 +517,7 @@ public class QuizService {
             .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
-            throw new ForbiddenException("Bạn không có quyền thao tác trên bài tập này");
+            throw ResourceNotFoundException.of("Quiz", "id", quizId);
         }
 
         if (quiz.getVisibility() != QuizVisibility.PENDING) {
@@ -522,7 +543,7 @@ public class QuizService {
             .orElseThrow(() -> ResourceNotFoundException.of("Quiz", "id", quizId));
 
         if (quiz.getCreatedBy() == null || !userId.equals(quiz.getCreatedBy().getId())) {
-            throw new ForbiddenException("Bạn không có quyền thao tác trên bài tập này");
+            throw ResourceNotFoundException.of("Quiz", "id", quizId);
         }
 
         if (quiz.getVisibility() != QuizVisibility.PUBLIC) {

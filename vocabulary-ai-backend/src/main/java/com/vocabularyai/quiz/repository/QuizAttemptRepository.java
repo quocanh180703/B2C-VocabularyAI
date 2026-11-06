@@ -49,6 +49,10 @@ public interface QuizAttemptRepository extends JpaRepository<QuizAttempt, Long> 
      * Count attempts by user
      */
     long countByUserId(Long userId);
+
+    boolean existsByQuizId(Long quizId);
+
+    long countByQuizId(Long quizId);
     
     /**
      * Count completed attempts

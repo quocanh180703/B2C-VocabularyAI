@@ -118,6 +118,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
     
     /**
+     * Handle ConflictException -> 409
+     */
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ApiResponse<?>> handleConflictException(
+            ConflictException ex, WebRequest request) {
+        log.warn("Conflict: {}", ex.getMessage());
+        ApiResponse<?> response = ApiResponse.error(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    /**
      * Handle DuplicateResourceException -> 409
      */
     @ExceptionHandler(DuplicateResourceException.class)

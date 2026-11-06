@@ -4,8 +4,7 @@ public enum DocumentFileType {
     TXT,
     MD,
     PDF,
-    DOCX,
-    PPTX;
+    DOCX;
 
     public static DocumentFileType fromExtension(String ext) {
         if (ext == null) {
