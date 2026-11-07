@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,6 +40,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/api/admin/cefr-words")
+@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 @Tag(name = "Admin - CEFR Words", description = "Admin-only CEFR word management (import, statistics)")
 @SecurityRequirement(name = "bearer-jwt")
@@ -66,7 +66,7 @@ public class AdminCefrWordController {
      * @return Combined import result for all levels
      */
     @PostMapping("/import/all")
-    @Secured("ROLE_ADMIN")  // Allow import regardless of authentication (for testing)
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Import all CEFR word levels",
             description = "Import CEFR vocabulary from all 5 CSV files (A1-C1, ~4962 words total). " +
@@ -115,6 +115,7 @@ public class AdminCefrWordController {
      * @return Import result for the level
      */
     @PostMapping("/import/{level}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Import specific CEFR level",
             description = "Import CEFR vocabulary for a specific level (A1, A2, B1, B2, or C1). " +
@@ -169,6 +170,7 @@ public class AdminCefrWordController {
      * @return Map of level -> word count
      */
     @GetMapping("/import/statistics")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Get CEFR word import statistics",
             description = "Get current CEFR word count statistics by CEFR level"
@@ -208,7 +210,7 @@ public class AdminCefrWordController {
      * @return Import result
      */
     @PostMapping("/upload")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Upload and import CSV file",
             description = "Upload a CSV file and import CEFR words from it. " +

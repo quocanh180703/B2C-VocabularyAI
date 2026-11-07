@@ -37,7 +37,7 @@ import java.util.Arrays;
  */
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig {
     
     private final UserDetailsService userDetailsService;
@@ -121,6 +121,8 @@ public class SecurityConfig {
                 ).permitAll()
                 // Allow viewing published quizzes without requiring login
                 .requestMatchers(HttpMethod.GET, "/quizzes", "/quizzes/**").permitAll()
+                // Admin CEFR words management operations require ADMIN role
+                .requestMatchers("/admin/cefr-words/**", "/api/admin/cefr-words/**").hasRole("ADMIN")
                 // All other requests require authentication
                 .anyRequest().authenticated()
             )
