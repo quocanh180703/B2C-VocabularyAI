@@ -26,7 +26,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,30 +45,30 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
     private final ObjectMapper objectMapper;
 
     @Override
-    @Transactional(readOnly = true)
     public DocumentAnalysisResponse analyzeDocument(Long documentId, Long userId) {
         UserDocument doc = getValidDocument(documentId, userId);
         String textSnippet = getTextSnippet(doc.getExtractedText(), 100000);
 
         String prompt = """
-            Bạn là một chuyên gia ngôn ngữ tiếng Anh và sư phạm. Hãy phân tích nội dung tài liệu sau và trả về kết quả dưới định dạng JSON duy nhất:
-            
-            NỘI DUNG TÀI LIỆU:
-            \"\"\"
-            %s
-            \"\"\"
-            
-            YÊU CẦU:
-            Trả về đúng JSON theo cấu trúc sau (không kèm markdown ngoài JSON):
-            {
-              "summary": "Tóm tắt ngắn gọn 2-3 câu về nội dung chính của tài liệu bằng tiếng Việt",
-              "suggestedLevel": "Cấp độ CEFR phù hợp nhất (chỉ chọn 1 trong: A1, A2, B1, B2, C1)",
-              "suggestedQuestionTypes": "MULTIPLE_CHOICE",
-              "keyTopics": ["Chủ đề 1", "Chủ đề 2", "Chủ đề 3"],
-              "keyVocabulary": ["từ/cụm từ 1", "từ/cụm từ 2", "từ/cụm từ 3", "từ/cụm từ 4", "từ/cụm từ 5"],
-              "suggestedQuestionsCount": 10
-            }
-            """.formatted(textSnippet);
+                Bạn là một chuyên gia ngôn ngữ tiếng Anh và sư phạm. Hãy phân tích nội dung tài liệu sau và trả về kết quả dưới định dạng JSON duy nhất:
+
+                NỘI DUNG TÀI LIỆU:
+                \"\"\"
+                %s
+                \"\"\"
+
+                YÊU CẦU:
+                Trả về đúng JSON theo cấu trúc sau (không kèm markdown ngoài JSON):
+                {
+                  "summary": "Tóm tắt ngắn gọn 2-3 câu về nội dung chính của tài liệu bằng tiếng Việt",
+                  "suggestedLevel": "Cấp độ CEFR phù hợp nhất (chỉ chọn 1 trong: A1, A2, B1, B2, C1)",
+                  "suggestedQuestionTypes": "MULTIPLE_CHOICE",
+                  "keyTopics": ["Chủ đề 1", "Chủ đề 2", "Chủ đề 3"],
+                  "keyVocabulary": ["từ/cụm từ 1", "từ/cụm từ 2", "từ/cụm từ 3", "từ/cụm từ 4", "từ/cụm từ 5"],
+                  "suggestedQuestionsCount": 10
+                }
+                """
+                .formatted(textSnippet);
 
         try {
             String aiRaw = geminiAIClientService.generateResponse(prompt, userId, false);
@@ -102,7 +101,6 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
     }
 
     @Override
-    @Transactional(readOnly = true)
     public DocumentChatResponse chatWithDocument(Long documentId, Long userId, DocumentChatRequest request) {
         UserDocument doc = getValidDocument(documentId, userId);
         String textSnippet = getTextSnippet(doc.getExtractedText(), 100000);
@@ -116,33 +114,35 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
         }
 
         String prompt = """
-            Bạn là trợ lý AI thông minh hỗ trợ giáo viên và học viên tinh chỉnh bài tập tiếng Anh từ tài liệu học tập.
-            
-            TÀI LIỆU NGUỒN:
-            \"\"\"
-            %s
-            \"\"\"
-            
-            LỊCH SỬ TRAO ĐỔI VỚI NGƯỜI DÙNG:
-            %s
-            
-            HƯỚNG DẪN:
-            - Trả lời thân thiện, súc tích bằng tiếng Việt trong trường "reply".
-            - Nếu người dùng yêu cầu soạn câu hỏi, đưa ra ví dụ bài tập hoặc gợi ý câu hỏi mẫu, hãy tạo các câu hỏi trắc nghiệm tiếng Anh hoàn chỉnh trong danh sách "draftQuestions". Nếu không có yêu cầu câu hỏi hoặc chỉ hỏi đáp thông thường, để "draftQuestions" là mảng rỗng [].
-            - Mỗi câu hỏi trong "draftQuestions" gồm: "content" (tiếng Anh), "options" (mảng 4 lựa chọn tiếng Anh), "correctAnswer" (chỉ số 0-3), "explanation" (giải thích chi tiết bằng tiếng Việt).
-            - Trả về kết quả dưới định dạng JSON duy nhất (không kèm markdown ngoài JSON):
-            {
-              "reply": "Câu trả lời thân thiện của bạn bằng tiếng Việt...",
-              "draftQuestions": [
+                Bạn là trợ lý AI thông minh hỗ trợ giáo viên và học viên tinh chỉnh bài tập tiếng Anh từ tài liệu học tập.
+
+                TÀI LIỆU NGUỒN:
+                \"\"\"
+                %s
+                \"\"\"
+
+                LỊCH SỬ TRAO ĐỔI VỚI NGƯỜI DÙNG:
+                %s
+
+                HƯỚNG DẪN:
+                - Trả lời thân thiện, súc tích bằng tiếng Việt trong trường "reply".
+                - Nếu người dùng yêu cầu soạn câu hỏi, đưa ra ví dụ bài tập hoặc gợi ý câu hỏi mẫu, hãy tạo các câu hỏi trắc nghiệm tiếng Anh hoàn chỉnh trong danh sách "draftQuestions". Nếu không có yêu cầu câu hỏi hoặc chỉ hỏi đáp thông thường, để "draftQuestions" là mảng rỗng [].
+                - Mỗi câu hỏi trong "draftQuestions" gồm: "content" (tiếng Anh), "options" (mảng 4 lựa chọn tiếng Anh), "correctAnswer" (chỉ số 0-3), "explanation" (giải thích chi tiết bằng tiếng Việt).
+                - Câu hỏi trong "draftQuestions" phải tự đứng được (trả lời được khi không có tài liệu): lấy chủ đề/từ vựng/ngữ pháp từ tài liệu, không hỏi chi tiết chỉ có trong tài liệu, không dùng cụm "theo tài liệu/đoạn văn...
+                - Trả về kết quả dưới định dạng JSON duy nhất (không kèm markdown ngoài JSON):
                 {
-                  "content": "Câu hỏi trắc nghiệm tiếng Anh...",
-                  "options": ["Lựa chọn A", "Lựa chọn B", "Lựa chọn C", "Lựa chọn D"],
-                  "correctAnswer": 0,
-                  "explanation": "Giải thích chi tiết tại sao đúng..."
+                  "reply": "Câu trả lời thân thiện của bạn bằng tiếng Việt...",
+                  "draftQuestions": [
+                    {
+                      "content": "Câu hỏi trắc nghiệm tiếng Anh...",
+                      "options": ["Lựa chọn A", "Lựa chọn B", "Lựa chọn C", "Lựa chọn D"],
+                      "correctAnswer": 0,
+                      "explanation": "Giải thích chi tiết tại sao đúng..."
+                    }
+                  ]
                 }
-              ]
-            }
-            """.formatted(textSnippet, chatHistory.toString());
+                """
+                .formatted(textSnippet, chatHistory.toString());
 
         try {
             String aiRaw = geminiAIClientService.generateResponse(prompt, userId, false);
@@ -180,7 +180,8 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
             }
 
             if (replyText == null || replyText.isBlank()) {
-                replyText = (aiRaw != null && !aiRaw.isBlank()) ? aiRaw.trim() : "Tôi đã hiểu yêu cầu của bạn. Bạn có thể tiến hành tạo bài tập bất cứ lúc nào!";
+                replyText = (aiRaw != null && !aiRaw.isBlank()) ? aiRaw.trim()
+                        : "Tôi đã hiểu yêu cầu của bạn. Bạn có thể tiến hành tạo bài tập bất cứ lúc nào!";
             }
 
             return DocumentChatResponse.builder()
@@ -203,7 +204,8 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
         featureUsageService.checkAndConsumeQuota(userId, FeatureType.EXERCISE_GENERATION);
 
         try {
-            int targetCount = request.getQuestionCount() != null ? Math.min(Math.max(request.getQuestionCount(), 5), 20) : 10;
+            int targetCount = request.getQuestionCount() != null ? Math.min(Math.max(request.getQuestionCount(), 5), 20)
+                    : 10;
 
             // 2. Generate questions via AI
             List<RawAiQuestion> rawQuestions = generateRawQuestionsWithRetry(doc, request, userId, targetCount);
@@ -215,12 +217,15 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
                 validQuestions = filterAndDeduplicate(rawQuestions);
             }
 
-            // 4. Gate logic: If valid questions are less than target, generate 1 round of supplementary questions
+            // 4. Gate logic: If valid questions are less than target, generate 1 round of
+            // supplementary questions
             if (validQuestions.size() < targetCount) {
                 int missing = targetCount - validQuestions.size();
-                log.info("Quiz has {}/{} valid questions, generating {} supplementary questions", validQuestions.size(), targetCount, missing);
+                log.info("Quiz has {}/{} valid questions, generating {} supplementary questions", validQuestions.size(),
+                        targetCount, missing);
                 try {
-                    List<RawAiQuestion> supplement = generateSupplementaryQuestions(doc, request, userId, missing, validQuestions);
+                    List<RawAiQuestion> supplement = generateSupplementaryQuestions(doc, request, userId, missing,
+                            validQuestions);
                     for (var q : supplement) {
                         if (validQuestions.size() < targetCount) {
                             validQuestions.add(q);
@@ -239,7 +244,8 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
             // 6. Save Quiz and Questions in database transaction via separate service
             return documentQuizPersistenceService.persistQuizTransaction(user, doc, request, validQuestions);
         } catch (Exception e) {
-            log.error("Failed to generate quiz for document id={}, rolling back quota for user {}", documentId, userId, e);
+            log.error("Failed to generate quiz for document id={}, rolling back quota for user {}", documentId, userId,
+                    e);
             featureUsageService.rollbackQuota(userId, FeatureType.EXERCISE_GENERATION);
             if (e instanceof BadRequestException) {
                 throw (BadRequestException) e;
@@ -248,45 +254,53 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
         }
     }
 
-    private List<RawAiQuestion> generateRawQuestionsWithRetry(UserDocument doc, GenerateQuizFromDocumentRequest req, Long userId, int targetCount) {
+    private List<RawAiQuestion> generateRawQuestionsWithRetry(UserDocument doc, GenerateQuizFromDocumentRequest req,
+            Long userId, int targetCount) {
         String textSnippet = getTextSnippet(doc.getExtractedText(), 100000);
         String level = normalizeLevel(req.getLevel());
-        String extra = req.getExtraPrompt() != null && !req.getExtraPrompt().isBlank() ? "Ghi chú thêm từ người dùng: " + req.getExtraPrompt().trim() : "";
+        String extra = req.getExtraPrompt() != null && !req.getExtraPrompt().isBlank()
+                ? "Ghi chú thêm từ người dùng: " + req.getExtraPrompt().trim()
+                : "";
 
         String prompt = """
-            Bạn là chuyên gia soạn đề thi tiếng Anh chuẩn quốc tế.
-            Dựa trên nội dung tài liệu sau, hãy soạn chính xác %d câu hỏi trắc nghiệm (Multiple Choice Questions) cấp độ CEFR %s.
-            
-            TÀI LIỆU NGUỒN:
-            \"\"\"
-            %s
-            \"\"\"
-            %s
-            
-            QUY ĐỊNH BẮT BUỘC:
-            1. Mỗi câu hỏi PHẢI có đúng 4 lựa chọn (options) là A, B, C, D (mảng 4 phần tử chuỗi).
-            2. Chỉ có ĐÚNG 1 đáp án chính xác. Ba lựa chọn còn lại phải hợp lý nhưng sai rõ ràng, không được gây tranh cãi.
-            3. correctAnswer là chỉ số số nguyên từ 0 đến 3 (0 ứng với lựa chọn đầu tiên, 1 ứng với lựa chọn thứ hai,...).
-            4. explanation: Phần giải thích chi tiết bằng tiếng Việt, nêu rõ tại sao đáp án đó đúng và giải thích các lựa chọn khác.
-            5. Nội dung câu hỏi và các lựa chọn bằng tiếng Anh.
-            
-            ĐỊNH DẠNG ĐẦU RA:
-            Trả về DUY NHẤT một mảng JSON các đối tượng câu hỏi, không kèm markdown code block hoặc lời dẫn:
-            [
-              {
-                "content": "Câu hỏi tiếng Anh...",
-                "options": ["Lựa chọn 1", "Lựa chọn 2", "Lựa chọn 3", "Lựa chọn 4"],
-                "correctAnswer": 0,
-                "explanation": "Giải thích chi tiết bằng tiếng Việt..."
-              }
-            ]
-            """.formatted(targetCount, level, textSnippet, extra);
+                Bạn là chuyên gia soạn đề thi tiếng Anh chuẩn quốc tế.
+                Dựa trên CHỦ ĐỀ của tài liệu sau, hãy soạn chính xác %d câu hỏi trắc nghiệm (Multiple Choice Questions) cấp độ CEFR %s. Tài liệu chỉ dùng để xác định chủ đề, từ vựng chính và điểm ngữ pháp — KHÔNG ra câu hỏi dạng đọc hiểu bám nội dung tài liệu.
+
+                TÀI LIỆU NGUỒN:
+                \"\"\"
+                %s
+                \"\"\"
+                %s
+
+                QUY ĐỊNH BẮT BUỘC:
+                1. Mỗi câu hỏi PHẢI có đúng 4 lựa chọn (options) là A, B, C, D (mảng 4 phần tử chuỗi).
+                2. Chỉ có ĐÚNG 1 đáp án chính xác. Ba lựa chọn còn lại phải hợp lý nhưng sai rõ ràng, không được gây tranh cãi.
+                3. correctAnswer là chỉ số số nguyên từ 0 đến 3 (0 ứng với lựa chọn đầu tiên, 1 ứng với lựa chọn thứ hai,...).
+                4. explanation: Phần giải thích chi tiết bằng tiếng Việt, nêu rõ tại sao đáp án đó đúng và giải thích các lựa chọn khác.
+                5. Nội dung câu hỏi và các lựa chọn bằng tiếng Anh.
+                6. Mỗi câu hỏi phải TỰ ĐỨNG ĐƯỢC: trả lời được khi KHÔNG có tài liệu. Mọi thông tin cần để trả lời phải nằm ngay trong câu hỏi.
+                7. CẤM câu hỏi chứa "theo tài liệu/đoạn văn/bài đọc..."; CẤM đáp án là chi tiết chỉ có trong tài liệu (tên riêng, số liệu, ngày tháng, ví dụ cụ thể trong bài).
+                8. ĐƯỢC ra câu hỏi về từ vựng thuộc chủ đề của tài liệu, ngữ pháp minh họa bằng chủ đề đó, kiến thức chung về chủ đề.
+
+                ĐỊNH DẠNG ĐẦU RA:
+                Trả về DUY NHẤT một mảng JSON các đối tượng câu hỏi, không kèm markdown code block hoặc lời dẫn:
+                [
+                  {
+                    "content": "Câu hỏi tiếng Anh...",
+                    "options": ["Lựa chọn 1", "Lựa chọn 2", "Lựa chọn 3", "Lựa chọn 4"],
+                    "correctAnswer": 0,
+                    "explanation": "Giải thích chi tiết bằng tiếng Việt..."
+                  }
+                ]
+                """
+                .formatted(targetCount, level, textSnippet, extra);
 
         for (int attempt = 1; attempt <= 2; attempt++) {
             try {
                 String aiRaw = geminiAIClientService.generateResponse(prompt, userId, false);
                 String cleaned = cleanJson(aiRaw);
-                List<RawAiQuestion> list = objectMapper.readValue(cleaned, new TypeReference<List<RawAiQuestion>>() {});
+                List<RawAiQuestion> list = objectMapper.readValue(cleaned, new TypeReference<List<RawAiQuestion>>() {
+                });
                 List<RawAiQuestion> valid = filterAndDeduplicate(list);
                 if (!valid.isEmpty()) {
                     return valid;
@@ -294,7 +308,8 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
             } catch (Exception e) {
                 log.warn("Attempt {} to generate quiz questions failed: {}", attempt, e.getMessage());
                 if (attempt == 2) {
-                    throw new BadRequestException("AI không thể tạo cấu trúc câu hỏi trắc nghiệm hợp lệ. Vui lòng thử lại.");
+                    throw new BadRequestException(
+                            "AI không thể tạo cấu trúc câu hỏi trắc nghiệm hợp lệ. Vui lòng thử lại.");
                 }
             }
         }
@@ -302,35 +317,39 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
     }
 
     private List<RawAiQuestion> verifyQuestionsWithAi(List<RawAiQuestion> questions, UserDocument doc, Long userId) {
-        if (questions == null || questions.isEmpty()) return List.of();
+        if (questions == null || questions.isEmpty())
+            return List.of();
 
         try {
             String questionsJson = objectMapper.writeValueAsString(questions);
             String prompt = """
-                Bạn là một chuyên gia thẩm định đề thi tiếng Anh (Quality Assurance Examiner).
-                Hãy kiểm tra danh sách câu hỏi trắc nghiệm sau đây:
-                %s
-                
-                TIÊU CHÍ KIỂM TRA:
-                1. Đáp án đúng (correctAnswer) có thực sự chính xác không? Có đáp án nào khác cũng đúng không?
-                2. Câu hỏi có rõ ràng, không gây nhầm lẫn không?
-                3. Nếu câu nào bị lỗi 2 đáp án cùng đúng hoặc câu hỏi tối nghĩa, hãy chỉnh sửa lại câu đó hoặc thay thế bằng 1 câu hỏi chất lượng tương đương.
-                
-                ĐỊNH DẠNG ĐẦU RA:
-                Trả về DUY NHẤT một mảng JSON các câu hỏi đã được thẩm định và chỉnh sửa hoàn thiện:
-                [
-                  {
-                    "content": "...",
-                    "options": ["A", "B", "C", "D"],
-                    "correctAnswer": 0,
-                    "explanation": "..."
-                  }
-                ]
-                """.formatted(questionsJson);
+                    Bạn là một chuyên gia thẩm định đề thi tiếng Anh (Quality Assurance Examiner).
+                    Hãy kiểm tra danh sách câu hỏi trắc nghiệm sau đây:
+                    %s
+
+                    TIÊU CHÍ KIỂM TRA:
+                    1. Đáp án đúng (correctAnswer) có thực sự chính xác không? Có đáp án nào khác cũng đúng không?
+                    2. Câu hỏi có rõ ràng, không gây nhầm lẫn không?
+                    3. Nếu câu nào bị lỗi 2 đáp án cùng đúng hoặc câu hỏi tối nghĩa, hãy chỉnh sửa lại câu đó hoặc thay thế bằng 1 câu hỏi chất lượng tương đương.
+                    4. Câu hỏi có cần đọc tài liệu mới trả lời được không? Nếu câu hỏi nhắc tới tài liệu/đoạn văn, hoặc hỏi về chi tiết cụ thể mà người chưa đọc tài liệu không thể biết, hãy viết lại thành câu hỏi theo chủ đề, tự trả lời được mà không cần tài liệu.
+
+                    ĐỊNH DẠNG ĐẦU RA:
+                    Trả về DUY NHẤT một mảng JSON các câu hỏi đã được thẩm định và chỉnh sửa hoàn thiện:
+                    [
+                      {
+                        "content": "...",
+                        "options": ["A", "B", "C", "D"],
+                        "correctAnswer": 0,
+                        "explanation": "..."
+                      }
+                    ]
+                    """
+                    .formatted(questionsJson);
 
             String aiRaw = geminiAIClientService.generateResponse(prompt, userId, false);
             String cleaned = cleanJson(aiRaw);
-            List<RawAiQuestion> verified = objectMapper.readValue(cleaned, new TypeReference<List<RawAiQuestion>>() {});
+            List<RawAiQuestion> verified = objectMapper.readValue(cleaned, new TypeReference<List<RawAiQuestion>>() {
+            });
             if (verified != null && !verified.isEmpty()) {
                 return verified;
             }
@@ -340,7 +359,8 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
         return questions;
     }
 
-    private List<RawAiQuestion> generateSupplementaryQuestions(UserDocument doc, GenerateQuizFromDocumentRequest req, Long userId, int count, List<RawAiQuestion> existing) {
+    private List<RawAiQuestion> generateSupplementaryQuestions(UserDocument doc, GenerateQuizFromDocumentRequest req,
+            Long userId, int count, List<RawAiQuestion> existing) {
         String textSnippet = getTextSnippet(doc.getExtractedText(), 100000);
         String level = normalizeLevel(req.getLevel());
         StringBuilder existingText = new StringBuilder("Không được trùng lặp các câu hỏi đã có sau:\n");
@@ -349,29 +369,31 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
         }
 
         String prompt = """
-            Hãy bổ sung chính xác %d câu hỏi trắc nghiệm tiếng Anh cấp độ %s từ tài liệu sau.
-            %s
-            
-            TÀI LIỆU NGUỒN:
-            \"\"\"
-            %s
-            \"\"\"
-            
-            Trả về DUY NHẤT một mảng JSON %d câu hỏi:
-            [
-              {
-                "content": "...",
-                "options": ["A", "B", "C", "D"],
-                "correctAnswer": 0,
-                "explanation": "..."
-              }
-            ]
-            """.formatted(count, level, existingText.toString(), textSnippet, count);
+                Hãy bổ sung chính xác %d câu hỏi trắc nghiệm tiếng Anh cấp độ %s theo CHỦ ĐỀ của tài liệu sau (câu hỏi phải tự trả lời được khi không có tài liệu, không hỏi chi tiết chỉ có trong tài liệu).
+                %s
+
+                TÀI LIỆU NGUỒN:
+                \"\"\"
+                %s
+                \"\"\"
+
+                Trả về DUY NHẤT một mảng JSON %d câu hỏi:
+                [
+                  {
+                    "content": "...",
+                    "options": ["A", "B", "C", "D"],
+                    "correctAnswer": 0,
+                    "explanation": "..."
+                  }
+                ]
+                """
+                .formatted(count, level, existingText.toString(), textSnippet, count);
 
         try {
             String aiRaw = geminiAIClientService.generateResponse(prompt, userId, false);
             String cleaned = cleanJson(aiRaw);
-            List<RawAiQuestion> list = objectMapper.readValue(cleaned, new TypeReference<List<RawAiQuestion>>() {});
+            List<RawAiQuestion> list = objectMapper.readValue(cleaned, new TypeReference<List<RawAiQuestion>>() {
+            });
             List<RawAiQuestion> valid = filterAndDeduplicate(list);
             Set<String> existingContents = new HashSet<>();
             existing.forEach(e -> existingContents.add(e.getContent().trim().toLowerCase()));
@@ -390,7 +412,8 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
     }
 
     private List<RawAiQuestion> filterAndDeduplicate(List<RawAiQuestion> list) {
-        if (list == null || list.isEmpty()) return new ArrayList<>();
+        if (list == null || list.isEmpty())
+            return new ArrayList<>();
         List<RawAiQuestion> valid = new ArrayList<>();
         Set<String> seen = new HashSet<>();
         for (var q : list) {
@@ -411,19 +434,23 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
         UserDocument doc = userDocumentRepository.findByIdAndUserId(documentId, userId)
                 .orElseThrow(() -> ResourceNotFoundException.of("Tài liệu", "id", documentId));
 
-        if (doc.getStatus() == DocumentStatus.FAILED || doc.getExtractedText() == null || doc.getExtractedText().isBlank()) {
-            throw new BadRequestException("Tài liệu chưa sẵn sàng hoặc trích xuất nội dung thất bại: " + doc.getErrorMessage());
+        if (doc.getStatus() == DocumentStatus.FAILED || doc.getExtractedText() == null
+                || doc.getExtractedText().isBlank()) {
+            throw new BadRequestException(
+                    "Tài liệu chưa sẵn sàng hoặc trích xuất nội dung thất bại: " + doc.getErrorMessage());
         }
         return doc;
     }
 
     private String getTextSnippet(String text, int maxChars) {
-        if (text == null) return "";
+        if (text == null)
+            return "";
         return text.length() <= maxChars ? text : text.substring(0, maxChars);
     }
 
     private String normalizeLevel(String lvl) {
-        if (lvl == null) return "B1";
+        if (lvl == null)
+            return "B1";
         String clean = lvl.trim().toUpperCase();
         if (List.of("A1", "A2", "B1", "B2", "C1", "C2").contains(clean)) {
             return clean;
@@ -432,7 +459,8 @@ public class DocumentExerciseAiServiceImpl implements DocumentExerciseAiService 
     }
 
     private String cleanJson(String raw) {
-        if (raw == null) return "[]";
+        if (raw == null)
+            return "[]";
         String trimmed = raw.trim();
         if (trimmed.startsWith("```json")) {
             trimmed = trimmed.substring(7);
