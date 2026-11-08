@@ -1,5 +1,7 @@
 package com.vocabularyai.payment.dto.payos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -14,41 +16,13 @@ import lombok.NoArgsConstructor;
  * - When user completes payment (PAID)
  * - When user cancels payment (CANCELLED)
  * - On timeout (EXPIRED)
- * 
- * Webhook format:
- * {
- *   "id": "123456789",
- *   "code": "PAYMENT.RECEIVED" | "PAYMENT_CANCELLED" | "PAYMENT_EXPIRED",
- *   "desc": "Payment received successfully",
- *   "data": {
- *     "id": "string",
- *     "orderCode": "ORD_1694000001_12345",
- *     "amount": 99000,
- *     "amountPaid": 99000,
- *     "amountRemaining": 0,
- *     "transactionDateTime": "2023-01-01T12:00:00Z",
- *     "expireAt": "2023-01-01T12:15:00Z",
- *     "expiredAt": "2023-01-01T12:15:00Z",
- *     "status": "PAID" | "CANCELLED" | "PENDING" | "EXPIRED",
- *     "referenceCode": "string",
- *     "transactionCode": "string",
- *     "reason": "string",
- *     "accountNumber": "string",
- *     "accountName": "string",
- *     "counterPartyCode": "111222333",
- *     "counterPartyName": "TRAN VAN A",
- *     "transferType": "BANK_ACCOUNT" | "CARD" | "WALLET",
- *     "description": "Premium Monthly",
- *     "cancellationReason": "USER_CANCELLED",
- *     "cancellationDescription": "Người dùng hủy"
- *   }
- * }
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PayOSWebhookRequest {
     
     /**
@@ -87,7 +61,8 @@ public class PayOSWebhookRequest {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    @JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class PayOSWebhookData {
         
         /**
@@ -221,6 +196,7 @@ public class PayOSWebhookRequest {
     /**
      * Check if this is a successful payment webhook
      */
+    @JsonIgnore
     public boolean isPaymentReceived() {
         return ("00".equals(this.code) || "PAYMENT.RECEIVED".equalsIgnoreCase(this.code)) && 
                this.data != null && 
@@ -230,6 +206,7 @@ public class PayOSWebhookRequest {
     /**
      * Check if this is a cancelled payment webhook
      */
+    @JsonIgnore
     public boolean isPaymentCancelled() {
         return ("PAYMENT_CANCELLED".equalsIgnoreCase(this.code) || "PAYMENT.CANCELLED".equalsIgnoreCase(this.code)) && 
                this.data != null && 
@@ -239,6 +216,7 @@ public class PayOSWebhookRequest {
     /**
      * Check if this is an expired payment webhook
      */
+    @JsonIgnore
     public boolean isPaymentExpired() {
         return ("PAYMENT_EXPIRED".equalsIgnoreCase(this.code) || "PAYMENT.EXPIRED".equalsIgnoreCase(this.code)) && 
                this.data != null && 

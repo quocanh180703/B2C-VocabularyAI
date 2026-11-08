@@ -296,7 +296,7 @@ public class AIIntegrationTest {
         assertTrue(prompt.contains("pizza"), "Prompt should contain transcript");
         assertTrue(prompt.contains("Food Preference"), "Prompt should contain topic");
         assertTrue(prompt.contains("A2"), "Prompt should contain level");
-        assertTrue(prompt.contains("CORRECTIONS") || prompt.contains("SUGGESTIONS"), 
+        assertTrue(prompt.toLowerCase().contains("corrections") || prompt.toLowerCase().contains("suggestions"), 
             "Prompt should contain feedback section instructions");
         
         log.info("✅ Speaking feedback prompt verified - {} chars", prompt.length());

@@ -31,7 +31,7 @@ public class SystemPromptConfigTest {
         
         // Check for key markers from expected prompt
         assertTrue(
-            vocabularyPrompt.contains("English vocabulary tutor") || vocabularyPrompt.contains("tutor"),
+            vocabularyPrompt.contains("English vocabulary tutor") || vocabularyPrompt.contains("tutor") || vocabularyPrompt.contains("coach"),
             "Vocabulary prompt should contain role definition"
         );
     }

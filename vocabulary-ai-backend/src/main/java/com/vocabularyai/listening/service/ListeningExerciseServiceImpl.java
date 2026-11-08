@@ -11,9 +11,9 @@ import com.vocabularyai.listening.repository.ListeningExerciseRepository;
 import com.vocabularyai.payment.entity.FeatureType;
 import com.vocabularyai.payment.service.FeatureUsageService;
 import com.vocabularyai.speaking.service.tts.XahTextToSpeechService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,6 @@ import java.util.*;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class ListeningExerciseServiceImpl implements ListeningExerciseService {
 
     private final ListeningExerciseRepository repository;
@@ -36,6 +35,19 @@ public class ListeningExerciseServiceImpl implements ListeningExerciseService {
     private final XahTextToSpeechService xahTextToSpeechService;
     private final FeatureUsageService featureUsageService;
     private final ObjectMapper objectMapper;
+
+    public ListeningExerciseServiceImpl(
+            ListeningExerciseRepository repository,
+            GeminiAIClientService geminiAIClientService,
+            @Lazy XahTextToSpeechService xahTextToSpeechService,
+            FeatureUsageService featureUsageService,
+            ObjectMapper objectMapper) {
+        this.repository = repository;
+        this.geminiAIClientService = geminiAIClientService;
+        this.xahTextToSpeechService = xahTextToSpeechService;
+        this.featureUsageService = featureUsageService;
+        this.objectMapper = objectMapper;
+    }
 
     @Value("${speaking.storage.local-path:/tmp/vocabulary-ai/audio}")
     private String basePath;
@@ -304,4 +316,3 @@ public class ListeningExerciseServiceImpl implements ListeningExerciseService {
         return cleaned;
     }
 }
-

@@ -1,17 +1,20 @@
 package com.vocabularyai.payment.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocabularyai.auth.config.JwtProperties;
 import com.vocabularyai.auth.security.JwtProvider;
 import com.vocabularyai.payment.dto.payos.PayOSCreatePaymentLinkResponse;
 import com.vocabularyai.payment.dto.payos.PayOSWebhookRequest;
+import com.vocabularyai.payment.entity.PaymentOrder;
 import com.vocabularyai.payment.exception.DuplicatePaymentException;
 import com.vocabularyai.payment.exception.InvalidSignatureException;
 import com.vocabularyai.payment.service.PaymentService;
 import com.vocabularyai.user.entity.User;
+import com.vocabularyai.user.repository.UserRepository;
 import com.vocabularyai.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,12 +22,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -48,9 +54,11 @@ public class PaymentControllerTest {
     
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private UserRepository userRepository;
     
     private User testUser;
-    private PayOSCreatePaymentLinkResponse paymentResponse;
     
     @BeforeEach
     public void setUp() {
@@ -59,11 +67,8 @@ public class PaymentControllerTest {
             .username("testuser")
             .email("test@example.com")
             .build();
-        
-        paymentResponse = PayOSCreatePaymentLinkResponse.builder()
-            .code("00")
-            .desc("success")
-            .build();
+        when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
     }
     
     // ==================== Initiate Payment Tests ====================
@@ -72,28 +77,48 @@ public class PaymentControllerTest {
     @WithMockUser(username = "testuser")
     @DisplayName("Should initiate payment successfully")
     public void testInitiatePayment_Success() throws Exception {
-        when(jwtProvider.getUserId(anyString(), anyString())).thenReturn(1L);
-        when(jwtProperties.getAccessToken()).thenReturn(mock(JwtProperties.AccessToken.class));
-        when(paymentService.initiatePayment(1L, 1L))
-            .thenReturn(paymentResponse);
+        PayOSCreatePaymentLinkResponse.PayOSPaymentLinkData linkData = PayOSCreatePaymentLinkResponse.PayOSPaymentLinkData.builder()
+            .checkoutUrl("https://checkout.payos.vn/123")
+            .orderCode(123L)
+            .build();
+        PayOSCreatePaymentLinkResponse response = PayOSCreatePaymentLinkResponse.builder()
+            .code("00")
+            .desc("success")
+            .data(linkData)
+            .build();
+        
+        when(paymentService.initiatePayment(anyLong(), anyLong())).thenReturn(response);
         
         mockMvc.perform(post("/api/payments/initiate")
-            .param("packageId", "1"))
+            .param("packageId", "1")
+            .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.success").value(true));
     }
     
     @Test
     @WithMockUser(username = "testuser")
-    @DisplayName("Should reject invalid package ID")
-    public void testInitiatePayment_InvalidPackage() throws Exception {
-        when(jwtProvider.getUserId(anyString(), anyString())).thenReturn(1L);
-        when(jwtProperties.getAccessToken()).thenReturn(mock(JwtProperties.AccessToken.class));
-        when(paymentService.initiatePayment(1L, 999L))
+    @DisplayName("Should return 400 when user already has active subscription")
+    public void testInitiatePayment_ActiveSubscription() throws Exception {
+        when(paymentService.initiatePayment(anyLong(), anyLong()))
+            .thenThrow(new IllegalStateException("User already has an active subscription"));
+        
+        mockMvc.perform(post("/api/payments/initiate")
+            .param("packageId", "1")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    @WithMockUser(username = "testuser")
+    @DisplayName("Should return 400 for non-existent package")
+    public void testInitiatePayment_PackageNotFound() throws Exception {
+        when(paymentService.initiatePayment(anyLong(), anyLong()))
             .thenThrow(new IllegalArgumentException("Package not found"));
         
         mockMvc.perform(post("/api/payments/initiate")
-            .param("packageId", "999"))
+            .param("packageId", "999")
+            .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest());
     }
     
@@ -102,8 +127,7 @@ public class PaymentControllerTest {
     public void testInitiatePayment_Unauthenticated() throws Exception {
         mockMvc.perform(post("/api/payments/initiate")
             .param("packageId", "1")
-            .param("returnUrl", "https://app.example.com/success")
-            .param("cancelUrl", "https://app.example.com/cancel"))
+            .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
     }
     
@@ -115,15 +139,15 @@ public class PaymentControllerTest {
         PayOSWebhookRequest.PayOSWebhookData data = PayOSWebhookRequest.PayOSWebhookData.builder()
             .orderCode("ORD_123")
             .amount(99000L)
-            .transactionCode("TXN_123")
             .status("PAID")
+            .transactionCode("TXN_123")
             .build();
         
         PayOSWebhookRequest webhook = PayOSWebhookRequest.builder()
             .data(data)
             .build();
         
-        doNothing().when(paymentService).handlePaymentWebhook(webhook, "valid_signature");
+        when(paymentService.handlePaymentWebhook(any(), anyString())).thenReturn(true);
         
         mockMvc.perform(post("/api/payments/webhook")
             .header("x-payos-signature", "valid_signature")
@@ -137,6 +161,8 @@ public class PaymentControllerTest {
     @DisplayName("Should reject webhook without signature")
     public void testHandleWebhook_NoSignature() throws Exception {
         PayOSWebhookRequest webhook = new PayOSWebhookRequest();
+        doThrow(new InvalidSignatureException("Signature is required"))
+            .when(paymentService).handlePaymentWebhook(any(), eq("direct-payos-verification"));
         
         mockMvc.perform(post("/api/payments/webhook")
             .contentType(MediaType.APPLICATION_JSON)
@@ -158,7 +184,7 @@ public class PaymentControllerTest {
             .build();
         
         doThrow(new InvalidSignatureException("Invalid signature"))
-            .when(paymentService).handlePaymentWebhook(webhook, "invalid_signature");
+            .when(paymentService).handlePaymentWebhook(any(), eq("invalid_signature"));
         
         mockMvc.perform(post("/api/payments/webhook")
             .header("x-payos-signature", "invalid_signature")
@@ -181,7 +207,7 @@ public class PaymentControllerTest {
             .build();
         
         doThrow(new DuplicatePaymentException("Duplicate payment"))
-            .when(paymentService).handlePaymentWebhook(webhook, "signature");
+            .when(paymentService).handlePaymentWebhook(any(), anyString());
         
         mockMvc.perform(post("/api/payments/webhook")
             .header("x-payos-signature", "signature")
@@ -196,6 +222,12 @@ public class PaymentControllerTest {
     @WithMockUser(username = "testuser")
     @DisplayName("Should get payment order status")
     public void testGetPaymentOrder_Success() throws Exception {
+        PaymentOrder mockOrder = PaymentOrder.builder()
+            .id(1L)
+            .userId(1L)
+            .build();
+        when(paymentService.getPaymentOrder(1L)).thenReturn(mockOrder);
+
         mockMvc.perform(get("/api/payments/1"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.success").value(true));
@@ -209,7 +241,7 @@ public class PaymentControllerTest {
             .thenThrow(new IllegalArgumentException("Payment order not found"));
         
         mockMvc.perform(get("/api/payments/999"))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isNotFound());
     }
     
     @Test

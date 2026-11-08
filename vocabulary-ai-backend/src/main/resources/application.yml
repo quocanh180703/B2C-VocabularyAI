@@ -9,6 +9,11 @@
 spring:
   application:
     name: vocabulary-ai-backend
+  config:
+    import:
+      - optional:file:.env[.properties]
+      - optional:file:./vocabulary-ai-backend/.env[.properties]
+      - optional:file:../.env[.properties]
   
   # ============================================================
   # 2. Database Configuration (MySQL)
@@ -16,7 +21,7 @@ spring:
   datasource:
     url: ${DB_URL:jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:datn_2}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8}
     username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:180703}
+    password: ${DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
@@ -69,10 +74,10 @@ spring:
   # 5. Email Configuration (SMTP - Gmail)
   # ============================================================
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${MAIL_USERNAME:quocanh220219@gmail.com}
-    password: ${MAIL_PASSWORD:jqbybpgwrydjzuzj}
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
     default-encoding: UTF-8
     properties:
       mail:
@@ -156,9 +161,6 @@ logging:
 app:
   name: VocabularyAI
   
-  debug:
-    enabled: true  # Set to false in production
-  
   frontend-url: ${FRONTEND_URL:http://localhost:3000}
   
   otp:
@@ -194,7 +196,7 @@ cloudinary:
 # 11.5 Gemini Fallback Alias Configuration
 # ============================================================
 gemini:
-  api-key: ${AI_CHAT_API_KEY:}
+  api-key: ${GEMINI_API_KEY:${AI_CHAT_API_KEY:}}
   model: ${AI_CHAT_MODEL:thanhnhan9023/gemini-3.7-flash-high}
 
 # ============================================================
@@ -537,8 +539,8 @@ security:
 # ============================================================
 speaking:
   storage:
-    type: local
-    local-path: "D:/vocabulary-ai-uploads/audio"  # Dùng đường dẫn tương đối để tránh lỗi AccessDenied trên ổ D:
+    type: ${SPEAKING_STORAGE_TYPE:local}
+    local-path: ${SPEAKING_AUDIO_STORAGE_PATH:D:/vocabulary-ai-uploads/audio}  # Dùng đường dẫn tương đối để tránh lỗi AccessDenied trên ổ D:
   speech-to-text:
     provider: whisper              # Use OpenAI Whisper for speech-to-text
     language-code: en-US           # Default language code
@@ -566,3 +568,9 @@ payment:
     max-attempts: 3
     initial-delay-ms: 1000
     backoff-multiplier: 2.0
+
+# ============================================================
+# 17. Google OAuth Configuration
+# ============================================================
+google:
+  client-id: ${GOOGLE_CLIENT_ID:}

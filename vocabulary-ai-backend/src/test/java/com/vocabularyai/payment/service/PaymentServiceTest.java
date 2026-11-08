@@ -3,12 +3,14 @@ package com.vocabularyai.payment.service;
 import com.vocabularyai.payment.dto.payos.PayOSCreatePaymentLinkResponse;
 import com.vocabularyai.payment.dto.payos.PayOSWebhookRequest;
 import com.vocabularyai.payment.entity.Package;
+import com.vocabularyai.payment.entity.Payment;
 import com.vocabularyai.payment.entity.PaymentOrder;
 import com.vocabularyai.payment.entity.Subscription;
 import com.vocabularyai.payment.exception.DuplicatePaymentException;
 import com.vocabularyai.payment.exception.InvalidSignatureException;
 import com.vocabularyai.payment.repository.PackageRepository;
 import com.vocabularyai.payment.repository.PaymentOrderRepository;
+import com.vocabularyai.payment.repository.PaymentRepository;
 import com.vocabularyai.payment.repository.SubscriptionRepository;
 import com.vocabularyai.payment.service.gateway.PaymentGatewayService;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +43,9 @@ public class PaymentServiceTest {
     
     @MockBean
     private PaymentOrderRepository paymentOrderRepository;
+    
+    @MockBean
+    private PaymentRepository paymentRepository;
     
     @MockBean
     private SubscriptionRepository subscriptionRepository;
@@ -77,9 +82,14 @@ public class PaymentServiceTest {
     @Test
     @DisplayName("Should initiate payment successfully")
     public void testInitiatePayment_Success() {
+        PayOSCreatePaymentLinkResponse.PayOSPaymentLinkData linkData = PayOSCreatePaymentLinkResponse.PayOSPaymentLinkData.builder()
+            .checkoutUrl("https://checkout.payos.vn/test")
+            .build();
+
         PayOSCreatePaymentLinkResponse mockResponse = PayOSCreatePaymentLinkResponse.builder()
             .code("00")
             .desc("success")
+            .data(linkData)
             .build();
         
         when(packageRepository.findById(1L)).thenReturn(Optional.of(testPackage));
@@ -113,13 +123,18 @@ public class PaymentServiceTest {
             .build();
         
         PayOSWebhookRequest webhook = PayOSWebhookRequest.builder()
+            .code("00")
             .data(data)
             .build();
         
+        when(paymentGateway.validateWebhook(any())).thenReturn(true);
         when(paymentGateway.verifyWebhookSignature(anyString(), anyLong(), anyString(), anyString()))
             .thenReturn(true);
         when(paymentOrderRepository.findByOrderCode("ORD_123"))
             .thenReturn(Optional.of(testPaymentOrder));
+        when(packageRepository.findById(1L)).thenReturn(Optional.of(testPackage));
+        when(paymentRepository.existsByTransactionCode(anyString())).thenReturn(false);
+        when(paymentRepository.save(any())).thenReturn(Payment.builder().id(1L).build());
         when(paymentOrderRepository.save(any())).thenReturn(testPaymentOrder);
         when(subscriptionRepository.save(any())).thenReturn(new Subscription());
         
@@ -129,10 +144,20 @@ public class PaymentServiceTest {
     @Test
     @DisplayName("Should reject webhook with invalid signature")
     public void testHandlePaymentWebhook_InvalidSignature() {
-        PayOSWebhookRequest webhook = new PayOSWebhookRequest();
+        PayOSWebhookRequest.PayOSWebhookData data = PayOSWebhookRequest.PayOSWebhookData.builder()
+            .orderCode("ORD_123")
+            .amount(99000L)
+            .transactionCode("TXN_123")
+            .status("PAID")
+            .build();
+        PayOSWebhookRequest webhook = PayOSWebhookRequest.builder()
+            .code("00")
+            .data(data)
+            .build();
         
-        when(paymentGateway.verifyWebhookSignature(anyString(), anyLong(), anyString(), anyString()))
-            .thenThrow(new InvalidSignatureException("Invalid signature"));
+        when(paymentGateway.validateWebhook(any())).thenReturn(true);
+        doThrow(new InvalidSignatureException("Invalid signature"))
+            .when(paymentGateway).verifyWebhookSignature(anyString(), anyLong(), anyString(), anyString());
         
         assertThrows(InvalidSignatureException.class, () ->
             paymentService.handlePaymentWebhook(webhook, "invalid"));

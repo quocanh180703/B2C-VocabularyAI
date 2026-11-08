@@ -1,5 +1,7 @@
 package com.vocabularyai.user.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vocabularyai.common.exception.BadRequestException;
 import com.vocabularyai.common.response.ApiResponse;
 import com.vocabularyai.user.dto.ChangePasswordRequest;
 import com.vocabularyai.user.dto.UpdateUserRequest;
@@ -7,8 +9,8 @@ import com.vocabularyai.user.dto.UserResponse;
 import com.vocabularyai.user.entity.User;
 import com.vocabularyai.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,12 +18,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -107,12 +110,13 @@ public class UserControllerTest {
     @DisplayName("Should change password successfully")
     public void testChangePassword_Success() throws Exception {
         ChangePasswordRequest request = ChangePasswordRequest.builder()
-            .oldPassword("oldpass123")
-            .newPassword("newpass123")
+            .oldPassword("OldPass123!")
+            .newPassword("NewPass123!")
+            .confirmPassword("NewPass123!")
             .build();
         
         when(userService.getCurrentUserId()).thenReturn(1L);
-        doNothing().when(userService).changePassword(1L, "oldpass123", "newpass123");
+        doNothing().when(userService).changePassword(1L, "OldPass123!", "NewPass123!");
         
         mockMvc.perform(put("/users/me/password")
             .contentType(MediaType.APPLICATION_JSON)
@@ -126,13 +130,14 @@ public class UserControllerTest {
     @DisplayName("Should reject password change with wrong old password")
     public void testChangePassword_WrongOldPassword() throws Exception {
         ChangePasswordRequest request = ChangePasswordRequest.builder()
-            .oldPassword("wrongpass")
-            .newPassword("newpass123")
+            .oldPassword("WrongPass123!")
+            .newPassword("NewPass123!")
+            .confirmPassword("NewPass123!")
             .build();
         
         when(userService.getCurrentUserId()).thenReturn(1L);
-        doThrow(new IllegalArgumentException("Old password is incorrect"))
-            .when(userService).changePassword(1L, "wrongpass", "newpass123");
+        doThrow(new BadRequestException("Old password is incorrect"))
+            .when(userService).changePassword(1L, "WrongPass123!", "NewPass123!");
         
         mockMvc.perform(put("/users/me/password")
             .contentType(MediaType.APPLICATION_JSON)

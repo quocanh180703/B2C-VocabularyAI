@@ -1,13 +1,13 @@
 package com.vocabularyai.ai.service.cache;
 
-import com.vocabularyai.personalization.service.AdaptiveDifficultyServiceImpl;
-import com.vocabularyai.personalization.service.DailyPracticeServiceImpl;
-import com.vocabularyai.personalization.service.LearningPlanServiceImpl;
-import com.vocabularyai.personalization.service.ProgressAnalysisServiceImpl;
-import com.vocabularyai.personalization.service.RecommendationServiceImpl;
-import com.vocabularyai.personalization.service.WeaknessStrengthServiceImpl;
-import lombok.RequiredArgsConstructor;
+import com.vocabularyai.personalization.service.AdaptiveDifficultyService;
+import com.vocabularyai.personalization.service.DailyPracticeService;
+import com.vocabularyai.personalization.service.LearningPlanService;
+import com.vocabularyai.personalization.service.ProgressAnalysisService;
+import com.vocabularyai.personalization.service.RecommendationService;
+import com.vocabularyai.personalization.service.WeaknessStrengthService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 /**
@@ -34,16 +34,32 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class CacheInvalidationService {
     
-    private final AdaptiveDifficultyServiceImpl adaptiveDifficultyService;
-    private final RecommendationServiceImpl recommendationService;
-    private final WeaknessStrengthServiceImpl weaknessStrengthService;
-    private final ProgressAnalysisServiceImpl progressAnalysisService;
-    private final LearningPlanServiceImpl learningPlanService;
-    private final DailyPracticeServiceImpl dailyPracticeService;
+    private final AdaptiveDifficultyService adaptiveDifficultyService;
+    private final RecommendationService recommendationService;
+    private final WeaknessStrengthService weaknessStrengthService;
+    private final ProgressAnalysisService progressAnalysisService;
+    private final LearningPlanService learningPlanService;
+    private final DailyPracticeService dailyPracticeService;
     private final CacheService cacheService;
+
+    public CacheInvalidationService(
+            @Lazy AdaptiveDifficultyService adaptiveDifficultyService,
+            @Lazy RecommendationService recommendationService,
+            @Lazy WeaknessStrengthService weaknessStrengthService,
+            @Lazy ProgressAnalysisService progressAnalysisService,
+            @Lazy LearningPlanService learningPlanService,
+            @Lazy DailyPracticeService dailyPracticeService,
+            CacheService cacheService) {
+        this.adaptiveDifficultyService = adaptiveDifficultyService;
+        this.recommendationService = recommendationService;
+        this.weaknessStrengthService = weaknessStrengthService;
+        this.progressAnalysisService = progressAnalysisService;
+        this.learningPlanService = learningPlanService;
+        this.dailyPracticeService = dailyPracticeService;
+        this.cacheService = cacheService;
+    }
     
     /**
      * TASK 11: Invalidate all user-specific caches when user status changes

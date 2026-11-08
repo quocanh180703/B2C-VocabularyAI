@@ -137,8 +137,8 @@ public class Subscription {
      */
     public boolean isActive() {
         LocalDateTime now = LocalDateTime.now();
-        return "ACTIVE".equals(this.status) && 
-               !now.isBefore(this.startAt) && 
-               !now.isAfter(this.endAt);
+        boolean afterOrAtStart = this.startAt == null || !now.isBefore(this.startAt);
+        boolean beforeOrAtEnd = this.endAt != null && !now.isAfter(this.endAt);
+        return "ACTIVE".equals(this.status) && afterOrAtStart && beforeOrAtEnd;
     }
 }
