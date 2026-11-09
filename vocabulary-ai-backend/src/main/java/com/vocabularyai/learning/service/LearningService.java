@@ -156,16 +156,18 @@ public class LearningService {
         
         if (isCorrect) {
             progress.setCorrectCount(progress.getCorrectCount() + 1);
+            // Update status and schedule next review
+            if (progress.getAccuracy() >= 80 && progress.getReviewCount() >= 5) {
+                progress.setStatus(LearningProgress.LearningStatus.MASTERED);
+                progress.setNextReviewAt(null);
+            } else {
+                progress.setNextReviewAt(calculateNextReviewDate(progress.getReviewCount()));
+            }
         } else {
             progress.setWrongCount(progress.getWrongCount() + 1);
-        }
-        
-        // Update status and schedule next review
-        if (progress.getAccuracy() >= 80 && progress.getReviewCount() >= 5) {
-            progress.setStatus(LearningProgress.LearningStatus.MASTERED);
-            progress.setNextReviewAt(null);
-        } else {
-            progress.setNextReviewAt(calculateNextReviewDate(progress.getReviewCount()));
+            // Khi trả lời sai: KHÔNG reset reviewCount (TC-SRS-02).
+            // Giữ từ này trong hàng đợi ôn tập hôm nay (nextReviewAt <= now) để người dùng tiếp tục ôn cho thuộc.
+            progress.setNextReviewAt(LocalDateTime.now());
         }
         
         LearningProgress updated = progressRepository.save(progress);
