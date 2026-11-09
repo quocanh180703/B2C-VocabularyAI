@@ -30,7 +30,8 @@ public class PaymentSchemaVerificationTest {
     
     @BeforeEach
     public void ensurePackagesExist() {
-        if (packageRepository.findByCode("PREMIUM_MONTHLY").isEmpty()) {
+        var monthly = packageRepository.findByCode("PREMIUM_MONTHLY");
+        if (monthly.isEmpty()) {
             packageRepository.save(Package.builder()
                 .code("PREMIUM_MONTHLY")
                 .name("Premium Monthly")
@@ -39,8 +40,16 @@ public class PaymentSchemaVerificationTest {
                 .status("ACTIVE")
                 .description("Premium subscription for 1 month")
                 .build());
+        } else {
+            Package p = monthly.get();
+            if (!"ACTIVE".equals(p.getStatus())) {
+                p.setStatus("ACTIVE");
+                packageRepository.save(p);
+            }
         }
-        if (packageRepository.findByCode("PREMIUM_YEARLY").isEmpty()) {
+        
+        var yearly = packageRepository.findByCode("PREMIUM_YEARLY");
+        if (yearly.isEmpty()) {
             packageRepository.save(Package.builder()
                 .code("PREMIUM_YEARLY")
                 .name("Premium Yearly")
@@ -49,6 +58,12 @@ public class PaymentSchemaVerificationTest {
                 .status("ACTIVE")
                 .description("Premium subscription for 1 year")
                 .build());
+        } else {
+            Package p = yearly.get();
+            if (!"ACTIVE".equals(p.getStatus())) {
+                p.setStatus("ACTIVE");
+                packageRepository.save(p);
+            }
         }
     }
     
