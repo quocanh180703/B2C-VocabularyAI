@@ -341,6 +341,17 @@ public class CefrWordController {
             @RequestParam(defaultValue = "25") int limit
     ) {
         log.info("GET /cefr-words/random-batch - level: {}, topic: {}, limit: {}", level, topic, limit);
+
+        if (level != null) {
+            Long userId = getCurrentUserIdSafely();
+            if (!featureUsageService.canAccessCefrLevel(userId, level.name())) {
+                throw new com.vocabularyai.common.exception.UpgradeRequiredException(
+                    "CEFR_B1_C1",
+                    "Cấp độ từ vựng " + level + " chỉ dành cho tài khoản Premium. Vui lòng nâng cấp để mở khóa toàn bộ kho từ vựng."
+                );
+            }
+        }
+
         List<CefrWordResponse> words = cefrWordService.getRandomWords(level, limit, topic);
         return ResponseEntity.ok(words);
     }
