@@ -320,24 +320,28 @@ public class CefrWordController {
     /**
      * GET /api/cefr-words/random-batch
      * 
-     * Get batch of random words at specific CEFR level (for flashcards)
+     * Get batch of random words at specific CEFR level and optional topic (for flashcards)
      * 
      * @param level CEFR level (optional)
+     * @param topic Topic filter (optional)
      * @param limit Batch size (default 25)
      * @return List of random CEFR words
      */
     @GetMapping("/random-batch")
-    @Operation(summary = "Get random CEFR words batch", description = "Retrieve random words at specific CEFR level (for flashcards)")
+    @Operation(summary = "Get random CEFR words batch", description = "Retrieve random words at specific CEFR level and optional topic (for flashcards)")
     @ApiResponse(responseCode = "200", description = "Random CEFR words found")
     public ResponseEntity<List<CefrWordResponse>> getRandomWordsBatch(
             @Parameter(description = "CEFR level", example = "B1")
             @RequestParam(required = false) CEFRLevel level,
 
+            @Parameter(description = "Topic filter (optional)", example = "WORK")
+            @RequestParam(required = false) WordTopic topic,
+
             @Parameter(description = "Batch size", example = "25")
             @RequestParam(defaultValue = "25") int limit
     ) {
-        log.info("GET /cefr-words/random-batch - level: {}, limit: {}", level, limit);
-        List<CefrWordResponse> words = cefrWordService.getRandomWords(level, limit);
+        log.info("GET /cefr-words/random-batch - level: {}, topic: {}, limit: {}", level, topic, limit);
+        List<CefrWordResponse> words = cefrWordService.getRandomWords(level, limit, topic);
         return ResponseEntity.ok(words);
     }
 

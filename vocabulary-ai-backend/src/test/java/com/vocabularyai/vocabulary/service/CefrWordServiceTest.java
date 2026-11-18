@@ -114,4 +114,46 @@ class CefrWordServiceTest {
         assertNotNull(techTopic);
         assertEquals(0L, techTopic.getCount());
     }
+
+    @Test
+    @DisplayName("getRandomWords should delegate to findRandomWordsByLevel when topic is null")
+    void testGetRandomWordsWithoutTopic() {
+        CefrWord word = CefrWord.builder()
+                .id("test-id-1")
+                .lemma("apple")
+                .cefrLevel(CEFRLevel.A1)
+                .build();
+        when(cefrWordRepository.findRandomWordsByLevel(eq("A1"), eq(25)))
+                .thenReturn(List.of(word));
+
+        List<CefrWordResponse> results = cefrWordService.getRandomWords(CEFRLevel.A1, 25);
+
+        assertNotNull(results);
+        assertEquals(1, results.size());
+        assertEquals("apple", results.get(0).getLemma());
+        verify(cefrWordRepository, times(1)).findRandomWordsByLevel(eq("A1"), eq(25));
+        verify(cefrWordRepository, never()).findRandomWordsByLevelAndTopic(any(), any(), anyInt());
+    }
+
+    @Test
+    @DisplayName("getRandomWords should delegate to findRandomWordsByLevelAndTopic when topic is provided")
+    void testGetRandomWordsWithTopic() {
+        CefrWord word = CefrWord.builder()
+                .id("test-id-2")
+                .lemma("computer")
+                .cefrLevel(CEFRLevel.B1)
+                .topic(WordTopic.TECHNOLOGY)
+                .build();
+        when(cefrWordRepository.findRandomWordsByLevelAndTopic(eq("B1"), eq("TECHNOLOGY"), eq(25)))
+                .thenReturn(List.of(word));
+
+        List<CefrWordResponse> results = cefrWordService.getRandomWords(CEFRLevel.B1, 25, WordTopic.TECHNOLOGY);
+
+        assertNotNull(results);
+        assertEquals(1, results.size());
+        assertEquals("computer", results.get(0).getLemma());
+        assertEquals(WordTopic.TECHNOLOGY, results.get(0).getTopic());
+        verify(cefrWordRepository, times(1)).findRandomWordsByLevelAndTopic(eq("B1"), eq("TECHNOLOGY"), eq(25));
+        verify(cefrWordRepository, never()).findRandomWordsByLevel(any(), anyInt());
+    }
 }

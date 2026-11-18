@@ -246,11 +246,29 @@ public class CefrWordService {
      * @return List of random CefrWordResponse objects
      */
     public List<CefrWordResponse> getRandomWords(CEFRLevel level, int limit) {
+        return getRandomWords(level, limit, null);
+    }
+
+    /**
+     * Get random words batch for flashcards by level and topic
+     * 
+     * @param level CEFR level (optional, all levels if null)
+     * @param limit Maximum number of words (1 to 100)
+     * @param topic Topic (optional, all topics if null)
+     * @return List of random CefrWordResponse objects
+     */
+    public List<CefrWordResponse> getRandomWords(CEFRLevel level, int limit, WordTopic topic) {
         String levelStr = level != null ? level.toString() : null;
+        String topicStr = topic != null ? topic.name() : null;
         int safeLimit = Math.min(Math.max(limit, 1), 100);
-        log.debug("Getting random CEFR words: level={}, limit={}", levelStr, safeLimit);
+        log.debug("Getting random CEFR words: level={}, topic={}, limit={}", levelStr, topicStr, safeLimit);
         
-        List<CefrWord> words = cefrWordRepository.findRandomWordsByLevel(levelStr, safeLimit);
+        List<CefrWord> words;
+        if (topic != null) {
+            words = cefrWordRepository.findRandomWordsByLevelAndTopic(levelStr, topicStr, safeLimit);
+        } else {
+            words = cefrWordRepository.findRandomWordsByLevel(levelStr, safeLimit);
+        }
         return words.stream()
                 .map(CefrWordResponse::fromEntityMinimal)
                 .toList();

@@ -48,6 +48,9 @@ public class StudentListResponse implements Serializable {
     
     @Schema(description = "Total learning sessions", example = "150")
     private long totalSessions;
+
+    @Schema(description = "Total words learned", example = "58")
+    private long wordsLearned;
     
     @Schema(description = "Account creation date", example = "2024-01-15T10:30:00")
     private LocalDateTime createdAt;

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.vocabularyai.user.entity.User;
+import com.vocabularyai.learning.entity.LearningProgress;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -40,11 +41,13 @@ public interface AdminStudentRepository extends JpaRepository<User, Long> {
            "u.role as role, " +
            "u.status as status, " +
            "COUNT(DISTINCT s.id) as totalSessions, " +
+           "COUNT(DISTINCT lp.id) as wordsLearned, " +
            "CASE WHEN MAX(sub.id) IS NOT NULL AND sub.status = 'ACTIVE' AND sub.endAt > CURRENT_TIMESTAMP " +
            "THEN true ELSE false END as hasActiveSubscription, " +
            "u.createdAt as createdAt) " +
            "FROM User u " +
            "LEFT JOIN LearningHistory s ON u.id = s.user.id " +
+           "LEFT JOIN LearningProgress lp ON u.id = lp.user.id " +
            "LEFT JOIN Subscription sub ON u.id = sub.userId " +
            "WHERE u.role = :role " +
            "GROUP BY u.id, u.username, u.email, u.fullName, u.role, u.status, u.createdAt")
@@ -69,9 +72,11 @@ public interface AdminStudentRepository extends JpaRepository<User, Long> {
            "u.role as role, " +
            "u.status as status, " +
            "COUNT(DISTINCT s.id) as totalSessions, " +
+           "COUNT(DISTINCT lp.id) as wordsLearned, " +
            "u.createdAt as createdAt) " +
            "FROM User u " +
            "LEFT JOIN LearningHistory s ON u.id = s.user.id " +
+           "LEFT JOIN LearningProgress lp ON u.id = lp.user.id " +
            "WHERE u.role = :role AND u.status = :status " +
            "GROUP BY u.id, u.username, u.email, u.fullName, u.role, u.status, u.createdAt")
     Page<?> getStudentListByRoleAndStatus(@Param("role") User.UserRole role, @Param("status") User.UserStatus status, Pageable pageable);
@@ -95,9 +100,11 @@ public interface AdminStudentRepository extends JpaRepository<User, Long> {
            "u.role as role, " +
            "u.status as status, " +
            "COUNT(DISTINCT s.id) as totalSessions, " +
+           "COUNT(DISTINCT lp.id) as wordsLearned, " +
            "u.createdAt as createdAt) " +
            "FROM User u " +
            "LEFT JOIN LearningHistory s ON u.id = s.user.id " +
+           "LEFT JOIN LearningProgress lp ON u.id = lp.user.id " +
            "WHERE u.role = :role AND " +
            "(LOWER(u.username) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
            "LOWER(u.email) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
@@ -134,7 +141,7 @@ public interface AdminStudentRepository extends JpaRepository<User, Long> {
            "u.createdAt as createdAt, " +
            "u.updatedAt as updatedAt, " +
            "COUNT(DISTINCT lh.id) as totalSessions, " +
-           "COUNT(DISTINCT fw.id) as wordsLearned, " +
+           "COUNT(DISTINCT lp.id) as wordsLearned, " +
            "COALESCE(CAST(SUM(CASE WHEN lh.isCorrect = true THEN 1 ELSE 0 END) * 100.0 / " +
            "NULLIF(COUNT(lh), 0) AS java.math.BigDecimal), 0) as accuracyRate, " +
            "COALESCE(sub.id, 0) as activeSubscriptionId, " +
@@ -145,7 +152,7 @@ public interface AdminStudentRepository extends JpaRepository<User, Long> {
            "COALESCE(MAX(lh.createdAt), NULL) as lastActivityAt) " +
            "FROM User u " +
            "LEFT JOIN LearningHistory lh ON u.id = lh.user.id " +
-           "LEFT JOIN FavoriteWord fw ON u.id = fw.user.id " +
+           "LEFT JOIN LearningProgress lp ON u.id = lp.user.id " +
            "LEFT JOIN Subscription sub ON u.id = sub.userId AND sub.status = 'ACTIVE' " +
            "LEFT JOIN Package pkg ON sub.packageId = pkg.id " +
            "WHERE u.id = :userId AND (u.role = com.vocabularyai.user.entity.User.UserRole.STUDENT OR u.role = com.vocabularyai.user.entity.User.UserRole.INSTRUCTOR) " +
@@ -243,8 +250,8 @@ public interface AdminStudentRepository extends JpaRepository<User, Long> {
      * @return Average number of words
      */
     @Query("SELECT COALESCE(AVG(wordCount), 0) FROM " +
-           "(SELECT COUNT(DISTINCT fw.id) as wordCount FROM FavoriteWord fw " +
-           "JOIN User u ON fw.user.id = u.id WHERE u.role = 'STUDENT' " +
+           "(SELECT COUNT(DISTINCT lp.id) as wordCount FROM LearningProgress lp " +
+           "JOIN User u ON lp.user.id = u.id WHERE u.role = 'STUDENT' " +
            "GROUP BY u.id) subquery")
     long getAvgWordsPerStudent();
 }

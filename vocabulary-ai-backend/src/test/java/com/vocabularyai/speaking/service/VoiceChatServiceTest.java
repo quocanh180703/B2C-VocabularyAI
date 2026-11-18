@@ -6,6 +6,8 @@ import com.vocabularyai.ai.service.whisper.WhisperService;
 import com.vocabularyai.payment.entity.FeatureType;
 import com.vocabularyai.payment.service.FeatureUsageService;
 import com.vocabularyai.speaking.dto.voicechat.*;
+import com.vocabularyai.speaking.entity.SpeakingSession;
+import com.vocabularyai.speaking.repository.SpeakingSessionRepository;
 import com.vocabularyai.speaking.service.voicechat.VoiceChatServiceImpl;
 import com.vocabularyai.user.entity.User;
 import com.vocabularyai.vocabulary.entity.CefrWord;
@@ -43,6 +45,9 @@ class VoiceChatServiceTest {
 
     @Mock
     private CefrWordRepository cefrWordRepository;
+
+    @Mock
+    private SpeakingSessionRepository speakingSessionRepository;
 
     @Spy
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -167,5 +172,6 @@ class VoiceChatServiceTest {
         assertEquals("resilient", w.getWord());
         assertTrue(w.isInDictionary());
         assertEquals("word-uuid-123", w.getWordId());
+        verify(speakingSessionRepository).save(any(SpeakingSession.class));
     }
 }

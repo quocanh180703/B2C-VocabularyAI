@@ -68,6 +68,9 @@ public interface QuizAttemptRepository extends JpaRepository<QuizAttempt, Long> 
     @Query("SELECT AVG(qa.score) FROM QuizAttempt qa WHERE qa.user.id = :userId AND qa.submittedAt IS NOT NULL")
     Double getAverageScoreByUserId(@Param("userId") Long userId);
 
+    @Query("SELECT MAX(qa.score) FROM QuizAttempt qa WHERE qa.user.id = :userId AND qa.submittedAt IS NOT NULL")
+    Double getMaxScoreByUserId(@Param("userId") Long userId);
+
     @Query("SELECT qa FROM QuizAttempt qa WHERE qa.user.id = :userId AND qa.submittedAt IS NOT NULL ORDER BY qa.submittedAt DESC")
     java.util.List<QuizAttempt> findLatestCompletedAttempts(@Param("userId") Long userId, Pageable pageable);
 

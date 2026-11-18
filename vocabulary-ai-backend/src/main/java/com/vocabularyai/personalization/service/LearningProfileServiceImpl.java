@@ -1,14 +1,17 @@
 package com.vocabularyai.personalization.service;
 
+import com.vocabularyai.ai.repository.GrammarPracticeHistoryRepository;
 import com.vocabularyai.common.exception.ResourceNotFoundException;
 import com.vocabularyai.learning.entity.LearningProgress;
 import com.vocabularyai.learning.repository.LearningHistoryRepository;
 import com.vocabularyai.learning.repository.LearningProgressRepository;
+import com.vocabularyai.listening.repository.ListeningExerciseRepository;
 import java.time.LocalDate;
 import com.vocabularyai.personalization.dto.LearningProfileDto;
 import com.vocabularyai.personalization.dto.LearningProfileDto.*;
 import com.vocabularyai.placement.entity.PlacementAttempt;
 import com.vocabularyai.placement.repository.PlacementAttemptRepository;
+import com.vocabularyai.quiz.repository.QuizAttemptRepository;
 import com.vocabularyai.speaking.entity.SpeakingLevel;
 import com.vocabularyai.speaking.entity.SpeakingSession;
 import com.vocabularyai.speaking.entity.SpeakingStatus;
@@ -61,6 +64,9 @@ public class LearningProfileServiceImpl implements LearningProfileService {
     private final SpeakingSessionRepository speakingSessionRepository;
     private final SpeakingProgressService speakingProgressService;
     private final PlacementAttemptRepository placementAttemptRepository;
+    private final GrammarPracticeHistoryRepository grammarPracticeHistoryRepository;
+    private final ListeningExerciseRepository listeningExerciseRepository;
+    private final QuizAttemptRepository quizAttemptRepository;
     
     // Cache constants
     private static final String CACHE_KEY_PREFIX = "ai:profile:";
@@ -132,23 +138,33 @@ public class LearningProfileServiceImpl implements LearningProfileService {
     // ==================== PRIVATE HELPER METHODS ====================
     
     /**
-     * Build comprehensive learning profile from all data sources
+     * Build comprehensive learning profile from all data sources:
+     * Vocabulary (25%), Grammar (20%), Speaking (25%), Listening (15%), Quiz (15%).
      */
     private LearningProfileDto buildLearningProfile(User user) {
         log.debug("Building learning profile for user {}", user.getId());
         
         int totalLearningDays = getTotalLearningDays(user.getId());
 
-        // Get learning progress (vocabulary + grammar) with volume & maturity weights
-        var learningStats = getLearningProgressStats(user.getId(), totalLearningDays);
+        // 1. Vocabulary stats from LearningProgress
+        PerformanceMetric vocabMetric = getVocabularyStats(user.getId(), totalLearningDays);
+
+        // 2. Grammar stats from GrammarPracticeHistory (independent measurement)
+        PerformanceMetric grammarMetric = getGrammarStats(user.getId(), totalLearningDays);
         
-        // Get speaking progress
-        var speakingStats = getSpeakingStats(user.getId(), totalLearningDays);
+        // 3. Speaking progress (monologue sessions + voice chat)
+        PerformanceMetric speakingStats = getSpeakingStats(user.getId(), totalLearningDays);
+
+        // 4. Listening stats from ListeningExercise
+        PerformanceMetric listeningStats = getListeningStats(user.getId(), totalLearningDays);
+
+        // 5. Quiz stats from QuizAttempt
+        PerformanceMetric quizStats = getQuizStats(user.getId(), totalLearningDays);
         
-        // Calculate overall metrics
-        Double overallScore = calculateOverallScore(learningStats, speakingStats);
-        int totalAttemptedWords = learningStats.get("vocabulary") != null && learningStats.get("vocabulary").getTotalActivities() != null
-            ? learningStats.get("vocabulary").getTotalActivities() : 0;
+        // Calculate overall metrics with dynamic normalization across active skills
+        Double overallScore = calculateOverallScore(vocabMetric, grammarMetric, speakingStats, listeningStats, quizStats);
+        int totalAttemptedWords = vocabMetric != null && vocabMetric.getTotalActivities() != null
+            ? vocabMetric.getTotalActivities() : 0;
         String estimatedLevel = estimateLevelFromScore(overallScore, totalAttemptedWords, totalLearningDays);
         String currentLevel = getEffectiveLevel(user.getId(), estimatedLevel);
         
@@ -164,9 +180,16 @@ public class LearningProfileServiceImpl implements LearningProfileService {
         Integer longestStreak = calculateLongestStreak(user.getId());
         List<String> achievements = getAchievements(user.getId());
         
-        // Get weak/strong topics
-        List<String> weakTopics = identifyWeakTopics(learningStats);
-        List<String> strongTopics = identifyStrongTopics(learningStats);
+        // Get weak/strong topics across all 5 skills
+        Map<String, PerformanceMetric> allMetrics = new LinkedHashMap<>();
+        allMetrics.put("vocabulary", vocabMetric);
+        allMetrics.put("grammar", grammarMetric);
+        allMetrics.put("speaking", speakingStats);
+        allMetrics.put("listening", listeningStats);
+        allMetrics.put("quiz", quizStats);
+
+        List<String> weakTopics = identifyWeakTopics(allMetrics);
+        List<String> strongTopics = identifyStrongTopics(allMetrics);
         
         // Get learning patterns
         Double learningFrequency = calculateLearningFrequency(user.getId());
@@ -177,9 +200,11 @@ public class LearningProfileServiceImpl implements LearningProfileService {
             .userName(user.getEmail())
             .currentLevel(currentLevel)
             .overallScore(overallScore)
-            .vocabulary(learningStats.get("vocabulary"))
-            .grammar(learningStats.get("grammar"))
+            .vocabulary(vocabMetric)
+            .grammar(grammarMetric)
             .speaking(speakingStats)
+            .listening(listeningStats)
+            .quiz(quizStats)
             .trend7Days(trend7Days)
             .trend30Days(trend30Days)
             .recentActivities(recentActivities)
@@ -198,11 +223,11 @@ public class LearningProfileServiceImpl implements LearningProfileService {
     }
     
     /**
-     * Get vocabulary and grammar statistics from LearningProgress.
+     * Get vocabulary statistics from LearningProgress.
      * Uses Method 1: Volume & Data Maturity Weighted Score to prevent brand-new accounts from scoring high CEFR levels.
      */
-    private Map<String, PerformanceMetric> getLearningProgressStats(Long userId, int totalLearningDays) {
-        log.debug("Getting learning progress stats for user {}", userId);
+    private PerformanceMetric getVocabularyStats(Long userId, int totalLearningDays) {
+        log.debug("Getting vocabulary stats for user {}", userId);
         
         Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
         var allProgress = learningProgressRepository.findByUserId(userId, pageable);
@@ -260,7 +285,7 @@ public class LearningProfileServiceImpl implements LearningProfileService {
         double weightedVocabScore = Math.min(100.0, Math.max(0.0, rawAccuracy * volumeFactor * maturityFactor));
         String vocabLevel = estimateLevelFromScore(weightedVocabScore, attemptedCount, totalLearningDays);
         
-        PerformanceMetric vocabularyMetric = PerformanceMetric.builder()
+        return PerformanceMetric.builder()
             .score(weightedVocabScore)
             .bestScore(attemptedProgress.stream()
                 .mapToDouble(LearningProgress::getAccuracy)
@@ -272,23 +297,158 @@ public class LearningProfileServiceImpl implements LearningProfileService {
             .progressInLevel(calculateProgressInLevel(weightedVocabScore))
             .recommendedFocus(getVocabularyFocus(progressList))
             .build();
+    }
+
+    /**
+     * Get independent grammar statistics from GrammarPracticeHistory (FREE, TOPIC, TRANSLATION).
+     */
+    private PerformanceMetric getGrammarStats(Long userId, int totalLearningDays) {
+        log.debug("Getting grammar stats for user {}", userId);
         
-        double weightedGrammarScore = Math.min(100.0, Math.max(0.0, weightedVocabScore * 0.9));
-        String grammarLevel = estimateLevelFromScore(weightedGrammarScore, attemptedCount, totalLearningDays);
-        
-        PerformanceMetric grammarMetric = PerformanceMetric.builder()
+        Double avgScore = grammarPracticeHistoryRepository.getAverageScoreByUserId(userId);
+        Double maxScore = grammarPracticeHistoryRepository.getMaxScoreByUserId(userId);
+        long count = grammarPracticeHistoryRepository.countByUserId(userId);
+        int totalActivities = (int) count;
+
+        if (totalActivities == 0 || avgScore == null || avgScore <= 0.0) {
+            return PerformanceMetric.builder()
+                .score(0.0)
+                .bestScore(0.0)
+                .averageScore(0.0)
+                .totalActivities(0)
+                .level("A1")
+                .progressInLevel(0.0)
+                .recommendedFocus("Start grammar practice")
+                .build();
+        }
+
+        double grammarVolumeFactor = totalActivities < 5 ? 0.50 : (totalActivities < 15 ? 0.75 : 1.00);
+        double weightedGrammarScore = Math.min(100.0, Math.max(0.0, avgScore * grammarVolumeFactor));
+        String grammarLevel = estimateLevelFromScore(weightedGrammarScore, totalActivities, totalLearningDays);
+
+        String recommendedFocus = "Luyện viết câu và cấu trúc ngữ pháp";
+        try {
+            List<Object[]> modeAvgs = grammarPracticeHistoryRepository.getAverageScoresByMode(userId);
+            if (modeAvgs != null && !modeAvgs.isEmpty()) {
+                String lowestMode = null;
+                double lowestScore = Double.MAX_VALUE;
+                for (Object[] row : modeAvgs) {
+                    if (row.length >= 2 && row[0] != null && row[1] instanceof Number) {
+                        double s = ((Number) row[1]).doubleValue();
+                        if (s < lowestScore) {
+                            lowestScore = s;
+                            lowestMode = String.valueOf(row[0]);
+                        }
+                    }
+                }
+                if ("FREE".equalsIgnoreCase(lowestMode)) {
+                    recommendedFocus = "Rèn luyện thêm kỹ năng Viết tự do";
+                } else if ("TOPIC".equalsIgnoreCase(lowestMode)) {
+                    recommendedFocus = "Rèn luyện thêm kỹ năng Viết theo chủ đề";
+                } else if ("TRANSLATION".equalsIgnoreCase(lowestMode)) {
+                    recommendedFocus = "Rèn luyện thêm kỹ năng Luyện dịch câu";
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Failed to determine recommendedFocus for grammar: {}", e.getMessage());
+        }
+
+        return PerformanceMetric.builder()
             .score(weightedGrammarScore)
-            .bestScore(rawAccuracy * 0.9)
+            .bestScore(maxScore != null ? maxScore : weightedGrammarScore)
             .averageScore(weightedGrammarScore)
-            .totalActivities(progressList.size())
+            .totalActivities(totalActivities)
             .level(grammarLevel)
             .progressInLevel(calculateProgressInLevel(weightedGrammarScore))
-            .recommendedFocus("Focus on verb tenses")
+            .recommendedFocus(recommendedFocus)
             .build();
+    }
+
+    /**
+     * Get listening statistics from completed ListeningExercise.
+     */
+    private PerformanceMetric getListeningStats(Long userId, int totalLearningDays) {
+        log.debug("Getting listening stats for user {}", userId);
         
+        Double avgScore = listeningExerciseRepository.getAverageScoreByUserId(userId);
+        Double maxScore = listeningExerciseRepository.getMaxScoreByUserId(userId);
+        long count = listeningExerciseRepository.countCompletedByUserId(userId);
+        int totalActivities = (int) count;
+
+        if (totalActivities == 0 || avgScore == null || avgScore <= 0.0) {
+            return PerformanceMetric.builder()
+                .score(0.0)
+                .bestScore(0.0)
+                .averageScore(0.0)
+                .totalActivities(0)
+                .level("A1")
+                .progressInLevel(0.0)
+                .recommendedFocus("Start listening practice")
+                .build();
+        }
+
+        double listeningVolumeFactor = totalActivities < 5 ? 0.50 : (totalActivities < 15 ? 0.75 : 1.00);
+        double weightedListeningScore = Math.min(100.0, Math.max(0.0, avgScore * listeningVolumeFactor));
+        String listeningLevel = estimateLevelFromScore(weightedListeningScore, totalActivities, totalLearningDays);
+
+        return PerformanceMetric.builder()
+            .score(weightedListeningScore)
+            .bestScore(maxScore != null ? maxScore : weightedListeningScore)
+            .averageScore(weightedListeningScore)
+            .totalActivities(totalActivities)
+            .level(listeningLevel)
+            .progressInLevel(calculateProgressInLevel(weightedListeningScore))
+            .recommendedFocus("Luyện nghe các đoạn văn dài hơn")
+            .build();
+    }
+
+    /**
+     * Get quiz statistics from submitted QuizAttempt.
+     */
+    private PerformanceMetric getQuizStats(Long userId, int totalLearningDays) {
+        log.debug("Getting quiz stats for user {}", userId);
+        
+        Double avgScore = quizAttemptRepository.getAverageScoreByUserId(userId);
+        Double maxScore = quizAttemptRepository.getMaxScoreByUserId(userId);
+        long count = quizAttemptRepository.countCompletedByUser(userId);
+        int totalActivities = (int) count;
+
+        if (totalActivities == 0 || avgScore == null || avgScore <= 0.0) {
+            return PerformanceMetric.builder()
+                .score(0.0)
+                .bestScore(0.0)
+                .averageScore(0.0)
+                .totalActivities(0)
+                .level("A1")
+                .progressInLevel(0.0)
+                .recommendedFocus("Start quiz practice")
+                .build();
+        }
+
+        double quizVolumeFactor = totalActivities < 5 ? 0.50 : (totalActivities < 15 ? 0.75 : 1.00);
+        double weightedQuizScore = Math.min(100.0, Math.max(0.0, avgScore * quizVolumeFactor));
+        String quizLevel = estimateLevelFromScore(weightedQuizScore, totalActivities, totalLearningDays);
+
+        return PerformanceMetric.builder()
+            .score(weightedQuizScore)
+            .bestScore(maxScore != null ? maxScore : weightedQuizScore)
+            .averageScore(weightedQuizScore)
+            .totalActivities(totalActivities)
+            .level(quizLevel)
+            .progressInLevel(calculateProgressInLevel(weightedQuizScore))
+            .recommendedFocus("Ôn lại các chủ đề hay sai")
+            .build();
+    }
+
+    /**
+     * Backward-compatibility helper for learning progress stats map
+     */
+    private Map<String, PerformanceMetric> getLearningProgressStats(Long userId, int totalLearningDays) {
+        PerformanceMetric vocab = getVocabularyStats(userId, totalLearningDays);
+        PerformanceMetric grammar = getGrammarStats(userId, totalLearningDays);
         Map<String, PerformanceMetric> result = new HashMap<>();
-        result.put("vocabulary", vocabularyMetric);
-        result.put("grammar", grammarMetric);
+        result.put("vocabulary", vocab);
+        result.put("grammar", grammar);
         return result;
     }
 
@@ -369,36 +529,57 @@ public class LearningProfileServiceImpl implements LearningProfileService {
     }
     
     /**
-     * Calculate overall score from vocabulary, grammar, and speaking
-     * Normalizes weights dynamically across active skills so zero speaking attempts
-     * do not unfairly slash a user's CEFR proficiency.
+     * Calculate overall score across up to 5 skill components:
+     * Vocabulary (25%), Grammar (20%), Speaking (25%), Listening (15%), Quiz (15%).
+     * Uses dynamic weight normalization across active skills (totalActivities > 0)
+     * so unpracticed skills do not unfairly slash proficiency.
+     */
+    private Double calculateOverallScore(
+            PerformanceMetric vocab,
+            PerformanceMetric grammar,
+            PerformanceMetric speaking,
+            PerformanceMetric listening,
+            PerformanceMetric quiz) {
+
+        Map<PerformanceMetric, Double> baseWeights = new LinkedHashMap<>();
+        baseWeights.put(vocab, 0.25);
+        baseWeights.put(grammar, 0.20);
+        baseWeights.put(speaking, 0.25);
+        baseWeights.put(listening, 0.15);
+        baseWeights.put(quiz, 0.15);
+
+        double totalActiveWeight = 0.0;
+        for (Map.Entry<PerformanceMetric, Double> entry : baseWeights.entrySet()) {
+            PerformanceMetric m = entry.getKey();
+            if (m != null && m.getTotalActivities() != null && m.getTotalActivities() > 0) {
+                totalActiveWeight += entry.getValue();
+            }
+        }
+
+        if (totalActiveWeight <= 0.0) {
+            return 0.0;
+        }
+
+        double overallScore = 0.0;
+        for (Map.Entry<PerformanceMetric, Double> entry : baseWeights.entrySet()) {
+            PerformanceMetric m = entry.getKey();
+            if (m != null && m.getTotalActivities() != null && m.getTotalActivities() > 0) {
+                double score = m.getScore() != null ? m.getScore() : 0.0;
+                double normalizedWeight = entry.getValue() / totalActiveWeight;
+                overallScore += (score * normalizedWeight);
+            }
+        }
+
+        return Math.min(100.0, Math.max(0.0, overallScore));
+    }
+
+    /**
+     * Backward-compatible overload for 2-argument calls
      */
     private Double calculateOverallScore(Map<String, PerformanceMetric> learningStats, PerformanceMetric speakingStats) {
         PerformanceMetric vocab = learningStats.get("vocabulary");
         PerformanceMetric grammar = learningStats.get("grammar");
-        
-        double vocabScore = (vocab != null && vocab.getScore() != null) ? vocab.getScore() : 0.0;
-        double grammarScore = (grammar != null && grammar.getScore() != null) ? grammar.getScore() : 0.0;
-        double speakingScore = (speakingStats != null && speakingStats.getScore() != null) ? speakingStats.getScore() : 0.0;
-        
-        boolean hasSpeaking = speakingStats != null && speakingStats.getTotalActivities() != null && speakingStats.getTotalActivities() > 0;
-        boolean hasVocabOrGrammar = (vocab != null && vocab.getTotalActivities() != null && vocab.getTotalActivities() > 0)
-                || (grammar != null && grammar.getTotalActivities() != null && grammar.getTotalActivities() > 0);
-        
-        double score;
-        if (hasSpeaking && hasVocabOrGrammar) {
-            // All skills active: vocabulary 30%, grammar 30%, speaking 40%
-            score = (vocabScore * 0.3) + (grammarScore * 0.3) + (speakingScore * 0.4);
-        } else if (hasSpeaking) {
-            score = speakingScore;
-        } else if (hasVocabOrGrammar) {
-            // Speaking has not been attempted yet: normalize dynamically across active skills (50% vocab, 50% grammar)
-            score = (vocabScore * 0.5) + (grammarScore * 0.5);
-        } else {
-            score = 0.0;
-        }
-        
-        return Math.min(100.0, Math.max(0.0, score));
+        return calculateOverallScore(vocab, grammar, speakingStats, null, null);
     }
     
     /**
@@ -581,13 +762,14 @@ public class LearningProfileServiceImpl implements LearningProfileService {
     }
     
     /**
-     * Identify weak topics (< 60% accuracy)
+     * Identify weak topics (< 60% accuracy, only for skills with activities)
      */
     private List<String> identifyWeakTopics(Map<String, PerformanceMetric> stats) {
         List<String> weak = new ArrayList<>();
         
         stats.forEach((topic, metric) -> {
-            if (metric.getScore() < WEAK_TOPICS_THRESHOLD) {
+            if (metric != null && metric.getTotalActivities() != null && metric.getTotalActivities() > 0
+                    && metric.getScore() != null && metric.getScore() < WEAK_TOPICS_THRESHOLD) {
                 weak.add(topic);
             }
         });
@@ -596,13 +778,14 @@ public class LearningProfileServiceImpl implements LearningProfileService {
     }
     
     /**
-     * Identify strong topics (> 80% accuracy)
+     * Identify strong topics (> 80% accuracy, only for skills with activities)
      */
     private List<String> identifyStrongTopics(Map<String, PerformanceMetric> stats) {
         List<String> strong = new ArrayList<>();
         
         stats.forEach((topic, metric) -> {
-            if (metric.getScore() > STRONG_TOPICS_THRESHOLD) {
+            if (metric != null && metric.getTotalActivities() != null && metric.getTotalActivities() > 0
+                    && metric.getScore() != null && metric.getScore() > STRONG_TOPICS_THRESHOLD) {
                 strong.add(topic);
             }
         });

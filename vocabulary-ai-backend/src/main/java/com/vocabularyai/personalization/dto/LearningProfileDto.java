@@ -71,6 +71,18 @@ public class LearningProfileDto {
      */
     @JsonProperty("speaking")
     private PerformanceMetric speaking;
+
+    /**
+     * Listening performance
+     */
+    @JsonProperty("listening")
+    private PerformanceMetric listening;
+
+    /**
+     * Quiz performance
+     */
+    @JsonProperty("quiz")
+    private PerformanceMetric quiz;
     
     // ==================== Progress Trends ====================
     

@@ -8,6 +8,10 @@ import com.vocabularyai.common.exception.ExternalServiceException;
 import com.vocabularyai.payment.entity.FeatureType;
 import com.vocabularyai.payment.service.FeatureUsageService;
 import com.vocabularyai.speaking.dto.voicechat.*;
+import com.vocabularyai.speaking.entity.SpeakingLevel;
+import com.vocabularyai.speaking.entity.SpeakingSession;
+import com.vocabularyai.speaking.entity.SpeakingStatus;
+import com.vocabularyai.speaking.repository.SpeakingSessionRepository;
 import com.vocabularyai.speaking.service.pronunciation.PronunciationAnalysisService;
 import com.vocabularyai.speaking.service.pronunciation.dto.PronunciationAnalysisResult;
 import com.vocabularyai.speaking.service.storage.AudioMetadata;
@@ -21,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +43,7 @@ public class VoiceChatServiceImpl implements VoiceChatService {
     private final GeminiAIClientService geminiAIClientService;
     private final FeatureUsageService featureUsageService;
     private final CefrWordRepository cefrWordRepository;
+    private final SpeakingSessionRepository speakingSessionRepository;
     private final ObjectMapper objectMapper;
 
     @Autowired(required = false)
@@ -269,6 +275,35 @@ public class VoiceChatServiceImpl implements VoiceChatService {
                     .summary(summary)
                     .newWords(newWordsList)
                     .build();
+
+            // Lưu phiên voice chat vào SpeakingSession để cập nhật năng lực nói và hồ sơ học tập
+            try {
+                SpeakingLevel speakingLevel = SpeakingLevel.B1;
+                if (request.getLevel() != null && !request.getLevel().isBlank()) {
+                    try {
+                        speakingLevel = SpeakingLevel.valueOf(request.getLevel().trim().toUpperCase());
+                    } catch (IllegalArgumentException e) {
+                        speakingLevel = SpeakingLevel.B1;
+                    }
+                }
+
+                LocalDateTime now = LocalDateTime.now();
+                SpeakingSession session = SpeakingSession.builder()
+                        .user(user)
+                        .topic(topic)
+                        .level(speakingLevel)
+                        .description("Voice chat")
+                        .status(SpeakingStatus.COMPLETED)
+                        .startedAt(now)
+                        .completedAt(now)
+                        .overallScore((double) overall)
+                        .build();
+
+                speakingSessionRepository.save(session);
+                log.info("Saved Voice chat speaking session for user {} with score {}", user.getId(), overall);
+            } catch (Exception e) {
+                log.error("Failed to save voice chat SpeakingSession for user {}: {}", user.getId(), e.getMessage(), e);
+            }
 
         } catch (ExternalServiceException e) {
             throw e;

@@ -167,6 +167,21 @@ public interface CefrWordRepository extends JpaRepository<CefrWord, String> {
            nativeQuery = true)
     List<CefrWord> findRandomWordsByLevel(@Param("level") String level, @Param("limit") int limit);
 
+    /**
+     * Find random words at specific level and topic
+     *
+     * @param level CEFR level (optional)
+     * @param topic Topic name (optional)
+     * @param limit Number of words to return
+     * @return List of random CefrWord entities
+     */
+    @Query(value = "SELECT * FROM cefr_words WHERE (:level IS NULL OR :level = '' OR cefr_level = :level) " +
+           "AND (:topic IS NULL OR :topic = '' OR topic = :topic) ORDER BY RAND() LIMIT :limit",
+           nativeQuery = true)
+    List<CefrWord> findRandomWordsByLevelAndTopic(@Param("level") String level,
+                                                  @Param("topic") String topic,
+                                                  @Param("limit") int limit);
+
     // ==================== AI Vocabulary Studio Audit & Enrichment Queries ====================
 
     @Query("SELECT COUNT(w) FROM CefrWord w WHERE w.vietnameseMeaning IS NULL OR TRIM(w.vietnameseMeaning) = ''")

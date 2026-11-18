@@ -344,6 +344,7 @@ public class AdminStudentServiceImpl implements AdminStudentService {
             .status(data.get("status") != null ? data.get("status").toString() : null)
             .hasActiveSubscription((Boolean) data.getOrDefault("hasActiveSubscription", false))
             .totalSessions(((Number) data.getOrDefault("totalSessions", 0)).longValue())
+            .wordsLearned(((Number) data.getOrDefault("wordsLearned", 0)).longValue())
             .createdAt((LocalDateTime) data.get("createdAt"))
             .lastLoginAt((LocalDateTime) data.get("lastLoginAt"))
             .build();
